@@ -1,0 +1,1 @@
+class RapSheetsController < ApplicationController; end
