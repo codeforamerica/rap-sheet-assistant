@@ -1,27 +1,24 @@
-# Ruby CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
 version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
        - image: circleci/ruby:2.4.1-node-browsers
          environment:
            RAILS_ENV: test
+           PGHOST: 127.0.0.1
+           PGUSER: cmr-self-help-user
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
        - image: circleci/postgres:9.6.5-alpine
+         environment:
+           POSTGRES_USER: cmr-self-help-user
+           POSTGRES_DB: cmr_self_help_test
+           POSTGRES_PASSWORD: ""
 
     working_directory: ~/repo
 
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "Gemfile.lock" }}
@@ -38,11 +35,9 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-      # Database setup
       - run: bundle exec rake db:create
       - run: bundle exec rake db:schema:load
 
-      # run tests!
       - run:
           name: run tests
           command: |
@@ -55,7 +50,6 @@ jobs:
                             --format progress \
                             "${TEST_FILES}"
 
-      # collect reports
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
