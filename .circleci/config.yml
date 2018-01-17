@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - checkout
-      - run: pip install awsebcli
+      - run: sudo pip install awsebcli
       - run: eb deploy
 
 workflows:
