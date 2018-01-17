@@ -7,3 +7,6 @@
  - `bundle` to install dependencies
  - `rake db:setup` to install database in development and test.
  - `rake` to run test suite
+
+ - Install ElasticBeanstalk CLI
+   `sudo pip install awsebcli`

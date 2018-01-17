@@ -2,6 +2,10 @@ branch-defaults:
   master:
     environment: cmr-self-help-env
     group_suffix: null
+environment-defaults:
+  cmr-self-help-env:
+    branch: null
+    repository: null
 global:
   application_name: cmr_self_help
   branch: null
