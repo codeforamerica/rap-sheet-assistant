@@ -41,4 +41,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.file_storage = :file
+  config.file_path_prefix = 'test'
 end
