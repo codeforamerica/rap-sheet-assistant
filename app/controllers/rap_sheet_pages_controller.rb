@@ -3,6 +3,9 @@ class RapSheetPagesController < ApplicationController
     RapSheetPage.create!(
       rap_sheet_page_image: rap_sheet_page_params[:rap_sheet_page_image]
     )
+
+    flash[:notice] = 'Successfully uploaded!'
+    redirect_to root_path
   end
 
   private
