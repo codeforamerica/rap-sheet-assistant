@@ -2,7 +2,7 @@
 
 <%= form_for @rap_sheet_page, html: { multipart: true } do |f| %>
   <label for="rap_sheet_page_rap_sheet_page_image">Upload</label>
-  <%= f.file_field :rap_sheet_page_image %>
+  <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera' %>
 
   <%= f.submit %>
 <% end %>
