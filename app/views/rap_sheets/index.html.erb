@@ -1,1 +1,8 @@
-Upload your RAP sheet here!
+<p>Upload your RAP sheet here!</p>
+
+<%= form_for @rap_sheet_page, html: { multipart: true } do |f| %>
+  <label for="rap_sheet_page_rap_sheet_page_image">Upload</label>
+  <%= f.file_field :rap_sheet_page_image %>
+
+  <%= f.submit %>
+<% end %>
