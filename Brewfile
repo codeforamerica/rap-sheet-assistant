@@ -1,0 +1,2 @@
+brew "tesseract"
+brew "imagemagick"

@@ -1,6 +1,7 @@
 # README
 
 ## Setup
+ - `brew bundle` to install system dependencies
  - Install ruby version specified in `.ruby-version`.
    
    Note: We recommend using `chruby` to manage Ruby versions locally.

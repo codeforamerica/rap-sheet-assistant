@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117185055) do
+ActiveRecord::Schema.define(version: 20180118213656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20180117185055) do
     t.string "rap_sheet_page_image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "text"
     t.index ["rap_sheet_id"], name: "index_rap_sheet_pages_on_rap_sheet_id"
   end
 
