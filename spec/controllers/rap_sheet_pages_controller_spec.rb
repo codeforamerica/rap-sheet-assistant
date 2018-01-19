@@ -26,8 +26,8 @@ describe RapSheetPagesController do
       end
     end
 
-    context 'the rap sheet exists' do
-      it 'adds rap sheet page to rap sheet' do
+    context 'the rap sheet does not exist' do
+      it 'creates new rap sheet with rap sheet page' do
         post :create, params: {
           rap_sheet_page: {
             rap_sheet_id: "",

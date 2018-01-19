@@ -12,6 +12,9 @@ class RapSheetPage < ApplicationRecord
   private
 
   def self.scan_text(image_path)
-    RTesseract.new(image_path, processor: 'mini_magick').to_s
+    whitelist = [*('A'..'Z'), *('0'..'9')].join + '*:-/.,()#&'
+
+    RTesseract.new(image_path,
+      processor: 'mini_magick', tessedit_char_whitelist: whitelist).to_s
   end
 end

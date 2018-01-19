@@ -12,5 +12,9 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
+
+    @court_dates = CourtDateParser.parse(
+      @rap_sheet.rap_sheet_pages.map(&:text).join
+    )
   end
 end

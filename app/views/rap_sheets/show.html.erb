@@ -1,6 +1,15 @@
 <p>Here is your rap sheet</p>
 
 <div>
+  <div class="border">
+    <p>Conviction Dates:</p>
+    <ul>
+      <% @court_dates.each do |date| %>
+        <li><%= date %></li>
+      <% end %>
+    </ul>
+  </div>
+
   <% @rap_sheet.rap_sheet_pages.each do |r| %>
   <pre>
   <%= r.text %>
