@@ -1,5 +1,7 @@
-<p>Upload your RAP sheet here!</p>
+<p>Upload any additional pages</p>
 
 <%= render partial: 'shared/rap_sheet_page_form', locals: {
   rap_sheet_page: @rap_sheet_page
 } %>
+
+<%= link_to('Done uploading', rap_sheet_path(@rap_sheet_id)) %>

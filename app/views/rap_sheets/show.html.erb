@@ -1,0 +1,9 @@
+<p>Here is your rap sheet</p>
+
+<div>
+  <% @rap_sheet.rap_sheet_pages.each do |r| %>
+  <pre>
+  <%= r.text %>
+  </pre>
+  <% end %>
+</div>
