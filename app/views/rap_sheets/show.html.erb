@@ -10,9 +10,10 @@
     </ul>
   </div>
 
-  <% @rap_sheet.rap_sheet_pages.each do |r| %>
-  <pre>
-  <%= r.text %>
-  </pre>
+  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
+    <p>Page <%= i + 1 %></p>
+    <pre>
+      <%= r.text %>
+    </pre>
   <% end %>
 </div>
