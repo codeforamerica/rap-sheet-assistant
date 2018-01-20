@@ -14,7 +14,7 @@ COURT: NAME7OZ
 
 DISPO:CONVICTED"
 '''
-      expected_dates = ['19820915']
+      expected_dates = [Date.new(1982, 9, 15)]
       expect(described_class.parse(text)).to eq expected_dates
     end
   end

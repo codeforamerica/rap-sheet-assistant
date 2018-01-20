@@ -11,7 +11,16 @@ class CourtDateParser
         !l.blank?
       end
 
-      lines[1][0..7]
+      parse_date(lines[1][0..7])
     end
+  end
+
+  private
+
+  def self.parse_date(date_string)
+    Date.strptime(date_string, '%Y%m%d')
+  rescue
+    puts "Unable to parse date: #{date_string}"
+    nil
   end
 end
