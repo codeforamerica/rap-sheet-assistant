@@ -12,9 +12,17 @@ DISPO:DISMISSED/FURTHERANCE OF JUSTICE
 COURT: NAME7OZ
 19820915 CAMC L05 ANGELES METRO
 
+DISPO:CONVICTED
+
+COURT:
+19890112 CAMC SAN DIEGO
+
 DISPO:CONVICTED"
 '''
-      expected_dates = [Date.new(1982, 9, 15)]
+      expected_dates = [
+        Date.new(1982, 9, 15),
+        Date.new(1989, 1, 12)
+      ]
       expect(described_class.parse(text)).to eq expected_dates
     end
   end
