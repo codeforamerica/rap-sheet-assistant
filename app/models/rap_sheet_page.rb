@@ -18,7 +18,8 @@ class RapSheetPage < ApplicationRecord
     RTesseract.new(image_path,
       processor: 'mini_magick',
       tessedit_char_whitelist: whitelist,
-      user_words: './tesseract/words',
+      user_words: Rails.root + './tesseract/words',
+      user_patterns: Rails.root + './tesseract/patterns',
     ).to_s
   end
 end
