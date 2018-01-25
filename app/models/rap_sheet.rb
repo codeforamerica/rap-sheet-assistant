@@ -5,7 +5,7 @@ class RapSheet < ApplicationRecord
     rap_sheet_pages.map(&:text).join
   end
 
-  def conviction_dates
+  def convictions
     CourtDateParser.parse(text)
   end
 end

@@ -2,10 +2,12 @@
 
 <div>
   <div class="border">
-    <p>Conviction Dates:</p>
+    <p>Convictions:</p>
     <ul>
       <% @court_dates.each do |date| %>
-        <li><%= date %></li>
+        <li>
+          <%= "Conviction Date: #{date[:date]} Case Number: ##{date[:case_number]}" %>
+        </li>
       <% end %>
     </ul>
   </div>

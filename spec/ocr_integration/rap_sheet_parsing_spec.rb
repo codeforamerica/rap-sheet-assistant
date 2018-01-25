@@ -11,10 +11,13 @@ RSpec.describe 'ocr parsing accuracy' do
 
     rap_sheet_directories = Dir['test_rap_sheet_data/*'].select { |e| File.directory? e }
     rap_sheet_directories.each do |directory|
-
-
       rap_sheet = RapSheet.create!
-      expected_values = JSON.parse(File.read("#{directory}/expected_values.json"))
+
+      values_file = File.read("#{directory}/expected_values.json")
+      expected_convictions = JSON.parse(values_file, symbolize_names: true)[:convictions]
+      expected_convictions.each do |c|
+        c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
+      end
 
       num_pages = Dir["#{directory}/*.jpg"].length
       num_pages.times do |page_number|
@@ -22,16 +25,16 @@ RSpec.describe 'ocr parsing accuracy' do
         RapSheetPage.scan_and_create(image: image, rap_sheet_id: rap_sheet.id)
       end
 
-      expected_dates = expected_values['convictions'].map do |c|
-        Date.strptime(c['date'], '%m/%d/%Y')
-      end
-
-      matches = rap_sheet.conviction_dates.select do |d|
-        expected_dates.include? d
+      matches = rap_sheet.convictions.select do |c|
+        if expected_convictions.include?(c)
+          true
+        else
+          puts c
+        end
       end.length
 
-      actual_convictions = expected_values['convictions'].length
-      detected_convictions = rap_sheet.conviction_dates.length
+      actual_convictions = expected_convictions.length
+      detected_convictions = rap_sheet.convictions.length
 
       summary_stats[:actual_convictions] += actual_convictions
       summary_stats[:detected_convictions] += detected_convictions

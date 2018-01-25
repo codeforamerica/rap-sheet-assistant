@@ -13,6 +13,6 @@ class RapSheetsController < ApplicationController
   def show
     @rap_sheet = RapSheet.find(params[:id])
 
-    @court_dates = @rap_sheet.conviction_dates
+    @court_dates = @rap_sheet.convictions
   end
 end

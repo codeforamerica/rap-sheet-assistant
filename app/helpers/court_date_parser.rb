@@ -7,7 +7,10 @@ class CourtDateParser
     end
 
     sections_with_convictions.map do |s|
-      parse_date(s[/\d{8}/])
+      {
+        date: parse_date(s[/\d{8}/]),
+        case_number: s[/#.*\n/].split('#')[1].strip.delete(' ')
+      }
     end
   end
 
