@@ -2,8 +2,7 @@ require 'rails_helper'
 
 describe RapSheetPagesController do
   before do
-    tesseract = double(:tesseract, to_s: 'page 1')
-    allow(RTesseract).to receive(:new).and_return(tesseract)
+    allow(TextScanner).to receive(:scan_text).and_return('page 1')
   end
 
   describe '#create' do

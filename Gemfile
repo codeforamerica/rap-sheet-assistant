@@ -18,6 +18,7 @@ gem 'carrierwave', '~> 1.0'
 gem 'fog-aws'
 gem 'mini_magick'
 gem 'rtesseract'
+gem 'google-cloud-vision'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -25,6 +26,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'rspec-rails', '~> 3.7'
   gem 'rspec_junit_formatter'
+  gem 'dotenv-rails'
 end
 
 group :development do

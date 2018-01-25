@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe 'uploading a rap sheet' do
   before do
-    tesseract_page_1 = double(:tesseract, to_s: 'page 1')
-    tesseract_page_2 = double(:tesseract, to_s: 'page 2')
-    allow(RTesseract).to receive(:new).and_return(tesseract_page_1, tesseract_page_2)
+    page_1_text = 'page 1'
+    page_2_text = 'page 2'
+    allow(TextScanner).to receive(:scan_text).and_return(page_1_text, page_2_text)
   end
 
   it 'shows welcome text' do

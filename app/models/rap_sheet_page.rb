@@ -6,20 +6,7 @@ class RapSheetPage < ApplicationRecord
     RapSheetPage.create!(
       rap_sheet_page_image: image,
       rap_sheet_id: rap_sheet_id,
-      text: self.scan_text(image.path),
+      text: TextScanner.scan_text(image.path),
     )
-  end
-
-  private
-
-  def self.scan_text(image_path)
-    whitelist = [*('A'..'Z'), *('0'..'9')].join + '*:-/.,()#&'
-
-    RTesseract.new(image_path,
-      processor: 'mini_magick',
-      tessedit_char_whitelist: whitelist,
-      user_words: Rails.root + './tesseract/words',
-      user_patterns: Rails.root + './tesseract/patterns',
-    ).to_s
   end
 end

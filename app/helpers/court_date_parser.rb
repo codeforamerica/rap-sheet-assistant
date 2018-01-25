@@ -1,17 +1,13 @@
 class CourtDateParser
   def self.parse(text)
-    sections = text.split(/COURT:.*\n/)
+    sections = text.split(/COURT ?:.*\n/)
 
     sections_with_convictions = sections.select do |s|
-      s.include?('DISPO:CONVICTED')
+      s[/CONVICTED/]
     end
 
     sections_with_convictions.map do |s|
-      lines = s.split("\n").select do |l|
-        !l.blank?
-      end
-
-      parse_date(lines[0][0..7])
+      parse_date(s[/\d{8}/])
     end
   end
 

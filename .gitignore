@@ -20,3 +20,5 @@
 .idea
 public/uploads/
 test_rap_sheet_data/
+
+.env
