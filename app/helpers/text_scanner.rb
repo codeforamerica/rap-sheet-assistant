@@ -18,8 +18,26 @@ class TextScanner
   end
 
   def self.scan_with_gcv(image_path)
+    self.retrieve_key_file
+
     require 'google/cloud/vision'
     vision = Google::Cloud::Vision.new(project: ENV['GOOGLE_PROJECT_ID'])
     vision.image(image_path).document.text
+  end
+
+  def self.retrieve_key_file
+    return if File.file?(ENV['GOOGLE_CLOUD_KEYFILE'])
+
+    connection = Fog::Storage.new({
+      provider: 'AWS',
+      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_KEY'],
+    })
+
+    directory = connection.directories.new(key: ENV['ASSETS_BUCKET'])
+
+    body = directory.files.get(ENV['GOOGLE_CLOUD_KEYFILE']).body
+
+    File.open(ENV['GOOGLE_CLOUD_KEYFILE'], 'w') {|f| f.write(body)}
   end
 end
