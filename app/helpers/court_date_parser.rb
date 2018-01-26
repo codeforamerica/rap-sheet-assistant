@@ -1,5 +1,8 @@
 class CourtDateParser
   def self.parse(text)
+    if text.index('COURT')
+      text = text[text.index('COURT')..-1]
+    end
     sections = text.split(/COURT ?:.*\n/)
 
     sections_with_convictions = sections.select do |s|

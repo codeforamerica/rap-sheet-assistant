@@ -45,5 +45,27 @@ describe CourtDateParser do
       ]
       expect(described_class.parse(text)).to eq expected_convictions
     end
+
+    it 'discards text before the first "COURT" line' do
+      text = <<~TEXT
+        19820918
+        #456
+        DISPO:CONVICTED      
+
+        COURT:
+        19740102 CASC SAN PRANCISCU rm
+        
+        #123
+        *DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+          {
+              date: Date.new(1974, 1, 2),
+              case_number: '123',
+          }
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+    end
   end
 end
