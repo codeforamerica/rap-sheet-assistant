@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'ocr parsing accuracy' do
-  # Skipped for now
   xit 'is accurate' do
     summary_stats = {
       actual_convictions: 0,
@@ -9,20 +8,31 @@ RSpec.describe 'ocr parsing accuracy' do
       correctly_detected_convictions: 0
     }
 
-    rap_sheet_directories = Dir['test_rap_sheet_data/*'].select { |e| File.directory? e }
-    rap_sheet_directories.each do |directory|
+    connection = Fog::Storage.new({
+      provider: 'AWS',
+      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_KEY'],
+    })
+
+    directory = connection.directories.new(key: 'rap-sheet-test-data')
+    file_names = directory.files.map(&:key)
+    rap_sheets = file_names.map{|f| f.split('/')[0]}.uniq
+    rap_sheets.each do |rap_sheet_prefix|
       rap_sheet = RapSheet.create!
 
-      values_file = File.read("#{directory}/expected_values.json")
-      expected_convictions = JSON.parse(values_file, symbolize_names: true)[:convictions]
+      values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
+      expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:convictions]
       expected_convictions.each do |c|
         c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
       end
 
-      num_pages = Dir["#{directory}/*.jpg"].length
-      num_pages.times do |page_number|
-        image = File.new("#{directory}/page_#{page_number}.jpg")
+      pages = file_names.select {|f| f.starts_with?("#{rap_sheet_prefix}/page_")}
+
+      pages.each do |page|
+        image = File.open('/tmp/tmp_rap_sheet.jpg', 'wb')
+        image.write(directory.files.get(page).body)
         RapSheetPage.scan_and_create(image: image, rap_sheet_id: rap_sheet.id)
+        image.close
       end
 
       matches = rap_sheet.convictions.select do |c|
@@ -40,7 +50,7 @@ RSpec.describe 'ocr parsing accuracy' do
       summary_stats[:detected_convictions] += detected_convictions
       summary_stats[:correctly_detected_convictions] += matches
 
-      puts "------------- For #{directory} -------------"
+      puts "------------- For #{rap_sheet_prefix} -------------"
       puts "Actual Convictions: #{actual_convictions}"
       puts "Detected Convictions: #{detected_convictions}"
       puts "Correctly Detected Convictions: #{matches}"
@@ -51,6 +61,9 @@ RSpec.describe 'ocr parsing accuracy' do
     puts "Actual Convictions: #{summary_stats[:actual_convictions]}"
     puts "Detected Convictions: #{summary_stats[:detected_convictions]}"
     puts "Correctly Detected Convictions: #{summary_stats[:correctly_detected_convictions]}"
-    puts "Accuracy: #{summary_stats[:correctly_detected_convictions].to_f / summary_stats[:actual_convictions].to_f * 100}%"
+    accuracy = summary_stats[:correctly_detected_convictions].to_f / summary_stats[:actual_convictions].to_f
+    puts "Accuracy: #{accuracy * 100}%"
+
+    expect(accuracy).to be > 0.9
   end
 end
