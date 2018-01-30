@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
+  let(:directory) do
+    connection = Fog::Storage.new({
+                                      provider: 'AWS',
+                                      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                      aws_secret_access_key: ENV['AWS_SECRET_KEY'],
+                                  })
+
+    connection.directories.new(key: 'rap-sheet-test-data')
+  end
+
   it 'is accurate' do
     summary_stats = {
       actual_convictions: 0,
@@ -8,33 +18,12 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       correctly_detected_convictions: 0
     }
 
-    connection = Fog::Storage.new({
-      provider: 'AWS',
-      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      aws_secret_access_key: ENV['AWS_SECRET_KEY'],
-    })
-
-    directory = connection.directories.new(key: 'rap-sheet-test-data')
     file_names = directory.files.map(&:key)
     rap_sheets = file_names.map{|f| f.split('/')[0]}.uniq
     rap_sheets.each do |rap_sheet_prefix|
-      rap_sheet = RapSheet.create!
+      rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
-      values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
-      expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:convictions]
-      expected_convictions.each do |c|
-        c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
-      end
-
-      pages = file_names.select {|f| f.starts_with?("#{rap_sheet_prefix}/page_")}
-
-      pages.each do |page|
-        image = File.open('/tmp/tmp_rap_sheet.jpg', 'wb')
-        image.write(directory.files.get(page).body)
-        RapSheetPage.scan_and_create(image: image, rap_sheet_id: rap_sheet.id)
-        image.close
-      end
-
+      expected_convictions = expected_values(rap_sheet_prefix)
       matches = rap_sheet.convictions.select do |c|
         if expected_convictions.include?(c)
           true
@@ -66,4 +55,43 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
 
     expect(accuracy).to be > 0.9
   end
+end
+
+def expected_values(rap_sheet_prefix)
+  values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
+  expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:convictions]
+  expected_convictions.each do |c|
+    c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
+  end
+  expected_convictions
+end
+
+def fetch_or_scan_text(file_names, page)
+  text_path = page.gsub('.jpg', '.txt')
+  if file_names.include? text_path
+    text = directory.files.get(text_path).body
+  else
+    image = File.open('/tmp/tmp_rap_sheet.jpg', 'wb')
+    image.write(directory.files.get(page).body)
+
+    text = TextScanner.scan_text(image.path)
+    image.close
+
+    directory.files.create(key: text_path, body: text, public: false)
+  end
+  text
+end
+
+def create_rap_sheet(file_names, rap_sheet_prefix)
+  rap_sheet = RapSheet.create!
+
+
+  pages = file_names.select {|f| f.starts_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg')}
+
+  pages.each do |page|
+    text = fetch_or_scan_text(file_names, page)
+
+    RapSheetPage.create!(rap_sheet_id: rap_sheet.id, text: text)
+  end
+  rap_sheet
 end
