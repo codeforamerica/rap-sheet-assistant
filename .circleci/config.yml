@@ -48,6 +48,15 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
+                            --tags ~ocr_integration
+                            -- \
+                            $TEST_FILES
+
+            bundle exec rspec --format progress \
+                            --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            --format progress \
+                            --tags ocr_integration
                             -- \
                             $TEST_FILES
 
@@ -72,7 +81,15 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only:
+                - master
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - master

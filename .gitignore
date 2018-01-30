@@ -19,6 +19,7 @@
 .byebug_history
 .idea
 public/uploads/
+public/test/
 test_rap_sheet_data/
 
 .env

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe 'ocr parsing accuracy' do
-  xit 'is accurate' do
+RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
+  it 'is accurate' do
     summary_stats = {
       actual_convictions: 0,
       detected_convictions: 0,
