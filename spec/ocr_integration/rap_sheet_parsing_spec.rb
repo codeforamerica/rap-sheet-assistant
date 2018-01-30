@@ -28,7 +28,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
         if expected_convictions.include?(c)
           true
         else
-          puts c
+          puts "Failed to find conviction: #{c}"
         end
       end.length
 

@@ -8,3 +8,25 @@ Rails.application.load_tasks
 RSpec::Core::RakeTask.new(:ocr) do |t|
   t.rspec_opts = '--tag ocr_integration'
 end
+
+task :upload_test_images, [:pdf] do |t, args|
+  pdf = args[:pdf]
+  system "convert -verbose -density 300 -trim #{pdf}.pdf -quality 100 page.jpg"
+
+  connection = Fog::Storage.new(
+      provider: 'AWS',
+      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_KEY']
+  )
+
+  directory = connection.directories.new(key: 'rap-sheet-test-data')
+
+
+  Dir.glob('page-*.jpg').length.times do |i|
+    page_filename = "page-#{i}.jpg"
+    File.open(page_filename) {|image|
+      directory.files.create(key: "#{pdf}/page_#{i}.jpg", body: image, public: false)
+    }
+    File.delete(page_filename)
+  end
+end
