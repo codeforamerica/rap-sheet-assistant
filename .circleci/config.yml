@@ -48,7 +48,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            --tags ~ocr_integration
+                            --tag ~ocr_integration
                             -- \
                             $TEST_FILES
 
@@ -56,7 +56,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            --tags ocr_integration
+                            --tag ocr_integration
                             -- \
                             $TEST_FILES
 
