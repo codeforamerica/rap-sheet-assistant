@@ -67,5 +67,97 @@ describe CourtDateParser do
       ]
       expect(described_class.parse(text)).to eq expected_convictions
     end
+
+    it 'strips trailing puncuation from case numbers' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        
+        #456.:
+        DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+        {
+          date: Date.new(1982, 9, 15),
+          case_number: '456',
+        },
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+      end
+
+    it 'strips periods from case numbers' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        
+        #45.6:
+        DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+        {
+          date: Date.new(1982, 9, 15),
+          case_number: '456',
+        },
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+      end
+
+    it 'ignores # characters on their own line' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        
+        #
+        8
+        #456:
+        DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+        {
+          date: Date.new(1982, 9, 15),
+          case_number: '456',
+        },
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+      end
+
+    it 'returns nil for unknown case numbers' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        Blah blah
+        
+        DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+        {
+          date: Date.new(1982, 9, 15),
+          case_number: nil,
+        },
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+    end
+
+    it 'replaces hyphens with dashes' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        
+        #4–5-6:
+        DISPO:CONVICTED
+      TEXT
+
+      expected_convictions = [
+        {
+          date: Date.new(1982, 9, 15),
+          case_number: '4-5-6',
+        },
+      ]
+      expect(described_class.parse(text)).to eq expected_convictions
+    end
   end
 end

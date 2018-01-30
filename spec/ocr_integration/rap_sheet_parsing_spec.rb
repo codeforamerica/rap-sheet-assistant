@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
   let(:directory) do
-    connection = Fog::Storage.new({
-                                      provider: 'AWS',
-                                      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                      aws_secret_access_key: ENV['AWS_SECRET_KEY'],
-                                  })
+    connection = Fog::Storage.new(
+      provider: 'AWS',
+      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_KEY']
+    )
 
     connection.directories.new(key: 'rap-sheet-test-data')
   end
@@ -15,11 +15,12 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     summary_stats = {
       actual_convictions: 0,
       detected_convictions: 0,
-      correctly_detected_convictions: 0
+      correctly_detected_convictions: 0,
+      missed_convictions: 0
     }
 
     file_names = directory.files.map(&:key)
-    rap_sheets = file_names.map{|f| f.split('/')[0]}.uniq
+    rap_sheets = file_names.map { |f| f.split('/')[0] }.uniq
     rap_sheets.each do |rap_sheet_prefix|
       puts "------------- For #{rap_sheet_prefix} -------------"
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
@@ -30,6 +31,14 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           true
         else
           puts "Parsed conviction #{c} failed to match expectations"
+          false
+        end
+      end.length
+
+      missed_convictions = expected_convictions.select do |c|
+        unless rap_sheet.convictions.include?(c)
+          puts "Conviction #{c} failed to be detected"
+          true
         end
       end.length
 
@@ -39,10 +48,12 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       summary_stats[:actual_convictions] += actual_convictions
       summary_stats[:detected_convictions] += detected_convictions
       summary_stats[:correctly_detected_convictions] += matches
+      summary_stats[:missed_convictions] += missed_convictions
 
       puts "Actual Convictions: #{actual_convictions}"
       puts "Detected Convictions: #{detected_convictions}"
       puts "Correctly Detected Convictions: #{matches}"
+      puts "Missed Convictions: #{missed_convictions}"
       puts "Accuracy: #{matches.to_f / actual_convictions.to_f * 100}%"
     end
 
@@ -50,6 +61,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     puts "Actual Convictions: #{summary_stats[:actual_convictions]}"
     puts "Detected Convictions: #{summary_stats[:detected_convictions]}"
     puts "Correctly Detected Convictions: #{summary_stats[:correctly_detected_convictions]}"
+    puts "Missed Convictions: #{summary_stats[:missed_convictions]}"
     accuracy = summary_stats[:correctly_detected_convictions].to_f / summary_stats[:actual_convictions].to_f
     puts "Accuracy: #{accuracy * 100}%"
 
@@ -87,7 +99,7 @@ def create_rap_sheet(file_names, rap_sheet_prefix)
   rap_sheet = RapSheet.create!
 
 
-  pages = file_names.select {|f| f.starts_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg')}
+  pages = file_names.select { |f| f.starts_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg') }
 
   pages.each do |page|
     text = fetch_or_scan_text(file_names, page)
