@@ -21,6 +21,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     file_names = directory.files.map(&:key)
     rap_sheets = file_names.map{|f| f.split('/')[0]}.uniq
     rap_sheets.each do |rap_sheet_prefix|
+      puts "------------- For #{rap_sheet_prefix} -------------"
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
       expected_convictions = expected_values(rap_sheet_prefix)
@@ -28,7 +29,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
         if expected_convictions.include?(c)
           true
         else
-          puts "Failed to find conviction: #{c}"
+          puts "Parsed conviction #{c} failed to match expectations"
         end
       end.length
 
@@ -39,7 +40,6 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       summary_stats[:detected_convictions] += detected_convictions
       summary_stats[:correctly_detected_convictions] += matches
 
-      puts "------------- For #{rap_sheet_prefix} -------------"
       puts "Actual Convictions: #{actual_convictions}"
       puts "Detected Convictions: #{detected_convictions}"
       puts "Correctly Detected Convictions: #{matches}"
@@ -62,6 +62,7 @@ def expected_values(rap_sheet_prefix)
   expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:convictions]
   expected_convictions.each do |c|
     c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
+    c[:case_number] = c[:case_number].gsub(' ', '')
   end
   expected_convictions
 end
