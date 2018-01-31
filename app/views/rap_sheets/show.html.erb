@@ -3,13 +3,22 @@
 <div>
   <div class="border">
     <p>Convictions:</p>
-    <ul>
+    <table>
+      <thead>
+      <tr>
+        <th>Conviction Date</th>
+        <th>Case Number</th>
+      </tr>
+      </thead>
+      <tbody>
       <% @court_dates.each do |date| %>
-        <li>
-          <%= "Conviction Date: #{date[:date]} Case Number: ##{date[:case_number]}" %>
-        </li>
+        <tr>
+          <td><%= date[:date] %></td>
+          <td><%= date[:case_number] %></td>
+        </tr>
       <% end %>
-    </ul>
+      </tbody>
+    </table>
   </div>
 
   <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>

@@ -29,8 +29,8 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'Upload any additional pages'
     click_on 'Done'
 
-    expect(page).to have_content 'Conviction Date: 1980-01-02'
-    expect(page).to have_content 'Case Number: #149494-6'
+    expect(page).to have_content '1980-01-02'
+    expect(page).to have_content '#149494-6'
     expect(page).to have_content 'page 1'
     expect(page).to have_content 'page 2'
   end
