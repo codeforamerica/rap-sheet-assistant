@@ -1,4 +1,6 @@
-require 'rails_helper'
+require 'spec_helper'
+require 'treetop'
+
 require_relative '../../app/parser/cycle_syntax_nodes'
 
 Treetop.load 'app/parser/cycle_grammar'
