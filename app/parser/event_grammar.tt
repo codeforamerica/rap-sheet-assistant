@@ -1,0 +1,65 @@
+grammar EventGrammar
+  rule event
+   (court_event / arrest_event / applicant_event / unknown_event)
+  end
+
+  rule newline
+    [\n]
+  end
+
+  rule court_event
+    'COURT:' stuff date w courthouse counts <CourtEvent>
+  end
+
+  rule courthouse
+    (!'CNT:' .)*
+  end
+
+  rule counts
+    (count_one / count)*
+  end
+
+  rule count
+    'CNT:' w [0-9]3..3 w count_content
+  end
+
+  rule count_content
+    (!'CNT:' !disposition .)* disposition_content (!'CNT:' .)*
+  end
+
+  rule disposition_content
+    disposition?
+  end
+
+  rule disposition
+    convicted / dismissed
+  end
+
+  rule convicted
+    'DISPO:CONVICTED'
+  end
+
+  rule dismissed
+    'DISPO:DISMISSED'
+  end
+
+  rule count_one
+    'CNT:' w '001' w case_number w count_content
+  end
+
+  rule case_number
+    '#' [ \t]* (!newline .)+
+  end
+
+  rule w
+    [ \t\n]*
+  end
+
+  rule stuff
+    (!date .)*
+  end
+
+  rule date
+    [0-9] 8..8
+  end
+end
