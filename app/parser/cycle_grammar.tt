@@ -1,0 +1,17 @@
+grammar CycleGrammar
+  rule root
+    event_content (event_delimiter event_content)* <Cycle>
+  end
+
+  rule event_content
+    (!event_delimiter .)* <EventContent>
+  end
+
+  rule event_delimiter
+      newline '- - - -' newline
+  end
+
+  rule newline
+     [\n]
+  end
+end

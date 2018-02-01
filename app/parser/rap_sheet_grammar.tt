@@ -1,0 +1,33 @@
+grammar RapSheetGrammar
+  rule rap_sheet
+    personal_info cycles end_of_message
+  end
+
+  rule personal_info
+    'hello' newline
+  end
+
+  rule newline
+   [\n]
+  end
+
+  rule cycles
+    cycle*
+  end
+
+  rule cycle_delimiter
+    newline '* * * *' newline
+  end
+
+  rule cycle
+     cycle_delimiter cycle_content <Cycle>
+  end
+
+  rule cycle_content
+    (!(cycle_delimiter / end_of_message) .)*
+  end
+
+  rule end_of_message
+     newline '* * * END OF MESSAGE * * *' newline
+  end
+end
