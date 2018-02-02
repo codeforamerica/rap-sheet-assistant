@@ -1,7 +1,7 @@
 class TextScanner
   def self.scan_text(image_path)
     # self.scan_with_tesseract(image_path)
-    self.scan_with_gcv(image_path)
+    TextCleaner.clean(self.scan_with_gcv(image_path))
   end
 
   private

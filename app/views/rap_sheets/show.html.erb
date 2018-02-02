@@ -11,7 +11,7 @@
       </tr>
       </thead>
       <tbody>
-      <% @court_dates.each do |date| %>
+      <% @rap_sheet.convictions.each do |date| %>
         <tr>
           <td><%= date[:date] %></td>
           <td><%= date[:case_number] %></td>

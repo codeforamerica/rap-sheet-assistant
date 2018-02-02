@@ -2,10 +2,18 @@ class RapSheet < ApplicationRecord
   has_many :rap_sheet_pages
 
   def text
+    #rap_sheet_pages.map(&:text).join[0..1337] + "END OF MESSAGE\n"
     rap_sheet_pages.map(&:text).join
   end
 
   def convictions
     CourtDateParser.parse(text)
+    # RapSheetPresenter.new(parsed_tree).convictions
+  end
+
+  private
+
+  def parsed_tree
+    @parsed_tree ||= Parser.new.parse(text)
   end
 end

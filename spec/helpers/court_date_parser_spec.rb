@@ -60,10 +60,10 @@ describe CourtDateParser do
       TEXT
 
       expected_convictions = [
-          {
-              date: Date.new(1974, 1, 2),
-              case_number: '123',
-          }
+        {
+          date: Date.new(1974, 1, 2),
+          case_number: '123',
+        }
       ]
       expect(described_class.parse(text)).to eq expected_convictions
     end
@@ -84,9 +84,9 @@ describe CourtDateParser do
         },
       ]
       expect(described_class.parse(text)).to eq expected_convictions
-      end
+    end
 
-    it 'strips periods from case numbers' do
+     it 'strips periods from case numbers' do
       text = <<~TEXT
         COURT: NAME7OZ
         19820915 CAMC L05 ANGELES METRO
@@ -102,7 +102,7 @@ describe CourtDateParser do
         },
       ]
       expect(described_class.parse(text)).to eq expected_convictions
-      end
+    end
 
     it 'ignores # characters on their own line' do
       text = <<~TEXT
@@ -122,7 +122,7 @@ describe CourtDateParser do
         },
       ]
       expect(described_class.parse(text)).to eq expected_convictions
-      end
+    end
 
     it 'returns nil for unknown case numbers' do
       text = <<~TEXT

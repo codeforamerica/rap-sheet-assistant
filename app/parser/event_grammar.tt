@@ -20,7 +20,7 @@ grammar EventGrammar
   end
 
   rule count_one
-    'CNT:' wn '001' wn case_number wn count_content <Count>
+    'CNT:' wn '001' wn case_number wn count_content <CountOne>
   end
 
   rule count
@@ -40,7 +40,7 @@ grammar EventGrammar
   end
 
   rule convicted
-    'DISPO:' w 'CONVICTED'
+    'DISPO:' w 'CONVICTED' <Convicted>
   end
 
   rule dismissed
