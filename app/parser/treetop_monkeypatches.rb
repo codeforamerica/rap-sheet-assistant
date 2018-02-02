@@ -1,6 +1,10 @@
 # Stolen from https://github.com/elastic/logstash/blob/master/logstash-core/lib/logstash/compiler/treetop_monkeypatches.rb
 
 class Treetop::Runtime::SyntaxNode
+  def [](i)
+    elements[i]
+  end
+
   # Traverse the syntax tree recursively.
   # The order should respect the order of the configuration file as it is read
   # and written by humans (and the order in which it is parsed).

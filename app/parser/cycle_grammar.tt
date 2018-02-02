@@ -8,10 +8,22 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-      newline '- - - -' newline
+      N '- - - -' N
   end
 
-  rule newline
-     [\n]
+  rule W
+    [ \t]+
+  end
+
+  rule N
+    [\n]+
+  end
+
+  rule w
+   W?
+  end
+
+  rule wn
+    [ \t\n]*
   end
 end

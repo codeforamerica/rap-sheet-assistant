@@ -7,16 +7,12 @@ grammar RapSheetGrammar
     (!cycle_delimiter .)*
   end
 
-  rule newline
-   [\n]
-  end
-
   rule cycles
     cycle*
   end
 
   rule cycle_delimiter
-    newline '* * * *' newline
+    N '* * * *' N
   end
 
   rule cycle
@@ -28,6 +24,22 @@ grammar RapSheetGrammar
   end
 
   rule end_of_message
-     newline '* * * END OF MESSAGE * * *' newline
+     N '* * *'? w 'END OF MESSAGE' w '* * *'? N
+  end
+
+  rule W
+    [ \t]+
+  end
+
+  rule N
+    [\n]+
+  end
+
+  rule w
+   W?
+  end
+
+  rule wn
+    [ \t\n]*
   end
 end

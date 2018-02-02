@@ -1,5 +1,9 @@
+require_relative './rap_sheet_syntax_nodes'
+require_relative './cycle_syntax_nodes'
+require_relative './event_syntax_nodes'
+
 class Parser
-  Treetop.load 'grammar/rap_sheet_grammar'
+  Treetop.load 'app/parser/rap_sheet_grammar'
 
   def parse(text)
     do_parsing(RapSheetGrammarParser.new, text)

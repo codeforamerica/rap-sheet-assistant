@@ -9,7 +9,7 @@ RSpec.describe EventGrammarParser do
   describe '#parse' do
     subject { described_class.new.parse(text) }
 
-    context 'parsing one event' do
+    context 'parsing a court event' do
       let(:text) {
         <<~TEXT
           COURT:
@@ -37,7 +37,7 @@ RSpec.describe EventGrammarParser do
         end
 
       it 'identifies the courthouse' do
-        expect(subject.courthouse.text_value).to eq('SAN FRANCISCO\n\n')
+        expect(subject.courthouse.text_value).to eq("SAN FRANCISCO\n\n")
       end
 
       it 'identifies the case number' do
@@ -45,12 +45,12 @@ RSpec.describe EventGrammarParser do
       end
 
       it 'identifies count data' do
-        count_1 = subject.counts.elements[0]
-        expect(count_1.count_content.disposition_content.text_value).to eq('DISPO:CONVICTED')
-        count_2 = subject.counts.elements[1]
-        expect(count_2.count_content.disposition_content.text_value).to eq('DISPO:DISMISSED')
-        count_3 = subject.counts.elements[2]
-        expect(count_3.count_content.disposition_content.text_value).to eq('')
+        count_1 = subject.counts[0]
+        expect(count_1.disposition.text_value).to eq('DISPO:CONVICTED')
+        count_2 = subject.counts[1]
+        expect(count_2.disposition.text_value).to eq('DISPO:DISMISSED')
+        count_3 = subject.counts[2]
+        expect(count_3.disposition.text_value).to eq('')
       end
     end
   end

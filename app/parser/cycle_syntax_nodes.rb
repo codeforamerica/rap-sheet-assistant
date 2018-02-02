@@ -2,8 +2,14 @@ require_relative './treetop_monkeypatches'
 
 module CycleGrammar
   class Cycle < Treetop::Runtime::SyntaxNode
+    Treetop.load 'app/parser/event_grammar'
+
     def events
-      recursive_select(EventContent)
+      parser = EventGrammarParser.new
+
+      recursive_select(EventContent).map do |event|
+        parser.parse(event.text_value)
+      end
     end
   end
 

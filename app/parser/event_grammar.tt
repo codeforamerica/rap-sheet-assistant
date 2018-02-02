@@ -1,14 +1,14 @@
 grammar EventGrammar
   rule event
-   (court_event / arrest_event / applicant_event / unknown_event)
-  end
-
-  rule newline
-    [\n]
+   (court_event / unknown_event)
   end
 
   rule court_event
-    'COURT:' stuff date w courthouse counts <CourtEvent>
+    'COURT:' stuff date wn courthouse counts <CourtEvent>
+  end
+
+  rule unknown_event
+    .*
   end
 
   rule courthouse
@@ -19,8 +19,12 @@ grammar EventGrammar
     (count_one / count)*
   end
 
+  rule count_one
+    'CNT:' wn '001' wn case_number wn count_content <Count>
+  end
+
   rule count
-    'CNT:' w [0-9]3..3 w count_content
+    'CNT:' wn [0-9]3..3 wn count_content <Count>
   end
 
   rule count_content
@@ -36,23 +40,15 @@ grammar EventGrammar
   end
 
   rule convicted
-    'DISPO:CONVICTED'
+    'DISPO:' w 'CONVICTED'
   end
 
   rule dismissed
     'DISPO:DISMISSED'
   end
 
-  rule count_one
-    'CNT:' w '001' w case_number w count_content
-  end
-
   rule case_number
-    '#' [ \t]* (!newline .)+
-  end
-
-  rule w
-    [ \t\n]*
+    '#' w (!N .)+
   end
 
   rule stuff
@@ -61,5 +57,21 @@ grammar EventGrammar
 
   rule date
     [0-9] 8..8
+  end
+
+  rule W
+    [ \t]+
+  end
+
+  rule N
+    [\n]+
+  end
+
+  rule w
+   W?
+  end
+
+  rule wn
+    [ \t\n]*
   end
 end

@@ -22,7 +22,7 @@ RSpec.describe RapSheetGrammarParser do
       }
 
       it 'parses cycle content' do
-        expect(subject.cycles.elements[0].cycle_content.text_value).to eq('cycle text')
+        expect(subject.cycles[0].cycle_content.text_value).to eq('cycle text')
       end
     end
 
@@ -41,8 +41,8 @@ RSpec.describe RapSheetGrammarParser do
       }
 
       it 'has an events method that calls the cycle parser' do
-        expect(subject.cycles.elements[0].cycle_content.text_value).to eq('cycle text')
-        expect(subject.cycles.elements[1].cycle_content.text_value).to eq('another cycle text')
+        expect(subject.cycles[0].cycle_content.text_value).to eq('cycle text')
+        expect(subject.cycles[1].cycle_content.text_value).to eq('another cycle text')
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe RapSheetGrammarParser do
       }
 
       it 'has an events method that calls the cycle parser' do
-        result = subject.cycles.elements
+        result = subject.cycles
         cycle1 = result[0]
         cycle2 = result[1]
         expect(cycle1.events[0].text_value).to eq 'event 1'
