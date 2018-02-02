@@ -13,15 +13,15 @@ RSpec.describe RapSheetGrammarParser do
     context 'parsing one cycle' do
       let(:text) {
         <<~TEXT
-        hello
+          arbitrary text
 
-        * * * *
-        cycle text
-        * * * END OF MESSAGE * * *
+          * * * *
+          cycle text
+          * * * END OF MESSAGE * * *
         TEXT
       }
 
-      it 'has an events method that calls the cycle parser' do
+      it 'parses cycle content' do
         expect(subject.cycles.elements[0].cycle_content.text_value).to eq('cycle text')
       end
     end
@@ -29,13 +29,14 @@ RSpec.describe RapSheetGrammarParser do
     context 'parsing multiple cycles' do
       let(:text) {
         <<~TEXT
-        hello
+          super
+          arbitrary
 
-        * * * *
-        cycle text
-        * * * *
-        another cycle text
-        * * * END OF MESSAGE * * *
+          * * * *
+          cycle text
+          * * * *
+          another cycle text
+          * * * END OF MESSAGE * * *
         TEXT
       }
 
@@ -48,17 +49,17 @@ RSpec.describe RapSheetGrammarParser do
     describe 'parsing events from cycles' do
       let(:text) {
         <<~TEXT
-        hello
+          hello
 
-        * * * *
-        event 1
-        - - - -
-        event 2
-        * * * *
-        event 3
-        - - - -
-        event 4
-        * * * END OF MESSAGE * * *
+          * * * *
+          event 1
+          - - - -
+          event 2
+          * * * *
+          event 3
+          - - - -
+          event 4
+          * * * END OF MESSAGE * * *
         TEXT
       }
 

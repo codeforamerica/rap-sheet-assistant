@@ -4,7 +4,7 @@ grammar RapSheetGrammar
   end
 
   rule personal_info
-    'hello' newline
+    (!cycle_delimiter .)*
   end
 
   rule newline
