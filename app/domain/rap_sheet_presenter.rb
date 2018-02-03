@@ -28,7 +28,7 @@ class RapSheetPresenter
 
   def format_case_number(c)
     return if c.nil?
-    stripped_case_number = c.text_value.delete(' ').delete('.')
+    stripped_case_number = c.text_value.delete(' ').delete('.')[1..-1]
     strip_trailing_punctuation(stripped_case_number)
   end
 

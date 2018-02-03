@@ -103,8 +103,13 @@ def create_rap_sheet(file_names, rap_sheet_prefix)
 
   pages.each do |page|
     text = fetch_or_scan_text(file_names, page)
+    page_number = page.split('/page_')[1].chomp('.jpg').to_i
 
-    RapSheetPage.create!(rap_sheet_id: rap_sheet.id, text: text)
+    RapSheetPage.create!(
+      rap_sheet_id: rap_sheet.id,
+      text: text,
+      page_number: page_number,
+    )
   end
   rap_sheet
 end

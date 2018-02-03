@@ -1,22 +1,22 @@
 class RapSheetPagesController < ApplicationController
   def create
-    rap_sheet_id = find_or_create_rap_sheet_id
+    rap_sheet = find_or_create_rap_sheet
 
     RapSheetPage.scan_and_create(
       image: rap_sheet_page_params[:rap_sheet_page_image],
-      rap_sheet_id: rap_sheet_id
+      rap_sheet: rap_sheet
     )
 
-    redirect_to edit_rap_sheet_path(rap_sheet_id)
+    redirect_to edit_rap_sheet_path(rap_sheet)
   end
 
   private
 
-  def find_or_create_rap_sheet_id
+  def find_or_create_rap_sheet
     if rap_sheet_page_params[:rap_sheet_id].present?
-      rap_sheet_page_params[:rap_sheet_id]
+      RapSheet.find(rap_sheet_page_params[:rap_sheet_id])
     else
-      RapSheet.create!.id
+      RapSheet.create!
     end
   end
 

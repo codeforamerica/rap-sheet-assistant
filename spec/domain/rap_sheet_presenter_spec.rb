@@ -28,7 +28,7 @@ describe RapSheetPresenter do
       expected_convictions = [
         {
           date: Date.new(1982, 9, 15),
-          case_number: '#456',
+          case_number: '456',
         }
       ]
 
@@ -51,7 +51,7 @@ describe RapSheetPresenter do
       expected_convictions = [
         {
           date: Date.new(1982, 9, 15),
-          case_number: '#456',
+          case_number: '456',
         }
       ]
 
@@ -74,7 +74,7 @@ describe RapSheetPresenter do
       expected_convictions = [
         {
           date: Date.new(1982, 9, 15),
-          case_number: '#456',
+          case_number: '456',
         },
       ]
 
@@ -97,7 +97,7 @@ describe RapSheetPresenter do
       expected_convictions = [
         {
           date: Date.new(1982, 9, 15),
-          case_number: '#456',
+          case_number: '456',
         },
       ]
 
