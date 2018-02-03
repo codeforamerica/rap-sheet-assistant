@@ -41,5 +41,24 @@ RSpec.describe CycleGrammarParser do
         expect(events[2].text_value).to eq "more events\n"
       end
     end
+
+    context 'when the cycle delimiters have extra dashes' do
+      let(:text) {
+        <<~TEXT
+          event one text
+          - - -- --
+          another event
+          --- - ---
+          more events
+        TEXT
+      }
+
+      it 'parses many events' do
+        events = subject.events
+        expect(events[0].text_value).to eq 'event one text'
+        expect(events[1].text_value).to eq 'another event'
+        expect(events[2].text_value).to eq "more events\n"
+      end
+    end
   end
 end

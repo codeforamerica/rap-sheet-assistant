@@ -8,7 +8,7 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-      N '- - - -' N
+      N w [-] [- \t]* N
   end
 
   rule W

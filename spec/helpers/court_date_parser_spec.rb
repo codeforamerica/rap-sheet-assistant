@@ -86,7 +86,7 @@ describe CourtDateParser do
       expect(described_class.parse(text)).to eq expected_convictions
     end
 
-     it 'strips periods from case numbers' do
+    it 'strips periods from case numbers' do
       text = <<~TEXT
         COURT: NAME7OZ
         19820915 CAMC L05 ANGELES METRO

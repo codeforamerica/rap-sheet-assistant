@@ -3,12 +3,7 @@ require_relative './treetop_monkeypatches'
 module EventGrammar
   class CourtEvent < Treetop::Runtime::SyntaxNode
     def case_number
-      if(counts[0].is_a? CountOne)
-        counts[0].case_number
-      else
-        nil
-      end
-
+      (counts[0].is_a? CountOne) ? counts[0].case_number : nil
     end
   end
 
@@ -16,7 +11,7 @@ module EventGrammar
     def disposition
       count_content.disposition_content
     end
-    end
+  end
 
   class Convicted < Treetop::Runtime::SyntaxNode; end
 
