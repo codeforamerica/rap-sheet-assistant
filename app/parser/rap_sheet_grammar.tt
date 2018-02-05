@@ -1,6 +1,6 @@
 grammar RapSheetGrammar
   rule rap_sheet
-    personal_info cycles end_of_message .*
+    personal_info cycles end_of_message
   end
 
   rule personal_info
@@ -24,7 +24,11 @@ grammar RapSheetGrammar
   end
 
   rule end_of_message
-     N '* * *'? w 'END OF MESSAGE' w '* * *'? N
+    N asterisks 'END OF MESSAGE' .*
+  end
+
+  rule asterisks
+    ('*' / W)*
   end
 
   rule W

@@ -46,13 +46,13 @@ RSpec.describe RapSheetGrammarParser do
       end
     end
 
-    it 'allows for arbitrary text after end of message' do
+    it 'allows for arbitrary number of asterisks before end of message' do
       text = <<~TEXT
         arbitrary
 
         * * * *
         cycle text
-        END OF MESSAGE
+        * END OF MESSAGE.
         some stuff
       TEXT
 
