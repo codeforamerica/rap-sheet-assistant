@@ -46,6 +46,19 @@ RSpec.describe RapSheetGrammarParser do
       end
     end
 
+    it 'allows for arbitrary text after end of message' do
+      text = <<~TEXT
+        arbitrary
+
+        * * * *
+        cycle text
+        END OF MESSAGE
+        some stuff
+      TEXT
+
+      expect(described_class.new.parse(text)).not_to be_nil
+    end
+
     describe 'parsing events from cycles' do
       let(:text) {
         <<~TEXT
