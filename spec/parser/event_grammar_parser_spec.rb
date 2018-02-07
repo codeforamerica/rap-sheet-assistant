@@ -34,7 +34,7 @@ RSpec.describe EventGrammarParser do
 
       it 'identifies the date' do
         expect(subject.date.text_value).to eq('20040102')
-        end
+      end
 
       it 'identifies the courthouse' do
         expect(subject.courthouse.text_value).to eq("SAN FRANCISCO\n\n")
@@ -52,6 +52,23 @@ RSpec.describe EventGrammarParser do
         count_3 = subject.counts[2]
         expect(count_3.disposition.text_value).to eq('')
       end
+    end
+
+    it 'can parse count ranges' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+
+        CNT: 001-004  #346477
+        blah
+        CNT: 003-011
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.counts[0].text_value).to eq "CNT: 001-004  #346477\nblah\n"
+      expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
     end
   end
 end

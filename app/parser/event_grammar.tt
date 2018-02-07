@@ -20,11 +20,15 @@ grammar EventGrammar
   end
 
   rule count_one
-    'CNT:' wn '001' wn case_number wn count_content <CountOne>
+    'CNT:' wn '001' multiple_count? wn case_number wn count_content <CountOne>
   end
 
   rule count
-    'CNT:' wn [0-9]3..3 wn count_content <Count>
+    'CNT:' wn [0-9]3..3 multiple_count? wn count_content <Count>
+  end
+
+  rule multiple_count
+    '-' [0-9]3..3
   end
 
   rule count_content
