@@ -6,7 +6,8 @@ class Parser
   Treetop.load 'app/parser/rap_sheet_grammar'
 
   def parse(text)
-    do_parsing(RapSheetGrammarParser.new, text)
+    cleaned_text = TextCleaner.clean(text)
+    do_parsing(RapSheetGrammarParser.new, cleaned_text)
   end
 
   def do_parsing(parser, text)

@@ -6,8 +6,7 @@ class RapSheet < ApplicationRecord
   end
 
   def convictions
-    CourtDateParser.parse(text)
-    # RapSheetPresenter.new(parsed_tree).convictions
+    RapSheetPresenter.new(parsed_tree).convictions
   end
 
   private

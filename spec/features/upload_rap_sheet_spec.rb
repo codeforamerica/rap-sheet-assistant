@@ -4,12 +4,13 @@ describe 'uploading a rap sheet' do
   before do
     page_1_text = <<~TEXT
       page 1
-
+      * * * *
       COURT:
       19800102
       CNT:001
       #149494-6
       DISPO: CONVICTED
+      END OF MESSAGE
     TEXT
     page_2_text = 'page 2'
     allow(TextScanner).to receive(:scan_text).and_return(page_1_text, page_2_text)
