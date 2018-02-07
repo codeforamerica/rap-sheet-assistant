@@ -20,7 +20,13 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     }
 
     file_names = directory.files.map(&:key)
-    rap_sheets = file_names.map { |f| f.split('/')[0] }.uniq
+
+    if ENV['TEST_DIR']
+      rap_sheets = ENV['TEST_DIR'].split(' ')
+    else
+      rap_sheets = file_names.map { |f| f.split('/')[0] }.uniq
+    end
+
     rap_sheets.each do |rap_sheet_prefix|
       puts "------------- For #{rap_sheet_prefix} -------------"
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
