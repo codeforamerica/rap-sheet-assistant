@@ -12,19 +12,23 @@ grammar EventGrammar
   end
 
   rule courthouse
-    (!'CNT:' .)*
+    (!count_identifier .)*
   end
 
   rule counts
-    (count_one / count)*
+    (count_with_case_number / count)*
   end
 
-  rule count_one
-    'CNT:' wn '001' multiple_count? wn case_number wn count_content <CountOne>
+  rule count_with_case_number
+    count_identifier wn case_number wn count_content <CountWithCaseNumber>
   end
 
   rule count
-    'CNT:' wn [0-9]3..3 multiple_count? wn count_content <Count>
+    count_identifier wn count_content <Count>
+  end
+
+  rule count_identifier
+    'CNT' w ':' wn [0-9]3..3 multiple_count? [.]?
   end
 
   rule multiple_count
@@ -32,7 +36,7 @@ grammar EventGrammar
   end
 
   rule count_content
-    (!'CNT:' !disposition .)* disposition_content (!'CNT:' .)*
+    (!count_identifier !disposition .)* disposition_content (!count_identifier .)*
   end
 
   rule disposition_content

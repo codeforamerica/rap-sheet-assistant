@@ -26,7 +26,8 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
       expected_convictions = expected_values(rap_sheet_prefix)
-      matches = rap_sheet.convictions.select do |c|
+      detected_convictions = rap_sheet.convictions
+      matches = detected_convictions.select do |c|
         if expected_convictions.include?(c)
           true
         else
@@ -36,14 +37,14 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       end.length
 
       missed_convictions = expected_convictions.select do |c|
-        unless rap_sheet.convictions.include?(c)
+        unless detected_convictions.include?(c)
           puts "Conviction #{c} failed to be detected"
           true
         end
       end.length
 
       actual_convictions = expected_convictions.length
-      detected_convictions = rap_sheet.convictions.length
+      detected_convictions = detected_convictions.length
 
       summary_stats[:actual_convictions] += actual_convictions
       summary_stats[:detected_convictions] += detected_convictions

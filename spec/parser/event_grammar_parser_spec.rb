@@ -69,6 +69,32 @@ RSpec.describe EventGrammarParser do
 
       expect(tree.counts[0].text_value).to eq "CNT: 001-004  #346477\nblah\n"
       expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
+      end
+
+    it 'can parse counts with extra whitespace' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+        CNT : 003
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.counts[0].text_value).to eq "CNT : 003\ncount 3 text\n"
+      end
+
+    it 'can parse case number even if first CNT number is not 001' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+        CNT : 003 #312145
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.case_number.text_value).to eq('#312145')
     end
   end
 end
