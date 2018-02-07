@@ -8,7 +8,11 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-     ( N w [-] [- \t]* N ) / ( N &'COURT:')
+     ( N w [-] [- \t]* N ) / ( N &court_identifier)
+  end
+
+  rule court_identifier
+    'COURT' w ':'
   end
 
   rule W

@@ -46,7 +46,7 @@ RSpec.describe EventGrammarParser do
 
       it 'identifies count data' do
         count_1 = subject.counts[0]
-        expect(count_1.disposition.text_value).to eq('DISPO:CONVICTED')
+        expect(count_1.disposition).to be_a EventGrammar::Convicted
         count_2 = subject.counts[1]
         expect(count_2.disposition.text_value).to eq('DISPO:DISMISSED')
         count_3 = subject.counts[2]
@@ -69,7 +69,22 @@ RSpec.describe EventGrammarParser do
 
       expect(tree.counts[0].text_value).to eq "CNT: 001-004  #346477\nblah\n"
       expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
-      end
+    end
+
+    it 'can parse convictions with semicolon instead of colon' do
+      text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
+
+          CNT: 001  #346477
+          blah
+          DISPO;CONVICTED
+      TEXT
+
+      counts = described_class.new.parse(text).counts
+
+      expect(counts[0].disposition).to be_a EventGrammar::Convicted
+    end
 
     it 'can parse counts with extra whitespace' do
       text = <<~TEXT
@@ -82,13 +97,40 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.counts[0].text_value).to eq "CNT : 003\ncount 3 text\n"
-      end
+    end
+
+    it 'can parse court identifier with extra whitespace' do
+      text = <<~TEXT
+        COURT :
+        20040102  SAN FRANCISCO
+        CNT : 003
+        count 3 text
+      TEXT
+
+      subject = described_class.new.parse(text)
+
+      expect(subject).to be_a(EventGrammar::CourtEvent)
+    end
 
     it 'can parse case number even if first CNT number is not 001' do
       text = <<~TEXT
         COURT:
         20040102  SAN FRANCISCO
         CNT : 003 #312145
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.case_number.text_value).to eq('#312145')
+    end
+
+    it 'can parse case number even with stray punctuation and newlines' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+        CNT :003.
+         . #312145
         count 3 text
       TEXT
 

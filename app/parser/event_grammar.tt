@@ -4,7 +4,7 @@ grammar EventGrammar
   end
 
   rule court_event
-    'COURT:' stuff date wn courthouse counts <CourtEvent>
+    'COURT' w ':' stuff date wn courthouse counts <CourtEvent>
   end
 
   rule unknown_event
@@ -20,7 +20,7 @@ grammar EventGrammar
   end
 
   rule count_with_case_number
-    count_identifier wn case_number wn count_content <CountWithCaseNumber>
+    count_identifier [ \t\n.:]* case_number wn count_content <CountWithCaseNumber>
   end
 
   rule count
@@ -28,7 +28,7 @@ grammar EventGrammar
   end
 
   rule count_identifier
-    'CNT' w ':' wn [0-9]3..3 multiple_count? [.]?
+    'CNT' w ':' wn [0-9]3..3 multiple_count?
   end
 
   rule multiple_count
@@ -48,7 +48,7 @@ grammar EventGrammar
   end
 
   rule convicted
-    'DISPO:' w 'CONVICTED' <Convicted>
+    'DISPO' w (':' / ';') w 'CONVICTED' <Convicted>
   end
 
   rule dismissed

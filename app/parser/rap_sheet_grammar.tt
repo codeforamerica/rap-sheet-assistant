@@ -12,7 +12,11 @@ grammar RapSheetGrammar
   end
 
   rule cycle_delimiter
-    N '* * * *' N
+    N (punctuation_space '*')4..4 punctuation_space N
+  end
+
+  rule punctuation_space
+    [ \t.,]*
   end
 
   rule cycle
