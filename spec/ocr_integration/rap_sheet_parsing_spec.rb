@@ -26,7 +26,12 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
       expected_convictions = expected_values(rap_sheet_prefix)
-      detected_convictions = rap_sheet.convictions
+      detected_convictions = rap_sheet.convictions.map do |c|
+        {
+          date: c[:date],
+          case_number: c[:case_number]
+        }
+      end
       matches = detected_convictions.select do |c|
         if expected_convictions.include?(c)
           true
@@ -73,11 +78,13 @@ end
 def expected_values(rap_sheet_prefix)
   values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
   expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:convictions]
-  expected_convictions.each do |c|
-    c[:date] = Date.strptime(c[:date], '%m/%d/%Y')
-    c[:case_number] = c[:case_number].gsub(' ', '')
+  expected_convictions.map do |c|
+    {
+      date: Date.strptime(c[:date], '%m/%d/%Y'),
+      case_number: c[:case_number].gsub(' ', ''),
+      # courthouse: c[:courthouse].upcase
+    }
   end
-  expected_convictions
 end
 
 def fetch_or_scan_text(file_names, page)

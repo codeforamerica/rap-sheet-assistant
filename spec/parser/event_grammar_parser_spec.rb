@@ -13,7 +13,7 @@ RSpec.describe EventGrammarParser do
       let(:text) {
         <<~TEXT
           COURT:
-          20040102  SAN FRANCISCO
+          20040102  CASC SAN FRANCISCO CO fds
 
           CNT: 001  #346477
           blah
@@ -37,7 +37,7 @@ RSpec.describe EventGrammarParser do
       end
 
       it 'identifies the courthouse' do
-        expect(subject.courthouse.text_value).to eq("SAN FRANCISCO\n\n")
+        expect(subject.courthouse.text_value).to eq('CASC SAN FRANCISCO CO')
       end
 
       it 'identifies the case number' do
@@ -71,14 +71,34 @@ RSpec.describe EventGrammarParser do
       expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
     end
 
+    it 'can parse two digit count' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+
+        CNT: 01  #346477
+        blah
+        CNT: 02
+        count 2 text
+        CNT: 03-04
+        count 3/4 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.counts[0].text_value).to eq "CNT: 01  #346477\nblah\n"
+      expect(tree.counts[1].text_value).to eq "CNT: 02\ncount 2 text\n"
+      expect(tree.counts[2].text_value).to eq "CNT: 03-04\ncount 3/4 text\n"
+    end
+
     it 'can parse convictions with semicolon instead of colon' do
       text = <<~TEXT
-          COURT:
-          20040102  SAN FRANCISCO
+        COURT:
+        20040102  SAN FRANCISCO
 
-          CNT: 001  #346477
-          blah
-          DISPO;CONVICTED
+        CNT: 001  #346477
+        blah
+        DISPO;CONVICTED
       TEXT
 
       counts = described_class.new.parse(text).counts
@@ -137,6 +157,20 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.case_number.text_value).to eq('#312145')
+    end
+
+    it 'parses unknown courthouse with TOC on the same line' do
+      text = <<~TEXT
+        COURT:
+        20040102  NEW COURTHOUSE TOC:M
+        CNT :003.
+         . #312145
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
     end
   end
 end

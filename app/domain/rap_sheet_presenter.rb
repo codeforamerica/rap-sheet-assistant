@@ -17,7 +17,8 @@ class RapSheetPresenter
     court_events.map do |e|
       {
         date: format_date(e),
-        case_number: format_case_number(e.case_number)
+        case_number: format_case_number(e.case_number),
+        courthouse: format_courthouse(e),
       }
     end
   end
@@ -25,6 +26,10 @@ class RapSheetPresenter
   private
 
   attr_reader :parsed_rap_sheet
+
+  def format_courthouse(e)
+    e.courthouse.text_value
+  end
 
   def format_case_number(c)
     return if c.nil?

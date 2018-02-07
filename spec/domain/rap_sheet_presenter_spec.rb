@@ -4,6 +4,7 @@ require 'date'
 
 require_relative '../../app/domain/rap_sheet_presenter'
 require_relative '../../app/parser/parser'
+require_relative '../../app/helpers/text_cleaner'
 
 describe RapSheetPresenter do
   describe '#convictions' do
@@ -29,6 +30,7 @@ describe RapSheetPresenter do
         {
           date: Date.new(1982, 9, 15),
           case_number: '456',
+          courthouse: 'CAMC L05 ANGELES METRO'
         }
       ]
 
@@ -48,15 +50,8 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        {
-          date: Date.new(1982, 9, 15),
-          case_number: '456',
-        }
-      ]
-
       tree = Parser.new.parse(text)
-      expect(described_class.new(tree).convictions).to eq expected_convictions
+      expect(described_class.new(tree).convictions[0][:case_number]).to eq '456'
     end
 
     it 'strips trailing punctuation from case numbers' do
@@ -71,15 +66,8 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        {
-          date: Date.new(1982, 9, 15),
-          case_number: '456',
-        },
-      ]
-
       tree = Parser.new.parse(text)
-      expect(described_class.new(tree).convictions).to eq expected_convictions
+      expect(described_class.new(tree).convictions[0][:case_number]).to eq '456'
     end
 
     it 'strips periods from case numbers' do
@@ -94,15 +82,8 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        {
-          date: Date.new(1982, 9, 15),
-          case_number: '456',
-        },
-      ]
-
       tree = Parser.new.parse(text)
-      expect(described_class.new(tree).convictions).to eq expected_convictions
+      expect(described_class.new(tree).convictions[0][:case_number]).to eq '456'
     end
 
     it 'returns nil case number for an unknown count one' do
@@ -117,15 +98,8 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        {
-          date: Date.new(1999, 9, 9),
-          case_number: nil,
-        }
-      ]
-
       tree = Parser.new.parse(text)
-      expect(described_class.new(tree).convictions).to eq expected_convictions
+      expect(described_class.new(tree).convictions[0][:case_number]).to eq nil
     end
 
     it 'returns nil case number for an unknown case number' do
@@ -141,10 +115,28 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
+      tree = Parser.new.parse(text)
+      expect(described_class.new(tree).convictions[0][:case_number]).to eq nil
+    end
+
+    it 'includes courthouse in the conviction data' do
+      text = <<~TEXT
+        info
+        * * * *
+        COURT: NAME7OZ
+        19820915 CASC SAN FRANCISCO CO
+
+        CNT: 001
+        garbled
+        DISPO:CONVICTED
+        * * * END OF MESSAGE * * *
+      TEXT
+
       expected_convictions = [
         {
           date: Date.new(1982, 9, 15),
           case_number: nil,
+          courthouse: 'CASC SAN FRANCISCO CO'
         }
       ]
 
