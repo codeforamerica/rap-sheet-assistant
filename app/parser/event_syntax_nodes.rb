@@ -11,6 +11,14 @@ module EventGrammar
     def disposition
       count_content.disposition_content
     end
+
+    def penal_code
+      count_content.charge_line.penal_code
+    end
+
+    def penal_code_description
+      count_content.charge_line.penal_code_description
+    end
   end
 
   class Convicted < Treetop::Runtime::SyntaxNode; end

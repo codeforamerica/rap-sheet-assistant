@@ -15,7 +15,18 @@ class RapSheetPresenter
     end
 
     court_events.map do |e|
+      convicted_counts = e.counts.elements.select { |c| c.disposition.is_a? EventGrammar::Convicted }
+      counts = convicted_counts.map do |count|
+        {
+            penal_code: format_penal_code(count),
+            penal_code_description: format_penal_code_description(count)
+        }
+      end
+
+      puts counts
+
       {
+        counts: counts,
         date: format_date(e),
         case_number: format_case_number(e.case_number),
         courthouse: format_courthouse(e),
@@ -26,6 +37,22 @@ class RapSheetPresenter
   private
 
   attr_reader :parsed_rap_sheet
+
+  def format_penal_code(count)
+    if count.respond_to?(:penal_code)
+      "#{count.penal_code.code.text_value} #{count.penal_code.number.text_value}"
+    else
+      #check comments for charge
+    end
+  end
+
+  def format_penal_code_description(count)
+    if count.respond_to?(:penal_code)
+      count.penal_code_description.text_value
+    else
+      #check comments for charge
+    end
+  end
 
   def format_courthouse(e)
     courthouse_names = {
