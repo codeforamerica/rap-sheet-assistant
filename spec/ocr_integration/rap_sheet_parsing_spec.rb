@@ -35,7 +35,8 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       detected_convictions = rap_sheet.convictions.map do |c|
         {
           date: c[:date],
-          case_number: c[:case_number]
+          case_number: c[:case_number],
+          courthouse: c[:courthouse].upcase
         }
       end
       matches = detected_convictions.select do |c|
@@ -88,7 +89,7 @@ def expected_values(rap_sheet_prefix)
     {
       date: Date.strptime(c[:date], '%m/%d/%Y'),
       case_number: c[:case_number].gsub(' ', ''),
-      # courthouse: c[:courthouse].upcase
+      courthouse: c[:courthouse].upcase.chomp(' CO')
     }
   end
 end

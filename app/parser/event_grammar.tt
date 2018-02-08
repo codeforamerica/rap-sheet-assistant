@@ -4,7 +4,7 @@ grammar EventGrammar
   end
 
   rule court_event
-    'COURT' w ':' stuff date wn [.']* courthouse wn toc? (!count_identifier .)* counts <CourtEvent>
+    'COURT' w ':' stuff date wn [.']* wn courthouse wn toc? (!count_identifier .)* counts <CourtEvent>
   end
 
   rule unknown_event
@@ -12,15 +12,21 @@ grammar EventGrammar
   end
 
   rule courthouse
-    'CASC SAN FRANCISCO CO' / 'CASC SAN FRANCISCO co'
+    'CASC SAN FRANCISCO' /
     'CAMC RICHMOND' /
     'CASC MCRICHMOND' /
     'CAMC CONCORD' /
     'CASC CONCORD' /
-    'CASC CONTRA COSTA CO' /
+    'CASC CONTRA COSTA' /
     'CASC PITTSBURG' /
     'CASC PLACER' /
     'CASC WALNUT CREEK' /
+    'CASC MCSAN RAFAEL' /
+    'CASC MCOAKLAND' /
+    'CAMC HAYWARD' /
+    'CASC MCSACRAMENTO' /
+    'CASC SN JOSE' /
+    'CAMC LOS ANGELES METRO' /
     (!count_identifier !toc !N .)*
   end
 

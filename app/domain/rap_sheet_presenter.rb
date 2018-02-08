@@ -11,7 +11,7 @@ class RapSheetPresenter
     end
 
     court_events = court_events.select do |e|
-      e.counts.elements.any? {|c| c.disposition.is_a? EventGrammar::Convicted }
+      e.counts.elements.any? { |c| c.disposition.is_a? EventGrammar::Convicted }
     end
 
     court_events.map do |e|
@@ -28,7 +28,31 @@ class RapSheetPresenter
   attr_reader :parsed_rap_sheet
 
   def format_courthouse(e)
-    e.courthouse.text_value
+    courthouse_names = {
+      'CASC SAN FRANCISCO' => 'CASC San Francisco',
+      'CAMC RICHMOND' => 'CAMC Richmond',
+      'CASC MCRICHMOND' => 'CASC Richmond',
+      'CAMC CONCORD' => 'CAMC Concord',
+      'CASC CONCORD' => 'CASC Concord',
+      'CASC CONTRA COSTA' => 'CASC Contra Costa',
+      'CASC PITTSBURG' => 'CASC Pittsburg',
+      'CASC PLACER' => 'CASC Placer',
+      'CASC WALNUT CREEK' => 'CASC Walnut Creek',
+      'CASC MCSAN RAFAEL' => 'CASC MC San Rafael',
+      'CASC MCOAKLAND' => 'CASC MC Oakland',
+      'CAMC HAYWARD' => 'CAMC Hayward',
+      'CASC MCSACRAMENTO' => 'CASC MC Sacramento',
+      'CASC SN JOSE' => 'CASC San Jose',
+      'CAMC LOS ANGELES METRO' => 'CAMC Los Angeles Metro'
+    }
+
+    courthouse_text = e.courthouse.text_value.gsub('.', '').upcase
+
+    if courthouse_names.key?(courthouse_text)
+      courthouse_names[courthouse_text]
+    else
+      courthouse_text
+    end
   end
 
   def format_case_number(c)

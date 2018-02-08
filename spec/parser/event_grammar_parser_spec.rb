@@ -37,7 +37,7 @@ RSpec.describe EventGrammarParser do
       end
 
       it 'identifies the courthouse' do
-        expect(subject.courthouse.text_value).to eq('CASC SAN FRANCISCO CO')
+        expect(subject.courthouse.text_value).to eq('CASC SAN FRANCISCO')
       end
 
       it 'identifies the case number' do

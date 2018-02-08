@@ -136,12 +136,60 @@ describe RapSheetPresenter do
         {
           date: Date.new(1982, 9, 15),
           case_number: nil,
-          courthouse: 'CASC SAN FRANCISCO CO'
+          courthouse: 'CASC San Francisco'
         }
       ]
 
       tree = Parser.new.parse(text)
       expect(described_class.new(tree).convictions).to eq expected_convictions
+    end
+
+    it 'translates courthouse names to display names' do
+      text = <<~TEXT
+        info
+        * * * *
+        COURT: NAME7OZ
+        19820915 CASC SN JOSE
+        
+        CNT: 001 #45      6
+        DISPO:CONVICTED
+        * * * END OF MESSAGE * * *
+      TEXT
+
+      tree = Parser.new.parse(text)
+      expect(described_class.new(tree).convictions[0][:courthouse]).to eq 'CASC San Jose'
+    end
+
+    it 'displays unknown courthouse names directly' do
+      text = <<~TEXT
+        info
+        * * * *
+        COURT: NAME7OZ
+        19820915 CASC ANYTOWN USA
+        
+        CNT: 001 #45      6
+        DISPO:CONVICTED
+        * * * END OF MESSAGE * * *
+      TEXT
+
+      tree = Parser.new.parse(text)
+      expect(described_class.new(tree).convictions[0][:courthouse]).to eq 'CASC ANYTOWN USA'
+    end
+
+    it 'strips periods from courthouse names' do
+      text = <<~TEXT
+        info
+        * * * *
+        COURT: NAME7OZ
+        19820915 CAMC LOS .ANGELES METRO
+        
+        CNT: 001 #45      6
+        DISPO:CONVICTED
+        * * * END OF MESSAGE * * *
+      TEXT
+
+      tree = Parser.new.parse(text)
+      expect(described_class.new(tree).convictions[0][:courthouse]).to eq 'CAMC Los Angeles Metro'
     end
   end
 
