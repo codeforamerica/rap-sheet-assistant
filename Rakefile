@@ -5,8 +5,12 @@ require_relative 'config/application'
 
 Rails.application.load_tasks
 
-RSpec::Core::RakeTask.new(:ocr) do |t|
-  t.rspec_opts = '--tag ocr_integration'
+begin
+  RSpec::Core::RakeTask.new(:ocr) do |t|
+    t.rspec_opts = '--tag ocr_integration'
+  end
+rescue NameError
+  # rspec is not available
 end
 
 task :upload_test_images, [:pdf] do |t, args|
