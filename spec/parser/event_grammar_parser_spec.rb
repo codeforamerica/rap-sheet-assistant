@@ -16,8 +16,11 @@ RSpec.describe EventGrammarParser do
           20040102  CASC SAN FRANCISCO CO fds
 
           CNT: 001  #346477
-          blah
-          DISPO:CONVICTED
+            496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+          *DISPO:CONVICTED
+          CONV STATUS:MISDEMEANOR
+          SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+          COM: SENTENCE CONCURRENT WITH FILE #743-2:
 
           CNT: 002
           count 2 text
@@ -47,6 +50,9 @@ RSpec.describe EventGrammarParser do
       it 'identifies count data' do
         count_1 = subject.counts[0]
         expect(count_1.disposition).to be_a EventGrammar::Convicted
+        expect(count_1.penal_code.text_value).to eq '496 PC'
+        expect(count_1.penal_code_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
+
         count_2 = subject.counts[1]
         expect(count_2.disposition.text_value).to eq('DISPO:DISMISSED')
         count_3 = subject.counts[2]
@@ -171,6 +177,23 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
+      end
+
+    it 'parses when charge is in the comments' do
+      text = <<~TEXT
+        COURT:
+        20040102  NEW COURTHOUSE TOC:M
+        CNT :003
+         SEE COMMENT FOR CHARGE
+        DISPO:CONVICTED
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      count = tree.counts[0].count_content
+      expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
+      expect(count.disposition_content.text_value).to eq('DISPO:CONVICTED')
     end
   end
 end

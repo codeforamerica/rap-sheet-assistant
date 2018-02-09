@@ -55,7 +55,37 @@ grammar EventGrammar
   end
 
   rule count_content
-    (!count_identifier !disposition .)* disposition_content (!count_identifier .)*
+    charge_line wn toc? wn disposition_content extra_count_info
+  end
+
+  rule charge_line
+    'SEE COMMENT FOR CHARGE' /
+    penal_code_line /
+    (!count_identifier !disposition .)*
+  end
+
+  rule penal_code_line
+    penal_code '-'* penal_code_description <PenalCodeLine>
+  end
+
+  rule penal_code_description
+    (!count_identifier !disposition .)*
+  end
+
+  rule penal_code
+     number code
+  end
+
+  rule number
+    (!code !count_identifier !disposition .)*
+  end
+
+  rule code
+    'PC' / 'HSC' / 'HS' / 'VC' / 'BPC'
+  end
+
+  rule extra_count_info
+    (!count_identifier .)*
   end
 
   rule disposition_content
@@ -67,7 +97,7 @@ grammar EventGrammar
   end
 
   rule convicted
-    'DISPO' w (':' / ';') w 'CONVICTED' <Convicted>
+    '*'? 'DISPO' w (':' / ';') w 'CONVICTED' <Convicted>
   end
 
   rule dismissed
