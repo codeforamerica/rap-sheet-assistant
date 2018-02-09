@@ -9,6 +9,7 @@
         <th>Conviction Date</th>
         <th>Case Number</th>
         <th>Courthouse</th>
+        <th>Counts</th>
       </tr>
       </thead>
       <tbody>
@@ -17,6 +18,13 @@
           <td><%= date[:date] %></td>
           <td><%= date[:case_number] %></td>
           <td><%= date[:courthouse] %></td>
+          <td>
+            <ul>
+              <% date[:counts].each do |count| %>
+                <li><%="#{ count[:penal_code]} --- #{count[:penal_code_description] }"%></li>
+              <% end %>
+            </ul>
+          </td>
         </tr>
       <% end %>
       </tbody>

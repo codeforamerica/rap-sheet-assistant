@@ -10,9 +10,10 @@ class CountPresenter
 
   def self.format_penal_code(count)
     if count.penal_code
-      "#{count.penal_code.code.text_value} #{count.penal_code.number.text_value.rstrip}"
+      "#{count.penal_code.code.text_value} #{count.penal_code.number.text_value.delete(' ')}"
     else
       #check comments for charge
+      ''
     end
   end
 
@@ -21,6 +22,7 @@ class CountPresenter
       count.penal_code_description.text_value.chomp
     else
       #check comments for charge
+      ''
     end
   end
 end

@@ -47,8 +47,8 @@ describe RapSheetPresenter do
           courthouse: 'CAMC L05 ANGELES METRO',
           counts: [
             {
-              penal_code: nil,
-              penal_code_description: nil
+              penal_code: '',
+              penal_code_description: ''
             },
             {
               penal_code: 'PC 4056',

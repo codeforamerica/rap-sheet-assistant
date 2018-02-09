@@ -51,7 +51,8 @@ RSpec.describe EventGrammarParser do
       it 'identifies count data' do
         count_1 = subject.counts[0]
         expect(count_1.disposition).to be_a EventGrammar::Convicted
-        expect(count_1.penal_code.text_value).to eq '496 PC'
+        expect(count_1.penal_code.code.text_value).to eq 'PC'
+        expect(count_1.penal_code.number.text_value).to eq '496'
         expect(count_1.penal_code_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
 
         count_2 = subject.counts[1]
@@ -178,7 +179,7 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
-      end
+    end
 
     it 'parses when charge is in the comments' do
       text = <<~TEXT
@@ -195,6 +196,47 @@ RSpec.describe EventGrammarParser do
       count = tree.counts[0].count_content
       expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
       expect(count.disposition_content.text_value).to eq('DISPO:CONVICTED')
+    end
+
+    it 'parses penal code when sentencing line exists' do
+      text = <<~TEXT
+        COURT:
+        20040102  CASC SAN FRANCISCO CO fds
+
+        CNT: 001  #346477
+         .-1170 (H) PC-SENTENCING
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+        COM: SENTENCE CONCURRENT WITH FILE #743-2:
+      TEXT
+
+      tree = described_class.new.parse(text)
+      count_1 = tree.counts[0]
+      expect(count_1.penal_code.code.text_value).to eq 'PC'
+      expect(count_1.penal_code.number.text_value).to eq '496'
+      expect(count_1.penal_code_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
+    end
+
+    it 'parses out punctuation around penal code' do
+      text = <<~TEXT
+        COURT:
+        20040102  CASC SAN FRANCISCO CO fds
+
+        CNT: 001  #346477
+          -496. PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+        COM: SENTENCE CONCURRENT WITH FILE #743-2:
+      TEXT
+
+      tree = described_class.new.parse(text)
+      count_1 = tree.counts[0]
+      expect(count_1.penal_code.code.text_value).to eq 'PC'
+      expect(count_1.penal_code.number.text_value).to eq '496'
+      expect(count_1.penal_code_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
     end
   end
 end
