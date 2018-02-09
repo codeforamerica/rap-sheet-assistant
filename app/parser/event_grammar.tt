@@ -1,4 +1,6 @@
 grammar EventGrammar
+  include CommonGrammar
+
   rule event
    (court_event / unknown_event)
   end
@@ -114,21 +116,5 @@ grammar EventGrammar
 
   rule date
     [0-9] 8..8
-  end
-
-  rule W
-    [ \t]+
-  end
-
-  rule N
-    [\n]+
-  end
-
-  rule w
-   W?
-  end
-
-  rule wn
-    [ \t\n]*
   end
 end

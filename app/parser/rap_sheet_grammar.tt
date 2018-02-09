@@ -1,4 +1,6 @@
 grammar RapSheetGrammar
+  include CommonGrammar
+
   rule rap_sheet
     personal_info cycles end_of_message
   end
@@ -33,21 +35,5 @@ grammar RapSheetGrammar
 
   rule asterisks
     ('*' / W)*
-  end
-
-  rule W
-    [ \t]+
-  end
-
-  rule N
-    [\n]+
-  end
-
-  rule w
-   W?
-  end
-
-  rule wn
-    [ \t\n]*
   end
 end

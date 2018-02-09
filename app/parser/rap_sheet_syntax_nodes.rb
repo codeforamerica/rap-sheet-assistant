@@ -1,5 +1,6 @@
 module RapSheetGrammar
   class Cycle < Treetop::Runtime::SyntaxNode
+    Treetop.load 'app/parser/common_grammar'
     Treetop.load 'app/parser/cycle_grammar'
 
     def events

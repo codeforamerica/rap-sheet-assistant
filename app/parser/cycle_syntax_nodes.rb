@@ -2,6 +2,7 @@ require_relative './treetop_monkeypatches'
 
 module CycleGrammar
   class Cycle < Treetop::Runtime::SyntaxNode
+    Treetop.load 'app/parser/common_grammar'
     Treetop.load 'app/parser/event_grammar'
 
     def events

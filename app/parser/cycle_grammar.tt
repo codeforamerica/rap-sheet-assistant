@@ -1,4 +1,6 @@
 grammar CycleGrammar
+  include CommonGrammar
+
   rule root
     event_content (event_delimiter event_content)* <Cycle>
   end
@@ -13,21 +15,5 @@ grammar CycleGrammar
 
   rule court_identifier
     'COURT' w ':'
-  end
-
-  rule W
-    [ \t]+
-  end
-
-  rule N
-    [\n]+
-  end
-
-  rule w
-   W?
-  end
-
-  rule wn
-    [ \t\n]*
   end
 end

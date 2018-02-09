@@ -3,6 +3,7 @@ require_relative './cycle_syntax_nodes'
 require_relative './event_syntax_nodes'
 
 class Parser
+  Treetop.load 'app/parser/common_grammar'
   Treetop.load 'app/parser/rap_sheet_grammar'
 
   def parse(text)

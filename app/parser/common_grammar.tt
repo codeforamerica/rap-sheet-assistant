@@ -1,0 +1,17 @@
+grammar CommonGrammar
+  rule wn
+    [ \t\n]*
+  end
+
+  rule W
+    [ \t]+
+  end
+
+  rule N
+    [\n]+
+  end
+
+  rule w
+    W?
+  end
+end

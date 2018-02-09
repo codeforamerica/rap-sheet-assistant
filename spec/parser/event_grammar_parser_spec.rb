@@ -3,6 +3,7 @@ require 'treetop'
 
 require_relative '../../app/parser/event_syntax_nodes'
 
+Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/event_grammar'
 
 RSpec.describe EventGrammarParser do

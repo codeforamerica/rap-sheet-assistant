@@ -3,6 +3,7 @@ require 'treetop'
 
 require_relative '../../app/parser/cycle_syntax_nodes'
 
+Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/cycle_grammar'
 
 RSpec.describe CycleGrammarParser do
