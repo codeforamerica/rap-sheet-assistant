@@ -1,6 +1,7 @@
 require_relative './rap_sheet_syntax_nodes'
 require_relative './cycle_syntax_nodes'
 require_relative './event_syntax_nodes'
+require_relative './count_syntax_nodes'
 
 class Parser
   Treetop.load 'app/parser/common_grammar'

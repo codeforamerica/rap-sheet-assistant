@@ -14,4 +14,8 @@ grammar CommonGrammar
   rule w
     W?
   end
+
+  rule toc
+    'TOC' w ':' w [MFIN]
+  end
 end

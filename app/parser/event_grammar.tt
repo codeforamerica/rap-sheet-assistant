@@ -37,15 +37,11 @@ grammar EventGrammar
   end
 
   rule count_with_case_number
-    count_identifier [ \t\n.:]* case_number wn count_content <CountWithCaseNumber>
+    count_identifier [ \t\n.:]* case_number wn count_info <CountWithCaseNumber>
   end
 
   rule count
-    count_identifier wn count_content <Count>
-  end
-
-  rule toc
-    'TOC' w ':' w [MFIN]
+    count_identifier wn count_info <Count>
   end
 
   rule count_identifier
@@ -56,62 +52,8 @@ grammar EventGrammar
     '-' [0-9]2..3
   end
 
-  rule count_content
-    sentencing_line? charge_line wn toc? wn disposition_content extra_count_info
-  end
-
-  rule sentencing_line
-    stray_punctuation '1170' w '(H)' w 'PC-SENTENCING' wn
-  end
-
-  rule charge_line
-    'SEE COMMENT FOR CHARGE' /
-    penal_code_line /
-    (!count_identifier !disposition .)*
-  end
-
-  rule penal_code_line
-    stray_punctuation penal_code '-'* penal_code_description <PenalCodeLine>
-  end
-
-  rule penal_code_description
-    (!count_identifier !disposition .)*
-  end
-
-  rule penal_code
-     number stray_punctuation code
-  end
-
-  rule stray_punctuation
-    [ \t\n.•\-*]*
-  end
-
-  rule number
-    (!code !count_identifier !disposition !(stray_punctuation &code) .)*
-  end
-
-  rule code
-    'PC' / 'HSC' / 'HS' / 'VC' / 'BPC'
-  end
-
-  rule extra_count_info
+  rule count_info
     (!count_identifier .)*
-  end
-
-  rule disposition_content
-    disposition?
-  end
-
-  rule disposition
-    convicted / dismissed
-  end
-
-  rule convicted
-    '*'? w 'DISPO' w (':' / ';') w 'CONVICTED' <Convicted>
-  end
-
-  rule dismissed
-    'DISPO:DISMISSED'
   end
 
   rule case_number

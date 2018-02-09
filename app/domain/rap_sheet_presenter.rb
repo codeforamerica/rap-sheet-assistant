@@ -7,11 +7,11 @@ class RapSheetPresenter
     end
 
     court_events = court_events.select do |e|
-      e.counts.elements.any? { |c| c.disposition.is_a? EventGrammar::Convicted }
+      e.counts.elements.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
     end
 
     convictions = court_events.map do |e|
-      convicted_counts = e.counts.elements.select { |c| c.disposition.is_a? EventGrammar::Convicted }
+      convicted_counts = e.counts.elements.select { |c| c.disposition.is_a? CountGrammar::Convicted }
 
       {
         counts: convicted_counts.map { |c| CountPresenter.present(c) },

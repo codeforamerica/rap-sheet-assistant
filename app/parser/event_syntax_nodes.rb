@@ -8,26 +8,25 @@ module EventGrammar
   end
 
   class Count < Treetop::Runtime::SyntaxNode
+    Treetop.load 'app/parser/common_grammar'
+    Treetop.load 'app/parser/count_grammar'
+
     def disposition
       count_content.disposition_content
     end
 
     def penal_code
-      if count_content.charge_line.is_a? PenalCodeLine
-        count_content.charge_line.penal_code
-      end
+      count_content.penal_code
     end
 
     def penal_code_description
-      if count_content.charge_line.is_a? PenalCodeLine
-        count_content.charge_line.penal_code_description
-      end
+      count_content.penal_code_description
+    end
+
+    def count_content
+      @count_content ||= CountGrammarParser.new.parse(count_info.text_value)
     end
   end
-
-  class Convicted < Treetop::Runtime::SyntaxNode; end
-
-  class PenalCodeLine < Treetop::Runtime::SyntaxNode; end
 
   class CountWithCaseNumber < Count; end
 end
