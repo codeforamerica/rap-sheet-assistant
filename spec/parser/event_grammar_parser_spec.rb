@@ -52,9 +52,9 @@ RSpec.describe EventGrammarParser do
       it 'identifies count data' do
         count_1 = subject.counts[0]
         expect(count_1.disposition).to be_a CountGrammar::Convicted
-        expect(count_1.penal_code.code.text_value).to eq 'PC'
-        expect(count_1.penal_code.number.text_value).to eq '496'
-        expect(count_1.penal_code_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
+        expect(count_1.code_section.code.text_value).to eq 'PC'
+        expect(count_1.code_section.number.text_value).to eq '496'
+        expect(count_1.code_section_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
 
         count_2 = subject.counts[1]
         expect(count_2.disposition.text_value).to eq('DISPO:DISMISSED')

@@ -11,19 +11,19 @@ grammar CountGrammar
 
     rule charge_line
       'SEE COMMENT FOR CHARGE' /
-      penal_code_line /
+      code_section_line /
       (!disposition .)*
     end
 
-    rule penal_code_line
-      stray_punctuation penal_code '-'* penal_code_description <PenalCodeLine>
+    rule code_section_line
+      stray_punctuation code_section '-'* code_section_description <CodeSectionLine>
     end
 
-    rule penal_code_description
+    rule code_section_description
       (!disposition .)*
     end
 
-    rule penal_code
+    rule code_section
        number stray_punctuation code
     end
 

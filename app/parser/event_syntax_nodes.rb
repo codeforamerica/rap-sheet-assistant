@@ -15,12 +15,12 @@ module EventGrammar
       count_content.disposition_content
     end
 
-    def penal_code
-      count_content.penal_code
+    def code_section
+      count_content.code_section
     end
 
-    def penal_code_description
-      count_content.penal_code_description
+    def code_section_description
+      count_content.code_section_description
     end
 
     def count_content

@@ -47,12 +47,12 @@ describe RapSheetPresenter do
           courthouse: 'CAMC L05 ANGELES METRO',
           counts: [
             {
-              penal_code: '',
-              penal_code_description: ''
+              code_section: '',
+              code_section_description: ''
             },
             {
-              penal_code: 'PC 4056',
-              penal_code_description: 'BREAKING AND ENTERING'
+              code_section: 'PC 4056',
+              code_section_description: 'BREAKING AND ENTERING'
             }
           ]
         }

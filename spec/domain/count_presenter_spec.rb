@@ -27,8 +27,8 @@ describe CountPresenter do
     count_node = tree.cycles[0].events[0].counts[0]
 
     expect(described_class.present(count_node)).to eq ({
-      penal_code: 'PC 496',
-      penal_code_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      code_section: 'PC 496',
+      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     })
   end
 
@@ -48,8 +48,8 @@ describe CountPresenter do
     count_node = tree.cycles[0].events[0].counts[0]
 
     expect(described_class.present(count_node)).to eq ({
-      penal_code: '',
-      penal_code_description: ''
+      code_section: '',
+      code_section_description: ''
     })
   end
 
@@ -73,8 +73,8 @@ describe CountPresenter do
     count_node = tree.cycles[0].events[0].counts[0]
 
     expect(described_class.present(count_node)).to eq ({
-      penal_code: 'PC 496(A)(2)',
-      penal_code_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      code_section: 'PC 496(A)(2)',
+      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     })
   end
 
