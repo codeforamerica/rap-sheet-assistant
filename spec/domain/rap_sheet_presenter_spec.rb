@@ -11,7 +11,7 @@ require_relative '../../app/domain/case_number_presenter'
 require_relative '../../app/domain/rap_sheet_presenter'
 
 describe RapSheetPresenter do
-  describe '#convictions' do
+  describe '.present' do
     it 'only returns events with convictions' do
       text = <<~TEXT
         info
@@ -59,7 +59,7 @@ describe RapSheetPresenter do
       ]
 
       tree = Parser.new.parse(text)
-      expect(described_class.new(tree).convictions).to eq expected_convictions
+      expect(described_class.present(tree)[:convictions]).to eq expected_convictions
     end
   end
 

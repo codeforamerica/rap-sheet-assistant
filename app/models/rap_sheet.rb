@@ -6,7 +6,7 @@ class RapSheet < ApplicationRecord
   end
 
   def convictions
-    RapSheetPresenter.new(parsed_tree).convictions
+    RapSheetPresenter.present(parsed_tree)[:convictions]
   end
 
   private
