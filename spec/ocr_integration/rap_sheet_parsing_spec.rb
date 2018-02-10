@@ -16,7 +16,6 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       actual_convictions: 0,
       detected_convictions: 0,
       correctly_detected_convictions: 0,
-      missed_convictions: 0
     }
 
     file_names = directory.files.map(&:key)
@@ -39,21 +38,19 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           courthouse: c[:courthouse].upcase
         }
       end
-      matches = detected_convictions.select do |c|
-        if expected_convictions.include?(c)
-          true
-        else
-          puts "Parsed conviction #{c} failed to match expectations"
-          false
-        end
-      end.length
+
+      detected_misses = detected_convictions.select do |c|
+        !expected_convictions.include?(c)
+      end
+      matches = detected_convictions.length - detected_misses.length
+
+      print_missed_convictions(detected_misses, 'Detected convictions failed to match expected values:')
 
       missed_convictions = expected_convictions.select do |c|
-        unless detected_convictions.include?(c)
-          puts "Conviction #{c} failed to be detected"
-          true
-        end
-      end.length
+        !detected_convictions.include?(c)
+      end
+
+      print_missed_convictions(missed_convictions, "\nFailed to detect expected convictions:")
 
       actual_convictions = expected_convictions.length
       detected_convictions = detected_convictions.length
@@ -61,24 +58,19 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       summary_stats[:actual_convictions] += actual_convictions
       summary_stats[:detected_convictions] += detected_convictions
       summary_stats[:correctly_detected_convictions] += matches
-      summary_stats[:missed_convictions] += missed_convictions
 
-      puts "Actual Convictions: #{actual_convictions}"
       puts "Detected Convictions: #{detected_convictions}"
-      puts "Correctly Detected Convictions: #{matches}"
-      puts "Missed Convictions: #{missed_convictions}"
-      puts "Accuracy: #{matches.to_f / actual_convictions.to_f * 100}%"
+      puts "Correctly detected #{matches} out of #{actual_convictions} convictions"
+      puts "Accuracy: #{compute_accuracy(matches, actual_convictions)}%"
     end
 
     puts '------------- Summary -------------'
-    puts "Actual Convictions: #{summary_stats[:actual_convictions]}"
     puts "Detected Convictions: #{summary_stats[:detected_convictions]}"
-    puts "Correctly Detected Convictions: #{summary_stats[:correctly_detected_convictions]}"
-    puts "Missed Convictions: #{summary_stats[:missed_convictions]}"
-    accuracy = summary_stats[:correctly_detected_convictions].to_f / summary_stats[:actual_convictions].to_f
-    puts "Accuracy: #{accuracy * 100}%"
+    puts "Correctly detected #{summary_stats[:correctly_detected_convictions]} out of #{summary_stats[:actual_convictions]} convictions"
+    accuracy = compute_accuracy(summary_stats[:correctly_detected_convictions], summary_stats[:actual_convictions])
+    puts "Accuracy: #{accuracy}%"
 
-    expect(accuracy).to be > 0.9
+    expect(accuracy).to be > 90
   end
 end
 
@@ -127,4 +119,18 @@ def create_rap_sheet(file_names, rap_sheet_prefix)
     )
   end
   rap_sheet
+end
+
+def print_missed_convictions(misses, info_string)
+  unless misses.empty?
+    puts info_string
+
+    misses.each do |c|
+      pp c
+    end
+  end
+end
+
+def compute_accuracy(matches, actual_convictions)
+  (matches.to_f / actual_convictions.to_f * 100).round(2)
 end
