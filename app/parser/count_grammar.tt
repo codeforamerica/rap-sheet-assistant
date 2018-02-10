@@ -40,7 +40,19 @@ grammar CountGrammar
     end
 
     rule extra_count_info
-      .*
+      (comment_charge_line / unknown_content_line)*
+    end
+
+    rule comment_charge_line
+      stray_punctuation 'COM' w ':' (!'CHRG' .)* 'CHRG' '-'? w code_section to_eol <CommentChargeLine>
+    end
+
+    rule unknown_content_line
+      to_eol
+    end
+
+    rule to_eol
+      (!N .)* N
     end
 
     rule disposition_content

@@ -24,12 +24,36 @@ describe CountGrammarParser do
       text = <<~TEXT
          SEE COMMENT FOR CHARGE
         DISPO:CONVICTED
-        count 3 text
+        CONV STATUS:FELONY
+        COM: SEN-X3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN
+        COM: CNT 01 CHRG-484-487 (A) PC SECOND DEGREE
+        DCN:T11389422131233123000545
       TEXT
 
       count = described_class.new.parse(text)
       expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
       expect(count.disposition_content.text_value).to eq('DISPO:CONVICTED')
+
+      expect(count.code_section.code.text_value).to eq 'PC'
+      expect(count.code_section.number.text_value).to eq '484-487 (A)'
+    end
+
+    it 'parses when charge is in the comments' do
+      text = <<~TEXT
+         SEE COMMENT FOR CHARGE
+        DISPO:CONVICTED
+        CONV STATUS:FELONY
+        COM: SEN-X3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN
+        .COM: CHRG 490,2 PC
+        DCN:T11389422131233123000545
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
+      expect(count.disposition_content.text_value).to eq('DISPO:CONVICTED')
+
+      expect(count.code_section.code.text_value).to eq 'PC'
+      expect(count.code_section.number.text_value).to eq '490,2'
     end
 
     it 'parses code section when sentencing line exists' do

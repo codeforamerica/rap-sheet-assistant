@@ -15,6 +15,10 @@ grammar CommonGrammar
     W?
   end
 
+  rule n
+    N?
+  end
+
   rule toc
     'TOC' w ':' w [MFIN]
   end

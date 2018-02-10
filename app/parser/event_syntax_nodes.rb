@@ -24,7 +24,14 @@ module EventGrammar
     end
 
     def count_content
-      @count_content ||= CountGrammarParser.new.parse(count_info.text_value)
+      @count_content ||= CountGrammarParser.new.parse(count_info.text_value + "\n")
+
+      if @count_content.nil?
+        puts '---------- FAILED TO PARSE COUNT: --------'
+        p count_info.text_value
+      end
+
+      @count_content
     end
   end
 
