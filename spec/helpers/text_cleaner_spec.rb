@@ -4,9 +4,13 @@ require_relative '../../app/helpers/text_cleaner'
 describe TextCleaner do
   describe '.clean' do
     it 'replaces commonly mis-scanned text' do
-      expect(clean('foo cNT: foo')).to eq('foo CNT: foo')
-      expect(clean('wrong–dash')).to eq('wrong-dash')
-      expect(clean('CNI: hi')).to eq('CNT: hi')
+      expect(clean('FOO ÇNT: FOO')).to eq('FOO CNT: FOO')
+      expect(clean('WRONG–DASH')).to eq('WRONG-DASH')
+      expect(clean('CNI: HI')).to eq('CNT: HI')
+    end
+
+    it 'upcases all text' do
+      expect(clean('abcD')).to eq 'ABCD'
     end
   end
 end

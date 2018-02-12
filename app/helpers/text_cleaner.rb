@@ -1,10 +1,12 @@
 class TextCleaner
   SUBSTITUTION_PATTERNS = {
-    'CNT:' => [/[cÇ]NT:/, /CN[tÍI]:/],
+    'CNT:' => [/[Ç]NT:/, /CN[ÍI]:/],
     '-' => ['–']
   }.freeze
 
   def self.clean(text)
+    text = text.upcase
+
     SUBSTITUTION_PATTERNS.each do |correct_value, patterns|
       patterns.each do |pattern|
         text.gsub!(pattern, correct_value)
