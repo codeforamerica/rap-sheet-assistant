@@ -39,6 +39,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           counts: c[:counts].map do |count|
             {
               'code_section' => count[:code_section],
+              'status' => count[:severity]&.first,
             }
           end
         }
@@ -90,6 +91,7 @@ def expected_values(rap_sheet_prefix)
       counts: c[:counts].map do |count|
         {
           'code_section' => count[:code_section],
+          'status' => count[:status]
         }
       end
     }
