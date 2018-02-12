@@ -9,6 +9,8 @@ describe 'uploading a rap sheet' do
 
   it 'allows the user to upload their rap sheet and shows convictions' do
     visit root_path
+    expect(page).to have_content 'Upload your California RAP sheet'
+    click_on 'Start'
 
     expect(page).to have_content 'Upload your RAP sheet here!'
     attach_file 'Take photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'

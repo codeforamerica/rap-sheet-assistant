@@ -20,6 +20,9 @@ gem 'mini_magick'
 gem 'rtesseract'
 gem 'google-cloud-vision'
 gem 'treetop'
+gem 'jquery-rails'
+gem 'sprockets-rails', '> 2.3.2'
+gem 'bootstrap', '~> 4.0.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
