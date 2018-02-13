@@ -12,15 +12,19 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'Upload your California RAP sheet'
     click_on 'Start'
 
-    expect(page).to have_content 'Upload your RAP sheet here!'
+    expect(page).to have_content 'How many pages does your RAP sheet have?'
+    fill_in 'How many pages does your RAP sheet have?', with: '2'
+    click_on 'Next'
+
+    expect(page).to have_content 'Upload pages'
     attach_file 'Take photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     click_on 'Upload'
 
-    expect(page).to have_content 'Upload any additional pages'
+    expect(page).to have_content 'Upload pages'
     attach_file 'Take photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     click_on 'Upload'
 
-    expect(page).to have_content 'Upload any additional pages'
+    expect(page).to have_content 'Upload pages'
     click_on 'Done'
 
     expect(page).to have_content '1990-12-14'

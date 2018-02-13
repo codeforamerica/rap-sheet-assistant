@@ -1,5 +1,29 @@
-<p>Upload your RAP sheet here!</p>
+<div class="container">
+  <%= form_for @rap_sheet do |f| %>
+    <div class="form-group">
+      <label>
+        <h1 class="mt-5">How many pages does your RAP sheet have?</h1>
 
-<%= render partial: 'shared/rap_sheet_page_form', locals: {
-  rap_sheet_page: @rap_sheet_page
-} %>
+        <div class="row">
+          <div class="col-sm-2">
+            <%= f.number_field :number_of_pages, class: 'form-control' %>
+          </div>
+        </div>
+      </label>
+    </div>
+
+    <% if @rap_sheet.errors.count > 0 %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@rap_sheet.errors.count, "error") %> prohibited this rap sheet from being saved:</h2>
+
+        <ul>
+          <% @rap_sheet.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= f.submit 'Next →', class: 'btn btn-info' %>
+  <% end %>
+</div>
