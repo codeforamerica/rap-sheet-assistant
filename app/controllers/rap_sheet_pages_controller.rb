@@ -7,7 +7,11 @@ class RapSheetPagesController < ApplicationController
       rap_sheet: rap_sheet
     )
 
-    redirect_to edit_rap_sheet_path(rap_sheet)
+    if rap_sheet.number_of_pages == rap_sheet.rap_sheet_pages.count
+      redirect_to rap_sheet_path(rap_sheet)
+    else
+      redirect_to edit_rap_sheet_path(rap_sheet)
+    end
   end
 
   private

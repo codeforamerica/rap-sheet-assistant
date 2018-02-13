@@ -1,7 +1,20 @@
-<p>Upload pages</p>
+<div class="container">
+  <p class="mt-5">Add a photo for page <%= "#{@rap_sheet_page.page_number} of #{@rap_sheet.number_of_pages}" %></p>
 
-<%= render partial: 'shared/rap_sheet_page_form', locals: {
-  rap_sheet_page: @rap_sheet_page
-} %>
+  <%= form_for @rap_sheet_page, html: { multipart: true } do |f| %>
+    <label for="rap_sheet_page_rap_sheet_page_image">+ add photo</label>
+    <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera' %>
+    <%= f.hidden_field :rap_sheet_id %>
+    <div>
+      <%= f.submit 'Upload' %>
+    </div>
+  <% end %>
 
-<%= link_to('Done uploading', rap_sheet_path(@rap_sheet_id)) %>
+  <hr>
+  <p>Need <%= pluralize(@rap_sheet.number_of_pages - @rap_sheet_page.page_number + 1, "more photo") %></p>
+  <% (1..@rap_sheet.number_of_pages).each do |page_number| %>
+    <%= content_tag :div, class: "mr-2 page-indicator #{@rap_sheet_page.page_number > page_number ? 'completed' : ''}" do %>
+      <%= page_number %>
+    <% end %>
+  <% end %>
+</div>

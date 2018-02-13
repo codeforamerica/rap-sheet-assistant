@@ -1,0 +1,34 @@
+body {
+  font-size: 20px;
+}
+
+input {
+  font-size: 20px;
+}
+
+.border {
+  border: 1px solid black;
+}
+
+.page-indicator {
+  text-align: center;
+  border: 1px solid black;
+  width: 30px;
+  display: inline-block;
+  position: relative;
+
+  &.completed {
+    background-color: #26d640;
+    color: rgba(0, 0, 0, 0.1);
+
+    &:after {
+      content: '✓';
+      position: absolute;
+      color: rgba(0, 0, 0, 1);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}

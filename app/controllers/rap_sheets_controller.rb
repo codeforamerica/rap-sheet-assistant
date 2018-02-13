@@ -4,9 +4,10 @@ class RapSheetsController < ApplicationController
   end
 
   def edit
-    @rap_sheet_id = params[:id]
-    @rap_sheet_page = RapSheetPage.new(
-      rap_sheet_id: params[:id]
+    @rap_sheet = RapSheet.find(params[:id])
+
+    @rap_sheet_page = @rap_sheet.rap_sheet_pages.build(
+      page_number: @rap_sheet.rap_sheet_pages.count + 1
     )
   end
 

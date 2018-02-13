@@ -8,7 +8,7 @@ class RapSheetPage < ApplicationRecord
     RapSheetPage.create!(
       rap_sheet_page_image: image,
       rap_sheet: rap_sheet,
-      page_number: rap_sheet.rap_sheet_pages.count,
+      page_number: rap_sheet.rap_sheet_pages.count + 1,
       text: TextScanner.scan_text(image.path),
     )
   end
