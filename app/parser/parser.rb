@@ -1,12 +1,12 @@
-require_relative './rap_sheet_syntax_nodes'
-require_relative './cycle_syntax_nodes'
-require_relative './event_syntax_nodes'
-require_relative './count_syntax_nodes'
+Treetop.load 'app/parser/common_grammar'
+Treetop.load 'app/parser/rap_sheet_grammar'
+
+require_dependency './rap_sheet_syntax_nodes'
+require_dependency './cycle_syntax_nodes'
+require_dependency './event_syntax_nodes'
+require_dependency './count_syntax_nodes'
 
 class Parser
-  Treetop.load 'app/parser/common_grammar'
-  Treetop.load 'app/parser/rap_sheet_grammar'
-
   def parse(text)
     cleaned_text = TextCleaner.clean(text)
     do_parsing(RapSheetGrammarParser.new, cleaned_text)

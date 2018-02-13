@@ -1,10 +1,8 @@
 require_relative './treetop_monkeypatches'
+Treetop.load 'app/parser/event_grammar'
 
 module CycleGrammar
   class Cycle < Treetop::Runtime::SyntaxNode
-    Treetop.load 'app/parser/common_grammar'
-    Treetop.load 'app/parser/event_grammar'
-
     def events
       parser = EventGrammarParser.new
 

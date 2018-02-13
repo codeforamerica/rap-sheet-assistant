@@ -1,4 +1,5 @@
 require_relative './treetop_monkeypatches'
+Treetop.load 'app/parser/count_grammar'
 
 module EventGrammar
   class CourtEvent < Treetop::Runtime::SyntaxNode
@@ -8,9 +9,6 @@ module EventGrammar
   end
 
   class Count < Treetop::Runtime::SyntaxNode
-    Treetop.load 'app/parser/common_grammar'
-    Treetop.load 'app/parser/count_grammar'
-
     def disposition
       count_content.disposition_content
     end
