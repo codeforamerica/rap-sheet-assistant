@@ -16,3 +16,9 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require_tree .
+
+$(document).ready(function () {
+  $('input[type="file"]').change(function(event) {
+    $(this).closest('form').submit();
+  });
+});

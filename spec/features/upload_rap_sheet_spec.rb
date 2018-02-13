@@ -17,12 +17,12 @@ describe 'uploading a rap sheet' do
     click_on 'Next'
 
     expect(page).to have_content 'Add a photo for page 1 of 2'
-    expect(page).to have_content 'Need 2 more photos'
+    expect(page).to have_content 'You need 2 more photos'
     attach_file '+ add photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     click_on 'Upload'
 
     expect(page).to have_content 'Add a photo for page 2 of 2'
-    expect(page).to have_content 'Need 1 more photo'
+    expect(page).to have_content 'You need 1 more photo'
     attach_file '+ add photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     click_on 'Upload'
 
