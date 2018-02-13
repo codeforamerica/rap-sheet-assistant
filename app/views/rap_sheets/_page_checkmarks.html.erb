@@ -1,0 +1,5 @@
+<% (1..@rap_sheet.number_of_pages).each do |page_number| %>
+  <%= content_tag :div, class: "mr-2 page-indicator #{completed_up_to >= page_number ? 'completed' : ''}" do %>
+    <%= page_number %>
+  <% end %>
+<% end %>

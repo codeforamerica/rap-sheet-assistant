@@ -20,9 +20,5 @@
     </div>
   </div>
   <p>You need <%= pluralize(@rap_sheet.number_of_pages - @rap_sheet_page.page_number + 1, "more photo") %></p>
-  <% (1..@rap_sheet.number_of_pages).each do |page_number| %>
-    <%= content_tag :div, class: "mr-2 page-indicator #{@rap_sheet_page.page_number > page_number ? 'completed' : ''}" do %>
-      <%= page_number %>
-    <% end %>
-  <% end %>
+  <%= render 'page_checkmarks', completed_up_to: @rap_sheet_page.page_number - 1 %>
 </div>

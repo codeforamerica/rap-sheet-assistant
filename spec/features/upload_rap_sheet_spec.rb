@@ -26,6 +26,9 @@ describe 'uploading a rap sheet' do
     attach_file '+ add photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     click_on 'Upload'
 
+    expect(page).to have_content 'You have successfully added all 2 pages of your RAP sheet!'
+    click_on 'Next'
+
     expect(page).to have_content '1990-12-14'
     expect(page).to have_content 'XR09005'
     expect(page).to have_content 'CASC LOS ANGELES'
