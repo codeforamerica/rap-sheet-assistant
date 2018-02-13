@@ -32,11 +32,7 @@ module CountGrammar
       severity_line = extra_conviction_info.elements.select do |l|
         l.is_a? SeverityLine
       end
-      if severity_line.empty?
-        puts extra_conviction_info.text_value
-      else
-        severity_line.first.severity
-      end
+      severity_line.first.severity unless severity_line.empty?
     end
   end
 
