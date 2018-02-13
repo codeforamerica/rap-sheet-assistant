@@ -39,6 +39,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           counts: c[:counts].map do |count|
             {
               'code_section' => count[:code_section],
+              'severity' => count[:severity]&.first,
             }
           end
         }
@@ -75,7 +76,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     accuracy = compute_accuracy(summary_stats[:correctly_detected_convictions], summary_stats[:actual_convictions])
     puts "Accuracy: #{accuracy}%"
 
-    expect(accuracy).to be > 90
+    expect(accuracy).to be > 75
   end
 end
 
@@ -85,11 +86,12 @@ def expected_values(rap_sheet_prefix)
   expected_convictions.map do |c|
     {
       date: Date.strptime(c[:date], '%m/%d/%Y'),
-      case_number: c[:case_number].gsub(' ', ''),
+      case_number: c[:case_number]&.gsub(' ', ''),
       courthouse: c[:courthouse].upcase.chomp(' CO'),
       counts: c[:counts].map do |count|
         {
           'code_section' => count[:code_section],
+          'severity' => count[:severity]
         }
       end
     }

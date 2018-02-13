@@ -28,11 +28,12 @@ describe CountPresenter do
 
     expect(described_class.present(count_node)).to eq ({
       code_section: 'PC 496',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+      severity: 'M'
     })
   end
 
-  it 'returns nil penal code and penal code description when no penal code exists' do
+  it 'returns nil fields when information not present' do
     text = <<~TEXT
       info
       * * * *
@@ -40,7 +41,7 @@ describe CountPresenter do
       19820915 CASC SN JOSE
 
       CNT: 001  #346477
-        bla bla bla
+        DISPO:CONVICTED
       * * * END OF MESSAGE * * *
     TEXT
 
@@ -48,8 +49,9 @@ describe CountPresenter do
     count_node = tree.cycles[0].events[0].counts[0]
 
     expect(described_class.present(count_node)).to eq ({
-      code_section: '',
-      code_section_description: ''
+      code_section: nil,
+      code_section_description: nil,
+      severity: nil
     })
   end
 
@@ -74,7 +76,8 @@ describe CountPresenter do
 
     expect(described_class.present(count_node)).to eq ({
       code_section: 'PC 496(A)(2)',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+      severity: 'M'
     })
   end
 
@@ -99,7 +102,8 @@ describe CountPresenter do
 
     expect(described_class.present(count_node)).to eq ({
       code_section: 'PC 496.3(A)(2)',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+      severity: 'M'
     })
   end
 end

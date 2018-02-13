@@ -1,6 +1,8 @@
 class TextCleaner
   SUBSTITUTION_PATTERNS = {
     'CNT:' => [/[Ç]NT:/, /CN[ÍI]:/],
+    'INFRACTION' => ['TNFRACTION'],
+    'CONV STATUS:' => [/CONV STATIS./],
     '-' => ['–']
   }.freeze
 
