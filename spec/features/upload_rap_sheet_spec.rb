@@ -29,6 +29,12 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'You have successfully added all 2 pages of your RAP sheet!'
     click_on 'Next'
 
+    expect(page).to have_content 'We found 5 convictions on your record.'
+    expect(page).to have_content '3 Felonies'
+    expect(page).to have_content '1 Misdemeanor'
+    expect(page).to have_content '1 Unknown'
+    click_on 'Next'
+
     expect(page).to have_content '1990-12-14'
     expect(page).to have_content 'XR09005'
     expect(page).to have_content 'CASC LOS ANGELES'

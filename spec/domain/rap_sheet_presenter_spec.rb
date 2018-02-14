@@ -40,28 +40,42 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        {
-          date: Date.new(1982, 9, 15),
-          case_number: '456',
-          courthouse: 'CAMC L05 ANGELES METRO',
-          counts: [
-            {
-              code_section: nil,
-              code_section_description: nil,
-              severity: nil
-            },
-            {
-              code_section: 'PC 4056',
-              code_section_description: 'BREAKING AND ENTERING',
-              severity: nil
-            }
-          ]
-        }
-      ]
+      expected_convictions = {
+        events_with_convictions: [
+          {
+            date: Date.new(1982, 9, 15),
+            case_number: '456',
+            courthouse: 'CAMC L05 ANGELES METRO',
+            counts: [
+              {
+                code_section: nil,
+                code_section_description: nil,
+                severity: nil
+              },
+              {
+                code_section: 'PC 4056',
+                code_section_description: 'BREAKING AND ENTERING',
+                severity: nil
+              }
+            ]
+          }
+        ],
+        conviction_counts: [
+          {
+            code_section: nil,
+            code_section_description: nil,
+            severity: nil
+          },
+          {
+            code_section: 'PC 4056',
+            code_section_description: 'BREAKING AND ENTERING',
+            severity: nil
+          }
+        ]
+      }
 
       tree = Parser.new.parse(text)
-      expect(described_class.present(tree)[:convictions]).to eq expected_convictions
+      expect(described_class.present(tree)).to eq expected_convictions
     end
   end
 

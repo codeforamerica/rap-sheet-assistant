@@ -21,7 +21,10 @@ class RapSheetPresenter
       }
     end
 
-    { convictions: convictions }
+    {
+      events_with_convictions: convictions,
+      conviction_counts: convictions.flat_map { |c| c[:counts] }
+    }
   end
 
   private

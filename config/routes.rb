@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :rap_sheets, only: [:index, :edit, :show, :create] do
     member do
       get :completed
+      get :debug
     end
   end
 

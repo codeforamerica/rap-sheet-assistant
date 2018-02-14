@@ -1,40 +1,32 @@
-<p>Here is your rap sheet</p>
-
-<div>
-  <div class="border">
-    <p>Convictions:</p>
-    <table>
-      <thead>
-      <tr>
-        <th>Conviction Date</th>
-        <th>Case Number</th>
-        <th>Courthouse</th>
-        <th>Counts</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @rap_sheet.convictions.each do |date| %>
-        <tr>
-          <td><%= date[:date] %></td>
-          <td><%= date[:case_number] %></td>
-          <td><%= date[:courthouse] %></td>
-          <td>
-            <ul>
-              <% date[:counts].each do |count| %>
-                <li><%="#{ count[:code_section]} --- #{count[:code_section_description] }"%></li>
-              <% end %>
-            </ul>
-          </td>
-        </tr>
+<div class="container">
+  <% if @rap_sheet.num_convictions > 0 %>
+    <h1 class="mt-5">We found <mark><%= pluralize(@rap_sheet.num_convictions, 'conviction') %></mark> on your record.</h1>
+    <ul>
+      <% if @rap_sheet.num_felonies > 0 %>
+        <li><%= pluralize(@rap_sheet.num_felonies, 'Felony') %></li>
       <% end %>
-      </tbody>
-    </table>
-  </div>
+      <% if @rap_sheet.num_misdemeanors > 0 %>
+        <li><%= pluralize(@rap_sheet.num_misdemeanors, 'Misdemeanor') %></li>
+      <% end %>
+      <% if @rap_sheet.num_unknown > 0 %>
+        <li><%= pluralize(@rap_sheet.num_unknown, 'Unknown') %></li>
+      <% end %>
+    </ul>
 
-  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
-    <p>Page <%= i + 1 %></p>
-    <pre>
-      <%= r.text %>
-    </pre>
+    <div class="row">
+      <div class="col-sm-2">
+        <%= link_to('Next →', debug_rap_sheet_path(@rap_sheet), class: 'btn btn-info btn-block') %>
+      </div>
+    </div>
+  <% else %>
+    <h1 class="mt-5">Good news, we didn't find any convictions on your record!</h1>
+
+    <p>This means you don't need to apply for record clearance because you have no convictions to clear.</p>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <%= link_to 'Done', root_path, class: 'btn btn-info btn-block' %>
+      </div>
+    </div>
   <% end %>
 </div>

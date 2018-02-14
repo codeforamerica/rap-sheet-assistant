@@ -1,10 +1,18 @@
 Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/rap_sheet_grammar'
 
-require_dependency './rap_sheet_syntax_nodes'
-require_dependency './cycle_syntax_nodes'
-require_dependency './event_syntax_nodes'
-require_dependency './count_syntax_nodes'
+def maybe_require_dependency(thing)
+  if respond_to?(:require_dependency)
+    require_dependency thing
+  else
+    require_relative thing
+  end
+end
+
+maybe_require_dependency './rap_sheet_syntax_nodes'
+maybe_require_dependency './cycle_syntax_nodes'
+maybe_require_dependency './event_syntax_nodes'
+maybe_require_dependency './count_syntax_nodes'
 
 class Parser
   def parse(text)

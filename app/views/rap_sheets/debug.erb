@@ -1,0 +1,40 @@
+<p>Here is your rap sheet</p>
+
+<div>
+  <div class="border">
+    <p>Convictions:</p>
+    <table>
+      <thead>
+      <tr>
+        <th>Conviction Date</th>
+        <th>Case Number</th>
+        <th>Courthouse</th>
+        <th>Counts</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @rap_sheet.convictions.each do |date| %>
+        <tr>
+          <td><%= date[:date] %></td>
+          <td><%= date[:case_number] %></td>
+          <td><%= date[:courthouse] %></td>
+          <td>
+            <ul>
+              <% date[:counts].each do |count| %>
+                <li><%="#{ count[:code_section]} --- #{count[:code_section_description] }"%></li>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
+    <p>Page <%= i + 1 %></p>
+    <pre>
+      <%= r.text %>
+    </pre>
+  <% end %>
+</div>

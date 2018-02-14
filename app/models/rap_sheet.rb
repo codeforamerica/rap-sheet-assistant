@@ -12,7 +12,27 @@ class RapSheet < ApplicationRecord
   end
 
   def convictions
-    RapSheetPresenter.present(parsed_tree)[:convictions]
+    RapSheetPresenter.present(parsed_tree)[:events_with_convictions]
+  end
+
+  def conviction_counts
+    RapSheetPresenter.present(parsed_tree)[:conviction_counts]
+  end
+
+  def num_convictions
+    conviction_counts.length
+  end
+
+  def num_felonies
+    conviction_counts.select { |count| count[:severity] == 'F' }.length
+  end
+
+  def num_misdemeanors
+    conviction_counts.select { |count| count[:severity] == 'M' }.length
+  end
+
+  def num_unknown
+    conviction_counts.select { |count| count[:severity] == nil }.length
   end
 
   private
