@@ -2,7 +2,7 @@ grammar CountGrammar
   include CommonGrammar
 
     rule count
-      sentencing_line? w charge_line wn toc? wn disposition_content extra_count_info <Count>
+      sentencing_line? w charge_line wn toc? wn disposition extra_count_info <Count>
     end
 
     rule sentencing_line
@@ -12,7 +12,7 @@ grammar CountGrammar
     rule charge_line
       'SEE COMMENT FOR CHARGE' /
       code_section_line /
-      (!disposition .)*
+      (!dispo_header .)*
     end
 
     rule code_section_line
@@ -20,7 +20,7 @@ grammar CountGrammar
     end
 
     rule code_section_description
-      (!disposition .)*
+      (!dispo_header .)*
     end
 
     rule code_section
@@ -32,7 +32,7 @@ grammar CountGrammar
     end
 
     rule number
-      (!code !disposition !(stray_punctuation &code) .)*
+      (!code !dispo_header !(stray_punctuation &code) .)*
     end
 
     rule code
@@ -55,12 +55,8 @@ grammar CountGrammar
       (!N .)* N
     end
 
-    rule disposition_content
-      disposition?
-    end
-
     rule disposition
-      convicted / dismissed
+      (convicted / dismissed)?
     end
 
     rule severity_line
@@ -72,7 +68,11 @@ grammar CountGrammar
     end
 
     rule convicted
-      '*'? w 'DISPO' w (':' / ';') w 'CONVICTED' to_eol w extra_conviction_info <Convicted>
+      dispo_header 'CONVICTED' to_eol w extra_conviction_info <Convicted>
+    end
+
+    rule dispo_header
+      '*'? w 'DISPO' w (':' / ';') w
     end
 
     rule extra_conviction_info
@@ -80,6 +80,6 @@ grammar CountGrammar
     end
 
     rule dismissed
-      'DISPO:DISMISSED'
+      dispo_header 'DISMISSED'
     end
 end

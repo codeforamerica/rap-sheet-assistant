@@ -12,11 +12,11 @@ class RapSheet < ApplicationRecord
   end
 
   def convictions
-    RapSheetPresenter.present(parsed_tree)[:events_with_convictions]
+    parsed_rap_sheet[:events_with_convictions]
   end
 
   def conviction_counts
-    RapSheetPresenter.present(parsed_tree)[:conviction_counts]
+    parsed_rap_sheet[:conviction_counts]
   end
 
   def num_convictions
@@ -41,7 +41,10 @@ class RapSheet < ApplicationRecord
 
   private
 
-  def parsed_tree
-    @parsed_tree ||= Parser.new.parse(text)
+  def parsed_rap_sheet
+    @parsed_rap_sheet ||= begin
+      parsed_tree = Parser.new.parse(text)
+      RapSheetPresenter.present(parsed_tree)
+    end
   end
 end

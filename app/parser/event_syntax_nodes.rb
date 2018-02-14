@@ -10,7 +10,7 @@ module EventGrammar
 
   class Count < Treetop::Runtime::SyntaxNode
     def disposition
-      count_content.disposition_content
+      count_content.disposition
     end
 
     def code_section
