@@ -23,6 +23,10 @@ class RapSheet < ApplicationRecord
     conviction_counts.length
   end
 
+  def num_dismissible_convictions
+    0
+  end
+
   def num_felonies
     conviction_counts.select { |count| count[:severity] == 'F' }.length
   end

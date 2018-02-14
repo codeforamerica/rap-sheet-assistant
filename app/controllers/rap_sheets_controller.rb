@@ -32,6 +32,10 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
   end
 
+  def details
+    @rap_sheet = RapSheet.find(params[:id])
+  end
+
   private
 
   def rap_sheet_params

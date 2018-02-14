@@ -1,0 +1,15 @@
+<div class="container">
+  <h1 class="mt-5">
+    Good news, you might be eligible to clear <mark><%= pluralize(@rap_sheet.num_convictions, 'conviction') %></mark> on your record!
+  </h1>
+
+  <p> There are different forms of record clearance. Here’s what we can help you with:</p>
+
+  <div class="card">
+    <div class="card-body">
+      <h2>We can help you apply to dismiss <%= pluralize(@rap_sheet.num_dismissible_convictions, 'conviction') %></h2>
+    </div>
+  </div>
+
+  <%= link_to 'Next →', debug_rap_sheet_path(@rap_sheet), class: 'btn btn-info mt-3' %>
+</div>
