@@ -1,4 +1,3 @@
-Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/rap_sheet_grammar'
 
 def maybe_require_dependency(thing)

@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'treetop'
 
-require_relative '../../app/parser/cycle_syntax_nodes'
-
 Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/cycle_grammar'
+
+require_relative '../../app/parser/cycle_syntax_nodes'
 
 RSpec.describe CycleGrammarParser do
   describe '#parse' do

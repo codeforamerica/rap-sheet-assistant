@@ -1,11 +1,11 @@
 require 'spec_helper'
 require 'treetop'
 
-require_relative '../../app/parser/event_syntax_nodes'
-require_relative '../../app/parser/count_syntax_nodes'
-
 Treetop.load 'app/parser/common_grammar'
 Treetop.load 'app/parser/event_grammar'
+
+require_relative '../../app/parser/event_syntax_nodes'
+require_relative '../../app/parser/count_syntax_nodes'
 
 RSpec.describe EventGrammarParser do
   describe '#parse' do
