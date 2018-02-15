@@ -42,5 +42,6 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'XR09005'
     expect(page).to have_content 'CASC LOS ANGELES'
     expect(page).to have_content 'PC 192.3(A) --- VEH MANSL W/GROSS NEGLIGENCE'
+    expect(page).to have_content '3y probation, 30d jail, fine, restitution'
   end
 end

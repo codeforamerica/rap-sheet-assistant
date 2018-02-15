@@ -2,12 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
   let(:directory) do
-    connection = Fog::Storage.new(
-      provider: 'AWS',
-      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      aws_secret_access_key: ENV['AWS_SECRET_KEY']
-    )
-
+    connection = Fog::Storage.new(fog_params)
     connection.directories.new(key: 'rap-sheet-test-data')
   end
 
@@ -36,6 +31,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           date: c[:date],
           case_number: c[:case_number],
           courthouse: c[:courthouse].upcase,
+          sentence: c[:sentence],
           counts: c[:counts].map do |count|
             {
               'code_section' => count[:code_section],
@@ -45,18 +41,14 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
         }
       end
 
-      detected_misses = detected_convictions.select do |c|
-        !expected_convictions.include?(c)
-      end
-      matches = detected_convictions.length - detected_misses.length
+      puts RSpec::Support::Differ.new(color: true).diff(
+        sorted(detected_convictions),
+        sorted(expected_convictions)
+      )
 
-      print_missed_convictions(detected_misses, 'Detected convictions failed to match expected values:')
-
-      missed_convictions = expected_convictions.select do |c|
-        !detected_convictions.include?(c)
-      end
-
-      print_missed_convictions(missed_convictions, "\nFailed to detect expected convictions:")
+      matches = detected_convictions.select do |c|
+        expected_convictions.include?(c)
+      end.length
 
       actual_convictions = expected_convictions.length
       detected_convictions = detected_convictions.length
@@ -88,6 +80,7 @@ def expected_values(rap_sheet_prefix)
       date: Date.strptime(c[:date], '%m/%d/%Y'),
       case_number: c[:case_number]&.gsub(' ', ''),
       courthouse: c[:courthouse].upcase.chomp(' CO'),
+      sentence: c[:sentence],
       counts: c[:counts].map do |count|
         {
           'code_section' => count[:code_section],
@@ -131,16 +124,25 @@ def create_rap_sheet(file_names, rap_sheet_prefix)
   rap_sheet
 end
 
-def print_missed_convictions(misses, info_string)
-  unless misses.empty?
-    puts info_string
+def compute_accuracy(matches, actual_convictions)
+  (matches.to_f / actual_convictions.to_f * 100).round(2)
+end
 
-    misses.each do |c|
-      pp c
-    end
+def fog_params
+  if ENV['LOCAL_ROOT']
+    {
+      provider: 'Local',
+      local_root: ENV['LOCAL_ROOT'],
+    }
+  else
+    {
+      provider: 'aws',
+      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_KEY']
+    }
   end
 end
 
-def compute_accuracy(matches, actual_convictions)
-  (matches.to_f / actual_convictions.to_f * 100).round(2)
+def sorted(convictions)
+  convictions.sort_by { |c| [c[:date], c[:case_number]] }
 end

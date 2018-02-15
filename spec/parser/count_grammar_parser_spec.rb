@@ -25,7 +25,8 @@ describe CountGrammarParser do
 
       expect(count.disposition).to be_a CountGrammar::Convicted
       expect(count.disposition.severity.text_value).to eq 'MISDEMEANOR'
-      end
+      expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL'
+    end
 
     it 'handles stray characters at the end of the disposition line' do
       text = <<~TEXT
@@ -116,6 +117,64 @@ describe CountGrammarParser do
       expect(count.code_section.code.text_value).to eq 'PC'
       expect(count.code_section.number.text_value).to eq '496'
       expect(count.code_section_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
+    end
+
+    it 'parses multiple line sentences where the sentence is last' do
+      text = <<~TEXT
+         .-1170 (H) PC-SENTENCING
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,
+             CONCURRENT
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
+      end
+
+    it 'parses out junk characters from sentences' do
+      text = <<~TEXT
+         .-1170 (H) PC-SENTENCING
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT
+        - .
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT'
+    end
+
+    it 'parses multiple line sentences where another specific line type comes after the sentence' do
+      text = <<~TEXT
+         .-1170 (H) PC-SENTENCING
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,
+             CONCURRENT
+        COM: hello world
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
+    end
+
+    it 'parses multiple line sentences where a date marker comes after the sentence' do
+      text = <<~TEXT
+         .-1170 (H) PC-SENTENCING
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,
+             CONCURRENT
+        20130116
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
     end
 
     it 'parses out punctuation around code section number' do

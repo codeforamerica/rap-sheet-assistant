@@ -18,6 +18,7 @@ class RapSheetPresenter
         date: format_date(e),
         case_number: CaseNumberPresenter.present(e.case_number),
         courthouse: CourthousePresenter.present(e.courthouse),
+        sentence: SentencePresenter.present(e.sentence)
       }
     end
 

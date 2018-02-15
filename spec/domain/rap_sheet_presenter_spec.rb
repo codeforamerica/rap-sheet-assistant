@@ -2,11 +2,14 @@ require 'spec_helper'
 require 'treetop'
 require 'date'
 
+Treetop.load 'app/parser/common_grammar'
+
 require_relative '../../app/parser/parser'
 require_relative '../../app/helpers/text_cleaner'
 require_relative '../../app/domain/count_presenter'
 require_relative '../../app/domain/courthouse_presenter'
 require_relative '../../app/domain/case_number_presenter'
+require_relative '../../app/domain/sentence_presenter'
 
 require_relative '../../app/domain/rap_sheet_presenter'
 
@@ -16,6 +19,9 @@ describe RapSheetPresenter do
       text = <<~TEXT
         info
         * * * *
+        ARREST
+        blah
+        - - - -        
         COURT:
         19740102 CASC SAN PRANCISCU rm
         
@@ -37,39 +43,67 @@ describe RapSheetPresenter do
         4056 PC-BREAKING AND ENTERING
         *DISPO:CONVICTED
         MORE INFO ABOUT THIS COUNT
+        * * * *
+        COURT:
+        19941120 CASC SAN DIEGO
+
+        CNT: 001 #612
+        487.2 PC-GRAND THEFT FROM PERSON
+        DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
         * * * END OF MESSAGE * * *
       TEXT
 
       expected_convictions = {
         events_with_convictions: [
           {
-            date: Date.new(1982, 9, 15),
-            case_number: '456',
-            courthouse: 'CAMC L05 ANGELES METRO',
             counts: [
               {
                 code_section: nil,
                 code_section_description: nil,
-                severity: nil
+                severity: nil,
               },
               {
                 code_section: 'PC 4056',
                 code_section_description: 'BREAKING AND ENTERING',
-                severity: nil
+                severity: nil,
               }
-            ]
+            ],
+            date: Date.new(1982, 9, 15),
+            case_number: '456',
+            courthouse: 'CAMC L05 ANGELES METRO',
+            sentence: nil
+          },
+          {
+            counts: [
+              {
+                code_section: 'PC 487.2',
+                code_section_description: 'GRAND THEFT FROM PERSON',
+                severity: 'M',
+              }
+            ],
+            date: Date.new(1994, 11, 20),
+            case_number: '612',
+            courthouse: 'CASC SAN DIEGO',
+            sentence: '12m probation, 45d jail'
           }
         ],
         conviction_counts: [
           {
             code_section: nil,
             code_section_description: nil,
-            severity: nil
+            severity: nil,
           },
           {
             code_section: 'PC 4056',
             code_section_description: 'BREAKING AND ENTERING',
-            severity: nil
+            severity: nil,
+          },
+          {
+            code_section: 'PC 487.2',
+            code_section_description: 'GRAND THEFT FROM PERSON',
+            severity: 'M',
           }
         ]
       }

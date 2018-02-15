@@ -14,7 +14,7 @@ grammar RapSheetGrammar
   end
 
   rule cycle_delimiter
-    N (punctuation_space '*')4..4 punctuation_space N
+    N (punctuation_space '*')3..4 punctuation_space N !(w 'END OF MESSAGE')
   end
 
   rule punctuation_space

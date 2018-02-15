@@ -6,6 +6,14 @@ module EventGrammar
     def case_number
       counts[0].case_number if counts[0].is_a? CountWithCaseNumber
     end
+
+    def sentence
+      count = counts.elements.find do |c|
+        c.disposition.sentence
+      end
+
+      count ? count.disposition.sentence : nil
+    end
   end
 
   class Count < Treetop::Runtime::SyntaxNode

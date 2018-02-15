@@ -56,7 +56,7 @@ grammar CountGrammar
     end
 
     rule disposition
-      (convicted / dismissed)?
+      convicted / dismissed / empty_disposition
     end
 
     rule severity_line
@@ -67,19 +67,35 @@ grammar CountGrammar
       (!N .)*
     end
 
+    rule sentence_line
+      stray_punctuation 'SEN:' stray_punctuation sentence N <SentenceLine>
+    end
+
+    rule sentence
+      (!next_dispo_info_item .)*
+    end
+
+    rule next_dispo_info_item
+      N stray_punctuation ('*'? [A-Z]+ w ':' / date / !.)
+    end
+
     rule convicted
       dispo_header 'CONVICTED' to_eol w extra_conviction_info <Convicted>
     end
 
     rule dispo_header
-      '*'? w 'DISPO' w (':' / ';') w
+      w '*'? w 'DISPO' w (':' / ';') w
     end
 
     rule extra_conviction_info
-      (comment_charge_line / severity_line / unknown_content_line)*
+      (comment_charge_line / severity_line / sentence_line / unknown_content_line)*
     end
 
     rule dismissed
-      dispo_header 'DISMISSED'
+      dispo_header 'DISMISSED' <Disposition>
+    end
+
+    rule empty_disposition
+      '' <Disposition>
     end
 end

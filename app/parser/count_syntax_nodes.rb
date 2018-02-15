@@ -23,12 +23,19 @@ module CountGrammar
     end
   end
 
-  class Convicted < Treetop::Runtime::SyntaxNode
+  class Disposition < Treetop::Runtime::SyntaxNode
+    def sentence
+      nil
+    end
+  end
+
+  class Convicted < Disposition
     def severity
-      severity_line = extra_conviction_info.elements.select do |l|
-        l.is_a? SeverityLine
-      end
-      severity_line.first.severity unless severity_line.empty?
+      extra_conviction_info.elements.find { |l| l.is_a? SeverityLine }&.severity
+    end
+
+    def sentence
+      extra_conviction_info.elements.find { |l| l.is_a? SentenceLine }&.sentence
     end
   end
 
@@ -37,4 +44,6 @@ module CountGrammar
   class SeverityLine < Treetop::Runtime::SyntaxNode; end
 
   class CommentChargeLine < Treetop::Runtime::SyntaxNode; end
+
+  class SentenceLine < Treetop::Runtime::SyntaxNode; end
 end
