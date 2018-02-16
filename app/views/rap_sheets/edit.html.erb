@@ -1,24 +1,55 @@
 <div class="container">
-  <h1 class="mt-5 font-weight-normal">Add a photo for
-    <span class="font-weight-bold">
-      <%= "page #{@rap_sheet_page.page_number}" %>
-    </span>
-    <%= "of #{@rap_sheet.number_of_pages}" %>
-  </h1>
-  <%= form_for @rap_sheet_page, html: { multipart: true } do |f| %>
-    <label for="rap_sheet_page_rap_sheet_page_image" class="mt-3 btn btn-info">+ add photo</label>
-    <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera', class: 'hidden' %>
-    <%= f.hidden_field :rap_sheet_id %>
-    <div>
-      <%= f.submit 'Upload', class: 'hidden' %>
-    </div>
-  <% end %>
+  <h1 class="mt-5 font-weight-normal">Upload all <%= pluralize(@rap_sheet.number_of_pages, 'page') %> of your RAP
+    sheet</h1>
+  <p>Make sure to keep them in order</p>
 
-  <div class="row">
-    <div class="col-md-3">
-      <hr>
+  <p class="mt-4"><%= @rap_sheet.rap_sheet_pages.length %> of <%= @rap_sheet.number_of_pages %> pages uploaded</p>
+
+  <div class="card">
+    <div class="card-content">
+      <ul class="list-group list-group-flush">
+        <% @rap_sheet_pages.each do |rap_sheet_page| %>
+          <li class="list-group-item">
+            <%= form_for rap_sheet_page, url: rap_sheet_pages_path, method: :post, html: {
+            multipart: true,
+            id: "rap_sheet_page_#{rap_sheet_page.page_number}",
+            class: 'rap-sheet-page-row'
+            } do |f| %>
+              <div class="rap-sheet-page-number-column">
+                <%= content_tag :div, class: "mr-2 page-indicator #{rap_sheet_page.persisted? ? 'completed' : ''}" do %>
+                  <%= rap_sheet_page.page_number %>
+                <% end %>
+              </div>
+              <div class="rap-sheet-page-content">
+                <div class="">
+                  page <%= rap_sheet_page.page_number %><% if rap_sheet_page.persisted? %> uploaded<% end %>
+                </div>
+                <% if rap_sheet_page.persisted? %>
+                  <%= rap_sheet_page.rap_sheet_page_image.file.filename %>
+                <% elsif rap_sheet_page.page_number == @rap_sheet.first_missing_page_number %>
+                  <label class="mt-1 btn btn-info btn-sm">
+                    + add
+                    <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera', class: 'hidden' %>
+                  </label>
+                <% end %>
+                <%= f.hidden_field :rap_sheet_id %>
+                <%= f.hidden_field :page_number %>
+                <div><%= f.submit 'Upload', class: 'hidden' %></div>
+              </div>
+              <div class="rap-sheet-page-delete">×</div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
-  <p>You need <%= pluralize(@rap_sheet.number_of_pages - @rap_sheet_page.page_number + 1, "more photo") %></p>
-  <%= render 'page_checkmarks', completed_up_to: @rap_sheet_page.page_number - 1 %>
+
+  <p class="mt-4">
+    <% if @rap_sheet.all_pages_uploaded? %>
+      All <%= pluralize(@rap_sheet.number_of_pages, 'page') %> added!
+    <% else %>
+      Upload <%= pluralize(@rap_sheet.number_of_pages, 'page') %> before proceeding
+    <% end %>
+  </p>
+  <%= link_to 'Next →', rap_sheet_path(@rap_sheet), class: "btn btn-info mt-2 #{'disabled' unless @rap_sheet.all_pages_uploaded?}" %>
 </div>

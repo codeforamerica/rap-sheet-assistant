@@ -4,14 +4,11 @@ class RapSheetPagesController < ApplicationController
 
     RapSheetPage.scan_and_create(
       image: rap_sheet_page_params[:rap_sheet_page_image],
-      rap_sheet: rap_sheet
+      rap_sheet: rap_sheet,
+      page_number: rap_sheet_page_params[:page_number]
     )
 
-    if rap_sheet.number_of_pages == rap_sheet.rap_sheet_pages.count
-      redirect_to completed_rap_sheet_path(rap_sheet)
-    else
-      redirect_to edit_rap_sheet_path(rap_sheet)
-    end
+    redirect_to edit_rap_sheet_path(rap_sheet)
   end
 
   private

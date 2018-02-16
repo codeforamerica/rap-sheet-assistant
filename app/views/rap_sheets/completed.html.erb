@@ -1,9 +1,0 @@
-<div class="container">
-  <h1 class="mt-5 font-weight-normal">You have successfully added all <%= pluralize(@rap_sheet.number_of_pages, 'page') %> of your RAP sheet!</h1>
-
-  <div>
-    <%= render 'page_checkmarks', completed_up_to: @rap_sheet.number_of_pages %>
-  </div>
-
-  <%= link_to 'Next →', rap_sheet_path(@rap_sheet), class: 'btn btn-info mt-3' %>
-</div>

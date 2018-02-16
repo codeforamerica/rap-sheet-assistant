@@ -39,6 +39,14 @@ class RapSheet < ApplicationRecord
     conviction_counts.select { |count| count[:severity] == nil }.length
   end
 
+  def first_missing_page_number
+    ((1..number_of_pages).to_a - rap_sheet_pages.pluck(:page_number)).first
+  end
+
+  def all_pages_uploaded?
+    rap_sheet_pages.length == number_of_pages
+  end
+
   private
 
   def parsed_rap_sheet

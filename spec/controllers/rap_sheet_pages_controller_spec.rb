@@ -12,7 +12,8 @@ describe RapSheetPagesController do
       post :create, params: {
         rap_sheet_page: {
           rap_sheet_id: rap_sheet.id,
-          rap_sheet_page_image: fixture_file_upload('skywalker_rap_sheet_page_1.jpg', 'image/jpg')
+          rap_sheet_page_image: fixture_file_upload('skywalker_rap_sheet_page_1.jpg', 'image/jpg'),
+          page_number: 1
         }
       }
 

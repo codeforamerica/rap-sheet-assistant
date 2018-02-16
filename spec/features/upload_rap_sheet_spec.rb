@@ -16,17 +16,20 @@ describe 'uploading a rap sheet' do
     fill_in 'How many pages does your RAP sheet have?', with: '2'
     click_on 'Next'
 
-    expect(page).to have_content 'Add a photo for page 1 of 2'
-    expect(page).to have_content 'You need 2 more photos'
-    attach_file '+ add photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-    click_on 'Upload'
+    expect(page).to have_content 'Upload all 2 pages of your RAP sheet'
+    expect(page).to have_content '0 of 2 pages uploaded'
+    within '#rap_sheet_page_1' do
+      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+      click_on 'Upload'
+    end
 
-    expect(page).to have_content 'Add a photo for page 2 of 2'
-    expect(page).to have_content 'You need 1 more photo'
-    attach_file '+ add photo', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-    click_on 'Upload'
+    expect(page).to have_content '1 of 2 pages uploaded'
+    within '#rap_sheet_page_2' do
+      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+      click_on 'Upload'
+    end
 
-    expect(page).to have_content 'You have successfully added all 2 pages of your RAP sheet!'
+    expect(page).to have_content 'All 2 pages added!'
     click_on 'Next'
 
     expect(page).to have_content 'We found 5 convictions on your record.'

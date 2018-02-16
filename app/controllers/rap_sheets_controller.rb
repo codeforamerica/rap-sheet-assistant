@@ -6,9 +6,12 @@ class RapSheetsController < ApplicationController
   def edit
     @rap_sheet = RapSheet.find(params[:id])
 
-    @rap_sheet_page = @rap_sheet.rap_sheet_pages.build(
-      page_number: @rap_sheet.rap_sheet_pages.count + 1
-    )
+    @rap_sheet_pages = (1..@rap_sheet.number_of_pages).map do |n|
+      RapSheetPage.find_or_initialize_by(
+        page_number: n,
+        rap_sheet: @rap_sheet
+      )
+    end
   end
 
   def show
@@ -25,10 +28,6 @@ class RapSheetsController < ApplicationController
   end
 
   def debug
-    @rap_sheet = RapSheet.find(params[:id])
-  end
-
-  def completed
     @rap_sheet = RapSheet.find(params[:id])
   end
 
