@@ -6,6 +6,7 @@ Treetop.load 'app/parser/event_grammar'
 
 require_relative '../../app/parser/event_syntax_nodes'
 require_relative '../../app/parser/count_syntax_nodes'
+require_relative '../../app/parser/update_syntax_nodes'
 
 RSpec.describe EventGrammarParser do
   describe '#parse' do
@@ -165,6 +166,33 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
+    end
+
+    it 'sets sentence correctly if sentence modified' do
+      text = <<~TEXT
+        COURT:
+        20040102  CASC SAN FRANCISCO CO
+
+        CNT: 001 #346477
+          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+
+        20040202
+          DISPO:SOMETHING ELSE
+     
+        20040202
+          DISPO:SENTENCE MODIFIED
+          SEN: 001 MONTHS JAIL
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+
+      # tree.updates[1].update_content[0].update_lines.elements.first.sentence.text_value
+
+      expect(tree.sentence.text_value).to eq('001 MONTHS JAIL')
     end
   end
 end

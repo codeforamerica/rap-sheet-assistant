@@ -27,10 +27,6 @@ grammar CountGrammar
        number stray_punctuation code
     end
 
-    rule stray_punctuation
-      [ \t\n.•·\-*]*
-    end
-
     rule number
       (!code !dispo_header !(stray_punctuation &code) .)*
     end
@@ -49,10 +45,6 @@ grammar CountGrammar
 
     rule unknown_content_line
       to_eol
-    end
-
-    rule to_eol
-      (!N .)* N
     end
 
     rule disposition

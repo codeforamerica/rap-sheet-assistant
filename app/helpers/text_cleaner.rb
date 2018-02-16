@@ -9,7 +9,7 @@ class TextCleaner
 
   def self.clean(text)
     text = text.upcase
-    text = text.split("\n").reject { |line| line.length <= 2 }.join("\n")
+    text = text.split("\n").reject { |line| line.length <= 3 }.join("\n")
 
     SUBSTITUTION_PATTERNS.each do |correct_value, patterns|
       patterns.each do |pattern|

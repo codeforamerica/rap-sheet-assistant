@@ -1,0 +1,40 @@
+grammar UpdateGrammar
+  include CommonGrammar
+
+  rule update
+    disposition* <Update>
+  end
+
+  rule disposition
+    w 'DISPO:' w disposition_type (!N .)* n update_lines
+  end
+
+  rule update_lines
+    update_line*
+  end
+
+  rule disposition_type
+    'SENTENCE MODIFIED' <SentenceModified>
+    / ''
+  end
+
+  rule update_line
+    (sentence_line / unknown_content_line)
+  end
+
+  rule unknown_content_line
+    to_eol
+  end
+
+  rule sentence_line
+    stray_punctuation 'SEN:' stray_punctuation sentence N <SentenceLine>
+  end
+
+  rule sentence
+    (!next_labeled_item_or_end .)*
+  end
+
+  rule next_labeled_item_or_end
+    N stray_punctuation ('*'? [A-Z]+ w ':' / !.)
+  end
+end

@@ -1,5 +1,6 @@
 require_relative './treetop_monkeypatches'
 Treetop.load 'app/parser/count_grammar'
+Treetop.load 'app/parser/update_grammar'
 
 module EventGrammar
   class CourtEvent < Treetop::Runtime::SyntaxNode
@@ -12,7 +13,23 @@ module EventGrammar
         c.disposition.sentence
       end
 
-      count ? count.disposition.sentence : nil
+      return unless count
+
+      modified = updates.elements.map(&:update_content).find do |u|
+        u.elements.any? do |d|
+          d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
+        end
+      end
+
+      if modified
+        return modified.elements.find do |d|
+          d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
+        end.update_lines.elements.find do |l|
+          l.is_a? UpdateGrammar::SentenceLine
+        end.sentence
+      end
+
+      count.disposition.sentence
     end
   end
 
@@ -41,5 +58,19 @@ module EventGrammar
     end
   end
 
-  class CountWithCaseNumber < Count; end
+  class Update < Treetop::Runtime::SyntaxNode
+    def update_content
+      @update_content ||= UpdateGrammarParser.new.parse(update_info.text_value + "\n")
+
+      if @update_content.nil?
+        puts '---------- FAILED TO PARSE UPDATE: --------'
+        p update_info.text_value
+      end
+
+      @update_content
+    end
+  end
+
+  class CountWithCaseNumber < Count;
+  end
 end

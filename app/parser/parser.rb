@@ -12,6 +12,7 @@ maybe_require_dependency './rap_sheet_syntax_nodes'
 maybe_require_dependency './cycle_syntax_nodes'
 maybe_require_dependency './event_syntax_nodes'
 maybe_require_dependency './count_syntax_nodes'
+maybe_require_dependency './update_syntax_nodes'
 
 class Parser
   def parse(text)

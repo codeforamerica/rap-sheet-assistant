@@ -6,7 +6,7 @@ grammar EventGrammar
   end
 
   rule court_event
-    'COURT' w ':' stuff date wn [.']* wn courthouse wn toc? (!count_identifier .)* counts <CourtEvent>
+    'COURT' w ':' stuff date wn [.']* wn courthouse wn toc? (!count_identifier .)* counts updates <CourtEvent>
   end
 
   rule unknown_event
@@ -53,7 +53,7 @@ grammar EventGrammar
   end
 
   rule count_info
-    (!count_identifier .)*
+    (!count_identifier !(N date N) .)*
   end
 
   rule case_number
@@ -62,5 +62,17 @@ grammar EventGrammar
 
   rule stuff
     (!date .)*
+  end
+
+  rule updates
+    update*
+  end
+
+  rule update
+    N w date w N update_info <Update>
+  end
+
+  rule update_info
+    (!(N w date) .)*
   end
 end

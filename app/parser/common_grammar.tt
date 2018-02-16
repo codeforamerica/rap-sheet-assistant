@@ -26,4 +26,12 @@ grammar CommonGrammar
   rule date
     [0-9] 8..8
   end
+
+  rule stray_punctuation
+    [ \t\n.•·\-*]*
+  end
+
+  rule to_eol
+    (!N .)* N
+  end
 end
