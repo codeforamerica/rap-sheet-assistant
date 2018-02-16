@@ -23,6 +23,7 @@ gem 'treetop'
 gem 'jquery-rails'
 gem 'sprockets-rails', '> 2.3.2'
 gem 'bootstrap', '~> 4.0.0'
+gem 'bootsnap'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -32,6 +33,7 @@ group :development, :test do
   gem 'rspec_junit_formatter'
   gem 'dotenv-rails'
   gem 'fog-local'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
