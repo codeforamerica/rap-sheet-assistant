@@ -15,19 +15,11 @@ module EventGrammar
 
       return unless count
 
-      modified = updates.elements.map(&:update_content).find do |u|
-        u.elements.any? do |d|
-          d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
-        end
+      sentence_modified_disposition = updates.elements.flat_map(&:dispositions).find do |d|
+        d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
       end
 
-      if modified
-        return modified.elements.find do |d|
-          d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
-        end.update_lines.elements.find do |l|
-          l.is_a? UpdateGrammar::SentenceLine
-        end.sentence
-      end
+      return sentence_modified_disposition.sentence if sentence_modified_disposition
 
       count.disposition.sentence
     end
@@ -59,6 +51,10 @@ module EventGrammar
   end
 
   class Update < Treetop::Runtime::SyntaxNode
+    def dispositions
+      update_content.elements
+    end
+
     def update_content
       @update_content ||= UpdateGrammarParser.new.parse(update_info.text_value + "\n")
 

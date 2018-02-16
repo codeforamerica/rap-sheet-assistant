@@ -6,7 +6,7 @@ grammar UpdateGrammar
   end
 
   rule disposition
-    w 'DISPO:' w disposition_type (!N .)* n update_lines
+    w 'DISPO:' w disposition_type (!N .)* n update_lines <Disposition>
   end
 
   rule update_lines
