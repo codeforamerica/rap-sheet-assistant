@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'tmpdir'
+
+unless ARGV.length == 1 && ARGV.first.end_with?('.pdf')
+  puts "usage:\n#{$0} path/to/some.pdf\n"
+end
+
+pdf_path = ARGV.first
+pdf_name = File.basename(pdf_path).sub(/\.pdf$/, '')
+pdf_dir = File.dirname(pdf_path)
+
+puts 'Splitting PDF file to pages...'
+Dir.mktmpdir do |tmpdir|
+  system('pdftk', pdf_path, 'burst', 'output', "#{tmpdir}/#{pdf_name}_page%02d.pdf")
+  system('pdftk', pdf_path, 'dump_data', 'output', "#{tmpdir}/metadata.txt")
+
+  puts 'Converting pages to JPEG files...'
+  Dir["#{tmpdir}/#{pdf_name}*.pdf"].each_with_index do |page_path|
+    system('convert', '-colorspace', 'RGB', '-interlace', 'none', '-density', '300x300', '-quality', '85', page_path, File.join(pdf_dir, File.basename(page_path.sub(/\.pdf$/, '.jpg'))))
+  end
+end
+
+puts 'All done'
