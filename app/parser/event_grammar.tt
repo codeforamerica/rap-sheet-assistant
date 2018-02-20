@@ -28,6 +28,7 @@ grammar EventGrammar
     'CAMC HAYWARD' /
     'CASC MCSACRAMENTO' /
     'CASC SN JOSE' /
+    'CASC LOS ANGELES' /
     'CAMC LOS ANGELES METRO' /
     (!count_identifier !toc !N .)*
   end
