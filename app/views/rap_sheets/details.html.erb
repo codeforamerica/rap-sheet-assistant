@@ -7,7 +7,14 @@
 
   <div class="card">
     <div class="card-body">
-      <h2>We can help you apply to dismiss <%= pluralize(@rap_sheet.num_dismissible_convictions, 'conviction') %></h2>
+      <h2>We can help you apply to change <%= pluralize(@rap_sheet.dismissible_convictions.length, 'conviction') %></h2>
+      <% if @rap_sheet.dismissible_convictions.length > 0 %>
+        <ul>
+          <% @rap_sheet.dismissible_convictions.each do |conviction_count| %>
+            <li><%= "#{conviction_count.code_section_description} - #{conviction_count.prop64_action}" %></li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
   </div>
 

@@ -22,7 +22,7 @@
           <td>
             <ul>
               <% date[:counts].each do |count| %>
-                <li><%="#{ count[:code_section]} --- #{count[:code_section_description] }"%></li>
+                <li><%="#{ count.code_section} --- #{count.code_section_description }"%></li>
               <% end %>
             </ul>
           </td>

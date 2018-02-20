@@ -39,6 +39,9 @@ describe 'uploading a rap sheet' do
     click_on 'Next'
 
     expect(page).to have_content 'Good news, you might be eligible to clear 5 convictions on your record'
+    expect(page).to have_content 'We can help you apply to change 1 conviction'
+    expect(page).to have_content 'POSSESS MARIJUANA'
+    expect(page).to have_content 'Redesignation'
     click_on 'Next'
 
     expect(page).to have_content '1990-12-14'

@@ -13,13 +13,18 @@ class RapSheetPresenter
     convictions = court_events.map do |e|
       convicted_counts = e.counts.elements.select { |c| c.disposition.is_a? CountGrammar::Convicted }
 
-      {
-        counts: convicted_counts.map { |c| CountPresenter.present(c) },
-        date: format_date(e),
+      event = {
+        date: parse_date(e),
         case_number: CaseNumberPresenter.present(e.case_number),
         courthouse: CourthousePresenter.present(e.courthouse),
         sentence: SentencePresenter.present(e.sentence)
       }
+
+      counts = convicted_counts.map do |count|
+        Count.new(event, count)
+      end
+
+      event.merge(counts: counts)
     end
 
     {
@@ -30,7 +35,7 @@ class RapSheetPresenter
 
   private
 
-  def self.format_date(e)
+  def self.parse_date(e)
     Date.strptime(e.date.text_value, '%Y%m%d')
   end
 end

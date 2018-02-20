@@ -2,12 +2,14 @@ require 'spec_helper'
 
 require 'treetop'
 
-require_relative '../../app/domain/count_presenter'
+require_relative '../../app/domain/count'
 require_relative '../../app/parser/parser'
 require_relative '../../app/helpers/text_cleaner'
 
-describe CountPresenter do
-  it 'returns hash representing count' do
+describe Count do
+  let(:event) { { some: 'event' } }
+
+  it 'populates values representing count' do
     text = <<~TEXT
       info
       * * * *
@@ -26,11 +28,10 @@ describe CountPresenter do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    expect(described_class.present(count_node)).to eq ({
-      code_section: 'PC 496',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-      severity: 'M'
-    })
+    subject = described_class.new(event, count_node)
+    expect(subject.code_section).to eq 'PC 496'
+    expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+    expect(subject.severity).to eq 'M'
   end
 
   it 'returns nil fields when information not present' do
@@ -48,11 +49,10 @@ describe CountPresenter do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    expect(described_class.present(count_node)).to eq ({
-      code_section: nil,
-      code_section_description: nil,
-      severity: nil
-    })
+    subject = described_class.new(event, count_node)
+    expect(subject.code_section).to be_nil
+    expect(subject.code_section_description).to be_nil
+    expect(subject.severity).to be_nil
   end
 
   it 'strips whitespace out of the code section number' do
@@ -74,11 +74,10 @@ describe CountPresenter do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    expect(described_class.present(count_node)).to eq ({
-      code_section: 'PC 496(A)(2)',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-      severity: 'M'
-    })
+    subject = described_class.new(event, count_node)
+    expect(subject.code_section).to eq 'PC 496(A)(2)'
+    expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+    expect(subject.severity).to eq 'M'
   end
 
   it 'replaces commas with periods in the code section number' do
@@ -99,11 +98,9 @@ describe CountPresenter do
 
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
-
-    expect(described_class.present(count_node)).to eq ({
-      code_section: 'PC 496.3(A)(2)',
-      code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-      severity: 'M'
-    })
+    subject = described_class.new(event, count_node)
+    expect(subject.code_section).to eq 'PC 496.3(A)(2)'
+    expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+    expect(subject.severity).to eq 'M'
   end
 end

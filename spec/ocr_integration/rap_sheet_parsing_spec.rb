@@ -34,8 +34,8 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           sentence: c[:sentence],
           counts: c[:counts].map do |count|
             {
-              'code_section' => count[:code_section],
-              'severity' => count[:severity]&.first,
+              'code_section' => count.code_section,
+              'severity' => count.severity&.first,
             }
           end
         }

@@ -23,20 +23,20 @@ class RapSheet < ApplicationRecord
     conviction_counts.length
   end
 
-  def num_dismissible_convictions
-    0
+  def dismissible_convictions
+    conviction_counts.select(&:prop64_eligible?)
   end
 
   def num_felonies
-    conviction_counts.select { |count| count[:severity] == 'F' }.length
+    conviction_counts.select { |count| count.severity == 'F' }.length
   end
 
   def num_misdemeanors
-    conviction_counts.select { |count| count[:severity] == 'M' }.length
+    conviction_counts.select { |count| count.severity == 'M' }.length
   end
 
   def num_unknown
-    conviction_counts.select { |count| count[:severity] == nil }.length
+    conviction_counts.select { |count| count.severity == nil }.length
   end
 
   def first_missing_page_number

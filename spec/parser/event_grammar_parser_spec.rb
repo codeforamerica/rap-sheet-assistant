@@ -189,9 +189,6 @@ RSpec.describe EventGrammarParser do
 
       tree = described_class.new.parse(text)
 
-
-      # tree.updates[1].update_content[0].update_lines.elements.first.sentence.text_value
-
       expect(tree.sentence.text_value).to eq('001 MONTHS JAIL')
     end
   end

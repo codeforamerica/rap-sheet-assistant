@@ -6,7 +6,7 @@ Treetop.load 'app/parser/common_grammar'
 
 require_relative '../../app/parser/parser'
 require_relative '../../app/helpers/text_cleaner'
-require_relative '../../app/domain/count_presenter'
+require_relative '../../app/domain/count'
 require_relative '../../app/domain/courthouse_presenter'
 require_relative '../../app/domain/case_number_presenter'
 require_relative '../../app/domain/sentence_presenter'
@@ -55,62 +55,56 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = {
+      expected_convictions = a_hash_including(
         events_with_convictions: [
-          {
-            counts: [
-              {
-                code_section: nil,
-                code_section_description: nil,
-                severity: nil,
-              },
-              {
-                code_section: 'PC 4056',
-                code_section_description: 'BREAKING AND ENTERING',
-                severity: nil,
-              }
-            ],
+          a_hash_including(
             date: Date.new(1982, 9, 15),
             case_number: '456',
             courthouse: 'CAMC L05 ANGELES METRO',
             sentence: nil
-          },
-          {
-            counts: [
-              {
-                code_section: 'PC 487.2',
-                code_section_description: 'GRAND THEFT FROM PERSON',
-                severity: 'M',
-              }
-            ],
+          ),
+          a_hash_including(
             date: Date.new(1994, 11, 20),
             case_number: '612',
             courthouse: 'CASC SAN DIEGO',
             sentence: '12m probation, 45d jail'
-          }
-        ],
-        conviction_counts: [
-          {
-            code_section: nil,
-            code_section_description: nil,
-            severity: nil,
-          },
-          {
-            code_section: 'PC 4056',
-            code_section_description: 'BREAKING AND ENTERING',
-            severity: nil,
-          },
-          {
-            code_section: 'PC 487.2',
-            code_section_description: 'GRAND THEFT FROM PERSON',
-            severity: 'M',
-          }
+          )
         ]
-      }
+      )
 
       tree = Parser.new.parse(text)
-      expect(described_class.present(tree)).to eq expected_convictions
+      presented_tree = described_class.present(tree)
+      expect(presented_tree).to match(expected_convictions)
+
+      count1_expectations = {
+        code_section: nil,
+        code_section_description: nil,
+        severity: nil,
+      }
+      count2_expectations = {
+        code_section: 'PC 4056',
+        code_section_description: 'BREAKING AND ENTERING',
+        severity: nil,
+      }
+      count3_expectations = {
+        code_section: 'PC 487.2',
+        code_section_description: 'GRAND THEFT FROM PERSON',
+        severity: 'M',
+      }
+
+      verify_count_looks_like(presented_tree[:events_with_convictions][0][:counts][0], count1_expectations)
+      verify_count_looks_like(presented_tree[:events_with_convictions][0][:counts][1], count2_expectations)
+      verify_count_looks_like(presented_tree[:events_with_convictions][1][:counts][0], count3_expectations)
+
+      verify_count_looks_like(presented_tree[:conviction_counts][0], count1_expectations)
+      verify_count_looks_like(presented_tree[:conviction_counts][1], count2_expectations)
+      verify_count_looks_like(presented_tree[:conviction_counts][2], count3_expectations)
     end
   end
 
+  def verify_count_looks_like(count, code_section:, code_section_description:, severity:)
+    expect(count.code_section).to eq code_section
+    expect(count.code_section_description).to eq code_section_description
+    expect(count.severity).to eq severity
+  end
 end
