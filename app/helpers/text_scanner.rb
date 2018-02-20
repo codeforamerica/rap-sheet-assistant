@@ -22,7 +22,9 @@ class TextScanner
 
     require 'google/cloud/vision'
     vision = Google::Cloud::Vision.new(project: ENV['GOOGLE_PROJECT_ID'])
-    vision.image(image_path).document.text
+    image = vision.image(image_path)
+    image.context.languages = [:en]
+    image.document.text
   end
 
   def self.retrieve_key_file
