@@ -93,9 +93,9 @@ end
 
 def fetch_or_scan_text(file_names, page)
   text_path = page.gsub('.jpg', '.txt')
-  # if file_names.include? text_path
-  #   text = directory.files.get(text_path).body
-  # else
+  if file_names.include? text_path
+    text = directory.files.get(text_path).body
+  else
     image = File.open('/tmp/tmp_rap_sheet.jpg', 'wb')
     image.write(directory.files.get(page).body)
 
@@ -103,7 +103,7 @@ def fetch_or_scan_text(file_names, page)
     image.close
 
     directory.files.create(key: text_path, body: text, public: false)
-  # end
+  end
   text
 end
 
