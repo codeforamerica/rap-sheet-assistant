@@ -19,7 +19,7 @@ class RapSheetsController < ApplicationController
   end
 
   def create
-    @rap_sheet = RapSheet.new(rap_sheet_params)
+    @rap_sheet = RapSheet.new(rap_sheet_params.merge(user: User.new))
     if @rap_sheet.save
       redirect_to edit_rap_sheet_path(@rap_sheet)
     else
@@ -33,6 +33,11 @@ class RapSheetsController < ApplicationController
 
   def details
     @rap_sheet = RapSheet.find(params[:id])
+  end
+
+  def documents
+    @rap_sheet = RapSheet.find(params[:id])
+    @user = @rap_sheet.user
   end
 
   def add_page

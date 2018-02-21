@@ -1,0 +1,24 @@
+.rap-sheet-debug {
+  width: 1024px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+.rap-sheet-debug table td {
+  padding-right: 10px;
+}
+
+.rap-sheet-debug-page-marker {
+  margin-top: 10px;
+  background: #ccc;
+  height: 60px;
+  line-height: 60px;
+  border: 1px solid #aaa;
+  font-weight: bold;
+  font-size: 32px;
+  padding-left: 10px;
+}

@@ -1,4 +1,6 @@
 class RapSheet < ApplicationRecord
+  belongs_to :user
+
   has_many :rap_sheet_pages
 
   validates :number_of_pages, numericality: {

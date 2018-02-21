@@ -1,41 +1,48 @@
-<p>Here is your rap sheet</p>
+<div class="rap-sheet-debug">
+  <h1>Here is your rap sheet:</h1>
 
-<div>
-  <div class="border">
-    <p>Convictions:</p>
-    <table>
-      <thead>
-      <tr>
-        <th>Conviction Date</th>
-        <th>Case Number</th>
-        <th>Courthouse</th>
-        <th>Counts</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @rap_sheet.convictions.each do |date| %>
+  <div>
+    <p class="rap-sheet-debug-page-marker">Convictions:</p>
+    <div class="border">
+      <table>
+        <thead>
         <tr>
-          <td><%= date[:date] %></td>
-          <td><%= date[:case_number] %></td>
-          <td><%= date[:courthouse] %></td>
-          <td><%= date[:sentence] %></td>
-          <td>
-            <ul>
-              <% date[:counts].each do |count| %>
-                <li><%="#{ count.code_section} --- #{count.code_section_description }"%></li>
-              <% end %>
-            </ul>
-          </td>
+          <th>Date</th>
+          <th>Case#</th>
+          <th>Courthouse</th>
+          <th>Sentence</th>
+          <th>Counts</th>
         </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+        <% @rap_sheet.convictions.each do |date| %>
+          <tr>
+            <td style="white-space: nowrap;"><%= date[:date] %></td>
+            <td><%= date[:case_number] %></td>
+            <td><%= date[:courthouse] %></td>
+            <td><%= date[:sentence] %></td>
+            <td>
+              <ul>
+                <% date[:counts].each do |count| %>
+                  <li><%="#{ count.code_section} --- #{count.code_section_description }"%></li>
+                <% end %>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
 
-  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
-    <p>Page <%= i + 1 %></p>
-    <pre>
-      <%= r.text %>
-    </pre>
-  <% end %>
+    <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
+      <p class="rap-sheet-debug-page-marker">Page <%= i + 1 %>:</p>
+      <pre><%= r.text %></pre>
+    <% end %>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <%= link_to 'Back', details_rap_sheet_path(@rap_sheet), class: 'btn btn-info btn-block' %>
+      </div>
+    </div>
+  </div>
 </div>

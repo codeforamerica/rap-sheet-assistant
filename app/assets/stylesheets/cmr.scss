@@ -55,3 +55,14 @@
     cursor: pointer;
   }
 }
+
+.date-select-row {
+  display: flex;
+}
+
+.form-control.date-select {
+  flex: 1 1 auto;
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+}

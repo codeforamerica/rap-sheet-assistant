@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213175725) do
+ActiveRecord::Schema.define(version: 20180221183501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pgcrypto"
 
   create_table "rap_sheet_pages", force: :cascade do |t|
     t.bigint "rap_sheet_id"
@@ -29,6 +30,23 @@ ActiveRecord::Schema.define(version: 20180213175725) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "number_of_pages", null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_rap_sheets_on_user_id"
   end
 
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "phone_number"
+    t.string "email"
+    t.string "street_address"
+    t.string "city"
+    t.string "state"
+    t.string "zip_code"
+    t.date "date_of_birth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "rap_sheets", "users"
 end

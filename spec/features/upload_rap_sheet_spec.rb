@@ -42,13 +42,20 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'We can help you apply to change 1 conviction'
     expect(page).to have_content 'POSSESS MARIJUANA'
     expect(page).to have_content 'Redesignation'
-    click_on 'Next'
+    click_on 'Debug'
 
     expect(page).to have_content '1990-12-14'
     expect(page).to have_content 'XR09005'
     expect(page).to have_content 'CASC LOS ANGELES'
     expect(page).to have_content 'PC 192.3(A) --- VEH MANSL W/GROSS NEGLIGENCE'
     expect(page).to have_content '3y probation, 30d jail, fine, restitution'
+    click_on 'Back'
+    click_on 'Next'
+
+    fill_in_contact_form(first_name: 'Testuser')
+    click_on 'Next'
+
+    expect(User.last.first_name).to eq('Testuser')
   end
 
   it 'allows the user to delete and re-upload pages' do
@@ -90,5 +97,19 @@ describe 'uploading a rap sheet' do
 
     click_on '- remove a page'
     expect(page).to have_css('.rap-sheet-page-row', count: 2)
+  end
+
+  def fill_in_contact_form(params = {})
+    fill_in 'What is your first name?', with: params[:first_name] || 'Clearme'
+    fill_in 'What is your last name?', with: params[:last_name] || 'Smith'
+    fill_in 'Phone number', with: params[:phone_number] || '415 555 1212'
+    fill_in 'Email address', with: params[:email_address] || 'testuser@example.com'
+    fill_in 'Street address', with: params[:street_address] || '123 Main St'
+    fill_in 'City', with: params[:city] || 'San Francisco'
+    fill_in 'State', with: params[:state] || 'CA'
+    fill_in 'Zip', with: params[:zip_code] || '94103'
+    select params[:dob_month] || 'January', from:  'user[date_of_birth(2i)]'
+    select params[:dob_day] || '1', from: 'user[date_of_birth(3i)]'
+    select params[:dob_year] || '1980', from: 'user[date_of_birth(1i)]'
   end
 end

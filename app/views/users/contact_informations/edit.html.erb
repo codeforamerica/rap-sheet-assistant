@@ -1,0 +1,75 @@
+<div class="container">
+  <h1 class="mt-5">Contact Info</h1>
+
+  <%= form_for @user, url: user_contact_information_path(@user) do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :first_name, 'What is your first name?' %>
+          <%= f.text_field :first_name, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :last_name, 'What is your last name?' %>
+          <%= f.text_field :last_name, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :phone_number, 'Phone number', required: true %>
+          <%= f.text_field :phone_number, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :email, 'Email address' %>
+          <%= f.text_field :email, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :street_address, 'Street address', required: true %>
+          <%= f.text_field :street_address, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <%= f.label :city, 'City' %>
+              <%= f.text_field :city, class: 'form-control', required: true  %>
+            </div>
+            <div class="col-sm-3">
+              <%= f.label :state %>
+              <%= f.text_field :state, class: 'form-control', required: true  %>
+            </div>
+            <div class="col-sm-3">
+              <%= f.label :zip_code, 'Zip' %>
+              <%= f.text_field :zip_code, class: 'form-control', required: true  %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div><%= f.label :date_of_birth %></div>
+          <div class="date-select-row">
+            <%= f.date_select :date_of_birth, {
+              include_blank: true,
+              start_year: 100.years.ago.year,
+              end_year: 5.years.ago.year,
+              with_css_classes: true,
+              order: [:month, :day, :year]
+            }, {
+              class: 'form-control date-select',
+              required: true
+            } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% if @user.errors.count > 0 %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@rap_sheet.errors.count, "error") %> prohibited this contact information from being saved:</h2>
+
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= f.submit 'Next →', class: 'btn btn-info' %>
+  <% end %>
+</div>
