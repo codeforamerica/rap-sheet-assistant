@@ -75,4 +75,20 @@ describe 'uploading a rap sheet' do
 
     expect(RapSheet.last.rap_sheet_pages.length).to eq(0)
   end
+
+  it 'allows the user to add and remove pages' do
+    visit root_path
+    expect(page).to have_content 'Upload your California RAP sheet'
+    click_on 'Start'
+
+    expect(page).to have_content 'How many pages does your RAP sheet have?'
+    fill_in 'How many pages does your RAP sheet have?', with: '2'
+    click_on 'Next'
+
+    click_on '+ add a page'
+    expect(page).to have_css('.rap-sheet-page-row', count: 3)
+
+    click_on '- remove a page'
+    expect(page).to have_css('.rap-sheet-page-row', count: 2)
+  end
 end

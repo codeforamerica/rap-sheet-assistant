@@ -44,6 +44,11 @@
     </div>
   </div>
 
+  <%= button_to '+ add a page', add_page_rap_sheet_path(@rap_sheet), form_class: 'd-inline', class: 'btn btn-link', method: :put %>
+  <% if @rap_sheet.number_of_pages > 1 %>
+    <%= button_to '- remove a page', remove_page_rap_sheet_path(@rap_sheet), form_class: 'd-inline', class: 'btn btn-link', method: :put %>
+  <% end %>
+
   <p class="mt-4">
     <% if @rap_sheet.all_pages_uploaded? %>
       All <%= pluralize(@rap_sheet.number_of_pages, 'page') %> added!

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     member do
       get :details
       get :debug
+      put :add_page
+      put :remove_page
     end
   end
 

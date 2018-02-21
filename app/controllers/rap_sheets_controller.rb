@@ -35,6 +35,26 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
   end
 
+  def add_page
+    @rap_sheet = RapSheet.find(params[:id])
+    @rap_sheet.update(number_of_pages: @rap_sheet.number_of_pages + 1)
+
+    redirect_to edit_rap_sheet_path(@rap_sheet)
+  end
+
+  def remove_page
+    @rap_sheet = RapSheet.find(params[:id])
+
+    if @rap_sheet.number_of_pages > 1
+      last_page = @rap_sheet.rap_sheet_pages.find_by(page_number: @rap_sheet.number_of_pages)
+      last_page.destroy if last_page
+
+      @rap_sheet.update!(number_of_pages: @rap_sheet.number_of_pages - 1)
+    end
+
+    redirect_to edit_rap_sheet_path(@rap_sheet)
+  end
+
   private
 
   def rap_sheet_params
