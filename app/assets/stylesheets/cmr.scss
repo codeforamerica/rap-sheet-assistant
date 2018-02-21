@@ -48,4 +48,10 @@
   display: flex;
   align-items: center;
   font-size: 32px;
+
+  input[type=submit] {
+    -webkit-appearance: none;
+    border: none;
+    cursor: pointer;
+  }
 }

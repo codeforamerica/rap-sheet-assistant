@@ -8,5 +8,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rap_sheet_pages, only: [:create]
+  resources :rap_sheet_pages, only: [:create, :destroy]
 end

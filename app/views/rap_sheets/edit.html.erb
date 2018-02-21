@@ -10,33 +10,33 @@
       <ul class="list-group list-group-flush">
         <% @rap_sheet_pages.each do |rap_sheet_page| %>
           <li class="list-group-item">
-            <%= form_for rap_sheet_page, url: rap_sheet_pages_path, method: :post, html: {
-            multipart: true,
-            id: "rap_sheet_page_#{rap_sheet_page.page_number}",
-            class: 'rap-sheet-page-row'
-            } do |f| %>
+            <%= content_tag :div, class: 'rap-sheet-page-row', id: "rap_sheet_page_#{rap_sheet_page.page_number}" do %>
               <div class="rap-sheet-page-number-column">
                 <%= content_tag :div, class: "mr-2 page-indicator #{rap_sheet_page.persisted? ? 'completed' : ''}" do %>
                   <%= rap_sheet_page.page_number %>
                 <% end %>
               </div>
               <div class="rap-sheet-page-content">
-                <div class="">
-                  page <%= rap_sheet_page.page_number %><% if rap_sheet_page.persisted? %> uploaded<% end %>
-                </div>
-                <% if rap_sheet_page.persisted? %>
-                  <%= rap_sheet_page.rap_sheet_page_image.file.filename %>
-                <% elsif rap_sheet_page.page_number == @rap_sheet.first_missing_page_number %>
-                  <label class="mt-1 btn btn-info btn-sm">
-                    + add
-                    <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera', class: 'hidden' %>
-                  </label>
+                <%= form_for rap_sheet_page, url: rap_sheet_pages_path, method: :post, html: { multipart: true } do |f| %>
+                  <div>
+                    page <%= rap_sheet_page.page_number %><% if rap_sheet_page.persisted? %> uploaded<% end %>
+                  </div>
+                  <% if rap_sheet_page.persisted? %>
+                    <%= rap_sheet_page.rap_sheet_page_image.file.filename %>
+                  <% elsif rap_sheet_page.page_number == @rap_sheet.first_missing_page_number %>
+                    <label class="mt-1 btn btn-info btn-sm">
+                      + add
+                      <%= f.file_field :rap_sheet_page_image, accept: 'image/*', capture: 'camera', class: 'hidden' %>
+                    </label>
+                  <% end %>
+                  <%= f.hidden_field :rap_sheet_id %>
+                  <%= f.hidden_field :page_number %>
+                  <div><%= f.submit 'Upload', class: 'hidden' %></div>
                 <% end %>
-                <%= f.hidden_field :rap_sheet_id %>
-                <%= f.hidden_field :page_number %>
-                <div><%= f.submit 'Upload', class: 'hidden' %></div>
               </div>
-              <div class="rap-sheet-page-delete">×</div>
+              <% if rap_sheet_page.persisted? %>
+                <div class="rap-sheet-page-delete"><%= button_to '×', rap_sheet_page_path(rap_sheet_page), method: :delete %></div>
+              <% end %>
             <% end %>
           </li>
         <% end %>

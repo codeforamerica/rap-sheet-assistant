@@ -50,4 +50,29 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'PC 192.3(A) --- VEH MANSL W/GROSS NEGLIGENCE'
     expect(page).to have_content '3y probation, 30d jail, fine, restitution'
   end
+
+  it 'allows the user to delete and re-upload pages' do
+    visit root_path
+    expect(page).to have_content 'Upload your California RAP sheet'
+    click_on 'Start'
+
+    expect(page).to have_content 'How many pages does your RAP sheet have?'
+    fill_in 'How many pages does your RAP sheet have?', with: '2'
+    click_on 'Next'
+
+    expect(page).to have_content 'Upload all 2 pages of your RAP sheet'
+    expect(page).to have_content '0 of 2 pages uploaded'
+    within '#rap_sheet_page_1' do
+      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+      click_on 'Upload'
+    end
+
+    expect(RapSheet.last.rap_sheet_pages.length).to eq(1)
+
+    within '#rap_sheet_page_1' do
+      click_on '×'
+    end
+
+    expect(RapSheet.last.rap_sheet_pages.length).to eq(0)
+  end
 end

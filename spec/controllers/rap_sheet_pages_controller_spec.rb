@@ -24,4 +24,21 @@ describe RapSheetPagesController do
       expect(response).to redirect_to(edit_rap_sheet_path(rap_sheet.id))
     end
   end
+
+  describe '#destroy' do
+    let(:image) { File.new(Rails.root.join('spec', 'fixtures', 'skywalker_rap_sheet_page_1.jpg')) }
+
+    it 'removes a page' do
+      rap_sheet = RapSheet.create!(number_of_pages: 1)
+      rap_sheet_page = rap_sheet.rap_sheet_pages.create!(page_number: 1, rap_sheet_page_image: image)
+
+      expect do
+        delete :destroy, params: { id: rap_sheet_page.id }
+      end.to change(RapSheetPage, :count).by(-1)
+
+      expect(rap_sheet.reload.rap_sheet_pages.length).to eq(0)
+
+      expect(response).to redirect_to(edit_rap_sheet_path(rap_sheet.id))
+    end
+  end
 end
