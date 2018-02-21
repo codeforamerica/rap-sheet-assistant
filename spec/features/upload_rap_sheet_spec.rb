@@ -108,8 +108,8 @@ describe 'uploading a rap sheet' do
     fill_in 'City', with: params[:city] || 'San Francisco'
     fill_in 'State', with: params[:state] || 'CA'
     fill_in 'Zip', with: params[:zip_code] || '94103'
-    select params[:dob_month] || 'January', from:  'user[date_of_birth(2i)]'
-    select params[:dob_day] || '1', from: 'user[date_of_birth(3i)]'
-    select params[:dob_year] || '1980', from: 'user[date_of_birth(1i)]'
+    select params[:dob_month] || 'January', from:  'contact_information_form[date_of_birth(2i)]'
+    select params[:dob_day] || '1', from: 'contact_information_form[date_of_birth(3i)]'
+    select params[:dob_year] || '1980', from: 'contact_information_form[date_of_birth(1i)]'
   end
 end

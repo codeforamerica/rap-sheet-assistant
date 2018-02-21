@@ -1,12 +1,12 @@
 <div class="container">
   <h1 class="mt-5">Contact Info</h1>
 
-  <%= form_for @user, url: user_contact_information_path(@user) do |f| %>
+  <%= form_for @form, url: user_contact_information_path(@user), method: :put do |f| %>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <%= f.label :first_name, 'What is your first name?' %>
-          <%= f.text_field :first_name, class: 'form-control', required: true %>
+          <%= f.text_field :first_name, class: 'form-control' %>
         </div>
         <div class="form-group">
           <%= f.label :last_name, 'What is your last name?' %>
@@ -58,12 +58,12 @@
       </div>
     </div>
 
-    <% if @user.errors.count > 0 %>
+    <% if @form.errors.count > 0 %>
       <div id="error_explanation">
-        <h2><%= pluralize(@rap_sheet.errors.count, "error") %> prohibited this contact information from being saved:</h2>
+        <h2><%= pluralize(@form.errors.count, "error") %> prohibited this contact information from being saved:</h2>
 
         <ul>
-          <% @user.errors.full_messages.each do |message| %>
+          <% @form.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>

@@ -2,11 +2,13 @@ module Users
   class ContactInformationsController < ApplicationController
     def edit
       @user = User.find(params[:user_id])
+      @form = ContactInformationForm.from_user(@user)
     end
 
     def update
       @user = User.find(params[:user_id])
-      if @user.update!(contact_information_params)
+      @form = ContactInformationForm.new(contact_information_params)
+      if @form.save(@user)
         redirect_to documents_rap_sheet_path(@user.rap_sheet)
       else
         render :edit
@@ -16,7 +18,7 @@ module Users
     private
 
     def contact_information_params
-      params.require(:user).permit(:first_name, :last_name, :phone_number, :email, :street_address, :city, :state, :zip_code, :date_of_birth)
+      params.require(:contact_information_form).permit(:first_name, :last_name, :phone_number, :email, :street_address, :city, :state, :zip_code, :date_of_birth)
     end
   end
 end
