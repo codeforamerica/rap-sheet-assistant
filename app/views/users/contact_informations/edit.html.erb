@@ -9,6 +9,10 @@
           <%= f.text_field :first_name, class: 'form-control' %>
         </div>
         <div class="form-group">
+          <%= f.label :middle_name, 'What is your middle name (optional)?' %>
+          <%= f.text_field :middle_name, class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
           <%= f.label :last_name, 'What is your last name?' %>
           <%= f.text_field :last_name, class: 'form-control', required: true %>
         </div>

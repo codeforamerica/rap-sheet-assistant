@@ -9,5 +9,9 @@ RSpec.describe User, type: :model do
     it 'combines first and last name' do
       expect(FactoryBot.build(:user, first_name: 'Jane', last_name: 'Smith').full_name).to eq('Jane Smith')
     end
+
+    it 'includes middle name if present' do
+      expect(FactoryBot.build(:user, first_name: 'Jane', middle_name: 'Danger', last_name: 'Smith').full_name).to eq('Jane Danger Smith')
+    end
   end
 end
