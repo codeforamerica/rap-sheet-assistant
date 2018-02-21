@@ -16,7 +16,7 @@ module CycleGrammar
 
       if tree.nil?
         puts '---------- FAILED TO PARSE EVENT: --------'
-        p event.text_value
+        p text
       end
 
       tree
