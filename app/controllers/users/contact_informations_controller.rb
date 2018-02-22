@@ -1,5 +1,10 @@
 module Users
   class ContactInformationsController < ApplicationController
+    def show
+      @user = User.find(params[:user_id])
+      redirect_to edit_user_contact_information_path(@user)
+    end
+
     def edit
       @user = User.find(params[:user_id])
       @form = ContactInformationForm.from_user(@user)

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :users do
     scope module: :users do
-      resource :contact_information, only: [:edit, :update]
+      resource :contact_information, only: [:show, :edit, :update]
     end
   end
 

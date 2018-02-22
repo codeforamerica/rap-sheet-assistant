@@ -1,32 +1,34 @@
 <div class="container">
   <h1 class="mt-5">Contact Info</h1>
 
-  <%= form_for @form, url: user_contact_information_path(@user), method: :put do |f| %>
+  <p>This information will be used to communicate with you about your case and file your petitions with the court.
+
+  <%= form_for @form, url: user_contact_information_path(@user), method: :put, html: { class: 'disable-until-required' } do |f| %>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <%= f.label :first_name, 'What is your first name?' %>
-          <%= f.text_field :first_name, class: 'form-control' %>
+          <%= f.text_field :first_name, class: 'form-control', required: true %>
         </div>
         <div class="form-group">
           <%= f.label :middle_name, 'What is your middle name (optional)?' %>
-          <%= f.text_field :middle_name, class: 'form-control', required: true %>
+          <%= f.text_field :middle_name, class: 'form-control' %>
         </div>
         <div class="form-group">
           <%= f.label :last_name, 'What is your last name?' %>
           <%= f.text_field :last_name, class: 'form-control', required: true %>
         </div>
         <div class="form-group">
-          <%= f.label :phone_number, 'Phone number', required: true %>
-          <%= f.text_field :phone_number, class: 'form-control' %>
+          <%= f.label :phone_number, 'Phone number' %>
+          <%= f.text_field :phone_number, class: 'form-control', required: true %>
         </div>
         <div class="form-group">
           <%= f.label :email, 'Email address' %>
           <%= f.text_field :email, class: 'form-control' %>
         </div>
         <div class="form-group">
-          <%= f.label :street_address, 'Street address', required: true %>
-          <%= f.text_field :street_address, class: 'form-control' %>
+          <%= f.label :street_address, 'Street address' %>
+          <%= f.text_field :street_address, class: 'form-control', required: true %>
         </div>
         <div class="form-group">
           <div class="row">
