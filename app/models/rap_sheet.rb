@@ -29,6 +29,12 @@ class RapSheet < ApplicationRecord
     conviction_counts.select(&:prop64_eligible?)
   end
 
+  def dismissible_conviction_events
+    convictions.select do |conviction_event|
+      conviction_event[:counts].any?(&:prop64_eligible?)
+    end
+  end
+
   def num_felonies
     conviction_counts.select { |count| count.severity == 'F' }.length
   end

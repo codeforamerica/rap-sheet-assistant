@@ -65,6 +65,7 @@ GEM
       mime-types (>= 1.16)
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
+    cliver (0.3.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -182,6 +183,9 @@ GEM
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     os (0.9.6)
+    pdf-forms (1.1.1)
+      cliver (~> 0.3.2)
+      safe_shell (>= 1.0.3, < 2.0)
     pg (0.21.0)
     polyglot (0.3.5)
     popper_js (1.12.9)
@@ -241,6 +245,7 @@ GEM
       nokogiri
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
+    safe_shell (1.1.0)
     sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -306,6 +311,7 @@ DEPENDENCIES
   byebug
   capybara (~> 2.13)
   carrierwave (~> 1.0)
+  cliver
   coffee-rails (~> 4.2)
   dotenv-rails
   factory_bot_rails
@@ -316,6 +322,7 @@ DEPENDENCIES
   jquery-rails
   listen (>= 3.0.5, < 3.2)
   mini_magick
+  pdf-forms
   pg (~> 0.18)
   puma (~> 3.7)
   rails (~> 5.1.4)

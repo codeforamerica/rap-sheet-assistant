@@ -13,7 +13,12 @@ Rails.application.routes.draw do
       get :debug
       put :add_page
       put :remove_page
-      get :documents
+    end
+
+    resources :documents, only: [:index] do
+      collection do
+        get :download
+      end
     end
   end
 

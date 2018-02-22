@@ -1,0 +1,24 @@
+<div class="container">
+  <h1 class="mt-5">Done!</h1>
+
+  <p>Download and print your paperwork</p>
+
+  <hr>
+
+  <p>Here's what paperwork we filled out for you:</p>
+
+  <div class="card">
+    <div class="card-body">
+      <h2><%= pluralize(@rap_sheet.dismissible_conviction_events.length, 'petition') %> to clear old marajuana convictions (CR400)</h2>
+      <ul>
+        <% @rap_sheet.dismissible_conviction_events.each do |conviction_event| %>
+          <% conviction_event[:counts].select(&:prop64_eligible?).each do |count| %>
+            <li><%= "#{count.code_section_description} - #{count.prop64_action}" %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <%= link_to '✓ download paperwork', download_rap_sheet_documents_path(@rap_sheet), class: 'btn btn-info mt-3', data: { turbolinks: false } %>
+</div>

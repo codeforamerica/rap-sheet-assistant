@@ -35,11 +35,6 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
   end
 
-  def documents
-    @rap_sheet = RapSheet.find(params[:id])
-    @user = @rap_sheet.user
-  end
-
   def add_page
     @rap_sheet = RapSheet.find(params[:id])
     @rap_sheet.update(number_of_pages: @rap_sheet.number_of_pages + 1)

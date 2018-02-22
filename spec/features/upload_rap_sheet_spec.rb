@@ -55,7 +55,13 @@ describe 'uploading a rap sheet' do
     fill_in_contact_form(first_name: 'Testuser')
     click_on 'Next'
 
-    expect(User.last.first_name).to eq('Testuser')
+    click_on 'download'
+    fields_dict = get_fields_from_downloaded_pdf
+    expected_values = {
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Testuser Smith',
+      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
+    }
+    expect(fields_dict).to match(a_hash_including(expected_values))
   end
 
   it 'allows the user to delete and re-upload pages' do
@@ -111,5 +117,20 @@ describe 'uploading a rap sheet' do
     select params[:dob_month] || 'January', from:  'contact_information_form[date_of_birth(2i)]'
     select params[:dob_day] || '1', from: 'contact_information_form[date_of_birth(3i)]'
     select params[:dob_year] || '1980', from: 'contact_information_form[date_of_birth(1i)]'
+  end
+
+  def get_fields_from_downloaded_pdf
+    tempfile = Tempfile.new('downloaded_pdf', :encoding => 'ascii-8bit')
+    tempfile.write(page.body)
+    tempfile.close
+
+    pdftk = PdfForms.new(Cliver.detect('pdftk'))
+    fields = pdftk.get_fields tempfile.path
+
+    {}.tap do |fields_dict|
+      fields.each do |field|
+        fields_dict[field.name] = field.value
+      end
+    end
   end
 end

@@ -24,6 +24,8 @@ gem 'jquery-rails'
 gem 'sprockets-rails', '> 2.3.2'
 gem 'bootstrap', '~> 4.0.0'
 gem 'bootsnap'
+gem 'pdf-forms'
+gem 'cliver'
 
 group :development, :test do
   gem 'factory_bot_rails'
