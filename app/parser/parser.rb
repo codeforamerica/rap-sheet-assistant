@@ -22,10 +22,8 @@ class Parser
 
   def do_parsing(parser, text)
     result = parser.parse(text)
-    unless result
-      puts "RapSheetGrammarParser had a problem with line #{parser.failure_line} column #{parser.failure_column}:"
-      puts parser.failure_reason
-    end
+    raise RapSheetParserException.new(parser) unless result
+
     result
   end
 end

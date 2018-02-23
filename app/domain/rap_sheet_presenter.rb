@@ -31,8 +31,6 @@ class RapSheetPresenter
       events_with_convictions: convictions,
       conviction_counts: convictions.flat_map { |c| c[:counts] }
     }
-  rescue StandardError => e
-    raise RapSheetParseError.new(e)
   end
 
   private

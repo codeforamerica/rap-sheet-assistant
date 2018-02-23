@@ -5,21 +5,17 @@ module CycleGrammar
   class Cycle < Treetop::Runtime::SyntaxNode
     def events
       recursive_select(EventContent).map do |event|
-        parse_event(event.text_value)
+        do_parsing(EventGrammarParser.new, event.text_value)
       end
     end
 
     private
 
-    def parse_event(text)
-      tree = EventGrammarParser.new.parse(text)
+    def do_parsing(parser, text)
+      result = parser.parse(text)
+      raise RapSheetParserException.new(parser) unless result
 
-      if tree.nil?
-        puts '---------- FAILED TO PARSE EVENT: --------'
-        p text
-      end
-
-      tree
+      result
     end
   end
 

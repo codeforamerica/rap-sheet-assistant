@@ -39,14 +39,18 @@ module EventGrammar
     end
 
     def count_content
-      @count_content ||= CountGrammarParser.new.parse(count_info.text_value + "\n")
+      return @count_content if @count_content
 
-      if @count_content.nil?
-        puts '---------- FAILED TO PARSE COUNT: --------'
-        p count_info.text_value
-      end
+      @count_content = do_parsing(CountGrammarParser.new, count_info.text_value + "\n")
+    end
 
-      @count_content
+    private
+
+    def do_parsing(parser, text)
+      result = parser.parse(text)
+      raise RapSheetParserException.new(parser) unless result
+
+      result
     end
   end
 
@@ -56,14 +60,18 @@ module EventGrammar
     end
 
     def update_content
-      @update_content ||= UpdateGrammarParser.new.parse(update_info.text_value + "\n")
+      return @update_content if @update_content
 
-      if @update_content.nil?
-        puts '---------- FAILED TO PARSE UPDATE: --------'
-        p update_info.text_value
-      end
+      @update_content = do_parsing(UpdateGrammarParser.new, update_info.text_value + "\n")
+    end
 
-      @update_content
+    private
+
+    def do_parsing(parser, text)
+      result = parser.parse(text)
+      raise RapSheetParserException.new(parser) unless result
+
+      result
     end
   end
 

@@ -31,7 +31,7 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
     begin
       @convictions = @rap_sheet.convictions
-    rescue RapSheetPresenter::RapSheetParseError => e
+    rescue RapSheetParserException => e
       @convictions = []
       @rap_sheet_parse_error = e
       @wrapped_error = ActionDispatch::ExceptionWrapper.new(Rails::BacktraceCleaner.new, e)
@@ -68,7 +68,7 @@ class RapSheetsController < ApplicationController
     params.require(:rap_sheet).permit(:number_of_pages)
   end
 
-  rescue_from RapSheetPresenter::RapSheetParseError do |exception|
+  rescue_from RapSheetParserException do |exception|
     redirect_to debug_rap_sheet_path(@rap_sheet)
   end
 end
