@@ -28,8 +28,8 @@ RSpec.describe RapSheetsController, type: :controller do
   describe '#show' do
     render_views
 
-    it 'shows conviction counts' do
-      text = <<~TEXT
+    let(:text) do
+      <<~TEXT
         info
         * * * *
         COURT:
@@ -39,16 +39,60 @@ RSpec.describe RapSheetsController, type: :controller do
         DISPO:DISMISSED
         * * * END OF MESSAGE * * *
       TEXT
+    end
 
-      rap_sheet = FactoryBot.create(
+    let(:rap_sheet) do
+      FactoryBot.create(
         :rap_sheet,
         number_of_pages: 1,
         rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
       )
+    end
 
+    it 'shows conviction counts' do
       get :show, params: { id: rap_sheet.id }
 
       expect(response.body).to include("we didn't find any convictions")
+    end
+
+    describe 'when the rap sheet cannot be parsed' do
+      let(:rap_sheet) do
+        FactoryBot.create(
+          :rap_sheet,
+          number_of_pages: 1,
+          rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
+        )
+      end
+
+      it 'redirects to the debug page' do
+        capture_output do
+          get :show, params: { id: rap_sheet.id }
+        end
+
+        expect(response).to redirect_to(debug_rap_sheet_path(rap_sheet.id))
+      end
+    end
+  end
+
+  describe '#debug' do
+    render_views
+
+    describe 'when the rap sheet cannot be parsed' do
+      let(:rap_sheet) do
+        FactoryBot.create(
+          :rap_sheet,
+          number_of_pages: 1,
+          rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
+        )
+      end
+
+      it 'shows a stack trace and the page content' do
+        capture_output do
+          get :debug, params: { id: rap_sheet.id }
+        end
+
+        expect(response.body).to include('fancy fjord')
+      end
     end
   end
 

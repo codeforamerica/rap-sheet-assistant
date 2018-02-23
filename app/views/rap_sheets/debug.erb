@@ -1,7 +1,13 @@
 <div class="rap-sheet-debug">
-  <h1>Here is your rap sheet:</h1>
+  <% if @rap_sheet_parse_error %>
+    <p class="rap-sheet-debug-page-marker">Error!</p>
+    <p>There was a problem parsing your RAP sheet. Here's some technical details:</p>
+    <pre class="rap-sheet-debug-backtrace"><%= @rap_sheet_parse_error.message %><%= "\n\n" %><%= @wrapped_error.application_trace.join("\n") %></pre>
+  <% else %>
+    <h1>Here is your rap sheet:</h1>
+  <% end %>
 
-  <div>
+  <% if @convictions.present? %>
     <p class="rap-sheet-debug-page-marker">Convictions:</p>
     <div class="border">
       <table>
@@ -15,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-        <% @rap_sheet.convictions.each do |date| %>
+        <% @convictions.each do |date| %>
           <tr>
             <td style="white-space: nowrap;"><%= date[:date] %></td>
             <td><%= date[:case_number] %></td>
@@ -24,7 +30,7 @@
             <td>
               <ul>
                 <% date[:counts].each do |count| %>
-                  <li><%="#{ count.code_section} --- #{count.code_section_description }"%></li>
+                  <li><%= "#{ count.code_section} --- #{count.code_section_description }" %></li>
                 <% end %>
               </ul>
             </td>
@@ -33,16 +39,16 @@
         </tbody>
       </table>
     </div>
+  <% end %>
 
-    <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
-      <p class="rap-sheet-debug-page-marker">Page <%= i + 1 %>:</p>
-      <pre><%= r.text %></pre>
-    <% end %>
+  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
+    <p class="rap-sheet-debug-page-marker">Page <%= i + 1 %>:</p>
+    <pre><%= r.text %></pre>
+  <% end %>
 
-    <div class="row">
-      <div class="col-sm-2">
-        <%= link_to 'Back', details_rap_sheet_path(@rap_sheet), class: 'btn btn-info btn-block' %>
-      </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <%= link_to 'Back', details_rap_sheet_path(@rap_sheet), class: 'btn btn-info btn-block' %>
     </div>
   </div>
 </div>

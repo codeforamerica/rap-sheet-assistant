@@ -31,11 +31,24 @@ class RapSheetPresenter
       events_with_convictions: convictions,
       conviction_counts: convictions.flat_map { |c| c[:counts] }
     }
+  rescue StandardError => e
+    raise RapSheetParseError.new(e)
   end
 
   private
 
   def self.parse_date(e)
     Date.strptime(e.date.text_value, '%Y%m%d')
+  end
+
+  class RapSheetParseError < StandardError
+    def initialize(e = nil)
+      super e
+      # Preserve the original exception's data if provided
+      if e && e.is_a?(Exception)
+        set_backtrace e.backtrace
+        message.prepend "#{e.class}: "
+      end
+    end
   end
 end
