@@ -58,6 +58,7 @@ describe 'uploading a rap sheet' do
     click_on 'download'
     fields_dict = get_fields_from_downloaded_pdf
     expected_values = {
+      'proSe' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Testuser Smith',
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
     }

@@ -9,6 +9,7 @@ class Prop64PetitionCreator
   def create_petition
     user = rap_sheet.user
     pdf_fields = {
+      'proSe' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => user.full_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.full_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => user.street_address,
