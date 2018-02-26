@@ -15,7 +15,8 @@ class CourthousePresenter
         'CAMC HAYWARD' => 'CAMC Hayward',
         'CASC MCSACRAMENTO' => 'CASC MC Sacramento',
         'CASC SN JOSE' => 'CASC San Jose',
-        'CAMC LOS ANGELES METRO' => 'CAMC Los Angeles Metro'
+        'CAMC LOS ANGELES METRO' => 'CAMC Los Angeles Metro',
+        'CASC LOS ANGELES' => 'CASC Los Angeles'
     }
 
     courthouse_text = courthouse.text_value.gsub('.', '').upcase
