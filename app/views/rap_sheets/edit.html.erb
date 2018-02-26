@@ -3,7 +3,7 @@
     sheet</h1>
   <p>Make sure to keep them in order</p>
 
-  <p class="mt-4"><%= @rap_sheet.rap_sheet_pages.length %> of <%= @rap_sheet.number_of_pages %> pages uploaded</p>
+  <p class="mt-4"><%= @rap_sheet.rap_sheet_pages.length %> of <%= pluralize(@rap_sheet.number_of_pages, 'page') %> uploaded</p>
 
   <div class="card">
     <div class="card-content">

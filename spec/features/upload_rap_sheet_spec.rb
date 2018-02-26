@@ -1,10 +1,15 @@
 require 'rails_helper'
 
 describe 'uploading a rap sheet' do
+  let(:scanned_pages) do
+    [
+      File.read('./spec/fixtures/skywalker_rap_sheet_page_1.txt'),
+      File.read('./spec/fixtures/skywalker_rap_sheet_page_2.txt')
+    ]
+  end
+
   before do
-    page_1_text = File.read('./spec/fixtures/skywalker_rap_sheet_page_1.txt')
-    page_2_text = File.read('./spec/fixtures/skywalker_rap_sheet_page_2.txt')
-    allow(TextScanner).to receive(:scan_text).and_return(page_1_text, page_2_text)
+    allow(TextScanner).to receive(:scan_text).and_return(*scanned_pages)
   end
 
   it 'allows the user to upload their rap sheet and shows convictions' do
@@ -13,24 +18,10 @@ describe 'uploading a rap sheet' do
     click_on 'Start'
 
     expect(page).to have_content 'How many pages does your RAP sheet have?'
-    fill_in 'How many pages does your RAP sheet have?', with: '2'
+    fill_in 'How many pages does your RAP sheet have?', with: scanned_pages.length
     click_on 'Next'
 
-    expect(page).to have_content 'Upload all 2 pages of your RAP sheet'
-    expect(page).to have_content '0 of 2 pages uploaded'
-    within '#rap_sheet_page_1' do
-      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-      click_on 'Upload'
-    end
-
-    expect(page).to have_content '1 of 2 pages uploaded'
-    within '#rap_sheet_page_2' do
-      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-      click_on 'Upload'
-    end
-
-    expect(page).to have_content 'All 2 pages added!'
-    click_on 'Next'
+    upload_pages(scanned_pages)
 
     expect(page).to have_content 'We found 5 convictions on your record.'
     expect(page).to have_content '3 Felonies'
@@ -63,6 +54,40 @@ describe 'uploading a rap sheet' do
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
     }
     expect(fields_dict).to match(a_hash_including(expected_values))
+  end
+
+  context 'when the rap sheet contains multiple prop64 conviction events' do
+    let(:scanned_pages) do
+      [
+        File.read('./spec/fixtures/skywalker_prop64_two_cases_both_convicted.txt')
+      ]
+    end
+
+    it 'generates multiple petitions for independent conviction events' do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Start'
+
+      fill_in 'How many pages does your RAP sheet have?', with: '1'
+      click_on 'Next'
+
+      upload_pages(scanned_pages)
+
+      click_on 'Next'
+      click_on 'Next'
+      click_on 'Next'
+
+      fill_in_contact_form(first_name: 'Testuser')
+      click_on 'Next'
+
+      click_on 'download'
+      fields_dict = get_fields_from_downloaded_pdf
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
+        '1.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
+      }
+      expect(fields_dict).to match(a_hash_including(expected_values))
+    end
   end
 
   it 'allows the user to delete and re-upload pages' do
@@ -104,6 +129,22 @@ describe 'uploading a rap sheet' do
 
     click_on '- remove a page'
     expect(page).to have_css('.rap-sheet-page-row', count: 2)
+  end
+
+  def upload_pages(rap_sheet_pages)
+    pluralized_rap_sheet_pages = "#{rap_sheet_pages.length} #{'page'.pluralize(rap_sheet_pages.length)}"
+    expect(page).to have_content "Upload all #{pluralized_rap_sheet_pages} of your RAP sheet"
+
+    rap_sheet_pages.each_with_index do |_rap_sheet_page, index|
+      expect(page).to have_content "#{index} of #{pluralized_rap_sheet_pages} uploaded"
+      within "#rap_sheet_page_#{index + 1}" do
+        attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+        click_on 'Upload'
+      end
+    end
+
+    expect(page).to have_content "All #{pluralized_rap_sheet_pages} added!"
+    click_on 'Next'
   end
 
   def fill_in_contact_form(params = {})
