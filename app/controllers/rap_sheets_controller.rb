@@ -42,6 +42,10 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
   end
 
+  def ineligible
+    @rap_sheet = RapSheet.find(params[:id])
+  end
+
   def add_page
     @rap_sheet = RapSheet.find(params[:id])
     @rap_sheet.update(number_of_pages: @rap_sheet.number_of_pages + 1)
@@ -63,6 +67,15 @@ class RapSheetsController < ApplicationController
   end
 
   private
+
+  def after_show_path
+    if @rap_sheet.dismissible_convictions.present?
+      details_rap_sheet_path(@rap_sheet)
+    else
+      ineligible_rap_sheet_path(@rap_sheet)
+    end
+  end
+  helper_method :after_show_path
 
   def rap_sheet_params
     params.require(:rap_sheet).permit(:number_of_pages)

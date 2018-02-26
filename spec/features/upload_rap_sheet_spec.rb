@@ -90,6 +90,29 @@ describe 'uploading a rap sheet' do
     end
   end
 
+  context 'when the rap sheet has no eligible convictions' do
+    let(:scanned_pages) do
+      [
+        File.read('./spec/fixtures/skywalker_ineligible.txt')
+
+      ]
+    end
+
+    it 'shows an ineligible page' do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Start'
+
+      fill_in 'How many pages does your RAP sheet have?', with: '1'
+      click_on 'Next'
+
+      upload_pages(scanned_pages)
+
+      click_on 'Next'
+      expect(page).to have_content 'one of your convictions are eligible'
+    end
+  end
+
   it 'allows the user to delete and re-upload pages' do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
