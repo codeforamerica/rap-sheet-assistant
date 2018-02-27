@@ -21,7 +21,7 @@ class RapSheet < ApplicationRecord
   end
 
   def conviction_counts
-    events_with_convictions.flat_map { |e| e[:counts] }
+    events_with_convictions.flat_map(&:counts)
   end
 
   def num_convictions
@@ -58,19 +58,19 @@ class RapSheet < ApplicationRecord
 
   def prop64_dismissible_conviction_events
     events_with_convictions.select do |conviction_event|
-      conviction_event[:counts].any?(&:prop64_eligible?)
+      conviction_event.counts.any?(&:prop64_eligible?)
     end
   end
 
   def pc1203_potentially_dismissible_conviction_events
     events_with_convictions.select do |conviction_event|
-      conviction_event[:counts].any?(&:pc1203_potentially_eligible?)
+      conviction_event.counts.any?(&:pc1203_potentially_eligible?)
     end
   end
 
   def pc1203_dismissible_conviction_events
     events_with_convictions.select do |conviction_event|
-      conviction_event[:counts].any?(&:pc1203_eligible?)
+      conviction_event.counts.any?(&:pc1203_eligible?)
     end
   end
 

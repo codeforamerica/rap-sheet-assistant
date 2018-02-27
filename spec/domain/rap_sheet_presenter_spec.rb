@@ -55,41 +55,45 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = [
-        a_hash_including(
-          date: Date.new(1982, 9, 15),
-          case_number: '456',
-          courthouse: 'CAMC L05 ANGELES METRO',
-          sentence: nil,
-        ),
-        a_hash_including(
-          date: Date.new(1994, 11, 20),
-          case_number: '612',
-          courthouse: 'CASC SAN DIEGO',
-          sentence: '12m probation, 45d jail'
-        )
-      ]
-
       tree = Parser.new.parse(text)
       events_with_convictions = described_class.present(tree)
-      expect(events_with_convictions).to match(expected_convictions)
 
-      verify_count_looks_like(events_with_convictions[0][:counts][0], {
+      verify_event_looks_like(events_with_convictions[0], {
+        date: Date.new(1982, 9, 15),
+        case_number: '456',
+        courthouse: 'CAMC L05 ANGELES METRO',
+        sentence: nil,
+      })
+      verify_event_looks_like(events_with_convictions[1], {
+        date: Date.new(1994, 11, 20),
+        case_number: '612',
+        courthouse: 'CASC SAN DIEGO',
+        sentence: '12m probation, 45d jail'
+      })
+
+      verify_count_looks_like(events_with_convictions[0].counts[0], {
         code_section: nil,
         code_section_description: nil,
         severity: nil,
       })
-      verify_count_looks_like(events_with_convictions[0][:counts][1], {
+      verify_count_looks_like(events_with_convictions[0].counts[1], {
         code_section: 'PC 4056',
         code_section_description: 'BREAKING AND ENTERING',
         severity: nil,
       })
-      verify_count_looks_like(events_with_convictions[1][:counts][0], {
+      verify_count_looks_like(events_with_convictions[1].counts[0], {
         code_section: 'PC 487.2',
         code_section_description: 'GRAND THEFT FROM PERSON',
         severity: 'M',
       })
     end
+  end
+
+  def verify_event_looks_like(event, date:, case_number:, courthouse:, sentence:)
+    expect(event.date).to eq date
+    expect(event.case_number).to eq case_number
+    expect(event.courthouse).to eq courthouse
+    expect(event.sentence).to eq sentence
   end
 
   def verify_count_looks_like(count, code_section:, code_section_description:, severity:)

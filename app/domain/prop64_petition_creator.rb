@@ -18,7 +18,7 @@ class Prop64PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => user.zip_code,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => user.phone_number,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => user.email,
-      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => conviction_event[:case_number],
+      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[0].Checkbox[0]' => resentencing?,
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[1].Checkbox[1]' => redesignation?,
@@ -57,7 +57,7 @@ class Prop64PetitionCreator
   end
 
   def code_sections
-    conviction_event[:counts].map(&:code_section)
+    conviction_event.counts.map(&:code_section)
   end
 
   def resentencing?
@@ -89,7 +89,7 @@ class Prop64PetitionCreator
   end
 
   def sentence_being_served?
-    end_of_sentence = conviction_event[:date] + SentenceParser.parse(conviction_event[:sentence])
+    end_of_sentence = conviction_event.date + SentenceParser.parse(conviction_event.sentence)
     end_of_sentence > Date.today
   end
 

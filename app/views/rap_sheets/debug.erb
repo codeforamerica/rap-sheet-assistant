@@ -7,7 +7,7 @@
     <h1>Here is your rap sheet:</h1>
   <% end %>
 
-  <% if @convictions.present? %>
+  <% if @conviction_events.present? %>
     <p class="rap-sheet-debug-page-marker">Convictions:</p>
     <div class="border">
       <table>
@@ -21,15 +21,15 @@
         </tr>
         </thead>
         <tbody>
-        <% @convictions.each do |date| %>
+        <% @conviction_events.each do |conviction_event| %>
           <tr>
-            <td style="white-space: nowrap;"><%= date[:date] %></td>
-            <td><%= date[:case_number] %></td>
-            <td><%= date[:courthouse] %></td>
-            <td><%= date[:sentence] %></td>
+            <td style="white-space: nowrap;"><%= conviction_event.date %></td>
+            <td><%= conviction_event.case_number %></td>
+            <td><%= conviction_event.courthouse %></td>
+            <td><%= conviction_event.sentence %></td>
             <td>
               <ul>
-                <% date[:counts].each do |count| %>
+                <% conviction_event.counts.each do |count| %>
                   <li><%= "#{ count.code_section} --- #{count.code_section_description }" %></li>
                 <% end %>
               </ul>

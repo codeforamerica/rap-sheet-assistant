@@ -5,13 +5,14 @@ require 'treetop'
 require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
-  let(:event_data) {
-    {sentence: sentence}
-  }
   let(:sentence) { '3yr jail'}
 
-  let(:count) do
-    instance_double(ConvictionCount, event: event_data)
+  let(:conviction_event) do
+    instance_double(ConvictionEvent, sentence: sentence)
+  end
+
+  let(:conviction_count) do
+    instance_double(ConvictionCount, event: conviction_event)
   end
 
   describe '#potentially_eligible?' do
@@ -19,7 +20,7 @@ describe PC1203Classifier do
       let(:sentence) { '3yr prison'}
 
       it 'returns false' do
-        expect(described_class.new(count)).not_to be_potentially_eligible
+        expect(described_class.new(conviction_count)).not_to be_potentially_eligible
       end
     end
 
@@ -27,7 +28,7 @@ describe PC1203Classifier do
       let(:sentence) { '1yr prison ss'}
 
       it 'returns true' do
-        expect(described_class.new(count)).to be_potentially_eligible
+        expect(described_class.new(conviction_count)).to be_potentially_eligible
       end
     end
 
@@ -35,7 +36,7 @@ describe PC1203Classifier do
       let(:sentence) { '3yr jail'}
 
       it 'returns true' do
-        expect(described_class.new(count)).to be_potentially_eligible
+        expect(described_class.new(conviction_count)).to be_potentially_eligible
       end
     end
   end

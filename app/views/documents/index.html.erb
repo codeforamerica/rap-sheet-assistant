@@ -12,8 +12,8 @@
       <h2><%= pluralize(@rap_sheet.dismissible_conviction_events.length, 'petition') %> to clear these marijuana convictions:</h2>
       <ul>
         <% @rap_sheet.dismissible_conviction_events.each do |conviction_event| %>
-          <% conviction_event[:counts].select(&:prop64_eligible?).each do |count| %>
-            <li><%= "#{count.code_section_description} on #{count.event[:date].strftime('%m/%d/%Y')} in #{count.event[:courthouse]}" %></li>
+          <% conviction_event.counts.select(&:prop64_eligible?).each do |count| %>
+            <li><%= "#{count.code_section_description} on #{count.event.date.strftime('%m/%d/%Y')} in #{count.event.courthouse}" %></li>
           <% end %>
         <% end %>
       </ul>

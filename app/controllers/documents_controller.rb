@@ -27,7 +27,7 @@ class DocumentsController < ApplicationController
   def download_filename(conviction_events)
     full_name_for_filename = @user.full_name.gsub(/[^0-9A-Za-z]/, '_')
     case_numbers_for_filename = conviction_events.map do |conviction_event|
-      conviction_event[:case_number].gsub(',', '_').gsub(/[^0-9A-Za-z]/, '')
+      conviction_event.case_number.gsub(',', '_').gsub(/[^0-9A-Za-z]/, '')
     end
 
     ['prop64_petition', full_name_for_filename].concat(case_numbers_for_filename).join('_') + '.pdf'
