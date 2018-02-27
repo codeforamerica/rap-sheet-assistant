@@ -26,12 +26,48 @@ class RapSheet < ApplicationRecord
   end
 
   def dismissible_convictions
+    prop64_dismissible_convictions + pc1203_dismissible_convictions
+  end
+
+  def potentially_dismissable_convictions
+    prop64_dismissible_convictions + pc1203_potentially_dismissible_convictions
+  end
+
+  def pc1203_potentially_dismissible_convictions
+    conviction_counts.select(&:pc1203_potentially_eligible?)
+  end
+
+  def pc1203_dismissible_convictions
+    conviction_counts.select(&:pc1203_eligible?)
+  end
+
+  def prop64_dismissible_convictions
     conviction_counts.select(&:prop64_eligible?)
   end
 
+  def potentially_dismissible_conviction_events
+    prop64_dismissible_conviction_events + pc1203_potentially_dismissible_conviction_events
+  end
+
   def dismissible_conviction_events
+    prop64_dismissible_conviction_events + pc1203_dismissible_conviction_events
+  end
+
+  def prop64_dismissible_conviction_events
     convictions.select do |conviction_event|
       conviction_event[:counts].any?(&:prop64_eligible?)
+    end
+  end
+
+  def pc1203_potentially_dismissible_conviction_events
+    convictions.select do |conviction_event|
+      conviction_event[:counts].any?(&:pc1203_potentially_eligible?)
+    end
+  end
+
+  def pc1203_dismissible_conviction_events
+    convictions.select do |conviction_event|
+      conviction_event[:counts].any?(&:pc1203_eligible?)
     end
   end
 

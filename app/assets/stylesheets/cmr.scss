@@ -70,3 +70,20 @@ body {
     margin-right: 5px;
   }
 }
+
+.boolean-choice {
+  display: inline-block;
+  cursor: pointer;
+  padding: .5em .8em;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+  margin: 0.5em 0.25em;
+
+  input {
+    margin-right: 5px;
+  }
+
+  .field_with_errors {
+    display: inline-block;
+  }
+}

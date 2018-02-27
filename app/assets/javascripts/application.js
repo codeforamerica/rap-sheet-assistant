@@ -42,4 +42,28 @@ $(document).ready(function () {
   $('form.disable-until-required').each(function (ix, el) {
     setFormSubmitDisabled($(el))
   });
+
+  function setControlVisibility($el, controllingElements) {
+    var shouldBeVisible = $(controllingElements + ":checked").val() === "true";
+    $el.toggleClass('hidden', !shouldBeVisible);
+    $el.find('input').each(function (ix, el) {
+      var $input = $(this);
+      if (shouldBeVisible) {
+        $input.prop('required', $input.data('was-required'));
+      } else {
+        $input.prop('required', false);
+        $input.data('was-required', true);
+      }
+    });
+  }
+
+  $('[data-visible-by]').each(function (ix, el) {
+    var $el = $(el);
+    var controller = $el.data('visible-by');
+    var controllingElements = 'input[name="' + controller + '"]';
+    $(controllingElements).on('change', function () {
+      setControlVisibility($el, controllingElements);
+    });
+    setControlVisibility($el, controllingElements);
+  });
 });

@@ -16,6 +16,14 @@ class Count
     Prop64Classifier.new(self).action
   end
 
+  def pc1203_eligible?
+    PC1203Classifier.new(self).eligible?
+  end
+
+  def pc1203_potentially_eligible?
+    PC1203Classifier.new(self).potentially_eligible?
+  end
+
   private
 
   def format_code_section(count)

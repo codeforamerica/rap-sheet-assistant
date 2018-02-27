@@ -3,8 +3,8 @@ class ContactInformationForm
 
   def self.from_user(user)
     new.tap do |instance|
-      contact_information_attributes = user.attributes.select { |k, v| ATTRIBUTES.include?(k.to_sym) }
-      contact_information_attributes.each { |k, v| instance.send(:"#{k}=", v)}
+      attributes = user.attributes.select { |k, v| ATTRIBUTES.include?(k.to_sym) }
+      attributes.each { |k, v| instance.send(:"#{k}=", v)}
     end
   end
 

@@ -5,8 +5,8 @@ RSpec.describe RapSheet, type: :model do
     allow_any_instance_of(Parser).to receive(:parse).and_return(nil)
     allow(RapSheetPresenter).to receive(:present).and_return(
       { conviction_counts: [
-        instance_double(Count, prop64_eligible?: true),
-        instance_double(Count, prop64_eligible?: false)
+        instance_double(Count, prop64_eligible?: true, pc1203_eligible?: false),
+        instance_double(Count, prop64_eligible?: false, pc1203_eligible?: false)
       ] })
   end
 

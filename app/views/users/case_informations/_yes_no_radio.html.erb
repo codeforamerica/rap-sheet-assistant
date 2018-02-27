@@ -1,0 +1,8 @@
+<div>
+  <%= f.label :"#{field}_true", class: 'boolean-choice' do %>
+    <%= f.radio_button field, true, required: local_assigns[:required] %>Yes
+  <% end %>
+  <%= f.label :"#{field}_false", class: 'boolean-choice' do %>
+    <%= f.radio_button field, false, required: local_assigns[:required] %>No
+  <% end %>
+</div>
