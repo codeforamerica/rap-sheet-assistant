@@ -9,7 +9,7 @@ describe Prop64Classifier do
   let(:code_section) {}
 
   let(:count) do
-    instance_double(Count, code_section: code_section, event: event_data)
+    instance_double(ConvictionCount, code_section: code_section, event: event_data)
   end
 
   describe '#eligible?' do

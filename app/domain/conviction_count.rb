@@ -1,4 +1,4 @@
-class Count
+class ConvictionCount
   def initialize(presented_event, count_syntax_node)
     @code_section = format_code_section(count_syntax_node)
     @code_section_description = format_code_section_description(count_syntax_node)

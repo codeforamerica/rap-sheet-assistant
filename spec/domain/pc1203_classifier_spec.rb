@@ -11,7 +11,7 @@ describe PC1203Classifier do
   let(:sentence) { '3yr jail'}
 
   let(:count) do
-    instance_double(Count, event: event_data)
+    instance_double(ConvictionCount, event: event_data)
   end
 
   describe '#potentially_eligible?' do

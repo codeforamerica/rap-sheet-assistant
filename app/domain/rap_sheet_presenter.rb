@@ -19,7 +19,7 @@ class RapSheetPresenter
       }
 
       counts = convicted_counts.map do |count|
-        Count.new(event, count)
+        ConvictionCount.new(event, count)
       end
 
       event.merge(counts: counts)
