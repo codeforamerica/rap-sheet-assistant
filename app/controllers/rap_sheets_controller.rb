@@ -30,7 +30,7 @@ class RapSheetsController < ApplicationController
   def debug
     @rap_sheet = RapSheet.find(params[:id])
     begin
-      @convictions = @rap_sheet.convictions
+      @convictions = @rap_sheet.events_with_convictions
     rescue RapSheetParserException => e
       @convictions = []
       @rap_sheet_parse_error = e

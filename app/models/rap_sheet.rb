@@ -13,12 +13,15 @@ class RapSheet < ApplicationRecord
     rap_sheet_pages.map(&:text).join
   end
 
-  def convictions
-    parsed_rap_sheet[:events_with_convictions]
+  def events_with_convictions
+    @events_with_convictions ||= begin
+      parsed_tree = Parser.new.parse(text)
+      RapSheetPresenter.present(parsed_tree)
+    end
   end
 
   def conviction_counts
-    parsed_rap_sheet[:conviction_counts]
+    events_with_convictions.flat_map { |e| e[:counts] }
   end
 
   def num_convictions
@@ -54,19 +57,19 @@ class RapSheet < ApplicationRecord
   end
 
   def prop64_dismissible_conviction_events
-    convictions.select do |conviction_event|
+    events_with_convictions.select do |conviction_event|
       conviction_event[:counts].any?(&:prop64_eligible?)
     end
   end
 
   def pc1203_potentially_dismissible_conviction_events
-    convictions.select do |conviction_event|
+    events_with_convictions.select do |conviction_event|
       conviction_event[:counts].any?(&:pc1203_potentially_eligible?)
     end
   end
 
   def pc1203_dismissible_conviction_events
-    convictions.select do |conviction_event|
+    events_with_convictions.select do |conviction_event|
       conviction_event[:counts].any?(&:pc1203_eligible?)
     end
   end
@@ -89,14 +92,5 @@ class RapSheet < ApplicationRecord
 
   def all_pages_uploaded?
     rap_sheet_pages.length == number_of_pages
-  end
-
-  private
-
-  def parsed_rap_sheet
-    @parsed_rap_sheet ||= begin
-      parsed_tree = Parser.new.parse(text)
-      RapSheetPresenter.present(parsed_tree)
-    end
   end
 end

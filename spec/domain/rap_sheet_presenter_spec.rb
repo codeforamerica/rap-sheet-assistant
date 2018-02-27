@@ -55,50 +55,40 @@ describe RapSheetPresenter do
         * * * END OF MESSAGE * * *
       TEXT
 
-      expected_convictions = a_hash_including(
-        events_with_convictions: [
-          a_hash_including(
-            date: Date.new(1982, 9, 15),
-            case_number: '456',
-            courthouse: 'CAMC L05 ANGELES METRO',
-            sentence: nil
-          ),
-          a_hash_including(
-            date: Date.new(1994, 11, 20),
-            case_number: '612',
-            courthouse: 'CASC SAN DIEGO',
-            sentence: '12m probation, 45d jail'
-          )
-        ]
-      )
+      expected_convictions = [
+        a_hash_including(
+          date: Date.new(1982, 9, 15),
+          case_number: '456',
+          courthouse: 'CAMC L05 ANGELES METRO',
+          sentence: nil,
+        ),
+        a_hash_including(
+          date: Date.new(1994, 11, 20),
+          case_number: '612',
+          courthouse: 'CASC SAN DIEGO',
+          sentence: '12m probation, 45d jail'
+        )
+      ]
 
       tree = Parser.new.parse(text)
-      presented_tree = described_class.present(tree)
-      expect(presented_tree).to match(expected_convictions)
+      events_with_convictions = described_class.present(tree)
+      expect(events_with_convictions).to match(expected_convictions)
 
-      count1_expectations = {
+      verify_count_looks_like(events_with_convictions[0][:counts][0], {
         code_section: nil,
         code_section_description: nil,
         severity: nil,
-      }
-      count2_expectations = {
+      })
+      verify_count_looks_like(events_with_convictions[0][:counts][1], {
         code_section: 'PC 4056',
         code_section_description: 'BREAKING AND ENTERING',
         severity: nil,
-      }
-      count3_expectations = {
+      })
+      verify_count_looks_like(events_with_convictions[1][:counts][0], {
         code_section: 'PC 487.2',
         code_section_description: 'GRAND THEFT FROM PERSON',
         severity: 'M',
-      }
-
-      verify_count_looks_like(presented_tree[:events_with_convictions][0][:counts][0], count1_expectations)
-      verify_count_looks_like(presented_tree[:events_with_convictions][0][:counts][1], count2_expectations)
-      verify_count_looks_like(presented_tree[:events_with_convictions][1][:counts][0], count3_expectations)
-
-      verify_count_looks_like(presented_tree[:conviction_counts][0], count1_expectations)
-      verify_count_looks_like(presented_tree[:conviction_counts][1], count2_expectations)
-      verify_count_looks_like(presented_tree[:conviction_counts][2], count3_expectations)
+      })
     end
   end
 

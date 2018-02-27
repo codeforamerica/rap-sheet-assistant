@@ -26,13 +26,13 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
       expected_convictions = expected_values(rap_sheet_prefix)
-      detected_convictions = rap_sheet.convictions.map do |c|
+      detected_convictions = rap_sheet.events_with_convictions.map do |event|
         {
-          date: c[:date],
-          case_number: c[:case_number],
-          courthouse: c[:courthouse].upcase,
-          sentence: c[:sentence],
-          counts: c[:counts].map do |count|
+          date: event[:date],
+          case_number: event[:case_number],
+          courthouse: event[:courthouse].upcase,
+          sentence: event[:sentence],
+          counts: event[:counts].map do |count|
             {
               'code_section' => count.code_section,
               'severity' => count.severity&.first,

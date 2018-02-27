@@ -6,11 +6,9 @@ class RapSheetPresenter
       end
     end
 
-    court_events = court_events.select do |e|
+    court_events.select do |e|
       e.counts.elements.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
-    end
-
-    convictions = court_events.map do |e|
+    end.map do |e|
       convicted_counts = e.counts.elements.select { |c| c.disposition.is_a? CountGrammar::Convicted }
 
       event = {
@@ -26,11 +24,6 @@ class RapSheetPresenter
 
       event.merge(counts: counts)
     end
-
-    {
-      events_with_convictions: convictions,
-      conviction_counts: convictions.flat_map { |c| c[:counts] }
-    }
   end
 
   private
