@@ -35,11 +35,18 @@ class RapSheet < ApplicationRecord
   end
 
   def dismissible_convictions_for_strategy(strategy)
-    conviction_counts.select { |count| count.eligible?(strategy) }
+    conviction_counts.select { |count| count.eligible?(user, strategy) }
+  end
+
+  def dismissible_convictions_exclusively_for_strategy(strategy)
+    other_strategies = DISMISSAL_STRATEGIES - [strategy]
+    conviction_counts.select do |count|
+      count.eligible?(user, strategy) && !other_strategies.any? { |strategy| count.eligible?(user, strategy) }
+    end
   end
 
   def potentially_dismissible_convictions_for_strategy(strategy)
-    conviction_counts.select { |count| count.potentially_eligible?(strategy) }
+    conviction_counts.select { |count| count.potentially_eligible?(user, strategy) }
   end
 
   def dismissible_conviction_events
@@ -52,13 +59,13 @@ class RapSheet < ApplicationRecord
 
   def dismissible_conviction_events_for_strategy(strategy)
     events_with_convictions.select do |conviction_event|
-      conviction_event.counts.any? { |count| count.eligible?(strategy) }
+      conviction_event.counts.any? { |count| count.eligible?(user, strategy) }
     end
   end
 
   def potentially_dismissible_conviction_events_for_strategy(strategy)
     events_with_convictions.select do |conviction_event|
-      conviction_event.counts.any? { |count| count.potentially_eligible?(strategy) }
+      conviction_event.counts.any? { |count| count.potentially_eligible?(user, strategy) }
     end
   end
 

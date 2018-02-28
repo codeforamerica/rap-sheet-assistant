@@ -1,5 +1,6 @@
 class PC1203Classifier
-  def initialize(count)
+  def initialize(user, count)
+    @user = user
     @count = count
   end
 
@@ -12,7 +13,17 @@ class PC1203Classifier
   end
 
   def eligible?
-    false
+    return false if @user.on_parole
+    return false if @user.on_probation && !@user.finished_half_of_probation
+    return false if @user.outstanding_warrant
+
+    potentially_eligible?
+  end
+
+  def action
+    # TBD
+
+    # @user.owe_fees ? 'Discretionary' : ' Mandatory'
   end
 
   private

@@ -87,6 +87,33 @@ describe RapSheetPresenter do
         severity: 'M',
       })
     end
+
+    context 'inferring probation violations' do
+      it 'annotates conviction counts that might have violated probation' do
+        text = <<~TEXT
+          info
+          * * * *
+          ARR/DET/CITE: NAM:02 DOB:19550505
+          19840101  CASO LOS ANGELES
+          
+          CNT:01     #1111111
+            496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+             COM: WARRANT NBR A-400000 BOTH CNTS
+          
+          - - - -
+          
+          COURT:                NAM:01
+          19840918  CASC LOS ANGELES
+          
+          CNT:01     #1234567
+            496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+          *DISPO:CONVICTED
+             CONV STATUS:MISDEMEANOR
+             SEN: 2 YEARS PRISON
+          * * * END OF MESSAGE * * *
+        TEXT
+      end
+    end
   end
 
   def verify_event_looks_like(event, date:, case_number:, courthouse:, sentence:)

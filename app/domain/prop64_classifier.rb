@@ -1,5 +1,6 @@
 class Prop64Classifier
-  def initialize(count)
+  def initialize(user, count)
+    @user = user
     @count = count
   end
 

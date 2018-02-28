@@ -17,10 +17,6 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'Upload your California RAP sheet'
     click_on 'Start'
 
-    expect(page).to have_content 'How many pages does your RAP sheet have?'
-    fill_in 'How many pages does your RAP sheet have?', with: scanned_pages.length
-    click_on 'Next'
-
     upload_pages(scanned_pages)
 
     expect(page).to have_content 'We found 5 convictions on your record.'
@@ -33,9 +29,8 @@ describe 'uploading a rap sheet' do
     click_on 'Next'
 
     expect(page).to have_content 'Good news, you might be eligible to clear 5 convictions on your record'
-    expect(page).to have_content 'We can help you apply to change 1 conviction'
+    expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
     expect(page).to have_content 'POSSESS MARIJUANA'
-    expect(page).to have_content 'Redesignation'
     click_on 'Debug'
 
     expect(page).to have_content '1990-12-14'
@@ -71,9 +66,6 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload your California RAP sheet'
       click_on 'Start'
 
-      fill_in 'How many pages does your RAP sheet have?', with: '1'
-      click_on 'Next'
-
       upload_pages(scanned_pages)
 
       click_on 'Next'
@@ -94,11 +86,39 @@ describe 'uploading a rap sheet' do
     end
   end
 
+  context 'when the rap sheet has a 1203-eligible dismissal' do
+    let(:scanned_pages) do
+      [
+        File.read('spec/fixtures/skywalker_pc1203_eligible.txt')
+      ]
+    end
+
+    it 'shows that it is dismissible' do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Start'
+
+      upload_pages(scanned_pages)
+
+      expect(page).to have_content 'We found 1 conviction on your record'
+      click_on 'Next'
+
+      fill_in_case_information
+      click_on 'Next'
+
+      expect(page).to have_content 'We can help you apply to dismiss 1 conviction'
+      expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      click_on 'Next'
+
+      fill_in_contact_form(first_name: 'Testuser')
+      click_on 'Next'
+    end
+  end
+
   context 'when the rap sheet has no eligible convictions' do
     let(:scanned_pages) do
       [
         File.read('./spec/fixtures/skywalker_ineligible.txt')
-
       ]
     end
 
@@ -107,13 +127,10 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload your California RAP sheet'
       click_on 'Start'
 
-      fill_in 'How many pages does your RAP sheet have?', with: '1'
-      click_on 'Next'
-
       upload_pages(scanned_pages)
 
       click_on 'Next'
-      expect(page).to have_content 'one of your convictions are eligible'
+      expect(page).to have_content 'none of your convictions are eligible'
     end
   end
 
@@ -159,6 +176,10 @@ describe 'uploading a rap sheet' do
   end
 
   def upload_pages(rap_sheet_pages)
+    expect(page).to have_content 'How many pages does your RAP sheet have?'
+    fill_in 'How many pages does your RAP sheet have?', with: rap_sheet_pages.length
+    click_on 'Next'
+
     pluralized_rap_sheet_pages = "#{rap_sheet_pages.length} #{'page'.pluralize(rap_sheet_pages.length)}"
     expect(page).to have_content "Upload all #{pluralized_rap_sheet_pages} of your RAP sheet"
 

@@ -6,6 +6,7 @@ require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
   let(:sentence) { '3yr jail'}
+  let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
     instance_double(ConvictionEvent, sentence: sentence)
@@ -20,7 +21,7 @@ describe PC1203Classifier do
       let(:sentence) { '3yr prison'}
 
       it 'returns false' do
-        expect(described_class.new(conviction_count)).not_to be_potentially_eligible
+        expect(described_class.new(user, conviction_count)).not_to be_potentially_eligible
       end
     end
 
@@ -28,7 +29,7 @@ describe PC1203Classifier do
       let(:sentence) { '1yr prison ss'}
 
       it 'returns true' do
-        expect(described_class.new(conviction_count)).to be_potentially_eligible
+        expect(described_class.new(user, conviction_count)).to be_potentially_eligible
       end
     end
 
@@ -36,7 +37,72 @@ describe PC1203Classifier do
       let(:sentence) { '3yr jail'}
 
       it 'returns true' do
-        expect(described_class.new(conviction_count)).to be_potentially_eligible
+        expect(described_class.new(user, conviction_count)).to be_potentially_eligible
+      end
+    end
+  end
+
+  describe '#eligible?' do
+    let(:sentence) { '3yr jail'}
+    let(:user) do
+      FactoryBot.build(
+        :user,
+        on_parole: false,
+        on_probation: false,
+        outstanding_warrant: false,
+        owe_fees: false
+      )
+    end
+
+    context 'when the user is in good standing' do
+      it 'returns true' do
+        expect(described_class.new(user, conviction_count)).to be_eligible
+      end
+    end
+
+    context 'when the user is on parole' do
+      before do
+        user.on_parole = true
+      end
+
+      it 'returns false' do
+        expect(described_class.new(user, conviction_count)).not_to be_eligible
+      end
+    end
+
+    context 'when the user is on probation' do
+      before do
+        user.on_probation = true
+      end
+
+      context 'and they have not yet finished 1/2 of their probation' do
+        before do
+          user.finished_half_of_probation = false
+        end
+
+        it 'returns false' do
+          expect(described_class.new(user, conviction_count)).not_to be_eligible
+        end
+      end
+
+      context 'and they have finished 1/2 of their probation' do
+        before do
+          user.finished_half_of_probation = true
+        end
+
+        it 'returns true' do
+          expect(described_class.new(user, conviction_count)).to be_eligible
+        end
+      end
+    end
+
+    context 'when the user has a warrant' do
+      before do
+        user.outstanding_warrant = true
+      end
+
+      it 'returns false' do
+        expect(described_class.new(user, conviction_count)).not_to be_eligible
       end
     end
   end
