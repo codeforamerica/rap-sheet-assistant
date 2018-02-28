@@ -3,6 +3,8 @@ class RapSheet < ApplicationRecord
 
   has_many :rap_sheet_pages
 
+  DISMISSAL_STRATEGIES = [Prop64Classifier, PC1203Classifier]
+
   validates :number_of_pages, numericality: {
     only_integer: true,
     less_than: 100,
@@ -24,53 +26,39 @@ class RapSheet < ApplicationRecord
     events_with_convictions.flat_map(&:counts)
   end
 
-  def num_convictions
-    conviction_counts.length
-  end
-
   def dismissible_convictions
-    prop64_dismissible_convictions.concat(pc1203_dismissible_convictions).uniq
+    DISMISSAL_STRATEGIES.flat_map { |strategy| dismissible_convictions_for_strategy(strategy) }.uniq
   end
 
   def potentially_dismissible_convictions
-    prop64_dismissible_convictions.concat(pc1203_potentially_dismissible_convictions).uniq
+    DISMISSAL_STRATEGIES.flat_map { |strategy| potentially_dismissible_convictions_for_strategy(strategy) }.uniq
   end
 
-  def pc1203_potentially_dismissible_convictions
-    conviction_counts.select(&:pc1203_potentially_eligible?)
+  def dismissible_convictions_for_strategy(strategy)
+    conviction_counts.select { |count| count.eligible?(strategy) }
   end
 
-  def pc1203_dismissible_convictions
-    conviction_counts.select(&:pc1203_eligible?)
-  end
-
-  def prop64_dismissible_convictions
-    conviction_counts.select(&:prop64_eligible?)
-  end
-
-  def potentially_dismissible_conviction_events
-    prop64_dismissible_conviction_events + pc1203_potentially_dismissible_conviction_events
+  def potentially_dismissible_convictions_for_strategy(strategy)
+    conviction_counts.select { |count| count.potentially_eligible?(strategy) }
   end
 
   def dismissible_conviction_events
-    prop64_dismissible_conviction_events + pc1203_dismissible_conviction_events
+    dismissible_convictions.map(&:event).uniq
   end
 
-  def prop64_dismissible_conviction_events
+  def potentially_dismissible_conviction_events
+    potentially_dismissible_convictions.map(&:event).uniq
+  end
+
+  def dismissible_conviction_events_for_strategy(strategy)
     events_with_convictions.select do |conviction_event|
-      conviction_event.counts.any?(&:prop64_eligible?)
+      conviction_event.counts.any? { |count| count.eligible?(strategy) }
     end
   end
 
-  def pc1203_potentially_dismissible_conviction_events
+  def potentially_dismissible_conviction_events_for_strategy(strategy)
     events_with_convictions.select do |conviction_event|
-      conviction_event.counts.any?(&:pc1203_potentially_eligible?)
-    end
-  end
-
-  def pc1203_dismissible_conviction_events
-    events_with_convictions.select do |conviction_event|
-      conviction_event.counts.any?(&:pc1203_eligible?)
+      conviction_event.counts.any? { |count| count.potentially_eligible?(strategy) }
     end
   end
 

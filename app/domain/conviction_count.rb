@@ -8,20 +8,16 @@ class ConvictionCount
 
   attr_reader :event, :code_section, :code_section_description, :severity
 
-  def prop64_eligible?
-    Prop64Classifier.new(self).eligible?
+  def eligible?(classifier)
+    classifier.new(self).eligible?
+  end
+
+  def potentially_eligible?(classifier)
+    classifier.new(self).potentially_eligible?
   end
 
   def prop64_action
     Prop64Classifier.new(self).action
-  end
-
-  def pc1203_eligible?
-    PC1203Classifier.new(self).eligible?
-  end
-
-  def pc1203_potentially_eligible?
-    PC1203Classifier.new(self).potentially_eligible?
   end
 
   private

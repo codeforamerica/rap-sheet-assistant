@@ -1,6 +1,6 @@
 <div class="container">
-  <% if @rap_sheet.num_convictions > 0 %>
-    <h1 class="mt-5">We found <mark><%= pluralize(@rap_sheet.num_convictions, 'conviction') %></mark> on your record.</h1>
+  <% if @rap_sheet.conviction_counts.length > 0 %>
+    <h1 class="mt-5">We found <mark><%= pluralize(@rap_sheet.conviction_counts.length, 'conviction') %></mark> on your record.</h1>
     <ul>
       <% if @rap_sheet.num_felonies > 0 %>
         <li><%= pluralize(@rap_sheet.num_felonies, 'Felony') %></li>

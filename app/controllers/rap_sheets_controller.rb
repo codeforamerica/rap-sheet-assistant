@@ -71,7 +71,7 @@ class RapSheetsController < ApplicationController
   def after_show_path
     return ineligible_rap_sheet_path(@rap_sheet) if @rap_sheet.potentially_dismissible_convictions.length == 0
 
-    if @rap_sheet.potentially_dismissible_convictions.length > @rap_sheet.prop64_dismissible_convictions.length
+    if @rap_sheet.potentially_dismissible_convictions.length > @rap_sheet.potentially_dismissible_conviction_events_for_strategy(Prop64Classifier).length
       edit_user_case_information_path(@rap_sheet.user)
     elsif @rap_sheet.dismissible_convictions.present?
       details_rap_sheet_path(@rap_sheet)

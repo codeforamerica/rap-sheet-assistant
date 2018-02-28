@@ -3,8 +3,12 @@ class Prop64Classifier
     @count = count
   end
 
-  def eligible?
+  def potentially_eligible?
     dismissible_codes.include?(count.code_section)
+  end
+
+  def eligible?
+    potentially_eligible?
   end
 
   def action

@@ -6,8 +6,8 @@ RSpec.describe RapSheet, type: :model do
     allow(RapSheetPresenter).to receive(:present).and_return([
       instance_double(ConvictionEvent,
         counts: [
-          instance_double(ConvictionCount, prop64_eligible?: true, pc1203_eligible?: false),
-          instance_double(ConvictionCount, prop64_eligible?: false, pc1203_eligible?: false)
+          instance_double(ConvictionCount, eligible?: true),
+          instance_double(ConvictionCount, eligible?: false)
         ]
       )
     ])
