@@ -72,6 +72,40 @@ RSpec.describe RapSheetsController, type: :controller do
         expect(response).to redirect_to(debug_rap_sheet_path(rap_sheet.id))
       end
     end
+
+    describe 'the "Next" link' do
+      context 'when there are only prop64/prop47 convictions' do
+        let(:text) { single_conviction_rap_sheet('11357 HS-POSSESS MARIJUANA') }
+
+        it 'goes to the detail page' do
+          get :show, params: { id: rap_sheet.id }
+
+          expect(response.body).to include(details_rap_sheet_path(rap_sheet.id))
+        end
+      end
+
+      context 'when there are convictions that are only eligible for pc1203 dismissal' do
+        let(:text) { single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY') }
+
+        it 'goes to the case information form' do
+          get :show, params: { id: rap_sheet.id }
+
+          expect(response.body).to include(edit_user_case_information_path(rap_sheet.user))
+        end
+      end
+
+      context 'when there are convictions but none are eligible for any kind of dismissal' do
+        let(:text) do
+          single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON')
+        end
+
+        it 'goes to the ineligible page' do
+          get :show, params: { id: rap_sheet.id }
+
+          expect(response.body).to include(ineligible_rap_sheet_path(rap_sheet))
+        end
+      end
+    end
   end
 
   describe '#debug' do
@@ -141,5 +175,22 @@ RSpec.describe RapSheetsController, type: :controller do
         expect(rap_sheet.rap_sheet_pages.first.page_number).to eq(1)
       end
     end
+  end
+
+  def single_conviction_rap_sheet(conviction_description, sentence: '012 MONTHS PROBATION, 045 DAYS JAIL')
+    <<~EOT
+      info
+      * * * *
+      COURT:                NAM:01
+      19840918  CASC LOS ANGELES
+      
+      CNT:01     #1234567
+        #{conviction_description}
+      *DISPO:CONVICTED
+         CONV STATUS:MISDEMEANOR
+         SEN: #{sentence}      
+
+      *    *    *    END OF MESSAGE    *    *    *
+    EOT
   end
 end

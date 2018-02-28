@@ -17,13 +17,11 @@
 //= require bootstrap-sprockets
 //= require_tree .
 
-$(document).ready(function () {
+$(document).on('turbolinks:load', function () {
   $('input[type="file"]').change(function(event) {
     $(this).closest('form').submit();
   });
-});
 
-$(document).ready(function () {
   function setFormSubmitDisabled($form) {
     var emptyFields = $form.find('input[required]').filter(function (ix, el) {
       return !el.value;

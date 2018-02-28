@@ -14,7 +14,7 @@ module Users
       @user = User.find(params[:user_id])
       @form = CaseInformationForm.new(case_information_params)
       if @form.save(@user)
-        redirect_to rap_sheet_documents_path(@user.rap_sheet)
+        redirect_to details_rap_sheet_path(@user.rap_sheet)
       else
         render :edit
       end

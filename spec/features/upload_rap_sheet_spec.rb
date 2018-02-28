@@ -29,6 +29,9 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content '1 Unknown'
     click_on 'Next'
 
+    fill_in_case_information
+    click_on 'Next'
+
     expect(page).to have_content 'Good news, you might be eligible to clear 5 convictions on your record'
     expect(page).to have_content 'We can help you apply to change 1 conviction'
     expect(page).to have_content 'POSSESS MARIJUANA'
@@ -74,6 +77,7 @@ describe 'uploading a rap sheet' do
       upload_pages(scanned_pages)
 
       click_on 'Next'
+      fill_in_case_information
       click_on 'Next'
       click_on 'Next'
 
@@ -168,6 +172,13 @@ describe 'uploading a rap sheet' do
 
     expect(page).to have_content "All #{pluralized_rap_sheet_pages} added!"
     click_on 'Next'
+  end
+
+  def fill_in_case_information
+    find('.form-group', text: 'Are you currently on parole?').choose('No')
+    find('.form-group', text: 'Are you currently on probation?').choose('No')
+    find('.form-group', text: 'Do you currently have any warrants?').choose('No')
+    find('.form-group', text: 'Do you currently owe any court fines or fees?').choose('No')
   end
 
   def fill_in_contact_form(params = {})

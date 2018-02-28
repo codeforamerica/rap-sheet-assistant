@@ -7,7 +7,7 @@ class PC1203Classifier
     return false unless count.event.sentence
 
     !count.event.sentence.split(',').any? do |sentence_component|
-      sentence_component.match(/prison$/)
+      sentence_component.strip.match(/prison$/)
     end
   end
 

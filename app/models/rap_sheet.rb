@@ -29,11 +29,11 @@ class RapSheet < ApplicationRecord
   end
 
   def dismissible_convictions
-    prop64_dismissible_convictions + pc1203_dismissible_convictions
+    prop64_dismissible_convictions.concat(pc1203_dismissible_convictions).uniq
   end
 
-  def potentially_dismissable_convictions
-    prop64_dismissible_convictions + pc1203_potentially_dismissible_convictions
+  def potentially_dismissible_convictions
+    prop64_dismissible_convictions.concat(pc1203_potentially_dismissible_convictions).uniq
   end
 
   def pc1203_potentially_dismissible_convictions
