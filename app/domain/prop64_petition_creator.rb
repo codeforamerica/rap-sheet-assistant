@@ -9,7 +9,6 @@ class Prop64PetitionCreator
   def create_petition
     user = rap_sheet.user
     pdf_fields = {
-      'proSe' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => user.full_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.full_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => user.street_address,
@@ -18,6 +17,7 @@ class Prop64PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => user.zip_code,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => user.phone_number,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => user.email,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[0].Checkbox[0]' => resentencing?,
