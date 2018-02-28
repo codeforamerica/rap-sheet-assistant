@@ -6,6 +6,7 @@ require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
   let(:sentence) { '3yr jail'}
+  let(:severity) { 'M' }
   let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
@@ -13,7 +14,7 @@ describe PC1203Classifier do
   end
 
   let(:conviction_count) do
-    instance_double(ConvictionCount, event: conviction_event)
+    instance_double(ConvictionCount, event: conviction_event, severity: severity)
   end
 
   describe '#potentially_eligible?' do
@@ -39,6 +40,20 @@ describe PC1203Classifier do
       it 'returns true' do
         expect(described_class.new(user, conviction_count)).to be_potentially_eligible
       end
+    end
+
+    it 'does not consider infractions to be eligible' do
+      count = instance_double(ConvictionCount, event: conviction_event, severity: 'nil')
+      expect(described_class.new(user, count)).not_to be_potentially_eligible
+
+      count = instance_double(ConvictionCount, event: conviction_event, severity: 'I')
+      expect(described_class.new(user, count)).not_to be_potentially_eligible
+
+      count = instance_double(ConvictionCount, event: conviction_event, severity: 'M')
+      expect(described_class.new(user, count)).to be_potentially_eligible
+
+      count = instance_double(ConvictionCount, event: conviction_event, severity: 'F')
+      expect(described_class.new(user, count)).to be_potentially_eligible
     end
   end
 
