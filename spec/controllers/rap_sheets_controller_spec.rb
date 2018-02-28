@@ -108,6 +108,39 @@ RSpec.describe RapSheetsController, type: :controller do
     end
   end
 
+  describe '#details' do
+    let(:rap_sheet) do
+      FactoryBot.create(
+        :rap_sheet,
+        number_of_pages: 1,
+        rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
+      )
+    end
+
+    context 'when there are eligible convictions' do
+      let(:text) { File.read('./spec/fixtures/skywalker_pc1203_eligible.txt') }
+
+      it 'renders a detail page' do
+        get :details, params: { id: rap_sheet.id }
+
+        expect(response).to be_success
+      end
+    end
+
+    context 'when there are no eligible convictions' do
+      let(:text) { File.read('./spec/fixtures/skywalker_ineligible.txt') }
+      before do
+        rap_sheet.user.update(outstanding_warrant: true)
+      end
+
+      it 'redirects to the ineligible page' do
+        get :details, params: { id: rap_sheet.id }
+
+        expect(response).to redirect_to(ineligible_rap_sheet_path(rap_sheet))
+      end
+    end
+  end
+
   describe '#debug' do
     render_views
 

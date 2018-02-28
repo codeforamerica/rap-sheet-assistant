@@ -40,6 +40,10 @@ class RapSheetsController < ApplicationController
 
   def details
     @rap_sheet = RapSheet.find(params[:id])
+
+    unless @rap_sheet.dismissible_convictions.present?
+      redirect_to ineligible_rap_sheet_path(@rap_sheet)
+    end
   end
 
   def ineligible
