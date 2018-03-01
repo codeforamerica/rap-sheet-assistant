@@ -1,9 +1,13 @@
 class ConvictionCount
-  def initialize(presented_event, count_syntax_node)
+  def initialize(conviction_event, count_syntax_node)
     @code_section = format_code_section(count_syntax_node)
     @code_section_description = format_code_section_description(count_syntax_node)
     @severity = format_severity(count_syntax_node)
-    @event = presented_event
+    @event = conviction_event
+  end
+
+  def inspect
+    OkayPrint.new(self).exclude_ivars(:@event).inspect
   end
 
   attr_reader :event, :code_section, :code_section_description, :severity

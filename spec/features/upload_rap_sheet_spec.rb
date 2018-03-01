@@ -69,8 +69,6 @@ describe 'uploading a rap sheet' do
       upload_pages(scanned_pages)
 
       click_on 'Next'
-      fill_in_case_information
-      click_on 'Next'
       click_on 'Next'
 
       fill_in_contact_form(first_name: 'Testuser')
@@ -112,6 +110,13 @@ describe 'uploading a rap sheet' do
 
       fill_in_contact_form(first_name: 'Testuser')
       click_on 'Next'
+
+      click_on 'download'
+      fields_dict = get_fields_from_downloaded_pdf
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901'
+      }
+      expect(fields_dict).to match(a_hash_including(expected_values))
     end
   end
 

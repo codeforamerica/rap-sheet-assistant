@@ -7,16 +7,32 @@
 
   <p>Here's what paperwork we filled out for you:</p>
 
-  <div class="card">
-    <div class="card-body">
-      <h2><%= pluralize(@rap_sheet.dismissible_conviction_events.length, 'petition') %> to clear these marijuana convictions:</h2>
-      <ul>
-        <% @rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).each do |count| %>
-          <li><%= "#{count.code_section_description} on #{count.event.date.strftime('%m/%d/%Y')} in #{count.event.courthouse}" %></li>
-        <% end %>
-      </ul>
+  <% if @rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).length > 0 %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2><%= pluralize(@rap_sheet.dismissible_conviction_events.length, 'petition') %> to clear these marijuana convictions:</h2>
+        <ul>
+          <% @rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).each do |count| %>
+            <li><%= "#{count.code_section_description} on #{count.event.date.strftime('%m/%d/%Y')} in #{count.event.courthouse}" %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  </div>
+  <% end %>
+
+  <% if @rap_sheet.dismissible_convictions_exclusively_for_strategy(PC1203Classifier).length > 0 %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2><%= pluralize(@rap_sheet.dismissible_conviction_events_exclusively_for_strategy(PC1203Classifier).length, 'petition') %> to dismiss these convictions:</h2>
+        <ul>
+          <% @rap_sheet.dismissible_convictions_exclusively_for_strategy(PC1203Classifier).each do |count| %>
+            <li><%= "#{count.code_section_description} on #{count.event.date.strftime('%m/%d/%Y')} in #{count.event.courthouse}" %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
 
   <%= link_to '✓ download paperwork', download_rap_sheet_documents_path(@rap_sheet), class: 'btn btn-info mt-3', data: { turbolinks: false } %>
 </div>

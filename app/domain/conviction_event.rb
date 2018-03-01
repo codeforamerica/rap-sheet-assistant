@@ -1,26 +1,35 @@
 class ConvictionEvent
   def initialize(event_syntax_node, count_syntax_nodes)
-    @event_syntax_node = event_syntax_node
+    @date = format_date(event_syntax_node)
+    @case_number = format_case_number(event_syntax_node)
+    @courthouse = format_courthouse(event_syntax_node)
+    @sentence = format_sentence(event_syntax_node)
     @counts = count_syntax_nodes.map do |count|
       ConvictionCount.new(self, count)
     end
   end
 
-  def date
-    Date.strptime(@event_syntax_node.date.text_value, '%Y%m%d')
+  def inspect
+    OkayPrint.new(self).exclude_ivars(:@counts).inspect
   end
 
-  def case_number
-    CaseNumberPresenter.present(@event_syntax_node.case_number)
+  attr_reader :counts, :date, :case_number, :courthouse, :sentence
+
+  private
+
+  def format_date(event_syntax_node)
+    Date.strptime(event_syntax_node.date.text_value, '%Y%m%d')
   end
 
-  def courthouse
-    CourthousePresenter.present(@event_syntax_node.courthouse)
+  def format_case_number(event_syntax_node)
+    CaseNumberPresenter.present(event_syntax_node.case_number)
   end
 
-  def sentence
-    SentencePresenter.present(@event_syntax_node.sentence)
+  def format_courthouse(event_syntax_node)
+    CourthousePresenter.present(event_syntax_node.courthouse)
   end
 
-  attr_reader :counts
+  def format_sentence(event_syntax_node)
+    SentencePresenter.present(event_syntax_node.sentence)
+  end
 end
