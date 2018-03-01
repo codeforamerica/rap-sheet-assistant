@@ -8,7 +8,7 @@ class DocumentsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
     @user = @rap_sheet.user
 
-    conviction_events = @rap_sheet.dismissible_conviction_events
+    conviction_events = @rap_sheet.conviction_counts.dismissible.events
     return redirect_to rap_sheet_documents_path(@rap_sheet) unless conviction_events.present?
 
     send_file concatenate_pdfs(petitions_for_conviction_events(conviction_events)), filename: download_filename(conviction_events)

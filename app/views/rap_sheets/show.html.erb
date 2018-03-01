@@ -2,14 +2,14 @@
   <% if @rap_sheet.conviction_counts.length > 0 %>
     <h1 class="mt-5">We found <mark><%= pluralize(@rap_sheet.conviction_counts.length, 'conviction') %></mark> on your record.</h1>
     <ul>
-      <% if @rap_sheet.num_felonies > 0 %>
-        <li><%= pluralize(@rap_sheet.num_felonies, 'Felony') %></li>
+      <% if @rap_sheet.conviction_counts.severity_felony.count > 0 %>
+        <li><%= pluralize(@rap_sheet.conviction_counts.severity_felony.count, 'Felony') %></li>
       <% end %>
-      <% if @rap_sheet.num_misdemeanors > 0 %>
-        <li><%= pluralize(@rap_sheet.num_misdemeanors, 'Misdemeanor') %></li>
+      <% if @rap_sheet.conviction_counts.severity_misdemeanor.count > 0 %>
+        <li><%= pluralize(@rap_sheet.conviction_counts.severity_misdemeanor.count, 'Misdemeanor') %></li>
       <% end %>
-      <% if @rap_sheet.num_unknown > 0 %>
-        <li><%= pluralize(@rap_sheet.num_unknown, 'Unknown') %></li>
+      <% if @rap_sheet.conviction_counts.severity_unknown.count > 0 %>
+        <li><%= pluralize(@rap_sheet.conviction_counts.severity_unknown.count, 'Unknown') %></li>
       <% end %>
     </ul>
 

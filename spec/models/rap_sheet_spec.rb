@@ -14,6 +14,6 @@ RSpec.describe RapSheet, type: :model do
   end
 
   it 'figures out convictions and stuff' do
-    expect(described_class.new.dismissible_convictions.length).to eq(1)
+    expect(described_class.new.conviction_counts.dismissible.length).to eq(1)
   end
 end

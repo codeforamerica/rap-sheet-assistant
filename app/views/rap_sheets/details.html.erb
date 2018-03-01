@@ -1,17 +1,17 @@
 <div class="container">
   <h1 class="mt-5">
-    Good news, you might be eligible to clear <mark><%= pluralize(@rap_sheet.dismissible_convictions.length, 'conviction') %></mark> on your record!
+    Good news, you might be eligible to clear <mark><%= pluralize(@rap_sheet.conviction_counts.dismissible.length, 'conviction') %></mark> on your record!
   </h1>
 
   <p> There are different forms of record clearance. Here’s what we can help you with:</p>
 
-  <% if @rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).length > 0 %>
+  <% if @rap_sheet.conviction_counts.dismissible_by_strategy(Prop64Classifier).length > 0 %>
     <div class="card mb-3">
       <div class="card-body">
-        <h2>We can help you apply to reclassify <%= pluralize(@rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).length, 'marijuana conviction') %></h2>
+        <h2>We can help you apply to reclassify <%= pluralize(@rap_sheet.conviction_counts.dismissible_by_strategy(Prop64Classifier).length, 'marijuana conviction') %></h2>
         <p>If the judge approves, these offense will be reduced to misdemeanors or changed to "dismissed"</p>
         <ul>
-          <% @rap_sheet.dismissible_convictions_for_strategy(Prop64Classifier).each do |conviction_count| %>
+          <% @rap_sheet.conviction_counts.dismissible_by_strategy(Prop64Classifier).each do |conviction_count| %>
             <li><%= "#{conviction_count.code_section_description} on #{conviction_count.event.date.strftime('%m/%d/%Y')} in #{conviction_count.event.courthouse}" %></li>
           <% end %>
         </ul>
@@ -19,13 +19,13 @@
     </div>
   <% end %>
 
-  <% if @rap_sheet.dismissible_convictions_exclusively_for_strategy(PC1203Classifier).length > 0 %>
+  <% if @rap_sheet.conviction_counts.dismissible_exclusively_by_strategy(PC1203Classifier).length > 0 %>
     <div class="card mb-3">
       <div class="card-body">
-        <h2>We can help you apply to dismiss <%= pluralize(@rap_sheet.dismissible_convictions_exclusively_for_strategy(PC1203Classifier).length, 'conviction') %> (1203.4)</h2>
+        <h2>We can help you apply to dismiss <%= pluralize(@rap_sheet.conviction_counts.dismissible_exclusively_by_strategy(PC1203Classifier).length, 'conviction') %> (1203.4)</h2>
         <p> If the judge approves, these offense will be changed to "dismissed"</p>
         <ul>
-          <% @rap_sheet.dismissible_convictions_exclusively_for_strategy(PC1203Classifier).each do |conviction_count| %>
+          <% @rap_sheet.conviction_counts.dismissible_exclusively_by_strategy(PC1203Classifier).each do |conviction_count| %>
             <li><%= "#{conviction_count.code_section_description} on #{conviction_count.event.date.strftime('%m/%d/%Y')} in #{conviction_count.event.courthouse}" %></li>
           <% end %>
         </ul>

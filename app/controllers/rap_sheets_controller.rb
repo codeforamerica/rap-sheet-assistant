@@ -41,7 +41,7 @@ class RapSheetsController < ApplicationController
   def details
     @rap_sheet = RapSheet.find(params[:id])
 
-    unless @rap_sheet.dismissible_convictions.present?
+    unless @rap_sheet.conviction_counts.dismissible.present?
       redirect_to ineligible_rap_sheet_path(@rap_sheet)
     end
   end
@@ -73,11 +73,11 @@ class RapSheetsController < ApplicationController
   private
 
   def after_show_path
-    return ineligible_rap_sheet_path(@rap_sheet) if @rap_sheet.potentially_dismissible_convictions.length == 0
+    return ineligible_rap_sheet_path(@rap_sheet) if @rap_sheet.conviction_counts.potentially_dismissible.length == 0
 
-    if @rap_sheet.potentially_dismissible_convictions.length > @rap_sheet.potentially_dismissible_convictions_for_strategy(Prop64Classifier).length
+    if @rap_sheet.conviction_counts.potentially_dismissible.length > @rap_sheet.conviction_counts.potentially_dismissible_by_strategy(Prop64Classifier).length
       edit_user_case_information_path(@rap_sheet.user)
-    elsif @rap_sheet.dismissible_convictions.present?
+    elsif @rap_sheet.conviction_counts.dismissible.present?
       details_rap_sheet_path(@rap_sheet)
     else
       ineligible_rap_sheet_path(@rap_sheet)
