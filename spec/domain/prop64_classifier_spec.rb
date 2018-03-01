@@ -11,7 +11,7 @@ describe Prop64Classifier do
   let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
-    instance_double(ConvictionEvent, date: date, sentence: sentence)
+    instance_double(ConvictionEvent, date: date, sentence: ConvictionSentence.new(sentence))
   end
 
   let(:conviction_count) do

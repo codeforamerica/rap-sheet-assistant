@@ -206,5 +206,3 @@ describe CountGrammarParser do
     end
   end
 end
-
-

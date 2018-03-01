@@ -89,7 +89,7 @@ class Prop64PetitionCreator
   end
 
   def sentence_being_served?
-    end_of_sentence = conviction_event.date + SentenceParser.parse(conviction_event.sentence)
+    end_of_sentence = conviction_event.date + conviction_event.sentence.total_duration
     end_of_sentence > Date.today
   end
 

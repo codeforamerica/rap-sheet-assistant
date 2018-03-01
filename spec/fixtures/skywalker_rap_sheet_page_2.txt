@@ -116,7 +116,7 @@ CNT:04
 
 
 
-   SEN: 2 YEARS PRISON, FINE,
+   SEN: 2 YEARS JAIL, FINE,
         RESTN
 
 

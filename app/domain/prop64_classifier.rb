@@ -13,7 +13,7 @@ class Prop64Classifier
   end
 
   def action
-    end_of_sentence = count.event.date + SentenceParser.parse(count.event.sentence)
+    end_of_sentence = count.event.date + count.event.sentence.total_duration
 
     if end_of_sentence > Date.today
       'Resentencing'

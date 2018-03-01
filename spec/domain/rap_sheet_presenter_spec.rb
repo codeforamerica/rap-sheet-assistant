@@ -9,7 +9,6 @@ require_relative '../../app/helpers/text_cleaner'
 require_relative '../../app/domain/conviction_count'
 require_relative '../../app/domain/courthouse_presenter'
 require_relative '../../app/domain/case_number_presenter'
-require_relative '../../app/domain/sentence_presenter'
 
 require_relative '../../app/domain/rap_sheet_presenter'
 
@@ -120,7 +119,7 @@ describe RapSheetPresenter do
     expect(event.date).to eq date
     expect(event.case_number).to eq case_number
     expect(event.courthouse).to eq courthouse
-    expect(event.sentence).to eq sentence
+    expect(event.sentence.to_s).to eq sentence
   end
 
   def verify_count_looks_like(count, code_section:, code_section_description:, severity:)

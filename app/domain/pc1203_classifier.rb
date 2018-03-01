@@ -8,9 +8,7 @@ class PC1203Classifier
     return false unless count.event.sentence
     return false unless %w(M F).include?(count.severity)
 
-    !count.event.sentence.split(',').any? do |sentence_component|
-      sentence_component.strip.match(/prison$/)
-    end
+    !count.event.sentence.had_prison?
   end
 
   def eligible?

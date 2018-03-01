@@ -31,7 +31,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
           date: event.date,
           case_number: event.case_number,
           courthouse: event.courthouse.upcase,
-          sentence: event.sentence,
+          sentence: event.sentence.to_s,
           counts: event.counts.map do |count|
             {
               'code_section' => count.code_section,
