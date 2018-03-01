@@ -1,6 +1,10 @@
 class ConvictionCount
   def initialize(conviction_event, count_syntax_node)
-    @code_section = format_code_section(count_syntax_node)
+    if count_syntax_node.code_section
+      @code = count_syntax_node.code_section.code.text_value
+      @section = count_syntax_node.code_section.number.text_value
+      @code_section = format_code_section(count_syntax_node)
+    end
     @code_section_description = format_code_section_description(count_syntax_node)
     @severity = format_severity(count_syntax_node)
     @event = conviction_event
@@ -10,7 +14,7 @@ class ConvictionCount
     OkayPrint.new(self).exclude_ivars(:@event).inspect
   end
 
-  attr_reader :event, :code_section, :code_section_description, :severity
+  attr_reader :event, :code_section, :code_section_description, :severity, :code, :section
 
   def eligible?(user, classifier)
     classifier.new(user, self).eligible?
@@ -20,10 +24,23 @@ class ConvictionCount
     classifier.new(user, self).potentially_eligible?
   end
 
+  def long_severity
+    case severity
+      when 'F'
+        'felony'
+      when 'M'
+        'misdemeanor'
+      when 'I'
+        'infraction'
+      else
+        'unknown'
+    end
+  end
+
   private
 
   def format_code_section(count)
-    "#{count.code_section.code.text_value} #{format_code_section_number(count)}" if count.code_section
+    "#{count.code_section.code.text_value} #{format_code_section_number(count)}"
   end
 
   def format_code_section_number(count)
