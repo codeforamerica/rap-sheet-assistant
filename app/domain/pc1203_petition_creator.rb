@@ -32,7 +32,6 @@ class PC1203PetitionCreator
     @conviction_counts.each_with_index do |count, index|
       pdf_fields.merge!(fields_for_count(count, index + 1))      
     end
-    
 
     tempfile = Tempfile.new('filled-pdf')
 

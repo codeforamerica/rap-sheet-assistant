@@ -191,6 +191,19 @@ describe CountGrammarParser do
       expect(count.code_section.number.text_value).to eq '496'
       expect(count.code_section_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
     end
+
+    it 'ignores "TRAFFIC VIOLATION" when looking for conviction codes' do
+      text = <<~TEXT
+        TRAFFIC VIOLATION
+        *DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        SEN: 003 DAYS JAIL
+        COM: SENTENCE CONCURRENT WITH FILE #743-2:
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.code_section).to be_nil
+    end
   end
 end
 
