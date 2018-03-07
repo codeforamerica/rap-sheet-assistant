@@ -44,6 +44,14 @@ describe 'uploading a rap sheet' do
     fill_in_contact_form(first_name: 'Testuser')
     click_on 'Next'
 
+    expect(page).to have_content 'Financial Information'
+    find('.form-group', text: 'Are you currently employed?').choose 'Yes'
+    fill_in 'What is your job title?', with: 'Mailman'
+    fill_in "What is your employer's name?", with: 'USPS'
+    fill_in "What is your employer's address?", with: '1 I love mail lane'
+
+    click_on 'Next'
+
     click_on 'download'
     fields_dict = get_fields_from_downloaded_pdf
     expected_values = {
@@ -72,6 +80,9 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       fill_in_contact_form(first_name: 'Testuser')
+      click_on 'Next'
+
+      find('.form-group', text: 'Are you currently employed?').choose 'Yes'
       click_on 'Next'
 
       click_on 'download'
@@ -109,6 +120,9 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       fill_in_contact_form(first_name: 'Testuser')
+      click_on 'Next'
+
+      find('.form-group', text: 'Are you currently employed?').choose 'No'
       click_on 'Next'
 
       click_on 'download'
@@ -216,7 +230,7 @@ describe 'uploading a rap sheet' do
     fill_in 'City', with: params[:city] || 'San Francisco'
     fill_in 'State', with: params[:state] || 'CA'
     fill_in 'Zip', with: params[:zip_code] || '94103'
-    select params[:dob_month] || 'January', from:  'contact_information_form[date_of_birth(2i)]'
+    select params[:dob_month] || 'January', from: 'contact_information_form[date_of_birth(2i)]'
     select params[:dob_day] || '1', from: 'contact_information_form[date_of_birth(3i)]'
     select params[:dob_year] || '1980', from: 'contact_information_form[date_of_birth(1i)]'
   end

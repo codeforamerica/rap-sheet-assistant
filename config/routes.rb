@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     scope module: :users do
       resource :contact_information, only: [:show, :edit, :update]
       resource :case_information, only: [:show, :edit, :update]
+      resource :financial_information, only: [:new, :create]
     end
   end
 

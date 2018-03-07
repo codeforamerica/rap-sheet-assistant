@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227000252) do
+ActiveRecord::Schema.define(version: 20180307180507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "financial_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "job_title"
+    t.string "employer_name"
+    t.string "employer_address"
+    t.boolean "employed", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_financial_informations_on_user_id"
+  end
 
   create_table "rap_sheet_pages", force: :cascade do |t|
     t.bigint "rap_sheet_id"

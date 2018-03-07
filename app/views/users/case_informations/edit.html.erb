@@ -8,23 +8,23 @@
       <div class="col-md-6">
         <div class="form-group">
           <%= f.label :on_parole, 'Are you currently on parole?' %>
-          <%= render 'yes_no_radio', f: f, field: :on_parole, required: true %>
+          <%= render 'shared/yes_no_radio', f: f, field: :on_parole, required: true %>
         </div>
         <div class="form-group">
           <%= f.label :on_probation, 'Are you currently on probation?' %>
-          <%= render 'yes_no_radio', f: f, field: :on_probation, required: true %>
+          <%= render 'shared/yes_no_radio', f: f, field: :on_probation, required: true %>
         </div>
         <%= content_tag :div, class: "form-group #{f.object.on_probation ? '' : 'hidden'}", data: { visible_by: 'case_information_form[on_probation]' } do %>
           <%= f.label :finished_half_of_probation, 'If you are currently on probation, have you finished at least half of your probation sentence?' %>
-          <%= render 'yes_no_radio', f: f, field: :finished_half_of_probation, required: true %>
+          <%= render 'shared/yes_no_radio', f: f, field: :finished_half_of_probation, required: true %>
         <% end %>
         <div class="form-group">
           <%= f.label :outstanding_warrant, 'Do you currently have any warrants?' %>
-          <%= render 'yes_no_radio', f: f, field: :outstanding_warrant, required: true %>
+          <%= render 'shared/yes_no_radio', f: f, field: :outstanding_warrant, required: true %>
         </div>
         <div class="form-group">
           <%= f.label :owe_fees, 'Do you currently owe any court fines or fees?' %>
-          <%= render 'yes_no_radio', f: f, field: :owe_fees, required: true %>
+          <%= render 'shared/yes_no_radio', f: f, field: :owe_fees, required: true %>
         </div>
       </div>
     </div>

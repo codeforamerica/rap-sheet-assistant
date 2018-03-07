@@ -1,0 +1,30 @@
+<div class="container">
+  <h1 class="mt-5">Financial Information</h1>
+  <hr>
+  <p>Some courts require that you pay up to $300 per petition to clear your record. This information will only be used
+    by the court to check if you qualify for a fee waiver.</p>
+
+  <%= form_for @financial_information, url: user_financial_information_path(@user, @financial_information), method: :post do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :employed, 'Are you currently employed?' %>
+          <%= render 'shared/yes_no_radio', f: f, field: :employed, required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :job_title, 'What is your job title?' %>
+          <%= f.text_field :job_title, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :employer_name, "What is your employer's name?" %>
+          <%= f.text_field :employer_name, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :employer_address, "What is your employer's address?" %>
+          <%= f.text_field :employer_address, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+    <%= f.submit 'Next →', class: 'btn btn-info' %>
+  <% end %>
+</div>

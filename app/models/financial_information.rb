@@ -1,0 +1,3 @@
+class FinancialInformation < ApplicationRecord
+  belongs_to :user
+end
