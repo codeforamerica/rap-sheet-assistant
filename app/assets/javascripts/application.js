@@ -22,25 +22,6 @@ $(document).on('turbolinks:load', function () {
     $(this).closest('form').submit();
   });
 
-  function setFormSubmitDisabled($form) {
-    var emptyFields = $form.find('input[required]').filter(function (ix, el) {
-      return !el.value;
-    });
-    $form.find('input[type=submit]').prop('disabled', emptyFields.length !== 0);
-  }
-
-  $('form.disable-until-required input[required]').keyup(function (_event) {
-    var form = $(this).closest('form');
-    setFormSubmitDisabled($(form));
-  }).change(function (_event) {
-    var form = $(this).closest('form');
-    setFormSubmitDisabled($(form));
-  });
-
-  $('form.disable-until-required').each(function (ix, el) {
-    setFormSubmitDisabled($(el))
-  });
-
   function setControlVisibility($el, controllingElements) {
     var shouldBeVisible = $(controllingElements + ":checked").val() === "true";
     $el.toggleClass('hidden', !shouldBeVisible);
