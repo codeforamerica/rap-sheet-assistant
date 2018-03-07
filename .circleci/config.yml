@@ -25,7 +25,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: sudo apt-get update; sudo apt-get install pdftk
+      - run: sudo apt-get update; sudo apt-get install pdftk qt5-default libqt5webkit5-dev
 
       - run:
           name: install dependencies
