@@ -22,6 +22,8 @@ class PC1203PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => conviction_event.date.strftime('%m/%d/%Y'),
+      'topmostSubform[0].Page2[0].PxCaption_sf[0].Defendant_ft[0]' => user.full_name,
+      'topmostSubform[0].Page2[0].PxCaption_sf[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page2[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
       'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
       'topmostSubform[0].Page2[0].T217[0]' => user.city,

@@ -7,7 +7,18 @@ Treetop.load 'app/parser/count_grammar'
 
 RSpec.describe PC1203PetitionCreator do
   let(:user) do
-    FactoryBot.build(:user, first_name: 'Test', last_name: 'User', date_of_birth: Date.parse('1970-01-01'))
+    FactoryBot.build(
+      :user,
+      first_name: 'Test',
+      last_name: 'User',
+      date_of_birth: Date.parse('1970-01-01'),
+      street_address: '123 Fake St',
+      city: 'San Francisco',
+      state: 'CA',
+      zip_code: '12345',
+      phone_number: '000-111-2222',
+      email: 'me@me.com'
+    )
   end
   let(:rap_sheet) { FactoryBot.create(:rap_sheet, user: user) }
 
@@ -23,7 +34,18 @@ RSpec.describe PC1203PetitionCreator do
 
     pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_counts).create_petition
     expected_values = {
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User'
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => '123 Fake St',
+      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => '01/01/1970',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => 'San Francisco',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => 'CA',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => '12345',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => '000-111-2222',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => 'me@me.com',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+      'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
+      'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
     }
     expect(get_fields_from_pdf(pdf_file)).to match(a_hash_including(expected_values))
   end
