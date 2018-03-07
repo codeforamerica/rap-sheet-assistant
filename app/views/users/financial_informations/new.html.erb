@@ -11,18 +11,18 @@
           <%= f.label :employed, 'Are you currently employed?' %>
           <%= render 'shared/yes_no_radio', f: f, field: :employed, required: true %>
         </div>
-        <div class="form-group">
+        <%= content_tag :div, class: "form-group #{f.object.employed ? '' : 'hidden'}", data: { visible_by: 'financial_information[employed]' } do %>
           <%= f.label :job_title, 'What is your job title?' %>
           <%= f.text_field :job_title, class: 'form-control' %>
-        </div>
-        <div class="form-group">
+        <% end %>
+        <%= content_tag :div, class: "form-group #{f.object.employed ? '' : 'hidden'}", data: { visible_by: 'financial_information[employed]' } do %>
           <%= f.label :employer_name, "What is your employer's name?" %>
           <%= f.text_field :employer_name, class: 'form-control' %>
-        </div>
-        <div class="form-group">
+        <% end %>
+        <%= content_tag :div, class: "form-group #{f.object.employed ? '' : 'hidden'}", data: { visible_by: 'financial_information[employed]' } do %>
           <%= f.label :employer_address, "What is your employer's address?" %>
           <%= f.text_field :employer_address, class: 'form-control' %>
-        </div>
+        <% end %>
       </div>
     </div>
     <%= f.submit 'Next →', class: 'btn btn-info' %>

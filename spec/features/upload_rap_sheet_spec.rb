@@ -12,7 +12,7 @@ describe 'uploading a rap sheet' do
     allow(TextScanner).to receive(:scan_text).and_return(*scanned_pages)
   end
 
-  it 'allows the user to upload their rap sheet and shows convictions' do
+  it 'allows the user to upload their rap sheet and shows convictions', js: true do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
     click_on 'Start'
@@ -45,6 +45,10 @@ describe 'uploading a rap sheet' do
     click_on 'Next'
 
     expect(page).to have_content 'Financial Information'
+    find('.form-group', text: 'Are you currently employed?').choose 'No'
+    expect(page).not_to have_content('What is your job title?')
+    expect(page).not_to have_content("What is your employer's name?")
+    expect(page).not_to have_content("What is your employer's address?")
     find('.form-group', text: 'Are you currently employed?').choose 'Yes'
     fill_in 'What is your job title?', with: 'Mailman'
     fill_in "What is your employer's name?", with: 'USPS'
@@ -205,8 +209,7 @@ describe 'uploading a rap sheet' do
     rap_sheet_pages.each_with_index do |_rap_sheet_page, index|
       expect(page).to have_content "#{index} of #{pluralized_rap_sheet_pages} uploaded"
       within "#rap_sheet_page_#{index + 1}" do
-        attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-        click_on 'Upload'
+        attach_rap_sheet_image_file
       end
     end
 
@@ -241,5 +244,16 @@ describe 'uploading a rap sheet' do
     tempfile.close
 
     get_fields_from_pdf(tempfile)
+  end
+
+  def attach_rap_sheet_image_file
+    # Make file field visible for capybara-webkit
+    if page.driver.class == Capybara::Webkit::Driver
+      page.evaluate_script("$('#rap_sheet_page_rap_sheet_page_image').toggle()")
+      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+    else
+      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+      click_on 'Upload'
+    end
   end
 end
