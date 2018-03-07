@@ -90,7 +90,7 @@ describe PC1203Classifier do
         user.on_probation = true
       end
 
-      context 'and they have not yet finished 1/2 of their probation' do
+      xcontext 'and they have not yet finished 1/2 of their probation' do
         before do
           user.finished_half_of_probation = false
         end
@@ -100,7 +100,7 @@ describe PC1203Classifier do
         end
       end
 
-      context 'and they have finished 1/2 of their probation' do
+      xcontext 'and they have finished 1/2 of their probation' do
         before do
           user.finished_half_of_probation = true
         end

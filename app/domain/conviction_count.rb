@@ -2,8 +2,7 @@ class ConvictionCount
   def initialize(conviction_event, count_syntax_node)
     if count_syntax_node.code_section
       @code = count_syntax_node.code_section.code.text_value
-      @section = count_syntax_node.code_section.number.text_value
-      @code_section = format_code_section(count_syntax_node)
+      @section = format_code_section_number(count_syntax_node)
     end
     @code_section_description = format_code_section_description(count_syntax_node)
     @severity = format_severity(count_syntax_node)
@@ -14,7 +13,7 @@ class ConvictionCount
     OkayPrint.new(self).exclude_ivars(:@event).inspect
   end
 
-  attr_reader :event, :code_section, :code_section_description, :severity, :code, :section
+  attr_reader :event, :code_section_description, :severity, :code, :section
 
   def eligible?(user, classifier)
     classifier.new(user, self).eligible?
@@ -37,14 +36,15 @@ class ConvictionCount
     end
   end
 
-  private
-
-  def format_code_section(count)
-    "#{count.code_section.code.text_value} #{format_code_section_number(count)}"
+  def code_section
+    return unless code && section
+    "#{code} #{section}"
   end
 
+  private
+
   def format_code_section_number(count)
-    count.code_section.number.text_value.delete(' ').gsub(',', '.')
+    count.code_section.number.text_value.delete(' ').downcase.gsub(',', '.')
   end
 
   def format_code_section_description(count)

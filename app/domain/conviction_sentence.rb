@@ -28,8 +28,6 @@ class ConvictionSentence
   end
 
   def to_s
-    return unless @sentence_string
-
     parts = @sentence_string.
       downcase.
       gsub(/[.']/, '').

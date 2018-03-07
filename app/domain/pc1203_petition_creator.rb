@@ -80,7 +80,7 @@ class PC1203PetitionCreator
     is_reducible ? 'yes' : 'no'
   end
 
-  def deterimine_checkboxes(conviction_event)
+  def determine_checkboxes(conviction_event)
     if conviction_event.sentence.contains? "PROBATION"
       "1203.4"
     elsif conviction_event.has_felony?

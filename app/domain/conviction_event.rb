@@ -3,7 +3,8 @@ class ConvictionEvent
     @date = format_date(event_syntax_node)
     @case_number = format_case_number(event_syntax_node)
     @courthouse = format_courthouse(event_syntax_node)
-    @sentence = ConvictionSentence.new(event_syntax_node.sentence.try(:text_value))
+    sentence_string = event_syntax_node.sentence.try(:text_value)
+    @sentence = ConvictionSentence.new(sentence_string) if sentence_string
     @counts = count_syntax_nodes.map do |count|
       ConvictionCount.new(self, count)
     end

@@ -28,7 +28,7 @@ grammar CommonGrammar
   end
 
   rule stray_punctuation
-    [ \t\n.•·\-*]*
+    [ \t\n.•·\-'*]*
   end
 
   rule to_eol

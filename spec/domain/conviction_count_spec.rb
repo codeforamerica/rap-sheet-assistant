@@ -55,7 +55,7 @@ describe ConvictionCount do
     expect(subject.severity).to be_nil
   end
 
-  it 'strips whitespace out of the code section number' do
+  it 'strips whitespace out of the code section number and downcases letters' do
     text = <<~TEXT
       info
       * * * *
@@ -75,7 +75,7 @@ describe ConvictionCount do
     count_node = tree.cycles[0].events[0].counts[0]
 
     subject = described_class.new(event, count_node)
-    expect(subject.code_section).to eq 'PC 496(A)(2)'
+    expect(subject.code_section).to eq 'PC 496(a)(2)'
     expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     expect(subject.severity).to eq 'M'
   end
@@ -99,7 +99,7 @@ describe ConvictionCount do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
     subject = described_class.new(event, count_node)
-    expect(subject.code_section).to eq 'PC 496.3(A)(2)'
+    expect(subject.code_section).to eq 'PC 496.3(a)(2)'
     expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     expect(subject.severity).to eq 'M'
   end

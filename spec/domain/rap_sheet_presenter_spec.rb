@@ -61,7 +61,7 @@ describe RapSheetPresenter do
         date: Date.new(1982, 9, 15),
         case_number: '456',
         courthouse: 'CAMC L05 ANGELES METRO',
-        sentence: nil,
+        sentence: '',
       })
       verify_event_looks_like(events_with_convictions[1], {
         date: Date.new(1994, 11, 20),

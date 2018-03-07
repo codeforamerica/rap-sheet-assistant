@@ -13,7 +13,7 @@ class PC1203Classifier
 
   def eligible?
     return false if @user.on_parole
-    return false if @user.on_probation && !@user.finished_half_of_probation
+    return false if @user.on_probation
     return false if @user.outstanding_warrant
 
     potentially_eligible?
