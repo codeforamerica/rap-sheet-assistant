@@ -1,5 +1,5 @@
 class PC1203PetitionCreator
-  attr_reader :rap_sheet, :conviction_event
+  include PetitionCreator
 
   def initialize(rap_sheet, conviction_counts)
     @rap_sheet = rap_sheet
@@ -35,28 +35,12 @@ class PC1203PetitionCreator
       pdf_fields.merge!(fields_for_count(count, index + 1))      
     end
 
-    tempfile = Tempfile.new('filled-pdf')
-
-    pdftk = PdfForms.new(Cliver.detect('pdftk'))
-
-    pdftk.fill_form Rails.root.join('app', 'assets', 'petitions', 'pc1203_petition.pdf'), tempfile.path, fields_for_pdftk(pdf_fields)
-
-    tempfile
+    fill_petition('pc1203_petition.pdf', pdf_fields)
   end
 
   private
 
-  def fields_for_pdftk(hsh)
-    hsh.transform_values { |v| [true, false].include?(v) ? pdf_bool(v) : v }
-  end
-
-  def pdf_bool(value)
-    if value
-      'Yes'
-    else
-      'Off'
-    end
-  end
+  attr_reader :rap_sheet, :conviction_event
 
   def code_sections
     conviction_event.counts.map(&:code_section)
