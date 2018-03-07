@@ -29,6 +29,8 @@ class DocumentsController < ApplicationController
       end
     end
 
+    result << FeeWaiverPetitionCreator.new(@rap_sheet.user).create_petition
+
     result
   end
 

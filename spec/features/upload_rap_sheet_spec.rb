@@ -41,7 +41,7 @@ describe 'uploading a rap sheet' do
     click_on 'Back'
     click_on 'Next'
 
-    fill_in_contact_form(first_name: 'Testuser')
+    fill_in_contact_form(first_name: 'Test', last_name: 'User')
     click_on 'Next'
 
     expect(page).to have_content 'Financial Information'
@@ -60,10 +60,14 @@ describe 'uploading a rap sheet' do
     fields_dict = get_fields_from_downloaded_pdf
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Testuser Smith',
-      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
+      'name' => 'Test User',
+      'job_title' => 'Mailman',
+      'employer_name' => 'USPS',
+      'employer_address' => '1 I love mail lane'
     }
-    expect(fields_dict).to match(a_hash_including(expected_values))
+    expect(fields_dict).to include(expected_values)
   end
 
   context 'when the rap sheet contains multiple prop64 conviction events' do
