@@ -8,7 +8,7 @@ module Users
     def create
       @user = User.find(params[:user_id])
       FinancialInformation.create!(financial_information_params.merge(user: @user))
-      redirect_to rap_sheet_documents_path(@user.rap_sheet)
+      redirect_to new_user_benefits_path(@user)
     end
 
     private

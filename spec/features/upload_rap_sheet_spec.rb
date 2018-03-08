@@ -56,6 +56,11 @@ describe 'uploading a rap sheet' do
 
     click_on 'Next'
 
+    check 'Food Stamps'
+    check 'Medi-Cal'
+
+    click_on 'Next'
+
     click_on 'download'
     fields_dict = get_fields_from_downloaded_pdf
     expected_values = {
@@ -65,7 +70,9 @@ describe 'uploading a rap sheet' do
       'name' => 'Test User',
       'job_title' => 'Mailman',
       'employer_name' => 'USPS',
-      'employer_address' => '1 I love mail lane'
+      'employer_address' => '1 I love mail lane',
+      'food_stamps' => 'Yes',
+      'medi_cal' => 'Yes',
     }
     expect(fields_dict).to include(expected_values)
   end
@@ -91,6 +98,9 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       find('.form-group', text: 'Are you currently employed?').choose 'Yes'
+      click_on 'Next'
+
+      check 'Food Stamps'
       click_on 'Next'
 
       click_on 'download'
@@ -131,6 +141,9 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       find('.form-group', text: 'Are you currently employed?').choose 'No'
+      click_on 'Next'
+
+      check 'Food Stamps'
       click_on 'Next'
 
       click_on 'download'

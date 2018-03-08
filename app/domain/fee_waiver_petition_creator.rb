@@ -21,6 +21,10 @@ class FeeWaiverPetitionCreator
       'employer_address' => financial_information.employer_address,
     }
 
+    financial_information.benefits_programs.each do |benefit|
+      pdf_fields[benefit] = true
+    end
+
     fill_petition('fw001.pdf', pdf_fields)
   end
 

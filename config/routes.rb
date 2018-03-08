@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resource :contact_information, only: [:show, :edit, :update]
       resource :case_information, only: [:show, :edit, :update]
       resource :financial_information, only: [:new, :create]
+      resource :benefits, only: [:new, :create]
+      resource :income_information, only: [:new]
     end
   end
 

@@ -45,7 +45,7 @@ RSpec.describe FeeWaiverPetitionCreator do
         job_title: 'Astronaut',
         employer_name: 'NASA',
         employer_address: '1 Space Age',
-      )
+        )
     end
 
     it 'populates employment information' do
@@ -53,6 +53,89 @@ RSpec.describe FeeWaiverPetitionCreator do
         'job_title' => 'Astronaut',
         'employer_name' => 'NASA',
         'employer_address' => '1 Space Age',
+      }
+      expect(subject).to include(expected_values)
+    end
+  end
+
+  context 'user is on all public benefits' do
+    let(:financial_information) do
+      FactoryBot.build(
+        :financial_information,
+        benefits_programs: [
+          'food_stamps',
+          'supp_sec_inc',
+          'ssp',
+          'medi_cal',
+          'county_relief',
+          'ihss',
+          'cal_works',
+          'capi',
+        ]
+      )
+    end
+
+    it 'populates employment information' do
+      expected_values = {
+        'food_stamps' => 'Yes',
+        'supp_sec_inc' => 'Yes',
+        'ssp' => 'Yes',
+        'medi_cal' => 'Yes',
+        'county_relief' => 'Yes',
+        'ihss' => 'Yes',
+        'cal_works' => 'Yes',
+        'capi' => 'Yes'
+      }
+      expect(subject).to include(expected_values)
+    end
+  end
+
+
+  context 'user is on some public benefits' do
+    let(:financial_information) do
+      FactoryBot.build(
+        :financial_information,
+        benefits_programs: [
+          'supp_sec_inc',
+          'ssp',
+        ]
+      )
+    end
+
+    it 'populates employment information' do
+      expected_values = {
+        'food_stamps' => nil,
+        'supp_sec_inc' => 'Yes',
+        'ssp' => 'Yes',
+        'medi_cal' => nil,
+        'county_relief' => nil,
+        'ihss' => nil,
+        'cal_works' => nil,
+        'capi' => nil
+      }
+      expect(subject).to include(expected_values)
+    end
+  end
+
+
+  context 'user is not on public benefits' do
+    let(:financial_information) do
+      FactoryBot.build(
+        :financial_information,
+        benefits_programs: []
+      )
+    end
+
+    it 'populates employment information' do
+      expected_values = {
+        'food_stamps' => nil,
+        'supp_sec_inc' => nil,
+        'ssp' => nil,
+        'medi_cal' => nil,
+        'county_relief' => nil,
+        'ihss' => nil,
+        'cal_works' => nil,
+        'capi' => nil
       }
       expect(subject).to include(expected_values)
     end

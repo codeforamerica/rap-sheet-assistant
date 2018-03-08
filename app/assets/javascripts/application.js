@@ -30,8 +30,10 @@ $(document).on('turbolinks:load', function () {
       if (shouldBeVisible) {
         $input.prop('required', $input.data('was-required'));
       } else {
-        $input.prop('required', false);
-        $input.data('was-required', true);
+          if($input.prop('required')) {
+              $input.data('was-required', true);
+              $input.prop('required', false);
+          }
       }
     });
   }
