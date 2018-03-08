@@ -56,6 +56,16 @@ describe 'uploading a rap sheet' do
 
     click_on 'Next'
 
+    expect(page).to have_content 'Do you receive public benefits?'
+    find('.form-group', text: 'Do you receive public benefits?').choose 'Yes'
+
+    within '.form_group', text: 'If you receive benefits, which of these do you receive?' do
+      check 'Food stamps'
+      check 'Medi-Cal'
+    end
+
+    click_on 'Next'
+
     click_on 'download'
     fields_dict = get_fields_from_downloaded_pdf
     expected_values = {

@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 class="mt-5">Financial Information</h1>
+  <hr>
+  <p>Some courts require that you pay up to $300 per petition to clear your record. This information will only be used
+    by the court to check if you qualify for a fee waiver.</p>
+
+  <%= form_for @user.financial_information, url: user_financial_information_path(@user, @user.financial_information), method: :put do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :on_public_benefits, 'Do you receive any public benefits?' %>
+          <%= render 'shared/yes_no_radio', f: f, field: :on_public_benefits, required: true %>
+        </div>
+        <%= content_tag :div, class: "form-group #{f.object.on_public_benefits ? '' : 'hidden'}", data: { visible_by: 'financial_information[on_public_benefits]' } do %>
+          <%= f.label :benefits_programs, 'Which of these do you receive? (select all that apply)' %>
+          <div>
+            <%= f.label :"#{field}_true", class: 'boolean-choice' do %>
+            <%= f.check_box :benefits_programs, {}, 'Medi-Cal' %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <%= f.submit 'Next →', class: 'btn btn-info' %>
+  <% end %>
+</div>

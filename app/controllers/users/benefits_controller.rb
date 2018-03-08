@@ -1,14 +1,13 @@
 module Users
-  class FinancialInformationsController < ApplicationController
+  class BenefitsController < ApplicationController
     def new
       @user = User.find(params[:user_id])
-      @financial_information = FinancialInformation.new(user: @user)
     end
 
     def create
       @user = User.find(params[:user_id])
-      FinancialInformation.create!(financial_information_params.merge(user: @user))
-      redirect_to new_user_benefits_path(@user)
+      @user.financial_information.update!(benefits_params)
+      redirect_to rap_sheet_documents_path(@user.rap_sheet)
     end
 
     private
