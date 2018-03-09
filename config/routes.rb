@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resource :case_information, only: [:show, :edit, :update]
       resource :financial_information, only: [:new, :create]
       resource :benefits, only: [:new, :create]
-      resource :income_information, only: [:new]
+      resource :income_information, only: [:new, :create]
     end
   end
 

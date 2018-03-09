@@ -4,7 +4,7 @@ RSpec.describe FeeWaiverPetitionCreator do
   let(:financial_information) do
     FactoryBot.build(
       :financial_information,
-      employed: false,
+      employed: false
     )
   end
 
@@ -118,11 +118,12 @@ RSpec.describe FeeWaiverPetitionCreator do
   end
 
 
-  context 'user is not on public benefits' do
+  context 'user is not on public benefits and low income' do
     let(:financial_information) do
       FactoryBot.build(
         :financial_information,
-        benefits_programs: []
+        benefits_programs: [],
+        monthly_income_under_limit: true
       )
     end
 
@@ -135,7 +136,33 @@ RSpec.describe FeeWaiverPetitionCreator do
         'county_relief' => nil,
         'ihss' => nil,
         'cal_works' => nil,
-        'capi' => nil
+        'capi' => nil,
+        'low_income' => 'Yes'
+      }
+      expect(subject).to include(expected_values)
+    end
+  end
+
+  context 'user is not on public benefits and not low income' do
+    let(:financial_information) do
+      FactoryBot.build(
+        :financial_information,
+        benefits_programs: [],
+        monthly_income_under_limit: false
+      )
+    end
+
+    it 'populates employment information' do
+      expected_values = {
+        'food_stamps' => nil,
+        'supp_sec_inc' => nil,
+        'ssp' => nil,
+        'medi_cal' => nil,
+        'county_relief' => nil,
+        'ihss' => nil,
+        'cal_works' => nil,
+        'capi' => nil,
+        'low_income' => 'Off'
       }
       expect(subject).to include(expected_values)
     end

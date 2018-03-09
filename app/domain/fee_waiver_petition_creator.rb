@@ -19,6 +19,7 @@ class FeeWaiverPetitionCreator
       'job_title' => financial_information.job_title,
       'employer_name' => financial_information.employer_name,
       'employer_address' => financial_information.employer_address,
+      'low_income' => financial_information.monthly_income_under_limit
     }
 
     financial_information.benefits_programs.each do |benefit|

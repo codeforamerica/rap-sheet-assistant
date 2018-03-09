@@ -11,4 +11,7 @@ class FinancialInformation < ApplicationRecord
     cal_works: 'CalWORKS or Tribal TANF',
     capi: 'CAPI',
   }
+
+  BASE_MONTHLY_INCOME_LIMIT = 814.59
+  HOUSEHOLD_SIZE_INCOME_MODIFIER = 450
 end

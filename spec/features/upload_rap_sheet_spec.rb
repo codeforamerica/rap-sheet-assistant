@@ -44,20 +44,11 @@ describe 'uploading a rap sheet' do
     fill_in_contact_form(first_name: 'Test', last_name: 'User')
     click_on 'Next'
 
-    expect(page).to have_content 'Financial Information'
     find('.form-group', text: 'Are you currently employed?').choose 'No'
-    expect(page).not_to have_content('What is your job title?')
-    expect(page).not_to have_content("What is your employer's name?")
-    expect(page).not_to have_content("What is your employer's address?")
-    find('.form-group', text: 'Are you currently employed?').choose 'Yes'
-    fill_in 'What is your job title?', with: 'Mailman'
-    fill_in "What is your employer's name?", with: 'USPS'
-    fill_in "What is your employer's address?", with: '1 I love mail lane'
 
     click_on 'Next'
 
     check 'Food Stamps'
-    check 'Medi-Cal'
 
     click_on 'Next'
 
@@ -66,13 +57,7 @@ describe 'uploading a rap sheet' do
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
-      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
-      'name' => 'Test User',
-      'job_title' => 'Mailman',
-      'employer_name' => 'USPS',
-      'employer_address' => '1 I love mail lane',
-      'food_stamps' => 'Yes',
-      'medi_cal' => 'Yes',
+      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
     }
     expect(fields_dict).to include(expected_values)
   end
@@ -109,18 +94,18 @@ describe 'uploading a rap sheet' do
         'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
         '1.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
       }
-      expect(fields_dict).to match(a_hash_including(expected_values))
+      expect(fields_dict).to include(expected_values)
     end
   end
 
-  context 'when the rap sheet has a 1203-eligible dismissal' do
+  context 'when the rap sheet has a 1203-eligible dismissal and the user is on public benefits' do
     let(:scanned_pages) do
       [
         File.read('spec/fixtures/skywalker_pc1203_eligible.txt')
       ]
     end
 
-    it 'shows that it is dismissible' do
+    it 'shows that it is dismissible', js: true do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
       click_on 'Start'
@@ -137,21 +122,100 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
       click_on 'Next'
 
-      fill_in_contact_form(first_name: 'Testuser')
+      fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
       click_on 'Next'
 
+      expect(page).to have_content 'Financial Information'
       find('.form-group', text: 'Are you currently employed?').choose 'No'
+      expect(page).not_to have_content('What is your job title?')
+      expect(page).not_to have_content("What is your employer's name?")
+      expect(page).not_to have_content("What is your employer's address?")
+      find('.form-group', text: 'Are you currently employed?').choose 'Yes'
+      fill_in 'What is your job title?', with: 'Mailman'
+      fill_in "What is your employer's name?", with: 'USPS'
+      fill_in "What is your employer's address?", with: '1 I love mail lane'
+
       click_on 'Next'
 
       check 'Food Stamps'
+      check 'Medi-Cal'
+
       click_on 'Next'
 
       click_on 'download'
       fields_dict = get_fields_from_downloaded_pdf
       expected_values = {
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901'
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
+        'name' => 'Testuser Smith',
+        'job_title' => 'Mailman',
+        'employer_name' => 'USPS',
+        'employer_address' => '1 I love mail lane',
+        'food_stamps' => 'Yes',
+        'medi_cal' => 'Yes',
       }
-      expect(fields_dict).to match(a_hash_including(expected_values))
+      expect(fields_dict).to include(expected_values)
+    end
+  end
+
+  context 'when the rap sheet has a 1203-eligible dismissal and the user is not on public benefits' do
+    let(:scanned_pages) do
+      [
+        File.read('spec/fixtures/skywalker_pc1203_eligible.txt')
+      ]
+    end
+
+    it 'shows that it is dismissible', js: true do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Start'
+
+      upload_pages(scanned_pages)
+
+      expect(page).to have_content 'We found 1 conviction on your record'
+      click_on 'Next'
+
+      fill_in_case_information
+      click_on 'Next'
+
+      expect(page).to have_content 'We can help you apply to dismiss 1 conviction'
+      expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
+      click_on 'Next'
+
+      fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
+      click_on 'Next'
+
+      expect(page).to have_content 'Financial Information'
+      find('.form-group', text: 'Are you currently employed?').choose 'No'
+      expect(page).not_to have_content('What is your job title?')
+      expect(page).not_to have_content("What is your employer's name?")
+      expect(page).not_to have_content("What is your employer's address?")
+      find('.form-group', text: 'Are you currently employed?').choose 'Yes'
+      fill_in 'What is your job title?', with: 'Mailman'
+      fill_in "What is your employer's name?", with: 'USPS'
+      fill_in "What is your employer's address?", with: '1 I love mail lane'
+
+      click_on 'Next'
+
+      click_on 'Next'
+
+      fill_in 'How many people do you live with, including yourself?', with: 4
+      find('.form-group', text: 'Is your monthly income less than $2,614.59?').choose('Yes')
+
+      click_on 'Next'
+
+      click_on 'download'
+      fields_dict = get_fields_from_downloaded_pdf
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
+        'name' => 'Testuser Smith',
+        'job_title' => 'Mailman',
+        'employer_name' => 'USPS',
+        'employer_address' => '1 I love mail lane',
+        'low_income' => 'Yes'
+      }
+      expect(fields_dict).to include(expected_values)
+
+      expect(User.last.financial_information.monthly_income_limit).to eq 2614.59
     end
   end
 
