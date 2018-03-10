@@ -77,14 +77,14 @@ RSpec.describe FeeWaiverPetitionCreator do
 
     it 'populates employment information' do
       expected_values = {
-        'food_stamps' => 'Yes',
-        'supp_sec_inc' => 'Yes',
-        'ssp' => 'Yes',
-        'medi_cal' => 'Yes',
-        'county_relief' => 'Yes',
-        'ihss' => 'Yes',
-        'cal_works' => 'Yes',
-        'capi' => 'Yes'
+        'food_stamps' => 'On',
+        'supp_sec_inc' => 'On',
+        'ssp' => 'On',
+        'medi_cal' => 'On',
+        'county_relief' => 'On',
+        'ihss' => 'On',
+        'cal_works' => 'On',
+        'capi' => 'On'
       }
       expect(subject).to include(expected_values)
     end
@@ -105,8 +105,8 @@ RSpec.describe FeeWaiverPetitionCreator do
     it 'populates employment information' do
       expected_values = {
         'food_stamps' => nil,
-        'supp_sec_inc' => 'Yes',
-        'ssp' => 'Yes',
+        'supp_sec_inc' => 'On',
+        'ssp' => 'On',
         'medi_cal' => nil,
         'county_relief' => nil,
         'ihss' => nil,
@@ -137,7 +137,7 @@ RSpec.describe FeeWaiverPetitionCreator do
         'ihss' => nil,
         'cal_works' => nil,
         'capi' => nil,
-        'low_income' => 'Yes'
+        'low_income' => 'On'
       }
       expect(subject).to include(expected_values)
     end

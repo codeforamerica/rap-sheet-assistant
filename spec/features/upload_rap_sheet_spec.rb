@@ -153,8 +153,8 @@ describe 'uploading a rap sheet' do
         'job_title' => 'Mailman',
         'employer_name' => 'USPS',
         'employer_address' => '1 I love mail lane',
-        'food_stamps' => 'Yes',
-        'medi_cal' => 'Yes',
+        'food_stamps' => 'On',
+        'medi_cal' => 'On',
       }
       expect(fields_dict).to include(expected_values)
     end
@@ -214,7 +214,7 @@ describe 'uploading a rap sheet' do
         'job_title' => 'Mailman',
         'employer_name' => 'USPS',
         'employer_address' => '1 I love mail lane',
-        'low_income' => 'Yes'
+        'low_income' => 'On'
       }
       expect(fields_dict).to include(expected_values)
 

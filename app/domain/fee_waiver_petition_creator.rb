@@ -19,11 +19,11 @@ class FeeWaiverPetitionCreator
       'job_title' => financial_information.job_title,
       'employer_name' => financial_information.employer_name,
       'employer_address' => financial_information.employer_address,
-      'low_income' => financial_information.monthly_income_under_limit
+      'low_income' => financial_information.monthly_income_under_limit ? 'On' : 'Off'
     }
 
     financial_information.benefits_programs.each do |benefit|
-      pdf_fields[benefit] = true
+      pdf_fields[benefit] = 'On'
     end
 
     fill_petition('fw001.pdf', pdf_fields)
