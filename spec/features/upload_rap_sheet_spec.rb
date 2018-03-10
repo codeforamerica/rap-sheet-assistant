@@ -12,57 +12,60 @@ describe 'uploading a rap sheet' do
     allow(TextScanner).to receive(:scan_text).and_return(*scanned_pages)
   end
 
-  it 'allows the user to upload their rap sheet and shows convictions', js: true do
-    visit root_path
-    expect(page).to have_content 'Upload your California RAP sheet'
-    click_on 'Start'
+  context 'when a user has both prop64 and 1203 dismissal eligible convictions' do
+    it 'allows the user to upload their rap sheet and shows convictions', js: true do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Start'
 
-    upload_pages(scanned_pages)
+      upload_pages(scanned_pages)
 
-    expect(page).to have_content 'We found 5 convictions on your record.'
-    expect(page).to have_content '3 Felonies'
-    expect(page).to have_content '1 Misdemeanor'
-    expect(page).to have_content '1 Unknown'
-    click_on 'Next'
+      expect(page).to have_content 'We found 5 convictions on your record.'
+      expect(page).to have_content '3 Felonies'
+      expect(page).to have_content '1 Misdemeanor'
+      expect(page).to have_content '1 Unknown'
+      click_on 'Next'
 
-    fill_in_case_information
-    click_on 'Next'
+      fill_in_case_information
+      click_on 'Next'
 
-    expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
-    expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
-    expect(page).to have_content 'POSSESS MARIJUANA'
-    click_on 'Debug'
+      expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
+      expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
+      expect(page).to have_content 'POSSESS MARIJUANA'
+      click_on 'Debug'
 
-    expect(page).to have_content '1990-12-14'
-    expect(page).to have_content 'XR09005'
-    expect(page).to have_content 'CASC LOS ANGELES'
-    expect(page).to have_content 'PC 192.3(a) --- VEH MANSL W/GROSS NEGLIGENCE'
-    expect(page).to have_content '3y probation, 30d jail, fine, restitution'
-    click_on 'Back'
-    click_on 'Next'
+      expect(page).to have_content '1990-12-14'
+      expect(page).to have_content 'XR09005'
+      expect(page).to have_content 'CASC LOS ANGELES'
+      expect(page).to have_content 'PC 192.3(a) --- VEH MANSL W/GROSS NEGLIGENCE'
+      expect(page).to have_content '3y probation, 30d jail, fine, restitution'
+      click_on 'Back'
+      click_on 'Next'
 
-    fill_in_contact_form(first_name: 'Test', last_name: 'User')
-    click_on 'Next'
+      fill_in_contact_form(first_name: 'Test', last_name: 'User')
+      click_on 'Next'
 
-    find('.form-group', text: 'Are you currently employed?').choose 'No'
+      find('.form-group', text: 'Are you currently employed?').choose 'No'
 
-    click_on 'Next'
+      click_on 'Next'
 
-    check 'Food Stamps'
+      check 'Food Stamps'
 
-    click_on 'Next'
+      click_on 'Next'
 
-    click_on 'download'
-    fields_dict = get_fields_from_downloaded_pdf
-    expected_values = {
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
-      'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114'
-    }
-    expect(fields_dict).to include(expected_values)
+      click_on 'download'
+      fields_dict = get_fields_from_downloaded_pdf
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+        'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050'
+      }
+      expect(fields_dict).to include(expected_values)
+    end
   end
 
-  context 'when the rap sheet contains multiple prop64 conviction events' do
+  context 'when the rap sheet contains only prop64 conviction events' do
     let(:scanned_pages) do
       [
         File.read('./spec/fixtures/skywalker_prop64_two_cases_both_convicted.txt')
@@ -98,7 +101,7 @@ describe 'uploading a rap sheet' do
     end
   end
 
-  context 'when the rap sheet has a 1203-eligible dismissal and the user is on public benefits' do
+  context 'when the rap sheet has only a 1203-eligible dismissal and the user is on public benefits' do
     let(:scanned_pages) do
       [
         File.read('spec/fixtures/skywalker_pc1203_eligible.txt')
