@@ -35,6 +35,8 @@ class PC1203PetitionCreator
       pdf_fields.merge!(fields_for_count(count, index + 1))      
     end
 
+    pdf_fields.merge!(checkbox_fields)
+
     fill_petition('pc1203_petition.pdf', pdf_fields)
   end
 
@@ -66,13 +68,15 @@ class PC1203PetitionCreator
     is_reducible ? 'yes' : 'no'
   end
 
-  def determine_checkboxes(conviction_event)
-    if conviction_event.sentence.contains? "PROBATION"
-      "1203.4"
-    elsif conviction_event.has_felony?
-      "1203.41"
-    else
-      "1203.4a"
-    end
+  def checkbox_fields
+    remedy = PC1203Classifier.new(@rap_sheet.user, @conviction_counts.first).remedy
+
+    remedy_checkbox = {
+      '1203.4' => 'topmostSubform[0].Page1[0].ProbationGranted_cb[0]',
+      '1203.4a' => 'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]',
+      '1203.41' => 'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]'
+    }[remedy]
+
+    remedy_checkbox ? { remedy_checkbox => 'Yes' } : {}
   end
 end

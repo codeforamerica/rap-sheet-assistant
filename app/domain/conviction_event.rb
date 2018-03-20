@@ -14,6 +14,13 @@ class ConvictionEvent
     OkayPrint.new(self).exclude_ivars(:@counts).inspect
   end
 
+  def severity
+    severities = counts.map(&:severity)
+    ['F', 'M', 'I'].each do |s|
+      return s if severities.include?(s)
+    end
+  end
+
   attr_reader :counts, :date, :case_number, :courthouse, :sentence
 
   private

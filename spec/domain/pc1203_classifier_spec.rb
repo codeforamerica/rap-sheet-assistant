@@ -1,64 +1,40 @@
 require 'spec_helper'
 
-require 'treetop'
-
 require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
-  let(:sentence) { '3yr jail'}
-  let(:severity) { 'M' }
   let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
-    instance_double(ConvictionEvent, sentence: ConvictionSentence.new(sentence))
+    instance_double(ConvictionEvent, sentence: sentence)
   end
 
   let(:conviction_count) do
-    instance_double(ConvictionCount, event: conviction_event, severity: severity)
+    double(event: conviction_event)
   end
 
+  subject { described_class.new(user, conviction_count) }
+
   describe '#potentially_eligible?' do
-    context "when the conviction's sentence included prison" do
-      let(:sentence) { '3yr prison'}
+    context "when the conviction's sentence had prison" do
+      let(:sentence) { double(ConvictionSentence, had_prison?: true) }
 
       it 'returns false' do
-        expect(described_class.new(user, conviction_count)).not_to be_potentially_eligible
-      end
-    end
-
-    context "when the conviction's sentence included 'prison ss'" do
-      let(:sentence) { '1yr prison ss'}
-
-      it 'returns true' do
-        expect(described_class.new(user, conviction_count)).to be_potentially_eligible
+        expect(subject).not_to be_potentially_eligible
       end
     end
 
     context "when the conviction's sentence did not include prison" do
-      let(:sentence) { '3yr jail'}
+      let(:sentence) { double(ConvictionSentence, had_prison?: false) }
 
       it 'returns true' do
-        expect(described_class.new(user, conviction_count)).to be_potentially_eligible
+        expect(subject).to be_potentially_eligible
       end
-    end
-
-    it 'does not consider infractions to be eligible' do
-      count = instance_double(ConvictionCount, event: conviction_event, severity: 'nil')
-      expect(described_class.new(user, count)).not_to be_potentially_eligible
-
-      count = instance_double(ConvictionCount, event: conviction_event, severity: 'I')
-      expect(described_class.new(user, count)).not_to be_potentially_eligible
-
-      count = instance_double(ConvictionCount, event: conviction_event, severity: 'M')
-      expect(described_class.new(user, count)).to be_potentially_eligible
-
-      count = instance_double(ConvictionCount, event: conviction_event, severity: 'F')
-      expect(described_class.new(user, count)).to be_potentially_eligible
     end
   end
 
   describe '#eligible?' do
-    let(:sentence) { '3yr jail'}
+    let(:sentence) { double(ConvictionSentence, had_prison?: false) }
     let(:user) do
       FactoryBot.build(
         :user,
@@ -71,7 +47,7 @@ describe PC1203Classifier do
 
     context 'when the user is in good standing' do
       it 'returns true' do
-        expect(described_class.new(user, conviction_count)).to be_eligible
+        expect(subject).to be_eligible
       end
     end
 
@@ -81,7 +57,7 @@ describe PC1203Classifier do
       end
 
       it 'returns false' do
-        expect(described_class.new(user, conviction_count)).not_to be_eligible
+        expect(subject).not_to be_eligible
       end
     end
 
@@ -96,7 +72,7 @@ describe PC1203Classifier do
         end
 
         it 'returns false' do
-          expect(described_class.new(user, conviction_count)).not_to be_eligible
+          expect(subject).not_to be_eligible
         end
       end
 
@@ -106,7 +82,7 @@ describe PC1203Classifier do
         end
 
         it 'returns true' do
-          expect(described_class.new(user, conviction_count)).to be_eligible
+          expect(subject).to be_eligible
         end
       end
     end
@@ -117,7 +93,59 @@ describe PC1203Classifier do
       end
 
       it 'returns false' do
-        expect(described_class.new(user, conviction_count)).not_to be_eligible
+        expect(subject).not_to be_eligible
+      end
+    end
+  end
+
+  describe '#remedy' do
+    context 'sentence includes probation' do
+      let(:conviction_event) do
+        instance_double(ConvictionEvent, sentence: instance_double(ConvictionSentence, had_probation?: true))
+      end
+
+      it 'returns 1203.4' do
+        expect(subject.remedy).to eq '1203.4'
+      end
+    end
+
+    context 'sentence does not include probation' do
+      let(:conviction_event) do
+        instance_double(ConvictionEvent,
+                        sentence: instance_double(ConvictionSentence, had_probation?: false),
+                        severity: severity)
+      end
+
+      context 'when the event severity is misdemeanor' do
+        let(:severity) { 'M' }
+
+        it 'returns 1203.4a' do
+          expect(subject.remedy).to eq '1203.4a'
+        end
+      end
+
+      context 'when the event severity is infraction' do
+        let(:severity) { 'I' }
+
+        it 'returns 1203.4a' do
+          expect(subject.remedy).to eq '1203.4a'
+        end
+      end
+
+      context 'when the event severity is felony' do
+        let(:severity) { 'F' }
+
+        it 'returns 1203.41' do
+          expect(subject.remedy).to eq '1203.41'
+        end
+      end
+
+      context 'unknown severity' do
+        let(:severity) { nil }
+
+        it 'returns nil' do
+          expect(subject.remedy).to eq nil
+        end
       end
     end
   end

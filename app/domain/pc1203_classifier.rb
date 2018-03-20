@@ -1,14 +1,13 @@
 class PC1203Classifier
   def initialize(user, count)
     @user = user
-    @count = count
+    @event = count.event
   end
 
   def potentially_eligible?
-    return false unless count.event.sentence
-    return false unless %w(M F).include?(count.severity)
+    return false unless event.sentence
 
-    !count.event.sentence.had_prison?
+    !event.sentence.had_prison?
   end
 
   def eligible?
@@ -19,13 +18,24 @@ class PC1203Classifier
     potentially_eligible?
   end
 
-  def action
-    # TBD
-
-    # @user.owe_fees ? 'Discretionary' : ' Mandatory'
+  def remedy
+    if event.sentence.had_probation?
+      '1203.4'
+    else
+      case event.severity
+        when 'M'
+          '1203.4a'
+        when 'I'
+          '1203.4a'
+        when 'F'
+          '1203.41'
+        else
+          nil
+      end
+    end
   end
 
   private
 
-  attr_reader :count
+  attr_reader :event
 end
