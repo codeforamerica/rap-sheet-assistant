@@ -112,6 +112,19 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.counts[0].text_value).to eq "CNT : 003\ncount 3 text\n"
+      end
+
+    it 'can parse counts with extra dashes' do
+      text = <<~TEXT
+        COURT:
+        20040102  SAN FRANCISCO
+        CNT:0-03
+        count 3 text
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.counts[0].text_value).to eq "CNT:0-03\ncount 3 text\n"
     end
 
     it 'can parse court identifier with extra whitespace' do

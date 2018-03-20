@@ -54,7 +54,27 @@ RSpec.describe RapSheetGrammarParser do
 
           .   * *, * *.  
         cycle text
-        .,* * * * .
+        .,* * ·* * .
+        another cycle text
+        * * * END OF MESSAGE * * *
+      TEXT
+
+      cycles = described_class.new.parse(text).cycles
+
+      expect(cycles[0].cycle_content.text_value).to eq('cycle text')
+      expect(cycles[1].cycle_content.text_value).to eq('another cycle text')
+    end
+
+    it 'parses newlines between asterisks in cycle delimiter' do
+      text = <<~TEXT
+        super
+        arbitrary
+        *
+        *
+        *
+        *  
+        cycle text
+        * * * *
         another cycle text
         * * * END OF MESSAGE * * *
       TEXT

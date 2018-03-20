@@ -28,7 +28,11 @@ class ConvictionSentence
   end
 
   def to_s
-    parts = @sentence_string.
+    str = @sentence_string.split("\n").reject do |x|
+      x.length <= 3
+    end.join("\n")
+
+    parts = str.
       downcase.
       gsub(/[.']/, '').
       gsub(/\n\s*/, ' ').

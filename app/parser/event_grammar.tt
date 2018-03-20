@@ -46,11 +46,7 @@ grammar EventGrammar
   end
 
   rule count_identifier
-    'CNT' w ':' wn [0-9]2..3 multiple_count?
-  end
-
-  rule multiple_count
-    '-' [0-9]2..3
+    'CNT' w ':' wn ([0-9] / '-')+
   end
 
   rule count_info

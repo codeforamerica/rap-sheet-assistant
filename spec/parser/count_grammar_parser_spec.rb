@@ -67,6 +67,17 @@ describe CountGrammarParser do
       expect(count.disposition).to be_a CountGrammar::Convicted
     end
 
+    it 'can parse whitespace in severity lines' do
+      text = <<~TEXT
+       DISPO:CONVICTED
+        CONV STATUS : FELONY
+      TEXT
+
+      count = described_class.new.parse(text)
+
+      expect(count.disposition.severity.text_value).to eq 'FELONY'
+    end
+
     it 'parses when charge is in the comments' do
       text = <<~TEXT
          SEE COMMENT FOR CHARGE
@@ -131,7 +142,7 @@ describe CountGrammarParser do
 
       count = described_class.new.parse(text)
       expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
-      end
+    end
 
     it 'parses out junk characters from sentences' do
       text = <<~TEXT

@@ -71,7 +71,7 @@ grammar CountGrammar
     end
 
     rule severity_line
-      stray_punctuation 'CONV STATUS:' stray_punctuation severity N <SeverityLine>
+      stray_punctuation 'CONV STATUS' w ':' stray_punctuation severity N <SeverityLine>
     end
 
     rule severity

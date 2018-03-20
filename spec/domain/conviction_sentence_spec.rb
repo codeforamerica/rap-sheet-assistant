@@ -25,6 +25,11 @@ describe ConvictionSentence do
       expect(result).to eq('6m jail')
     end
 
+    it 'removes lines with less than 3 characters' do
+      result = described_class.new("FINE SS,\na\nbbb\ncccc").to_s
+      expect(result).to eq('fine ss, cccc')
+    end
+
     it 'standardizes restitution strings' do
       result = described_class.new('restn, rstn, restitution').to_s
       expect(result).to eq('restitution, restitution, restitution')
