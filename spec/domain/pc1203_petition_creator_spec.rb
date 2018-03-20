@@ -53,9 +53,9 @@ RSpec.describe PC1203PetitionCreator do
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
       'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
-      'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => 'Yes'
+      'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1'
     }
-    expect(get_fields_from_pdf(pdf_file)).to match(a_hash_including(expected_values))
+    expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
   it 'fills out the offenses table with data from each count' do

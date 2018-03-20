@@ -77,6 +77,6 @@ class PC1203PetitionCreator
       '1203.41' => 'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]'
     }[remedy]
 
-    remedy_checkbox ? { remedy_checkbox => 'Yes' } : {}
+    remedy_checkbox ? { remedy_checkbox => '1' } : {}
   end
 end
