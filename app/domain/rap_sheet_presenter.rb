@@ -6,8 +6,10 @@ class RapSheetPresenter
       end
     end
 
-    court_events
+    conviction_events = court_events
       .select(&:is_conviction?)
       .map { |e| ConvictionEventBuilder.new(e).build }
+
+    ConvictionEventCollection.new(conviction_events)
   end
 end
