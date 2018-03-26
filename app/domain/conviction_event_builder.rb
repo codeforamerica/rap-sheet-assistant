@@ -1,7 +1,6 @@
 class ConvictionEventBuilder
-  def initialize(event_syntax_node, convicted_counts)
+  def initialize(event_syntax_node)
     @event_syntax_node = event_syntax_node
-    @convicted_counts = convicted_counts
   end
 
   def build
@@ -12,7 +11,7 @@ class ConvictionEventBuilder
       sentence: sentence
     )
 
-    conviction_event.counts = convicted_counts.map do |count|
+    conviction_event.counts = event_syntax_node.conviction_counts.map do |count|
       ConvictionCount.new(conviction_event, count)
     end
 
@@ -21,7 +20,7 @@ class ConvictionEventBuilder
 
   private
 
-  attr_reader :event_syntax_node, :convicted_counts
+  attr_reader :event_syntax_node
 
   def date
     Date.strptime(event_syntax_node.date.text_value, '%Y%m%d')

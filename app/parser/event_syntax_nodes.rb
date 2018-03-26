@@ -23,6 +23,16 @@ module EventGrammar
 
       count.disposition.sentence
     end
+
+    def is_conviction?
+      counts.elements.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
+    end
+
+    def conviction_counts
+      counts.elements.select do |c|
+        c.disposition.is_a? CountGrammar::Convicted
+      end
+    end
   end
 
   class Count < Treetop::Runtime::SyntaxNode

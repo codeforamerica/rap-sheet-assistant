@@ -6,14 +6,8 @@ class RapSheetPresenter
       end
     end
 
-    court_events.select do |e|
-      e.counts.elements.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
-    end.map do |e|
-      convicted_counts = e.counts.elements.select do |c|
-        c.disposition.is_a? CountGrammar::Convicted
-      end
-
-      ConvictionEventBuilder.new(e, convicted_counts).build
-    end
+    court_events
+      .select(&:is_conviction?)
+      .map { |e| ConvictionEventBuilder.new(e).build }
   end
 end
