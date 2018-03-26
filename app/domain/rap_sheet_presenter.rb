@@ -13,7 +13,7 @@ class RapSheetPresenter
         c.disposition.is_a? CountGrammar::Convicted
       end
 
-      ConvictionEvent.new(e, convicted_counts)
+      ConvictionEventBuilder.new(e, convicted_counts).build
     end
   end
 end
