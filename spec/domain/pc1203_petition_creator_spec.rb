@@ -1,9 +1,4 @@
 require 'rails_helper'
-require 'treetop'
-
-require_relative '../../app/parser/count_syntax_nodes'
-
-Treetop.load 'app/parser/count_grammar'
 
 RSpec.describe PC1203PetitionCreator do
   let(:user) do
@@ -32,11 +27,13 @@ RSpec.describe PC1203PetitionCreator do
       sentence: sentence
     )
     conviction_counts = [
-      create_conviction_count(conviction_event, {
+      ConvictionCount.new(
+        event: conviction_event,
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'FELONY',
         code: 'PC',
         section: '111'
-      }),
+      ),
     ]
 
     pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_counts).create_petition
@@ -69,26 +66,34 @@ RSpec.describe PC1203PetitionCreator do
     )
 
     conviction_counts = [
-      create_conviction_count(conviction_event, {
-        severity: 'FELONY',
+      ConvictionCount.new(
+        event: conviction_event,
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+        severity: 'F',
         code: 'PC',
-        section: '107', # wobbler, felony
-      }),
-      create_conviction_count(conviction_event, {
-        severity: 'MISDEMEANOR',
+        section: '107' # wobbler, felony
+      ),
+      ConvictionCount.new(
+        event: conviction_event,
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+        severity: 'M',
         code: 'PC',
-        section: '12355(b)', # wobbler but already misdemeanor
-      }),
-      create_conviction_count(conviction_event, {
-        severity: 'FELONY',
+        section: '12355(b)' # wobbler but already misdemeanor
+      ),
+      ConvictionCount.new(
+        event: conviction_event,
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+        severity: 'F',
         code: 'PC',
-        section: '605', # made up (not a wobbler)
-      }),
-      create_conviction_count(conviction_event, {
-        severity: 'MISDEMEANOR',
+        section: '605' # made up (not a wobbler)
+      ),
+      ConvictionCount.new(
+        event: conviction_event,
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+        severity: 'M',
         code: 'PC',
-        section: '330', # reducible to infraction
-      })
+        section: '330' # reducible to infraction
+      )
     ]
 
     pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_counts).create_petition
@@ -118,17 +123,6 @@ RSpec.describe PC1203PetitionCreator do
       'topmostSubform[0].Page1[0].Offense4_ft[0]' => 'yes'
     }
 
-    expect(get_fields_from_pdf(pdf_file)).to match(a_hash_including(expected_values))
-  end
-
-  def create_conviction_count(event, code:, section:, severity:)
-    text = <<~COUNT
-      #{section} #{code}-RECEIVE/ETC KNOWN STOLEN PROPERTY
-      *DISPO:CONVICTED
-         CONV STATUS:#{severity}
-    COUNT
-
-    count_syntax_node = CountGrammarParser.new.parse(text)
-    ConvictionCount.new(event, count_syntax_node)
+    expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 end

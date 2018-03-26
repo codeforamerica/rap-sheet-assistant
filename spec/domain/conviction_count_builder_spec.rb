@@ -6,7 +6,7 @@ require_relative '../../app/domain/conviction_count'
 require_relative '../../app/parser/parser'
 require_relative '../../app/helpers/text_cleaner'
 
-describe ConvictionCount do
+describe ConvictionCountBuilder do
   let(:event) { { some: 'event' } }
 
   it 'populates values representing count' do
@@ -28,7 +28,7 @@ describe ConvictionCount do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    subject = described_class.new(event, count_node)
+    subject = described_class.new(event, count_node).build
     expect(subject.code_section).to eq 'PC 496'
     expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     expect(subject.severity).to eq 'M'
@@ -49,7 +49,7 @@ describe ConvictionCount do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    subject = described_class.new(event, count_node)
+    subject = described_class.new(event, count_node).build
     expect(subject.code_section).to be_nil
     expect(subject.code_section_description).to be_nil
     expect(subject.severity).to be_nil
@@ -74,7 +74,7 @@ describe ConvictionCount do
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
 
-    subject = described_class.new(event, count_node)
+    subject = described_class.new(event, count_node).build
     expect(subject.code_section).to eq 'PC 496(a)(2)'
     expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     expect(subject.severity).to eq 'M'
@@ -98,7 +98,7 @@ describe ConvictionCount do
 
     tree = Parser.new.parse(text)
     count_node = tree.cycles[0].events[0].counts[0]
-    subject = described_class.new(event, count_node)
+    subject = described_class.new(event, count_node).build
     expect(subject.code_section).to eq 'PC 496.3(a)(2)'
     expect(subject.code_section_description).to eq 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
     expect(subject.severity).to eq 'M'

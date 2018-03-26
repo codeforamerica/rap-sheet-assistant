@@ -12,7 +12,7 @@ class ConvictionEventBuilder
     )
 
     conviction_event.counts = event_syntax_node.conviction_counts.map do |count|
-      ConvictionCount.new(conviction_event, count)
+      ConvictionCountBuilder.new(conviction_event, count).build
     end
 
     conviction_event
