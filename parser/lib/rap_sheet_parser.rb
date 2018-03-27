@@ -19,6 +19,7 @@ require 'syntax_nodes/event_syntax_nodes'
 require 'syntax_nodes/count_syntax_nodes'
 require 'syntax_nodes/update_syntax_nodes'
 
+require 'text_cleaner'
 require 'rap_sheet_parser_exception'
 
 Treetop.load 'parser/lib/grammars/common_grammar'

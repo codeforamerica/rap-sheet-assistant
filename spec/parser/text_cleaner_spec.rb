@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../app/helpers/text_cleaner'
+require_relative '../../parser/lib/text_cleaner'
 
 describe TextCleaner do
   describe '.clean' do
