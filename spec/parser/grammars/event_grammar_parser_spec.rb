@@ -202,6 +202,24 @@ RSpec.describe EventGrammarParser do
         expect(tree.sentence.text_value).to eq('001 MONTHS JAIL')
       end
     end
+
+    context 'parsing an arrest event' do
+      it 'parses' do
+        text = <<~TEXT
+          ARR/DET/CITE:
+          NAM:001
+          19910105 CAPD CONCORD
+          TOC:F
+          CNT:001
+          #65131
+          496.1 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::ArrestEvent)
+        expect(subject.date.text_value).to eq '19910105'
+      end
+    end
   end
 end
 

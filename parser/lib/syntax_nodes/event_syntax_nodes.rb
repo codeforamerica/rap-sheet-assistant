@@ -1,5 +1,7 @@
 module EventGrammar
-  class CourtEvent < Treetop::Runtime::SyntaxNode
+  class Event < Treetop::Runtime::SyntaxNode; end
+
+  class CourtEvent < Event
     def case_number
       counts[0].case_number if counts[0].is_a? CountWithCaseNumber
     end
@@ -81,6 +83,6 @@ module EventGrammar
     end
   end
 
-  class CountWithCaseNumber < Count;
-  end
+  class CountWithCaseNumber < Count; end
+  class ArrestEvent < Event; end
 end

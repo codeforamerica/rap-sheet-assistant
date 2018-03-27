@@ -1,16 +1,20 @@
 require 'treetop'
 
 require 'models/conviction_count'
+require 'models/arrest_event'
 require 'models/conviction_event'
 require 'models/conviction_event_collection'
+require 'models/event_collection'
 require 'models/conviction_sentence'
 require 'models/okay_print'
 
 require 'builders/case_number_builder'
 require 'builders/conviction_count_builder'
+require 'builders/event_builder'
 require 'builders/conviction_event_builder'
+require 'builders/arrest_event_builder'
 require 'builders/courthouse_presenter'
-require 'builders/rap_sheet_presenter'
+require 'builders/event_collection_builder'
 
 require 'syntax_nodes/treetop_monkeypatches'
 require 'syntax_nodes/cycle_syntax_nodes'

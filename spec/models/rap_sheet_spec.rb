@@ -3,15 +3,14 @@ require 'rails_helper'
 RSpec.describe RapSheet, type: :model do
   before do
     allow_any_instance_of(Parser).to receive(:parse).and_return(nil)
-    allow(RapSheetPresenter).to receive(:present).and_return(
-      ConvictionEventCollection.new([
-        instance_double(ConvictionEvent,
-          counts: [
-            instance_double(ConvictionCount, eligible?: true),
-            instance_double(ConvictionCount, eligible?: false)
-          ]
-        )
-      ])
+
+    conviction_event = ConvictionEvent.new(date: nil, case_number: nil, courthouse: nil, sentence: nil)
+    conviction_event.counts = [
+      instance_double(ConvictionCount, eligible?: true),
+      instance_double(ConvictionCount, eligible?: false)
+    ]
+    allow(EventCollectionBuilder).to receive(:build).and_return(
+      EventCollection.new([conviction_event])
     )
   end
 

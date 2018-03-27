@@ -1,7 +1,5 @@
 class ConvictionEventBuilder
-  def initialize(event_syntax_node)
-    @event_syntax_node = event_syntax_node
-  end
+  include EventBuilder
 
   def build
     conviction_event = ConvictionEvent.new(
@@ -19,12 +17,6 @@ class ConvictionEventBuilder
   end
 
   private
-
-  attr_reader :event_syntax_node
-
-  def date
-    Date.strptime(event_syntax_node.date.text_value, '%Y%m%d')
-  end
 
   def case_number
     CaseNumberBuilder.build(event_syntax_node.case_number)

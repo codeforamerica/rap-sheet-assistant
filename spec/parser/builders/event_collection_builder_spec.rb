@@ -2,14 +2,19 @@ require 'spec_helper'
 require 'date'
 require 'rap_sheet_parser'
 
-describe RapSheetPresenter do
+describe EventCollectionBuilder do
   describe '.present' do
-    it 'only returns events with convictions' do
+    it 'returns arrest events and court events with convictions' do
       text = <<~TEXT
         info
         * * * *
-        ARREST
-        blah
+        ARR/DET/CITE:
+        NAM:001
+        19910105 CAPD CONCORD
+        TOC:F
+        CNT:001
+        #65131
+        496.1 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
         - - - -        
         COURT:
         19740102 CASC SAN PRANCISCU rm
@@ -45,32 +50,34 @@ describe RapSheetPresenter do
       TEXT
 
       tree = Parser.new.parse(text)
-      events_with_convictions = described_class.present(tree)
+      events_with_convictions = described_class.build(tree)
 
-      verify_event_looks_like(events_with_convictions[0], {
+      expect(events_with_convictions[0].date).to eq Date.new(1991, 1, 5)
+
+      verify_event_looks_like(events_with_convictions[1], {
         date: Date.new(1982, 9, 15),
         case_number: '456',
         courthouse: 'CAMC L05 ANGELES METRO',
         sentence: '',
       })
-      verify_event_looks_like(events_with_convictions[1], {
+      verify_event_looks_like(events_with_convictions[2], {
         date: Date.new(1994, 11, 20),
         case_number: '612',
         courthouse: 'CASC SAN DIEGO',
         sentence: '12m probation, 45d jail'
       })
 
-      verify_count_looks_like(events_with_convictions[0].counts[0], {
+      verify_count_looks_like(events_with_convictions[1].counts[0], {
         code_section: nil,
         code_section_description: nil,
         severity: nil,
       })
-      verify_count_looks_like(events_with_convictions[0].counts[1], {
+      verify_count_looks_like(events_with_convictions[1].counts[1], {
         code_section: 'PC 4056',
         code_section_description: 'BREAKING AND ENTERING',
         severity: nil,
       })
-      verify_count_looks_like(events_with_convictions[1].counts[0], {
+      verify_count_looks_like(events_with_convictions[2].counts[0], {
         code_section: 'PC 487.2',
         code_section_description: 'GRAND THEFT FROM PERSON',
         severity: 'M',

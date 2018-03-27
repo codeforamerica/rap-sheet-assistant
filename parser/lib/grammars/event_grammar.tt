@@ -2,11 +2,15 @@ grammar EventGrammar
   include CommonGrammar
 
   rule event
-   (court_event / unknown_event)
+   (court_event / arrest_event / unknown_event)
   end
 
   rule court_event
     'COURT' w ':' stuff date wn [.']* wn courthouse wn toc? (!count_identifier .)* counts updates <CourtEvent>
+  end
+
+  rule arrest_event
+    'ARR/DET/CITE' (!date .)* date .* <ArrestEvent>
   end
 
   rule unknown_event

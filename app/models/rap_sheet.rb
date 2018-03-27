@@ -16,7 +16,7 @@ class RapSheet < ApplicationRecord
   def events_with_convictions
     @events_with_convictions ||= begin
       parsed_tree = Parser.new.parse(text)
-      RapSheetPresenter.present(parsed_tree)
+      EventCollectionBuilder.build(parsed_tree).with_convictions
     end
   end
 
