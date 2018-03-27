@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require 'treetop'
+require 'rap_sheet_parser'
 
 require_relative '../../app/domain/prop64_classifier'
 

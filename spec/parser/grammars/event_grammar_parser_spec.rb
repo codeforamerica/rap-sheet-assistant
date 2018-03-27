@@ -1,12 +1,5 @@
 require 'spec_helper'
-require 'treetop'
-
-Treetop.load 'app/parser/common_grammar'
-Treetop.load 'app/parser/event_grammar'
-
-require_relative '../../app/parser/event_syntax_nodes'
-require_relative '../../app/parser/count_syntax_nodes'
-require_relative '../../app/parser/update_syntax_nodes'
+require 'rap_sheet_parser'
 
 RSpec.describe EventGrammarParser do
   describe '#parse' do
@@ -165,6 +158,21 @@ RSpec.describe EventGrammarParser do
       tree = described_class.new.parse(text)
 
       expect(tree.case_number.text_value).to eq('#312145')
+    end
+
+    it 'returns nil case number for an unknown case number' do
+      text = <<~TEXT
+        COURT: NAME7OZ
+        19820915 CAMC L05 ANGELES METRO
+        
+        CNT: 001
+        garbled
+        DISPO:CONVICTED
+      TEXT
+
+      tree = described_class.new.parse(text)
+
+      expect(tree.case_number).to eq nil
     end
 
     it 'parses unknown courthouse with TOC on the same line' do

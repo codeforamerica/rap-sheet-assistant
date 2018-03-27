@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require_relative '../../app/domain/conviction_sentence'
+require 'rap_sheet_parser'
 
 describe ConvictionSentence do
   it 'computes a duration from the sentence string' do

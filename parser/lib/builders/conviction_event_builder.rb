@@ -27,7 +27,7 @@ class ConvictionEventBuilder
   end
 
   def case_number
-    CaseNumberPresenter.present(event_syntax_node.case_number)
+    CaseNumberBuilder.build(event_syntax_node.case_number)
   end
 
   def courthouse

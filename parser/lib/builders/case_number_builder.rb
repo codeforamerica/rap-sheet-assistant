@@ -1,5 +1,5 @@
-class CaseNumberPresenter
-  def self.present(c)
+class CaseNumberBuilder
+  def self.build(c)
     return if c.nil?
     stripped_case_number = c.text_value.delete(' ').delete('.')[1..-1]
     strip_trailing_punctuation(stripped_case_number)

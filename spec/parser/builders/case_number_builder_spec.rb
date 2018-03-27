@@ -1,12 +1,8 @@
 require 'spec_helper'
 
-require 'treetop'
+require 'rap_sheet_parser'
 
-require_relative '../../app/domain/case_number_presenter'
-require_relative '../../app/parser/parser'
-require_relative '../../app/helpers/text_cleaner'
-
-describe CaseNumberPresenter do
+describe CaseNumberBuilder do
   it 'strips whitespace from case numbers' do
     text = <<~TEXT
         info
@@ -21,8 +17,7 @@ describe CaseNumberPresenter do
 
     tree = Parser.new.parse(text)
     case_number_node = tree.cycles[0].events[0].case_number
-
-    expect(described_class.present(case_number_node)).to eq '456'
+    expect(described_class.build(case_number_node)).to eq '456'
   end
 
   it 'strips trailing punctuation from case numbers' do
@@ -40,7 +35,7 @@ describe CaseNumberPresenter do
     tree = Parser.new.parse(text)
     case_number_node = tree.cycles[0].events[0].case_number
 
-    expect(described_class.present(case_number_node)).to eq '456'
+    expect(described_class.build(case_number_node)).to eq '456'
   end
 
   it 'strips periods from case numbers' do
@@ -58,7 +53,7 @@ describe CaseNumberPresenter do
     tree = Parser.new.parse(text)
     case_number_node = tree.cycles[0].events[0].case_number
 
-    expect(described_class.present(case_number_node)).to eq '456'
+    expect(described_class.build(case_number_node)).to eq '456'
   end
 
   it 'returns nil case number for an unknown count one' do
@@ -76,7 +71,7 @@ describe CaseNumberPresenter do
     tree = Parser.new.parse(text)
     case_number_node = tree.cycles[0].events[0].case_number
 
-    expect(described_class.present(case_number_node)).to eq nil
+    expect(described_class.build(case_number_node)).to eq nil
   end
 
   it 'returns nil case number for an unknown case number' do
@@ -95,6 +90,6 @@ describe CaseNumberPresenter do
     tree = Parser.new.parse(text)
     case_number_node = tree.cycles[0].events[0].case_number
 
-    expect(described_class.present(case_number_node)).to eq nil
+    expect(described_class.build(case_number_node)).to eq nil
   end
 end

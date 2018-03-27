@@ -1,7 +1,3 @@
-require_relative './treetop_monkeypatches'
-Treetop.load 'app/parser/count_grammar'
-Treetop.load 'app/parser/update_grammar'
-
 module EventGrammar
   class CourtEvent < Treetop::Runtime::SyntaxNode
     def case_number

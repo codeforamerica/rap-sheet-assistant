@@ -1,3 +1,8 @@
+PATH
+  remote: parser
+  specs:
+    rap_sheet_parser (0.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -331,6 +336,7 @@ DEPENDENCIES
   pg (~> 0.18)
   puma (~> 3.7)
   rails (~> 5.1.4)
+  rap_sheet_parser!
   rspec-rails (~> 3.7)
   rspec_junit_formatter
   rtesseract

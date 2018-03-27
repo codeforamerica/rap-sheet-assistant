@@ -1,16 +1,6 @@
 require 'spec_helper'
-require 'treetop'
 require 'date'
-
-Treetop.load 'app/parser/common_grammar'
-
-require_relative '../../app/parser/parser'
-require_relative '../../app/helpers/text_cleaner'
-require_relative '../../app/domain/conviction_count'
-require_relative '../../app/domain/courthouse_presenter'
-require_relative '../../app/domain/case_number_presenter'
-
-require_relative '../../app/domain/rap_sheet_presenter'
+require 'rap_sheet_parser'
 
 describe RapSheetPresenter do
   describe '.present' do

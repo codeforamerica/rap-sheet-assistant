@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-require 'treetop'
-
-require_relative '../../app/domain/conviction_count'
-require_relative '../../app/parser/parser'
-require_relative '../../app/helpers/text_cleaner'
+require 'rap_sheet_parser'
 
 describe ConvictionCountBuilder do
   let(:event) { { some: 'event' } }

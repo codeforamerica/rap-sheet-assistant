@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-require 'treetop'
-
-require_relative '../../app/domain/courthouse_presenter'
-require_relative '../../app/parser/parser'
-require_relative '../../app/helpers/text_cleaner'
+require 'rap_sheet_parser'
 
 describe CourthousePresenter do
   it 'translates courthouse names to display names' do

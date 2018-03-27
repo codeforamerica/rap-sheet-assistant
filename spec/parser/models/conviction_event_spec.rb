@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rap_sheet_parser'
 
 RSpec.describe ConvictionEvent do
   describe '#severity' do

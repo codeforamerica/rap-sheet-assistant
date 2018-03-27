@@ -1,11 +1,5 @@
 require 'spec_helper'
-require 'treetop'
-
-Treetop.load 'app/parser/common_grammar'
-Treetop.load 'app/parser/rap_sheet_grammar'
-
-require_relative '../../app/parser/rap_sheet_syntax_nodes'
-require_relative '../../app/parser/cycle_syntax_nodes'
+require 'rap_sheet_parser'
 
 RSpec.describe RapSheetGrammarParser do
   describe '#parse' do

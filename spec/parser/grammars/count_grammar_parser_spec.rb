@@ -1,11 +1,5 @@
 require 'spec_helper'
-require 'treetop'
-
-Treetop.load 'app/parser/common_grammar'
-Treetop.load 'app/parser/count_grammar'
-
-require_relative '../../app/parser/event_syntax_nodes'
-require_relative '../../app/parser/count_syntax_nodes'
+require 'rap_sheet_parser'
 
 describe CountGrammarParser do
   describe '#parse' do
