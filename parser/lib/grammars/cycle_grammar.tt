@@ -10,7 +10,11 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-     ( N w [-] [- \t]* N ) / ( N &court_identifier)
+     ( N w dash 2.. w N ) / ( N &court_identifier)
+  end
+
+  rule dash
+    w [-]
   end
 
   rule court_identifier

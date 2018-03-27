@@ -5,7 +5,8 @@ class TextCleaner
     'CONV STATUS:' => [/CONV STATIS./],
     '-' => ['–'],
     'RESTN' => ['RESIN'],
-    'SEN' => ['SÉN']
+    'SEN' => ['SÉN'],
+    'FINE SS' => ['FINESS']
   }.freeze
 
   def self.clean(text)

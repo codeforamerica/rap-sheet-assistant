@@ -89,6 +89,21 @@ RSpec.describe CycleGrammarParser do
       expect(events[0].text_value).to eq 'event one text'
       expect(events[1].text_value).to eq "COURT :\nanother event"
       expect(events[2].text_value).to eq "more events\n"
+      end
+
+    it 'handles stray dashes in event' do
+      text = <<~TEXT
+        event
+        -
+        one text
+        - - -- --
+        another event
+      TEXT
+
+      events = described_class.new.parse(text).events
+      expect(events.length).to eq 2
+      expect(events[0].text_value).to eq "event\n-\none text"
+      expect(events[1].text_value).to eq "another event\n"
     end
   end
 end
