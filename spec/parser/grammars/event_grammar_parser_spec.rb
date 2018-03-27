@@ -3,11 +3,9 @@ require 'rap_sheet_parser'
 
 RSpec.describe EventGrammarParser do
   describe '#parse' do
-    subject { described_class.new.parse(text) }
-
     context 'parsing a court event' do
-      let(:text) {
-        <<~TEXT
+      it 'parses' do
+        text = <<~TEXT
           COURT:
           20040102  CASC SAN FRANCISCO CO fds
 
@@ -25,192 +23,188 @@ RSpec.describe EventGrammarParser do
           CNT: 003
           count 3 text
         TEXT
-      }
 
-      it 'parses a court event' do
-        expect(subject).to be_a(EventGrammar::CourtEvent)
-      end
+        tree = parse(text)
 
-      it 'identifies the date' do
-        expect(subject.date.text_value).to eq('20040102')
-      end
+        expect(tree).to be_a(EventGrammar::CourtEvent)
 
-      it 'identifies the courthouse' do
-        expect(subject.courthouse.text_value).to eq('CASC SAN FRANCISCO')
-      end
+        expect(tree.date.text_value).to eq('20040102')
 
-      it 'identifies the case number' do
-        expect(subject.case_number.text_value).to eq('#346477')
-      end
+        expect(tree.courthouse.text_value).to eq('CASC SAN FRANCISCO')
 
-      it 'identifies count data' do
-        count_1 = subject.counts[0]
+        expect(tree.case_number.text_value).to eq('#346477')
+
+        count_1 = tree.counts[0]
         expect(count_1.disposition).to be_a CountGrammar::Convicted
         expect(count_1.code_section.code.text_value).to eq 'PC'
         expect(count_1.code_section.number.text_value).to eq '496'
         expect(count_1.code_section_description.text_value).to eq "RECEIVE/ETC KNOWN STOLEN PROPERTY\n"
 
-        count_2 = subject.counts[1]
+        count_2 = tree.counts[1]
         expect(count_2.disposition.text_value).to eq('DISPO:DISMISSED')
-        count_3 = subject.counts[2]
+        count_3 = tree.counts[2]
         expect(count_3.disposition.text_value).to eq('')
       end
-    end
 
-    it 'can parse count ranges' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
+      it 'can parse count ranges' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
 
-        CNT: 001-004  #346477
-        blah
-        CNT: 003-011
-        count 3 text
-      TEXT
+          CNT: 001-004  #346477
+          blah
+          CNT: 003-011
+          count 3 text
+        TEXT
 
-      tree = described_class.new.parse(text)
+        tree = parse(text)
 
-      expect(tree.counts[0].text_value).to eq "CNT: 001-004  #346477\nblah\n"
-      expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
-    end
-
-    it 'can parse two digit count' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
-
-        CNT: 01  #346477
-        blah
-        CNT: 02
-        count 2 text
-        CNT: 03-04
-        count 3/4 text
-      TEXT
-
-      tree = described_class.new.parse(text)
-
-      expect(tree.counts[0].text_value).to eq "CNT: 01  #346477\nblah\n"
-      expect(tree.counts[1].text_value).to eq "CNT: 02\ncount 2 text\n"
-      expect(tree.counts[2].text_value).to eq "CNT: 03-04\ncount 3/4 text\n"
-    end
-
-    it 'can parse counts with extra whitespace' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
-        CNT : 003
-        count 3 text
-      TEXT
-
-      tree = described_class.new.parse(text)
-
-      expect(tree.counts[0].text_value).to eq "CNT : 003\ncount 3 text\n"
+        expect(tree.counts[0].text_value).to eq "CNT: 001-004  #346477\nblah\n"
+        expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
       end
 
-    it 'can parse counts with extra dashes' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
-        CNT:0-03
-        count 3 text
-      TEXT
+      it 'can parse two digit count' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
 
-      tree = described_class.new.parse(text)
+          CNT: 01  #346477
+          blah
+          CNT: 02
+          count 2 text
+          CNT: 03-04
+          count 3/4 text
+        TEXT
 
-      expect(tree.counts[0].text_value).to eq "CNT:0-03\ncount 3 text\n"
-    end
+        tree = parse(text)
 
-    it 'can parse court identifier with extra whitespace' do
-      text = <<~TEXT
-        COURT :
-        20040102  SAN FRANCISCO
-        CNT : 003
-        count 3 text
-      TEXT
+        expect(tree.counts[0].text_value).to eq "CNT: 01  #346477\nblah\n"
+        expect(tree.counts[1].text_value).to eq "CNT: 02\ncount 2 text\n"
+        expect(tree.counts[2].text_value).to eq "CNT: 03-04\ncount 3/4 text\n"
+      end
 
-      subject = described_class.new.parse(text)
+      it 'can parse counts with extra whitespace' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
+          CNT : 003
+          count 3 text
+        TEXT
 
-      expect(subject).to be_a(EventGrammar::CourtEvent)
-    end
+        tree = parse(text)
 
-    it 'can parse case number even if first CNT number is not 001' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
-        CNT : 003 #312145
-        count 3 text
-      TEXT
+        expect(tree.counts[0].text_value).to eq "CNT : 003\ncount 3 text\n"
+      end
 
-      tree = described_class.new.parse(text)
+      it 'can parse counts with extra dashes' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
+          CNT:0-03
+          count 3 text
+        TEXT
 
-      expect(tree.case_number.text_value).to eq('#312145')
-    end
+        tree = parse(text)
 
-    it 'can parse case number even with stray punctuation and newlines' do
-      text = <<~TEXT
-        COURT:
-        20040102  SAN FRANCISCO
-        CNT :003.
-         . #312145
-        count 3 text
-      TEXT
+        expect(tree.counts[0].text_value).to eq "CNT:0-03\ncount 3 text\n"
+      end
 
-      tree = described_class.new.parse(text)
+      it 'can parse court identifier with extra whitespace' do
+        text = <<~TEXT
+          COURT :
+          20040102  SAN FRANCISCO
+          CNT : 003
+          count 3 text
+        TEXT
 
-      expect(tree.case_number.text_value).to eq('#312145')
-    end
+        subject = parse(text)
 
-    it 'returns nil case number for an unknown case number' do
-      text = <<~TEXT
-        COURT: NAME7OZ
-        19820915 CAMC L05 ANGELES METRO
-        
-        CNT: 001
-        garbled
-        DISPO:CONVICTED
-      TEXT
+        expect(subject).to be_a(EventGrammar::CourtEvent)
+      end
 
-      tree = described_class.new.parse(text)
+      it 'can parse case number even if first CNT number is not 001' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
+          CNT : 003 #312145
+          count 3 text
+        TEXT
 
-      expect(tree.case_number).to eq nil
-    end
+        tree = parse(text)
 
-    it 'parses unknown courthouse with TOC on the same line' do
-      text = <<~TEXT
-        COURT:
-        20040102  NEW COURTHOUSE TOC:M
-        CNT :003.
-         . #312145
-        count 3 text
-      TEXT
+        expect(tree.case_number.text_value).to eq('#312145')
+      end
 
-      tree = described_class.new.parse(text)
+      it 'can parse case number even with stray punctuation and newlines' do
+        text = <<~TEXT
+          COURT:
+          20040102  SAN FRANCISCO
+          CNT :003.
+           . #312145
+          count 3 text
+        TEXT
 
-      expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
-    end
+        tree = parse(text)
 
-    it 'sets sentence correctly if sentence modified' do
-      text = <<~TEXT
-        COURT:
-        20040102  CASC SAN FRANCISCO CO
+        expect(tree.case_number.text_value).to eq('#312145')
+      end
 
-        CNT: 001 #346477
-          496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
-        *DISPO:CONVICTED
-        CONV STATUS:MISDEMEANOR
-        SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+      it 'returns nil case number for an unknown case number' do
+        text = <<~TEXT
+          COURT: NAME7OZ
+          19820915 CAMC L05 ANGELES METRO
 
-        20040202
-          DISPO:SOMETHING ELSE
-     
-        20040202
-          DISPO:SENTENCE MODIFIED
-          SEN: 001 MONTHS JAIL
-      TEXT
+          CNT: 001
+          garbled
+          DISPO:CONVICTED
+        TEXT
 
-      tree = described_class.new.parse(text)
+        tree = parse(text)
 
-      expect(tree.sentence.text_value).to eq('001 MONTHS JAIL')
+        expect(tree.case_number).to eq nil
+      end
+
+      it 'parses unknown courthouse with TOC on the same line' do
+        text = <<~TEXT
+          COURT:
+          20040102  NEW COURTHOUSE TOC:M
+          CNT :003.
+           . #312145
+          count 3 text
+        TEXT
+
+        tree = parse(text)
+
+        expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
+      end
+
+      it 'sets sentence correctly if sentence modified' do
+        text = <<~TEXT
+          COURT:
+          20040102  CASC SAN FRANCISCO CO
+
+          CNT: 001 #346477
+            496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+          *DISPO:CONVICTED
+          CONV STATUS:MISDEMEANOR
+          SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+
+          20040202
+            DISPO:SOMETHING ELSE
+
+          20040202
+            DISPO:SENTENCE MODIFIED
+            SEN: 001 MONTHS JAIL
+        TEXT
+
+        tree = parse(text)
+
+        expect(tree.sentence.text_value).to eq('001 MONTHS JAIL')
+      end
     end
   end
+end
+
+def parse(text)
+  described_class.new.parse(text)
 end
