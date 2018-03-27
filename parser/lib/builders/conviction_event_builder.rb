@@ -35,7 +35,8 @@ class ConvictionEventBuilder
   end
 
   def sentence
-    sentence_string = event_syntax_node.sentence.try(:text_value)
-    ConvictionSentence.new(sentence_string) if sentence_string
+    if event_syntax_node.sentence
+      ConvictionSentence.new(event_syntax_node.sentence.text_value)
+    end
   end
 end
