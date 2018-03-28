@@ -169,7 +169,10 @@ def fog_params
 end
 
 def sorted(convictions)
-  convictions.sort_by { |c| [c[:date], c[:case_number]] }
+  convictions.sort_by do |c|
+    date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
+    [date, c[:case_number]]
+  end
 end
 
 def diff(*args)
