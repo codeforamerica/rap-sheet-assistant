@@ -13,15 +13,8 @@ class RapSheet < ApplicationRecord
     rap_sheet_pages.map(&:text).join
   end
 
-  def events_with_convictions
-    @events_with_convictions ||= begin
-      parsed_tree = Parser.new.parse(text)
-      EventCollectionBuilder.build(parsed_tree).with_convictions
-    end
-  end
-
   def conviction_counts
-    events_with_convictions.conviction_counts(user)
+    events.with_convictions.conviction_counts(user)
   end
 
   def first_missing_page_number
@@ -30,5 +23,12 @@ class RapSheet < ApplicationRecord
 
   def all_pages_uploaded?
     rap_sheet_pages.length == number_of_pages
+  end
+
+  def events
+    @events ||= begin
+      parsed_tree = Parser.new.parse(text)
+      EventCollectionBuilder.build(parsed_tree)
+    end
   end
 end

@@ -11,6 +11,9 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       actual_convictions: 0,
       detected_convictions: 0,
       correctly_detected_convictions: 0,
+      actual_arrests: 0,
+      detected_arrests: 0,
+      correctly_detected_arrests: 0,
     }
 
     file_names = directory.files.map(&:key)
@@ -25,47 +28,56 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       puts "------------- For #{rap_sheet_prefix} -------------"
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
 
-      expected_convictions = expected_values(rap_sheet_prefix)
-      detected_convictions = rap_sheet.events_with_convictions.map do |event|
-        {
-          date: event.date,
-          case_number: event.case_number,
-          courthouse: event.courthouse.upcase,
-          sentence: event.sentence.to_s,
-          counts: event.counts.map do |count|
-            {
-              'code_section' => count.code_section&.upcase,
-              'severity' => count.severity&.first,
-            }
-          end
-        }
-      end
 
-      puts RSpec::Support::Differ.new(color: true).diff(
-        sorted(detected_convictions),
-        sorted(expected_convictions)
-      )
+      detected_convictions = detected_convictions(rap_sheet)
+      expected_convictions = sorted(expected_values(rap_sheet_prefix))
+      puts 'Convictions Diff:'
+      puts diff(detected_convictions, expected_convictions)
 
-      matches = detected_convictions.select do |c|
+      detected_arrests = detected_arrests(rap_sheet)
+      expected_arrests = sorted(expected_arrests(rap_sheet_prefix))
+      puts 'Arrests Diff:'
+      puts diff(detected_arrests, expected_arrests)
+
+      arrests_matches = detected_arrests.select do |c|
+        expected_arrests.include?(c)
+      end.length
+
+      convictions_matches = detected_convictions.select do |c|
         expected_convictions.include?(c)
       end.length
 
-      actual_convictions = expected_convictions.length
-      detected_convictions = detected_convictions.length
+      actual_convictions_count = expected_convictions.length
+      detected_convictions_count = detected_convictions.length
 
-      summary_stats[:actual_convictions] += actual_convictions
-      summary_stats[:detected_convictions] += detected_convictions
-      summary_stats[:correctly_detected_convictions] += matches
+      actual_arrests_count = expected_arrests.length
+      detected_arrests_count = detected_arrests.length
 
-      puts "Detected Convictions: #{detected_convictions}"
-      puts "Correctly detected #{matches} out of #{actual_convictions} convictions"
-      puts "Accuracy: #{compute_accuracy(matches, actual_convictions)}%"
+      summary_stats[:actual_convictions] += actual_convictions_count
+      summary_stats[:detected_convictions] += detected_convictions_count
+      summary_stats[:correctly_detected_convictions] += convictions_matches
+
+      summary_stats[:actual_arrests] += actual_arrests_count
+      summary_stats[:detected_arrests] += detected_arrests_count
+      summary_stats[:correctly_detected_arrests] += arrests_matches
+
+      puts "Detected Convictions: #{detected_convictions_count}"
+      puts "Correctly detected #{convictions_matches} out of #{actual_convictions_count} convictions"
+      puts "Accuracy: #{compute_accuracy(convictions_matches, actual_convictions_count)}%"
+
+      puts "Detected Arrests: #{detected_arrests_count}"
+      puts "Correctly detected #{arrests_matches} out of #{actual_arrests_count} arrests"
+      puts "Accuracy: #{compute_accuracy(arrests_matches, actual_arrests_count)}%"
     end
 
     puts '------------- Summary -------------'
     puts "Detected Convictions: #{summary_stats[:detected_convictions]}"
     puts "Correctly detected #{summary_stats[:correctly_detected_convictions]} out of #{summary_stats[:actual_convictions]} convictions"
-    accuracy = compute_accuracy(summary_stats[:correctly_detected_convictions], summary_stats[:actual_convictions])
+    puts "Correctly detected #{summary_stats[:correctly_detected_arrests]} out of #{summary_stats[:actual_arrests]} arrests"
+    accuracy = compute_accuracy(
+      summary_stats[:correctly_detected_convictions] + summary_stats[:correctly_detected_arrests],
+      summary_stats[:actual_convictions] + summary_stats[:actual_arrests]
+    )
     puts "Accuracy: #{accuracy}%"
 
     expect(accuracy).to be > 75
@@ -87,6 +99,19 @@ def expected_values(rap_sheet_prefix)
           'severity' => count[:severity]
         }
       end
+    }
+  end
+end
+
+def expected_arrests(rap_sheet_prefix)
+  values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
+  expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:arrests]
+  expected_convictions.map do |c|
+
+    date = c[:date] ? Date.strptime(c[:date], '%m/%d/%Y') : nil
+
+    {
+      date: date,
     }
   end
 end
@@ -145,4 +170,33 @@ end
 
 def sorted(convictions)
   convictions.sort_by { |c| [c[:date], c[:case_number]] }
+end
+
+def diff(*args)
+  RSpec::Support::Differ.new(color: true).diff(*args)
+end
+
+def detected_convictions(rap_sheet)
+  sorted(rap_sheet.events.with_convictions.map do |event|
+    {
+      date: event.date,
+      case_number: event.case_number,
+      courthouse: event.courthouse.upcase,
+      sentence: event.sentence.to_s,
+      counts: event.counts.map do |count|
+        {
+          'code_section' => count.code_section&.upcase,
+          'severity' => count.severity&.first,
+        }
+      end
+    }
+  end)
+end
+
+def detected_arrests(rap_sheet)
+  sorted(rap_sheet.events.arrests.map do |event|
+    {
+      date: event.date
+    }
+  end)
 end

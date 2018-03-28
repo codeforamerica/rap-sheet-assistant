@@ -5,4 +5,10 @@ class EventCollection < Array
     end
     ConvictionEventCollection.new(conviction_events)
   end
+
+  def arrests
+    self.select do |e|
+      e.is_a? ArrestEvent
+    end
+  end
 end

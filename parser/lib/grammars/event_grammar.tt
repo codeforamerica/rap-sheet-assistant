@@ -10,7 +10,11 @@ grammar EventGrammar
   end
 
   rule arrest_event
-    'ARR/DET/CITE' (!date .)* date .* <ArrestEvent>
+    (!arrest_header .)* arrest_header (!date .)* date .* <ArrestEvent>
+  end
+
+  rule arrest_header
+    'ARR' w '/' w 'DET' w '/' w 'CITE'
   end
 
   rule unknown_event

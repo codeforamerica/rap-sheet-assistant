@@ -219,6 +219,37 @@ RSpec.describe EventGrammarParser do
         expect(subject).to be_a(EventGrammar::ArrestEvent)
         expect(subject.date.text_value).to eq '19910105'
       end
+
+      it 'handles content before the arrest header' do
+        text = <<~TEXT
+          NAM:001
+          ARR/DET/CITE:
+          19910105 CAPD CONCORD
+          TOC:F
+          CNT:001
+          #65131
+          496.1 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::ArrestEvent)
+        expect(subject.date.text_value).to eq '19910105'
+      end
+
+      it 'handles whitespace in arrest header' do
+        text = <<~TEXT
+          ARR / DET / CITE:
+          19910105 CAPD CONCORD
+          TOC:F
+          CNT:001
+          #65131
+          496.1 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::ArrestEvent)
+        expect(subject.date.text_value).to eq '19910105'
+      end
     end
   end
 end
