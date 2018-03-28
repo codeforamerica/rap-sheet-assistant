@@ -34,4 +34,16 @@ grammar CommonGrammar
   rule to_eol
     (!N .)* N
   end
+
+  rule event_identifier
+    court_identifier / arrest_identifier
+  end
+
+  rule court_identifier
+    'COURT' w ':'
+  end
+
+  rule arrest_identifier
+    'ARR' w '/' w 'DET' w '/' w 'CITE'
+  end
 end

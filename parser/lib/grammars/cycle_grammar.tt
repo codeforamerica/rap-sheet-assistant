@@ -10,14 +10,10 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-     ( N w dash 2.. w N ) / ( N &court_identifier)
+     ( N w dash 2.. w N ) / ( N &event_identifier)
   end
 
   rule dash
     w [-]
-  end
-
-  rule court_identifier
-    'COURT' w ':'
   end
 end

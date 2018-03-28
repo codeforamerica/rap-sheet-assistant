@@ -76,6 +76,25 @@ RSpec.describe CycleGrammarParser do
       end
     end
 
+    context 'when court event has missing event delimiter' do
+      let(:text) {
+        <<~TEXT
+          event one text
+          ARR/DET/CITE:
+          another event
+          --- - ---
+          more events
+        TEXT
+      }
+
+      it 'parses many events' do
+        events = subject.events
+        expect(events[0].text_value).to eq 'event one text'
+        expect(events[1].text_value).to eq "ARR/DET/CITE:\nanother event"
+        expect(events[2].text_value).to eq "more events\n"
+      end
+    end
+
     it 'handles when court event has extra whitespace' do
       text = <<~TEXT
         event one text
@@ -89,7 +108,7 @@ RSpec.describe CycleGrammarParser do
       expect(events[0].text_value).to eq 'event one text'
       expect(events[1].text_value).to eq "COURT :\nanother event"
       expect(events[2].text_value).to eq "more events\n"
-      end
+    end
 
     it 'handles stray dashes in event' do
       text = <<~TEXT
