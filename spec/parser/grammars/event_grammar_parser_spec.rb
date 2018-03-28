@@ -236,9 +236,9 @@ RSpec.describe EventGrammarParser do
         expect(subject.date.text_value).to eq '19910105'
       end
 
-      it 'handles whitespace in arrest header' do
+      it 'handles whitespace and stray punctuation in arrest header' do
         text = <<~TEXT
-          ARR / DET / CITE:
+          ARR / DET. / CITE:
           19910105 CAPD CONCORD
           TOC:F
           CNT:001

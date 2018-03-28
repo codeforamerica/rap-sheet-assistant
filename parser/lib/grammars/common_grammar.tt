@@ -44,6 +44,6 @@ grammar CommonGrammar
   end
 
   rule arrest_identifier
-    'ARR' w '/' w 'DET' w '/' w 'CITE'
+    'ARR' stray_punctuation '/' stray_punctuation 'DET' stray_punctuation '/' stray_punctuation 'CITE'
   end
 end

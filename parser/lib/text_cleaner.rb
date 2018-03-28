@@ -7,7 +7,8 @@ class TextCleaner
     'RESTN' => ['RESIN'],
     'E' => ['É'],
     'C' => ['Ç'],
-    'FINE SS' => ['FINESS']
+    'FINE SS' => ['FINESS'],
+    'ARR/DET/CITE' => ['ARR/PET/CITE']
   }.freeze
 
   def self.clean(text)
