@@ -1,11 +1,12 @@
 class TextCleaner
   SUBSTITUTION_PATTERNS = {
-    'CNT:' => [/[Ç]NT:/, /CN[ÍI]:/],
+    'CNT:' => [/CN[ÍI]:/],
     'INFRACTION' => ['TNFRACTION'],
     'CONV STATUS:' => [/CONV STATIS./],
     '-' => ['–'],
     'RESTN' => ['RESIN'],
-    'SEN' => ['SÉN'],
+    'E' => ['É'],
+    'C' => ['Ç'],
     'FINE SS' => ['FINESS']
   }.freeze
 
