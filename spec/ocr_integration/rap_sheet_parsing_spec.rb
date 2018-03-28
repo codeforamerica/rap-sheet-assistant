@@ -107,7 +107,6 @@ def expected_arrests(rap_sheet_prefix)
   values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
   expected_convictions = JSON.parse(values_file.body, symbolize_names: true)[:arrests]
   expected_convictions.map do |c|
-
     date = c[:date] ? Date.strptime(c[:date], '%m/%d/%Y') : nil
 
     {
@@ -168,8 +167,8 @@ def fog_params
   end
 end
 
-def sorted(convictions)
-  convictions.sort_by do |c|
+def sorted(items)
+  items.sort_by do |c|
     date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
     [date, c[:case_number]]
   end
