@@ -2,7 +2,7 @@ grammar EventGrammar
   include CommonGrammar
 
   rule event
-   (court_event / arrest_event / unknown_event)
+   (court_event / arrest_event / custody_event / unknown_event)
   end
 
   rule court_event
@@ -11,6 +11,10 @@ grammar EventGrammar
 
   rule arrest_event
     (!arrest_identifier .)* arrest_identifier (!date .)* date .* <ArrestEvent>
+  end
+
+  rule custody_event
+    (!custody_identifier .)* custody_identifier (!date .)* date .* <CustodyEvent>
   end
 
   rule unknown_event

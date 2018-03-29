@@ -11,6 +11,8 @@ class EventCollectionBuilder
         ConvictionEventBuilder.new(e).build
       elsif e.is_a? EventGrammar::ArrestEvent
         ArrestEventBuilder.new(e).build
+      elsif e.is_a? EventGrammar::CustodyEvent
+        CustodyEventBuilder.new(e).build
       end
     end.compact
 

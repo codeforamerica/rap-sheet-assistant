@@ -11,4 +11,10 @@ class EventCollection < Array
       e.is_a? ArrestEvent
     end
   end
+
+  def custody_events
+    self.select do |e|
+      e.is_a? CustodyEvent
+    end
+  end
 end

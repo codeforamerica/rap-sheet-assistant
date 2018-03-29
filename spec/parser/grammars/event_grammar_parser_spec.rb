@@ -251,6 +251,52 @@ RSpec.describe EventGrammarParser do
         expect(subject.date.text_value).to eq '19910105'
       end
     end
+
+    context 'parsing a custody event' do
+      it 'parses' do
+        text = <<~TEXT
+          CUSTODY:JAIL
+          NAM:001
+          20120503 CASO MARTINEZ
+          CNT:001 #Cc12EA868A-070KLK602
+          459 PC-BURGLARY
+          TOC:F
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::CustodyEvent)
+        expect(subject.date.text_value).to eq '20120503'
+      end
+
+      it 'handles content before the custody header' do
+        text = <<~TEXT
+          NAM:001
+          CUSTODY:JAIL
+          20120503 CASO MARTINEZ
+          CNT:001 #Cc12EA868A-070KLK602
+          459 PC-BURGLARY
+          TOC:F
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::CustodyEvent)
+        expect(subject.date.text_value).to eq '20120503'
+      end
+
+      it 'handles whitespace and stray punctuation in the header' do
+        text = <<~TEXT
+           . CUSTODY* *:JAIL
+          20120503 CASO MARTINEZ
+          CNT:001 #Cc12EA868A-070KLK602
+          459 PC-BURGLARY
+          TOC:F
+        TEXT
+
+        subject = parse(text)
+        expect(subject).to be_a(EventGrammar::CustodyEvent)
+        expect(subject.date.text_value).to eq '20120503'
+      end
+    end
   end
 end
 

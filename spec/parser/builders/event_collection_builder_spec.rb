@@ -4,7 +4,7 @@ require 'rap_sheet_parser'
 
 describe EventCollectionBuilder do
   describe '.present' do
-    it 'returns arrest events and court events with convictions' do
+    it 'returns arrest, custody, and court events with convictions' do
       text = <<~TEXT
         info
         * * * *
@@ -46,6 +46,13 @@ describe EventCollectionBuilder do
         DISPO:CONVICTED
         CONV STATUS:MISDEMEANOR
         SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
+        * * * *
+        CUSTODY:JAIL
+        NAM:001
+        20120503 CASO MARTINEZ
+        CNT:001 #Cc12EA868A-070KLK602
+        459 PC-BURGLARY
+        TOC:F
         * * * END OF MESSAGE * * *
       TEXT
 
@@ -66,6 +73,8 @@ describe EventCollectionBuilder do
         courthouse: 'CASC SAN DIEGO',
         sentence: '12m probation, 45d jail'
       })
+
+      expect(events[3].date).to eq Date.new(2012, 5, 3)
 
       verify_count_looks_like(events[1].counts[0], {
         code_section: nil,

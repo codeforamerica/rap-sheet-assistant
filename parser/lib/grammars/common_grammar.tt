@@ -36,7 +36,7 @@ grammar CommonGrammar
   end
 
   rule event_identifier
-    court_identifier / arrest_identifier
+    court_identifier / arrest_identifier / custody_identifier
   end
 
   rule court_identifier
@@ -45,5 +45,9 @@ grammar CommonGrammar
 
   rule arrest_identifier
     'ARR' stray_punctuation '/' stray_punctuation 'DET' stray_punctuation '/' stray_punctuation 'CITE'
+  end
+
+  rule custody_identifier
+    stray_punctuation 'CUSTODY'
   end
 end
