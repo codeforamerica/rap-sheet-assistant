@@ -9,11 +9,7 @@ describe PC1203Classifier do
     instance_double(ConvictionEvent, sentence: sentence)
   end
 
-  let(:conviction_count) do
-    double(event: conviction_event)
-  end
-
-  subject { described_class.new(user, conviction_count) }
+  subject { described_class.new(user, conviction_event) }
 
   describe '#potentially_eligible?' do
     context "when the conviction's sentence had prison" do

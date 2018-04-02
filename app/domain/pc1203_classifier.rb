@@ -1,7 +1,7 @@
 class PC1203Classifier
-  def initialize(user, count)
+  def initialize(user, event)
     @user = user
-    @event = count.event
+    @event = event
   end
 
   def potentially_eligible?

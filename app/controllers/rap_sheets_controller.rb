@@ -16,6 +16,7 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
+    @conviction_counts = @rap_sheet.events.with_convictions.conviction_counts
   end
 
   def create
@@ -40,8 +41,12 @@ class RapSheetsController < ApplicationController
 
   def details
     @rap_sheet = RapSheet.find(params[:id])
+    eligibility = EligibilityDeterminer.new(@rap_sheet.user)
 
-    unless @rap_sheet.conviction_counts.dismissible.present?
+    if eligibility.eligible?
+      @eligible_events = eligibility.eligible_events_with_counts
+      @eligible_counts = eligibility.all_eligible_counts
+    else
       redirect_to ineligible_rap_sheet_path(@rap_sheet)
     end
   end
@@ -73,14 +78,14 @@ class RapSheetsController < ApplicationController
   private
 
   def after_show_path
-    return ineligible_rap_sheet_path(@rap_sheet) if @rap_sheet.conviction_counts.potentially_dismissible.length == 0
+    eligibility = EligibilityDeterminer.new(@rap_sheet.user)
 
-    if @rap_sheet.conviction_counts.potentially_dismissible.length > @rap_sheet.conviction_counts.potentially_dismissible_by_strategy(Prop64Classifier).length
+    if !eligibility.potentially_eligible?
+      return ineligible_rap_sheet_path(@rap_sheet)
+    elsif eligibility.needs_1203_info?
       edit_user_case_information_path(@rap_sheet.user)
-    elsif @rap_sheet.conviction_counts.dismissible.present?
-      details_rap_sheet_path(@rap_sheet)
     else
-      ineligible_rap_sheet_path(@rap_sheet)
+      details_rap_sheet_path(@rap_sheet)
     end
   end
   helper_method :after_show_path

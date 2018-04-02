@@ -11,26 +11,36 @@ describe Prop64Classifier do
   let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
-    instance_double(ConvictionEvent, date: date, sentence: ConvictionSentence.new(sentence))
+    instance_double(ConvictionEvent, date: date, sentence: ConvictionSentence.new(sentence), counts: [conviction_count])
   end
 
   let(:conviction_count) do
-    instance_double(ConvictionCount, code_section: code_section, event: conviction_event)
+    instance_double(ConvictionCount, code_section: code_section)
   end
+
+  subject { described_class.new(user, conviction_event) }
 
   describe '#eligible?' do
     context 'when the count is an eligible code' do
       let(:code_section) { 'HS 11359' }
       it 'returns true' do
-        expect(described_class.new(user, conviction_count)).to be_eligible
+        expect(subject).to be_eligible
       end
     end
 
     context 'when the count is an ineligible code' do
       let(:code_section) { 'HS 12345' }
       it 'returns true' do
-        expect(described_class.new(user, conviction_count)).not_to be_eligible
+        expect(subject).not_to be_eligible
       end
+    end
+  end
+
+  describe '#eligible_counts' do
+    let(:code_section) { 'HS 11359' }
+
+    it 'returns eligible count' do
+      expect(subject.eligible_counts).to eq [conviction_count]
     end
   end
 
@@ -40,7 +50,7 @@ describe Prop64Classifier do
       let(:sentence) { '1y jail' }
 
       it 'returns resentencing' do
-        expect(described_class.new(user, conviction_count).action).to eq 'Resentencing'
+        expect(subject.action).to eq 'Resentencing'
       end
     end
 
@@ -49,7 +59,7 @@ describe Prop64Classifier do
       let(:sentence) { '1m probation' }
 
       it 'returns redesignation' do
-        expect(described_class.new(user, conviction_count).action).to eq 'Redesignation'
+        expect(subject.action).to eq 'Redesignation'
       end
     end
   end

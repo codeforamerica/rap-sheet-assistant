@@ -1,19 +1,28 @@
 class Prop64Classifier
-  def initialize(user, count)
-    @user = user
-    @count = count
-  end
-
-  def potentially_eligible?
-    dismissible_codes.include?(count.code_section)
+  def initialize(user, event)
+    @event = event
   end
 
   def eligible?
-    potentially_eligible?
+    !eligible_counts.empty?
+  end
+
+  def potentially_eligible?
+    eligible?
+  end
+
+  def eligible_counts
+    event.counts.select do |c|
+      dismissible_codes.include?(c.code_section)
+    end
+  end
+
+  def potentially_eligible_counts
+    eligible_counts
   end
 
   def action
-    end_of_sentence = count.event.date + count.event.sentence.total_duration
+    end_of_sentence = event.date + event.sentence.total_duration
 
     if end_of_sentence > Date.today
       'Resentencing'
@@ -24,7 +33,7 @@ class Prop64Classifier
 
   private
 
-  attr_reader :count
+  attr_reader :event
 
   def dismissible_codes
     [

@@ -1,15 +1,15 @@
 <div class="container">
-  <% if @rap_sheet.conviction_counts.length > 0 %>
-    <h1 class="mt-5">We found <mark><%= pluralize(@rap_sheet.conviction_counts.length, 'conviction') %></mark> on your record.</h1>
+  <% if @conviction_counts.length > 0 %>
+    <h1 class="mt-5">We found <mark><%= pluralize(@conviction_counts.length, 'conviction') %></mark> on your record.</h1>
     <ul>
-      <% if @rap_sheet.conviction_counts.severity_felony.count > 0 %>
-        <li><%= pluralize(@rap_sheet.conviction_counts.severity_felony.count, 'Felony') %></li>
+      <% if @conviction_counts.severity_felony.count > 0 %>
+        <li><%= pluralize(@conviction_counts.severity_felony.count, 'Felony') %></li>
       <% end %>
-      <% if @rap_sheet.conviction_counts.severity_misdemeanor.count > 0 %>
-        <li><%= pluralize(@rap_sheet.conviction_counts.severity_misdemeanor.count, 'Misdemeanor') %></li>
+      <% if @conviction_counts.severity_misdemeanor.count > 0 %>
+        <li><%= pluralize(@conviction_counts.severity_misdemeanor.count, 'Misdemeanor') %></li>
       <% end %>
-      <% if @rap_sheet.conviction_counts.severity_unknown.count > 0 %>
-        <li><%= pluralize(@rap_sheet.conviction_counts.severity_unknown.count, 'Unknown') %></li>
+      <% if @conviction_counts.severity_unknown.count > 0 %>
+        <li><%= pluralize(@conviction_counts.severity_unknown.count, 'Unknown') %></li>
       <% end %>
     </ul>
 

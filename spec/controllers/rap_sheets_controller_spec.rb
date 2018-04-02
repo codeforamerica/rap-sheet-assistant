@@ -74,7 +74,7 @@ RSpec.describe RapSheetsController, type: :controller do
     end
 
     describe 'the "Next" link' do
-      context 'when there are only prop64/prop47 convictions' do
+      context 'when there are only prop64 convictions' do
         let(:text) { single_conviction_rap_sheet('11357 HS-POSSESS MARIJUANA') }
 
         it 'goes to the detail page' do

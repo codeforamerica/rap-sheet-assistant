@@ -13,10 +13,6 @@ class RapSheet < ApplicationRecord
     rap_sheet_pages.map(&:text).join
   end
 
-  def conviction_counts
-    events.with_convictions.conviction_counts(user)
-  end
-
   def first_missing_page_number
     ((1..number_of_pages).to_a - rap_sheet_pages.pluck(:page_number)).first
   end

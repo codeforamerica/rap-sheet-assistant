@@ -1,9 +1,10 @@
 class Prop64PetitionCreator
   include PetitionCreator
 
-  def initialize(rap_sheet, conviction_event)
+  def initialize(rap_sheet, conviction_event, eligible_counts)
     @rap_sheet = rap_sheet
     @conviction_event = conviction_event
+    @eligible_counts = eligible_counts
   end
 
   def create_petition
@@ -38,10 +39,10 @@ class Prop64PetitionCreator
 
   private
 
-  attr_reader :rap_sheet, :conviction_event
+  attr_reader :rap_sheet, :conviction_event, :eligible_counts
 
   def code_sections
-    conviction_event.counts.map(&:code_section)
+    eligible_counts.map(&:code_section)
   end
 
   def resentencing?

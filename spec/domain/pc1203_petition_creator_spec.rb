@@ -36,7 +36,7 @@ RSpec.describe PC1203PetitionCreator do
       ),
     ]
 
-    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_counts).create_petition
+    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_event, conviction_counts).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
@@ -96,7 +96,7 @@ RSpec.describe PC1203PetitionCreator do
       )
     ]
 
-    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_counts).create_petition
+    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_event, conviction_counts).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Code1_ft[0]' => 'PC',
       'topmostSubform[0].Page1[0].Section1_ft[0]' => '107',
