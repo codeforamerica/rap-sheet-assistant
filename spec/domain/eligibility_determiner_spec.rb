@@ -17,11 +17,11 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr probation'),
+            sentence: ConvictionSentence.new(probation: 1.year),
             counts: [prop64_eligible_count_1, pc1203_eligible_count]
           ),
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr prison'),
+            sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
           )
         ]
@@ -47,11 +47,11 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr probation'),
+            sentence: ConvictionSentence.new(probation: 1.year),
             counts: [prop64_eligible_count_1, pc1203_eligible_count]
           ),
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr prison'),
+            sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
           )
         ]
@@ -75,11 +75,11 @@ describe EligibilityDeterminer do
       )
 
       event_1 = build_conviction_event(
-        sentence: ConvictionSentence.new('1yr probation'),
+        sentence: ConvictionSentence.new(probation: 1.year),
         counts: [prop64_eligible_count_1, pc1203_eligible_count]
       )
       event_2 = build_conviction_event(
-        sentence: ConvictionSentence.new('1yr prison'),
+        sentence: ConvictionSentence.new(prison: 1.year),
         counts: [prop64_eligible_count_2]
       )
       events = EventCollection.new([event_1, event_2])
@@ -116,7 +116,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr probation'),
+            sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
         ]
@@ -139,7 +139,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr probation'),
+            sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
         ]
@@ -166,7 +166,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr prison'),
+            sentence: ConvictionSentence.new(prison: 1.year),
             counts: [pc1203_eligible_count]
           )
         ]
@@ -186,7 +186,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr probation'),
+            sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
         ]
@@ -210,7 +210,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new(
         [
           build_conviction_event(
-            sentence: ConvictionSentence.new('1yr prison'),
+            sentence: ConvictionSentence.new(prison: 1.year),
             counts: [pc1203_eligible_count]
           )
         ]

@@ -18,7 +18,7 @@ RSpec.describe PC1203PetitionCreator do
   let(:rap_sheet) { FactoryBot.create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
-    sentence = instance_double(ConvictionSentence, had_probation?: false)
+    sentence = ConvictionSentence.new(probation: nil)
     conviction_event = instance_double(
       ConvictionEvent,
       case_number: '#ABCDE',
@@ -56,7 +56,7 @@ RSpec.describe PC1203PetitionCreator do
   end
 
   it 'fills out the offenses table with data from each count' do
-    sentence = instance_double(ConvictionSentence, had_probation?: false)
+    sentence = ConvictionSentence.new(probation: nil)
     conviction_event = instance_double(
       ConvictionEvent,
       case_number: '#ABCDE',

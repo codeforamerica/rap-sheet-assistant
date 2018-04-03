@@ -2,8 +2,6 @@ require 'spec_helper'
 
 require 'rap_sheet_parser'
 
-require_relative '../../app/domain/prop64_classifier'
-
 describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
@@ -11,7 +9,7 @@ describe Prop64Classifier do
   let(:user) { FactoryBot.build(:user) }
 
   let(:conviction_event) do
-    instance_double(ConvictionEvent, date: date, sentence: ConvictionSentence.new(sentence), counts: [conviction_count])
+    instance_double(ConvictionEvent, date: date, sentence: sentence, counts: [conviction_count])
   end
 
   let(:conviction_count) do
@@ -47,7 +45,7 @@ describe Prop64Classifier do
   describe '#action' do
     context 'it is eligible for resentencing' do
       let(:date) { 2.months.ago }
-      let(:sentence) { '1y jail' }
+      let(:sentence) { ConvictionSentence.new(jail: 1.year) }
 
       it 'returns resentencing' do
         expect(subject.action).to eq 'Resentencing'
@@ -56,7 +54,7 @@ describe Prop64Classifier do
 
     context 'it is eligible for redesignation' do
       let(:date) { 2.years.ago }
-      let(:sentence) { '1m probation' }
+      let(:sentence) { ConvictionSentence.new(probation: 1.month) }
 
       it 'returns redesignation' do
         expect(subject.action).to eq 'Redesignation'

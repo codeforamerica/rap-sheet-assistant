@@ -7,7 +7,7 @@ class PC1203Classifier
   def potentially_eligible?
     return false unless event.sentence
 
-    !event.sentence.had_prison?
+    !event.sentence.prison
   end
 
   def eligible?
@@ -19,7 +19,7 @@ class PC1203Classifier
   end
 
   def remedy
-    if event.sentence.had_probation?
+    if event.sentence.probation
       '1203.4'
     else
       case event.severity

@@ -13,7 +13,7 @@ describe PC1203Classifier do
 
   describe '#potentially_eligible?' do
     context "when the conviction's sentence had prison" do
-      let(:sentence) { double(ConvictionSentence, had_prison?: true) }
+      let(:sentence) { ConvictionSentence.new(prison: 1.year) }
 
       it 'returns false' do
         expect(subject).not_to be_potentially_eligible
@@ -21,7 +21,7 @@ describe PC1203Classifier do
     end
 
     context "when the conviction's sentence did not include prison" do
-      let(:sentence) { double(ConvictionSentence, had_prison?: false) }
+      let(:sentence) { ConvictionSentence.new(prison: nil) }
 
       it 'returns true' do
         expect(subject).to be_potentially_eligible
@@ -30,7 +30,7 @@ describe PC1203Classifier do
   end
 
   describe '#eligible?' do
-    let(:sentence) { double(ConvictionSentence, had_prison?: false) }
+    let(:sentence) { ConvictionSentence.new(prison: nil) }
     let(:user) do
       FactoryBot.build(
         :user,
@@ -97,7 +97,7 @@ describe PC1203Classifier do
   describe '#remedy' do
     context 'sentence includes probation' do
       let(:conviction_event) do
-        instance_double(ConvictionEvent, sentence: instance_double(ConvictionSentence, had_probation?: true))
+        instance_double(ConvictionEvent, sentence: ConvictionSentence.new(probation: 1.month))
       end
 
       it 'returns 1203.4' do
@@ -108,7 +108,7 @@ describe PC1203Classifier do
     context 'sentence does not include probation' do
       let(:conviction_event) do
         instance_double(ConvictionEvent,
-                        sentence: instance_double(ConvictionSentence, had_probation?: false),
+                        sentence: ConvictionSentence.new(probation: nil),
                         severity: severity)
       end
 

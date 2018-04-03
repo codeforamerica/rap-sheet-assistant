@@ -16,6 +16,7 @@ require 'builders/arrest_event_builder'
 require 'builders/custody_event_builder'
 require 'builders/courthouse_presenter'
 require 'builders/event_collection_builder'
+require 'builders/conviction_sentence_builder'
 
 require 'syntax_nodes/treetop_monkeypatches'
 require 'syntax_nodes/cycle_syntax_nodes'
