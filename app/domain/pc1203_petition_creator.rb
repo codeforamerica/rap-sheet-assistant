@@ -1,10 +1,11 @@
 class PC1203PetitionCreator
   include PetitionCreator
 
-  def initialize(rap_sheet, conviction_event, conviction_counts)
+  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy:)
     @rap_sheet = rap_sheet
     @conviction_event = conviction_event
     @conviction_counts = conviction_counts
+    @remedy = remedy
   end
 
   def create_petition
@@ -42,7 +43,7 @@ class PC1203PetitionCreator
 
   private
 
-  attr_reader :rap_sheet, :conviction_event, :conviction_counts
+  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy
 
   def code_sections
     conviction_counts.map(&:code_section)
@@ -69,8 +70,6 @@ class PC1203PetitionCreator
   end
 
   def checkbox_fields
-    remedy = PC1203Classifier.new(@rap_sheet.user, conviction_event).remedy
-
     remedy_checkbox = {
       '1203.4' => 'topmostSubform[0].Page1[0].ProbationGranted_cb[0]',
       '1203.4a' => 'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]',

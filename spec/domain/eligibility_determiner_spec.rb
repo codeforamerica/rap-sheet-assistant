@@ -88,11 +88,23 @@ describe EligibilityDeterminer do
       expect(EligibilityDeterminer.new(user).eligible_events_with_counts).to eq ([
         {
           event: event_1,
-          counts: { prop64: [prop64_eligible_count_1], pc1203: [pc1203_eligible_count]}
+          prop64: {
+            counts: [prop64_eligible_count_1]
+          },
+          pc1203: {
+            counts: [pc1203_eligible_count],
+            remedy: '1203.4'
+          }
         },
         {
           event: event_2,
-          counts: { prop64: [prop64_eligible_count_2], pc1203: []}
+          prop64: {
+            counts: [prop64_eligible_count_2]
+          },
+          pc1203: {
+            counts: [],
+            remedy: nil
+          }
         }
       ])
     end

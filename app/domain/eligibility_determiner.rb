@@ -9,8 +9,8 @@ class EligibilityDeterminer
     end
 
     {
-      prop64: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:prop64] }),
-      pc1203: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:pc1203] })
+      prop64: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:prop64][:counts] }),
+      pc1203: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:pc1203][:counts] })
     }
   end
 
@@ -28,14 +28,14 @@ class EligibilityDeterminer
     end
 
     {
-      prop64: all_counts.flat_map { |c| c[:prop64] },
-      pc1203: all_counts.flat_map { |c| c[:pc1203] }
+      prop64: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:prop64][:counts] }),
+      pc1203: ConvictionCountCollection.new(all_counts.flat_map { |c| c[:pc1203][:counts] })
     }
   end
 
   def eligible_events_with_counts
     events.map do |event|
-      { event: event, counts: eligible_counts(event) }
+      { event: event }.merge(eligible_counts(event))
     end
   end
 
@@ -49,16 +49,25 @@ class EligibilityDeterminer
 
   def eligible_counts(event)
     prop64_counts = Prop64Classifier.new(user, event).eligible_counts
-    pc1203_counts =
-      if PC1203Classifier.new(@user, event).eligible?
-        event.counts - prop64_counts
+    pc1203_classifier = PC1203Classifier.new(@user, event)
+    pc1203 =
+      if pc1203_classifier.eligible?
+        {
+          counts: event.counts - prop64_counts,
+          remedy: pc1203_classifier.remedy
+        }
       else
-        ConvictionCountCollection.new([])
+        {
+          counts: ConvictionCountCollection.new([]),
+          remedy: nil
+        }
       end
 
     {
-      prop64: prop64_counts,
-      pc1203: pc1203_counts
+      prop64: {
+        counts: prop64_counts
+      },
+      pc1203: pc1203
     }
   end
 
@@ -72,12 +81,16 @@ class EligibilityDeterminer
       end
 
     {
-      prop64: prop64_counts,
-      pc1203: pc1203_counts
+      prop64: {
+        counts: prop64_counts
+      },
+      pc1203: {
+        counts: pc1203_counts,
+      }
     }
   end
 
   def events
-    user.rap_sheet.events.with_convictions
+    @events ||= user.rap_sheet.events.with_convictions
   end
 end

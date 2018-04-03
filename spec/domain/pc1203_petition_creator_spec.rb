@@ -18,13 +18,11 @@ RSpec.describe PC1203PetitionCreator do
   let(:rap_sheet) { FactoryBot.create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
-    sentence = ConvictionSentence.new(probation: nil)
-    conviction_event = instance_double(
-      ConvictionEvent,
+    conviction_event = ConvictionEvent.new(
       case_number: '#ABCDE',
-      date: Date.parse('2010-01-01'),
-      severity: 'F',
-      sentence: sentence
+      date: Date.new(2010, 1, 1),
+      sentence: nil,
+      courthouse: nil
     )
     conviction_counts = [
       ConvictionCount.new(
@@ -35,8 +33,14 @@ RSpec.describe PC1203PetitionCreator do
         section: '111'
       ),
     ]
+    remedy = '1203.41'
 
-    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_event, conviction_counts).create_petition
+    pdf_file = PC1203PetitionCreator.new(
+      rap_sheet: rap_sheet,
+      conviction_event: conviction_event,
+      conviction_counts: conviction_counts,
+      remedy: remedy
+    ).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
@@ -95,8 +99,12 @@ RSpec.describe PC1203PetitionCreator do
         section: '330' # reducible to infraction
       )
     ]
-
-    pdf_file = PC1203PetitionCreator.new(rap_sheet, conviction_event, conviction_counts).create_petition
+    pdf_file = PC1203PetitionCreator.new(
+      rap_sheet: rap_sheet,
+      conviction_event: conviction_event,
+      conviction_counts: conviction_counts,
+      remedy: nil
+    ).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Code1_ft[0]' => 'PC',
       'topmostSubform[0].Page1[0].Section1_ft[0]' => '107',
