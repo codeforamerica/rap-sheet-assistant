@@ -13,28 +13,35 @@ class ConvictionSentence
   end
 
   def to_s
-    [probation_string, jail_string, *details].compact.join(', ')
+    [prison_string, probation_string, jail_string, *details].compact.join(', ')
   end
 
   private
 
   attr_reader :details
 
+  def prison_string
+    return unless prison
+
+    "#{duration_string(prison)} prison"
+  end
+
   def probation_string
     return unless probation
 
-    p_k = probation.parts.keys[0]
-    p_v = probation.parts[p_k]
-
-    "#{p_v}#{p_k[0]} probation"
+    "#{duration_string(probation)} probation"
   end
 
   def jail_string
     return unless jail
 
-    j_k = jail.parts.keys[0]
-    j_v = jail.parts[j_k]
+    "#{duration_string(jail)} jail"
+  end
 
-    "#{j_v}#{j_k[0]} jail"
+  def duration_string(duration)
+    key = duration.parts.keys[0]
+    value = duration.parts[key]
+
+    "#{value}#{key[0]}"
   end
 end

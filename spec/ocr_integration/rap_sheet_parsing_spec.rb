@@ -108,23 +108,23 @@ def expected_convictions(expected_values)
 end
 
 def expected_arrests(expected_values)
-  expected_values[:arrests].map do |c|
+  sorted(expected_values[:arrests].map do |c|
     date = c[:date] ? Date.strptime(c[:date], '%m/%d/%Y') : nil
 
     {
       date: date,
     }
-  end
+  end)
 end
 
 def expected_custody_events(expected_values)
-  expected_values[:custody_events].map do |c|
+  sorted(expected_values[:custody_events].map do |c|
     date = c[:date] ? Date.strptime(c[:date], '%m/%d/%Y') : nil
 
     {
       date: date,
     }
-  end
+  end)
 end
 
 def fetch_or_scan_text(file_names, page)
@@ -236,7 +236,7 @@ end
 def summarize(detected, expected, key)
   matches = num_matches(detected, expected)
 
-  puts "Detected Convictions: #{detected.length}"
+  puts "Detected #{key}: #{detected.length}"
   puts "Accuracy: #{compute_accuracy(matches, expected.length, key)}%"
 
   @summary_stats[key][:actual] += expected.length

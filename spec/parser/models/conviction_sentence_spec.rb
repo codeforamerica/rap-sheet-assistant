@@ -12,9 +12,14 @@ describe ConvictionSentence do
   end
 
   describe '#to_s' do
-    it 'transforms probation and jail into strings and shows details' do
-      result = described_class.new(jail: 6.months, details: ['fine']).to_s
-      expect(result).to eq('6m jail, fine')
+    it 'transforms probation, prison, and jail into strings and shows details' do
+      result = described_class.new(
+        jail: 6.months,
+        prison: 10.years,
+        probation: 2.days,
+        details: ['fine']
+      ).to_s
+      expect(result).to eq('10y prison, 2d probation, 6m jail, fine')
     end
   end
 end
