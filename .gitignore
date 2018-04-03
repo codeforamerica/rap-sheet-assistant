@@ -18,6 +18,7 @@
 
 .byebug_history
 .idea
+*.iml
 public/uploads/
 public/test/
 test_rap_sheet_data/
