@@ -25,7 +25,7 @@ gem 'bootstrap', '~> 4.0.0'
 gem 'bootsnap'
 gem 'pdf-forms'
 gem 'cliver'
-gem 'rap_sheet_parser', :path => './parser'
+gemspec path: './parser'
 
 group :development, :test do
   gem 'factory_bot_rails'
