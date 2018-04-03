@@ -16,7 +16,8 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
-    @conviction_counts = @rap_sheet.events.with_convictions.conviction_counts
+    @conviction_counts =
+      ConvictionCountCollection.new(@rap_sheet.events.with_convictions.flat_map(&:counts))
   end
 
   def create

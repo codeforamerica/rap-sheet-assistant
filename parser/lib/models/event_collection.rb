@@ -1,17 +1,19 @@
 class EventCollection < Array
   def with_convictions
-    ConvictionEventCollection.new(self.select { |e| e.is_a? ConvictionEvent })
+    filtered(ConvictionEvent)
   end
 
   def arrests
-    self.select do |e|
-      e.is_a? ArrestEvent
-    end
+    filtered(ArrestEvent)
   end
 
   def custody_events
-    self.select do |e|
-      e.is_a? CustodyEvent
-    end
+    filtered(CustodyEvent)
+  end
+
+  private
+
+  def filtered(klass)
+    self.class.new(self.select { |e| e.is_a? klass })
   end
 end
