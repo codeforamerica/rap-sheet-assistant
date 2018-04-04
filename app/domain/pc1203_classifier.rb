@@ -1,8 +1,5 @@
 class PC1203Classifier
-  def initialize(user, event)
-    @user = user
-    @event = event
-  end
+  include Classifier
 
   def potentially_eligible?
     return false unless event.sentence
@@ -20,22 +17,37 @@ class PC1203Classifier
 
   def remedy
     if event.sentence.probation
-      '1203.4'
-    else
-      case event.severity
-        when 'M'
-          '1203.4a'
-        when 'I'
-          '1203.4a'
-        when 'F'
-          '1203.41'
+      code = '1203.4'
+      probation_successful = event.successfully_completed_probation?(event_collection)
+
+      scenario =
+        if probation_successful
+          :successful_completion
+        elsif probation_successful == false
+          :discretionary
         else
-          nil
-      end
+          :unknown
+        end
+    else
+      code =
+        case event.severity
+          when 'M'
+            '1203.4a'
+          when 'I'
+            '1203.4a'
+          when 'F'
+            '1203.41'
+          else
+            nil
+        end
+      scenario = nil
     end
+
+    return nil if code.nil?
+
+    {
+      code: code,
+      scenario: scenario
+    }
   end
-
-  private
-
-  attr_reader :event
 end

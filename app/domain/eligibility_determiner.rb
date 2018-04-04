@@ -4,7 +4,7 @@ class EligibilityDeterminer
   end
 
   def all_eligible_counts
-    all_counts = events.map do |conviction_event|
+    all_counts = events.with_convictions.map do |conviction_event|
       eligible_counts(conviction_event)
     end
 
@@ -23,7 +23,7 @@ class EligibilityDeterminer
   end
 
   def all_potentially_eligible_counts
-    all_counts = events.map do |conviction_event|
+    all_counts = events.with_convictions.map do |conviction_event|
       potentially_eligible_counts(conviction_event)
     end
 
@@ -34,7 +34,7 @@ class EligibilityDeterminer
   end
 
   def eligible_events_with_counts
-    events.map do |event|
+    events.with_convictions.map do |event|
       { event: event }.merge(eligible_counts(event))
     end
   end
@@ -48,8 +48,8 @@ class EligibilityDeterminer
   attr_reader :user
 
   def eligible_counts(event)
-    prop64_counts = Prop64Classifier.new(user, event).eligible_counts
-    pc1203_classifier = PC1203Classifier.new(@user, event)
+    prop64_counts = Prop64Classifier.new(user: user, event: event, event_collection: events).eligible_counts
+    pc1203_classifier = PC1203Classifier.new(user: user, event: event, event_collection: events)
     pc1203 =
       if pc1203_classifier.eligible?
         {
@@ -72,9 +72,9 @@ class EligibilityDeterminer
   end
 
   def potentially_eligible_counts(event)
-    prop64_counts = Prop64Classifier.new(user, event).potentially_eligible_counts
+    prop64_counts = Prop64Classifier.new(user: user, event: event, event_collection: events).potentially_eligible_counts
     pc1203_counts =
-      if PC1203Classifier.new(@user, event).potentially_eligible?
+      if PC1203Classifier.new(user: user, event: event, event_collection: events).potentially_eligible?
         event.counts - prop64_counts
       else
         ConvictionCountCollection.new([])
@@ -91,6 +91,6 @@ class EligibilityDeterminer
   end
 
   def events
-    @events ||= user.rap_sheet.events.with_convictions
+    @events ||= user.rap_sheet.events
   end
 end

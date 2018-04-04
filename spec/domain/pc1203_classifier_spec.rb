@@ -4,12 +4,10 @@ require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
   let(:user) { FactoryBot.build(:user) }
+  let(:all_events) {}
+  let(:conviction_event) { build_conviction_event(sentence: sentence) }
 
-  let(:conviction_event) do
-    instance_double(ConvictionEvent, sentence: sentence)
-  end
-
-  subject { described_class.new(user, conviction_event) }
+  subject { described_class.new(user: user, event: conviction_event, event_collection: all_events) }
 
   describe '#potentially_eligible?' do
     context "when the conviction's sentence had prison" do
@@ -96,27 +94,82 @@ describe PC1203Classifier do
 
   describe '#remedy' do
     context 'sentence includes probation' do
-      let(:conviction_event) do
-        instance_double(ConvictionEvent, sentence: ConvictionSentence.new(probation: 1.month))
+      context 'probation successfully completed' do
+        let(:conviction_event) do
+          build_conviction_event(
+            sentence: ConvictionSentence.new(probation: 5.months),
+            date: Date.new(1991, 5, 1)
+          )
+        end
+        let(:all_events) { EventCollection.new([conviction_event]) }
+
+        it 'returns successful completion' do
+          expect(subject.remedy).to eq ({
+            code: '1203.4',
+            scenario: :successful_completion
+          })
+        end
       end
 
-      it 'returns 1203.4' do
-        expect(subject.remedy).to eq '1203.4'
+      # context 'probation terminated early' do
+      #   let(:all_events) { [conviction_event] }
+      #
+      #   it 'returns early termination' do
+      #     expect(subject.remedy).to eq ({
+      #       code: '1203.4',
+      #       scenario: :early_termination
+      #     })
+      #   end
+      # end
+
+      context 'probation violated' do
+        let(:conviction_event) do
+          build_conviction_event(
+            sentence: ConvictionSentence.new(probation: 5.months),
+            date: Date.new(1991, 5, 1)
+          )
+        end
+        let(:arrest_event) { ArrestEvent.new(date: Date.new(1991, 7, 1)) }
+        let(:all_events) { EventCollection.new([conviction_event, arrest_event]) }
+
+        it 'returns discretionary' do
+          expect(subject.remedy).to eq ({
+            code: '1203.4',
+            scenario: :discretionary
+          })
+        end
+      end
+
+      context 'unknown probation completion status' do
+        let(:conviction_event) do
+          build_conviction_event(
+            sentence: ConvictionSentence.new(probation: 5.months),
+            date: nil
+          )
+        end
+        let(:all_events) { EventCollection.new([conviction_event]) }
+
+        it 'returns discretionary' do
+          expect(subject.remedy).to eq ({
+            code: '1203.4',
+            scenario: :unknown
+          })
+        end
       end
     end
 
     context 'sentence does not include probation' do
       let(:conviction_event) do
         instance_double(ConvictionEvent,
-                        sentence: ConvictionSentence.new(probation: nil),
-                        severity: severity)
+          sentence: ConvictionSentence.new(probation: nil),
+          severity: severity)
       end
 
       context 'when the event severity is misdemeanor' do
         let(:severity) { 'M' }
 
         it 'returns 1203.4a' do
-          expect(subject.remedy).to eq '1203.4a'
+          expect(subject.remedy[:code]).to eq '1203.4a'
         end
       end
 
@@ -124,7 +177,7 @@ describe PC1203Classifier do
         let(:severity) { 'I' }
 
         it 'returns 1203.4a' do
-          expect(subject.remedy).to eq '1203.4a'
+          expect(subject.remedy[:code]).to eq '1203.4a'
         end
       end
 
@@ -132,7 +185,7 @@ describe PC1203Classifier do
         let(:severity) { 'F' }
 
         it 'returns 1203.41' do
-          expect(subject.remedy).to eq '1203.41'
+          expect(subject.remedy[:code]).to eq '1203.41'
         end
       end
 
@@ -144,5 +197,14 @@ describe PC1203Classifier do
         end
       end
     end
+  end
+
+  def build_conviction_event(date: nil, case_number: nil, courthouse: nil, sentence: nil)
+    ConvictionEvent.new(
+      date: date,
+      case_number: case_number,
+      courthouse: courthouse,
+      sentence: sentence
+    )
   end
 end

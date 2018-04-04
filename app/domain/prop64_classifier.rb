@@ -1,7 +1,5 @@
 class Prop64Classifier
-  def initialize(user, event)
-    @event = event
-  end
+  include Classifier
 
   def eligible?
     !eligible_counts.empty?
@@ -32,8 +30,6 @@ class Prop64Classifier
   end
 
   private
-
-  attr_reader :event
 
   def dismissible_codes
     [

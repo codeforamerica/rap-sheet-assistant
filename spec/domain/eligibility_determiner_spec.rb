@@ -23,7 +23,8 @@ describe EligibilityDeterminer do
           build_conviction_event(
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
-          )
+          ),
+          ArrestEvent.new(date: Date.today)
         ]
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
@@ -53,7 +54,8 @@ describe EligibilityDeterminer do
           build_conviction_event(
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
-          )
+          ),
+          ArrestEvent.new(date: Date.today)
         ]
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
@@ -75,6 +77,7 @@ describe EligibilityDeterminer do
       )
 
       event_1 = build_conviction_event(
+        date: Date.new(2014, 6, 1),
         sentence: ConvictionSentence.new(probation: 1.year),
         counts: [prop64_eligible_count_1, pc1203_eligible_count]
       )
@@ -82,7 +85,7 @@ describe EligibilityDeterminer do
         sentence: ConvictionSentence.new(prison: 1.year),
         counts: [prop64_eligible_count_2]
       )
-      events = EventCollection.new([event_1, event_2])
+      events = EventCollection.new([event_1, event_2, ArrestEvent.new(date: Date.new(2015, 1, 1))])
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
       expect(EligibilityDeterminer.new(user).eligible_events_with_counts).to eq ([
@@ -93,7 +96,7 @@ describe EligibilityDeterminer do
           },
           pc1203: {
             counts: [pc1203_eligible_count],
-            remedy: '1203.4'
+            remedy: { code: '1203.4', scenario: :discretionary }
           }
         },
         {
@@ -233,8 +236,13 @@ describe EligibilityDeterminer do
     end
   end
 
-  def build_conviction_event(sentence: nil, counts: nil)
-    event = ConvictionEvent.new(date: nil, case_number: nil, courthouse: nil, sentence: sentence)
+  def build_conviction_event(date: nil, sentence: nil, counts: nil)
+    event = ConvictionEvent.new(
+      date: date,
+      case_number: nil,
+      courthouse: nil,
+      sentence: sentence
+    )
     event.counts = counts
     event
   end

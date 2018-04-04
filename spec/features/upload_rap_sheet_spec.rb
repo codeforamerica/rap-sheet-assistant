@@ -59,7 +59,8 @@ describe 'uploading a rap sheet' do
         'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
         'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
         'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050'
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050',
+        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1'
       }
       expect(fields_dict).to include(expected_values)
     end
@@ -155,6 +156,8 @@ describe 'uploading a rap sheet' do
         'employer_address' => '1 I love mail lane',
         'food_stamps' => 'On',
         'medi_cal' => 'On',
+        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+        'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1'
       }
       expect(fields_dict).to include(expected_values)
     end

@@ -16,7 +16,8 @@ describe Prop64Classifier do
     instance_double(ConvictionCount, code_section: code_section)
   end
 
-  subject { described_class.new(user, conviction_event) }
+  let(:event_collection) { nil }
+  subject { described_class.new(user: user, event: conviction_event, event_collection: event_collection) }
 
   describe '#eligible?' do
     context 'when the count is an eligible code' do
