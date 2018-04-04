@@ -22,10 +22,10 @@ describe CountGrammarParser do
       expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL'
     end
 
-    it 'handles stray characters at the end of the disposition line' do
+    it 'handles stray characters and whitespace in the disposition line' do
       text = <<~TEXT
         496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
-        DISPO:CONVICTED blah .
+        DI SP O:CONVICTED blah .
         CONV STATUS:MISDEMEANOR
       TEXT
 

@@ -1,7 +1,7 @@
 # Stolen from https://github.com/elastic/logstash/blob/master/logstash-core/lib/logstash/compiler/treetop_monkeypatches.rb
 
 class Treetop::Runtime::SyntaxNode
-  delegate :[], :length, to: :elements
+  delegate :[], :length, :any?, :select, :flat_map, :find, to: :elements
 
   # Traverse the syntax tree recursively.
   # The order should respect the order of the configuration file as it is read

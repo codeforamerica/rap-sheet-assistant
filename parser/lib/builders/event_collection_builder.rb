@@ -1,6 +1,6 @@
 class EventCollectionBuilder
   def self.build(parsed_rap_sheet)
-    event_nodes = parsed_rap_sheet.cycles.elements.flat_map do |cycle|
+    event_nodes = parsed_rap_sheet.cycles.flat_map do |cycle|
       cycle.events.select do |event|
         event.is_a? EventGrammar::Event
       end

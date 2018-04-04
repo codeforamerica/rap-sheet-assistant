@@ -5,7 +5,7 @@ module UpdateGrammar
 
   class Disposition < Treetop::Runtime::SyntaxNode
     def sentence
-      update_lines.elements.find do |l|
+      update_lines.find do |l|
         l.is_a? UpdateGrammar::SentenceLine
       end&.sentence
     end

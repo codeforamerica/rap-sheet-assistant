@@ -7,7 +7,7 @@ module CountGrammar
         charge_line.code_section
       elsif charge_line.text_value.include? 'SEE COMMENT FOR CHARGE'
         if disposition.is_a? Convicted
-          comment_charge_line = disposition.extra_conviction_info.elements.select do |l|
+          comment_charge_line = disposition.extra_conviction_info.select do |l|
             l.is_a? CommentChargeLine
           end
 
@@ -31,11 +31,11 @@ module CountGrammar
 
   class Convicted < Disposition
     def severity
-      extra_conviction_info.elements.find { |l| l.is_a? SeverityLine }&.severity
+      extra_conviction_info.find { |l| l.is_a? SeverityLine }&.severity
     end
 
     def sentence
-      extra_conviction_info.elements.find { |l| l.is_a? SentenceLine }&.sentence
+      extra_conviction_info.find { |l| l.is_a? SentenceLine }&.sentence
     end
   end
 

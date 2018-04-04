@@ -7,13 +7,11 @@ module EventGrammar
     end
 
     def sentence
-      count = counts.elements.find do |c|
-        c.disposition.sentence
-      end
+      count = counts.find { |c| c.disposition.sentence }
 
       return unless count
 
-      sentence_modified_disposition = updates.elements.flat_map(&:dispositions).find do |d|
+      sentence_modified_disposition = updates.flat_map(&:dispositions).find do |d|
         d.disposition_type.is_a?(UpdateGrammar::SentenceModified)
       end
 
@@ -23,13 +21,11 @@ module EventGrammar
     end
 
     def is_conviction?
-      counts.elements.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
+      counts.any? { |c| c.disposition.is_a? CountGrammar::Convicted }
     end
 
     def conviction_counts
-      counts.elements.select do |c|
-        c.disposition.is_a? CountGrammar::Convicted
-      end
+      counts.select { |c| c.disposition.is_a? CountGrammar::Convicted }
     end
   end
 

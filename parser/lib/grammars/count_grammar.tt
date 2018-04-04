@@ -95,7 +95,7 @@ grammar CountGrammar
     end
 
     rule dispo_header
-      w '*'? w 'DISPO' w (':' / ';') w
+      w '*'? w 'D' w 'I' w 'S' w 'P' w 'O' w (':' / ';') w
     end
 
     rule extra_conviction_info
