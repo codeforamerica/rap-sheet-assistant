@@ -94,10 +94,6 @@ grammar CountGrammar
       dispo_header 'CONVICTED' to_eol w extra_conviction_info <Convicted>
     end
 
-    rule dispo_header
-      w '*'? w 'D' w 'I' w 'S' w 'P' w 'O' w (':' / ';') w
-    end
-
     rule extra_conviction_info
       (comment_charge_line / severity_line / sentence_line / unknown_content_line)*
     end

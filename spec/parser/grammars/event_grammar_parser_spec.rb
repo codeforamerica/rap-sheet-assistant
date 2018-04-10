@@ -190,7 +190,7 @@ RSpec.describe EventGrammarParser do
           SEN: 012 MONTHS PROBATION, 045 DAYS JAIL
 
           20040202
-            DISPO:SOMETHING ELSE
+            DISPO :SOMETHING ELSE
 
           20040202
             DISPO:SENTENCE MODIFIED
