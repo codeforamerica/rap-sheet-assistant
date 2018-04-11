@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe EligibilityDeterminer do
+describe EligibilityChecker do
   let(:prop64_eligible_count_1) { build_conviction_count(code: 'HS', section: '11357') }
   let(:prop64_eligible_count_2) { build_conviction_count(code: 'HS', section: '11357') }
   let(:pc1203_eligible_count) { build_conviction_count(code: 'PC', section: '456') }
@@ -29,7 +29,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).all_eligible_counts).to eq ({
+      expect(described_class.new(user).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
         pc1203: [pc1203_eligible_count]
       })
@@ -60,7 +60,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).all_potentially_eligible_counts).to eq ({
+      expect(described_class.new(user).all_potentially_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
         pc1203: [pc1203_eligible_count]
       })
@@ -88,7 +88,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new([event_1, event_2, ArrestEvent.new(date: Date.new(2015, 1, 1))])
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).eligible_events_with_counts).to eq ([
+      expect(described_class.new(user).eligible_events_with_counts).to eq ([
         {
           event: event_1,
           prop64: {
@@ -125,7 +125,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new([])
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).needs_1203_info?).to eq false
+      expect(described_class.new(user).needs_1203_info?).to eq false
 
 
       events = EventCollection.new(
@@ -138,7 +138,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).needs_1203_info?).to eq true
+      expect(described_class.new(user).needs_1203_info?).to eq true
     end
   end
 
@@ -161,7 +161,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).eligible?).to eq true
+      expect(described_class.new(user).eligible?).to eq true
     end
 
     it 'returns false if there are no eligible counts' do
@@ -175,7 +175,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new([])
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).eligible?).to eq false
+      expect(described_class.new(user).eligible?).to eq false
 
 
       events = EventCollection.new(
@@ -188,7 +188,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).eligible?).to eq false
+      expect(described_class.new(user).eligible?).to eq false
     end
   end
 
@@ -208,7 +208,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).potentially_eligible?).to eq true
+      expect(described_class.new(user).potentially_eligible?).to eq true
     end
 
     it 'returns false if there are no potentially eligible counts' do
@@ -219,7 +219,7 @@ describe EligibilityDeterminer do
       events = EventCollection.new([])
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).potentially_eligible?).to eq false
+      expect(described_class.new(user).potentially_eligible?).to eq false
 
 
       events = EventCollection.new(
@@ -232,7 +232,7 @@ describe EligibilityDeterminer do
       )
       allow(user.rap_sheet).to receive(:events).and_return(events)
 
-      expect(EligibilityDeterminer.new(user).potentially_eligible?).to eq false
+      expect(described_class.new(user).potentially_eligible?).to eq false
     end
   end
 

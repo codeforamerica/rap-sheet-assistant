@@ -1,13 +1,13 @@
 class DocumentsController < ApplicationController
   def index
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
-    @eligible_counts = EligibilityDeterminer.new(@rap_sheet.user).all_eligible_counts
+    @eligible_counts = EligibilityChecker.new(@rap_sheet.user).all_eligible_counts
   end
 
   def download
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
     @user = @rap_sheet.user
-    eligibility = EligibilityDeterminer.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.user)
 
     petitions = create_petitions(eligibility)
 

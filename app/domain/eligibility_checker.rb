@@ -1,4 +1,4 @@
-class EligibilityDeterminer
+class EligibilityChecker
   def initialize(user)
     @user = user
   end

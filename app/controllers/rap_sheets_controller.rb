@@ -42,7 +42,7 @@ class RapSheetsController < ApplicationController
 
   def details
     @rap_sheet = RapSheet.find(params[:id])
-    eligibility = EligibilityDeterminer.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.user)
 
     if eligibility.eligible?
       @eligible_events = eligibility.eligible_events_with_counts
@@ -79,7 +79,7 @@ class RapSheetsController < ApplicationController
   private
 
   def after_show_path
-    eligibility = EligibilityDeterminer.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.user)
 
     if !eligibility.potentially_eligible?
       return ineligible_rap_sheet_path(@rap_sheet)
