@@ -28,4 +28,5 @@ Rails.application.routes.draw do
   end
 
   resources :rap_sheet_pages, only: [:create, :destroy]
+  get 'healthcheck', to: proc { [200, {}, ['']] }
 end
