@@ -20,6 +20,8 @@ describe CountGrammarParser do
       expect(count.disposition).to be_a CountGrammar::Convicted
       expect(count.disposition.severity.text_value).to eq 'MISDEMEANOR'
       expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL'
+      expect(count.disposition.sentence.probation.text_value).to eq '012 MONTHS PROBATION'
+      expect(count.disposition.sentence.jail.text_value).to eq '045 DAYS JAIL'
     end
 
     it 'handles stray characters and whitespace in the disposition line' do
@@ -63,8 +65,8 @@ describe CountGrammarParser do
 
     it 'can parse whitespace in severity lines' do
       text = <<~TEXT
-       DISPO:CONVICTED
-        CONV STATUS : FELONY
+        DISPO:CONVICTED
+         CONV STATUS : FELONY
       TEXT
 
       count = described_class.new.parse(text)
