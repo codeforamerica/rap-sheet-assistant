@@ -1,7 +1,11 @@
 # Stolen from https://github.com/elastic/logstash/blob/master/logstash-core/lib/logstash/compiler/treetop_monkeypatches.rb
 
+require 'forwardable'
+
 class Treetop::Runtime::SyntaxNode
-  delegate :[], :length, :any?, :select, :flat_map, :find, to: :elements
+  extend Forwardable
+
+  def_delegators :elements, :[], :length, :any?, :select, :flat_map, :find
 
   # Traverse the syntax tree recursively.
   # The order should respect the order of the configuration file as it is read
@@ -48,5 +52,12 @@ class Treetop::Runtime::SyntaxNode
 
   def recursive_select_parent(results=[], klass)
     return recursive_inject_parent(results) { |e| e.is_a?(klass) }
+  end
+
+  def do_parsing(parser, text)
+    result = parser.parse(text)
+    raise RapSheetParserException.new(parser) unless result
+
+    result
   end
 end

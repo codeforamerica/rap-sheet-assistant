@@ -47,15 +47,6 @@ module EventGrammar
 
       @count_content = do_parsing(CountGrammarParser.new, count_info.text_value + "\n")
     end
-
-    private
-
-    def do_parsing(parser, text)
-      result = parser.parse(text)
-      raise RapSheetParserException.new(parser) unless result
-
-      result
-    end
   end
 
   class Update < Treetop::Runtime::SyntaxNode
@@ -67,15 +58,6 @@ module EventGrammar
       return @update_content if @update_content
 
       @update_content = do_parsing(UpdateGrammarParser.new, update_info.text_value + "\n")
-    end
-
-    private
-
-    def do_parsing(parser, text)
-      result = parser.parse(text)
-      raise RapSheetParserException.new(parser) unless result
-
-      result
     end
   end
 
