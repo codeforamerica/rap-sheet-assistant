@@ -1,0 +1,23 @@
+grammar SentenceGrammar
+  include CommonGrammar
+
+  rule sentence
+    w sentence_content w (',' w sentence_content w)* <Sentence>
+  end
+
+  rule sentence_content
+    probation / jail / detail
+  end
+
+  rule probation
+    (!'PROBATION' .)* 'PROBATION' <Probation>
+  end
+
+  rule jail
+    (!'JAIL' .)* 'JAIL' <Jail>
+  end
+
+  rule detail
+    (!',' .)* <Detail>
+  end
+end
