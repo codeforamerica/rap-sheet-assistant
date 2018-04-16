@@ -3,55 +3,102 @@ require 'rap_sheet_parser'
 
 describe ConvictionSentenceBuilder do
   it 'parses jail time' do
-    result = described_class.new('006 MONTHS JAIL').build
-    expect(result.jail).to eq 6.months
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
+
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: 006 MONTHS JAIL
+      * * * END OF MESSAGE * * *
+    TEXT
+
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.jail).to eq 6.months
   end
 
   it 'parses probation time' do
-    result = described_class.new('012 MONTHS PROBATION').build
-    expect(result.probation).to eq 12.months
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
+
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: 012 MONTHS PROBATION
+      * * * END OF MESSAGE * * *
+    TEXT
+
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.probation).to eq 12.months
   end
 
   it 'parses prison time' do
-    result = described_class.new('012 YEARS PRISON').build
-    expect(result.prison).to eq 12.years
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
 
-    result = described_class.new('012 YEARS PRISON SS').build
-    expect(result.prison).to eq nil
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: 012 YEARS PRISON
+      * * * END OF MESSAGE * * *
+    TEXT
+
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.prison).to eq 12.years
   end
 
-  it 'downcases sentence text' do
-    result = described_class.new('012 MONTHS PROBATION, 045 DAYS JAIL, FINE').build
-    expect(result.to_s).to eq('12m probation, 45d jail, fine')
-  end
+  it 'downcases details' do
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
 
-  it 'removes periods' do
-    result = described_class.new('01.2 MONTHS PROBATION').build
-    expect(result.probation).to eq 12.months
-  end
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: 012 YEARS PRISON, FINE, FINE SS
+      * * * END OF MESSAGE * * *
+    TEXT
 
-  it 'removes quotes' do
-    result = described_class.new("'006 MONTHS JAIL'").build
-    expect(result.jail).to eq 6.months
-  end
-
-  it 'removes lines with less than 3 characters' do
-    result = described_class.new("FINE SS,\na\nbbb\ncccc").build
-    expect(result.to_s).to eq('fine ss, cccc')
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.to_s).to eq('12y prison, fine, fine ss')
   end
 
   it 'standardizes restitution strings' do
-    result = described_class.new('restn, rstn, restitution').build
-    expect(result.to_s).to eq('restitution, restitution, restitution')
-  end
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
 
-  it 'replaces newlines with spaces' do
-    result = described_class.new("006 MONTHS JAIL,\nFINE").build
-    expect(result.to_s).to eq('6m jail, fine')
-  end
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: RESTN, RSTN, RESTITUTION
+      * * * END OF MESSAGE * * *
+    TEXT
 
-  it 'replaces newlines with spaces' do
-    result = described_class.new("006 MONTHS JAIL,\nFINE").build
-    expect(result.to_s).to eq('6m jail, fine')
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.to_s).to eq('restitution, restitution, restitution')
   end
 end

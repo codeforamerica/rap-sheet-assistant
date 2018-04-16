@@ -28,7 +28,7 @@ class ConvictionEventBuilder
 
   def sentence
     if event_syntax_node.sentence
-      ConvictionSentenceBuilder.new(event_syntax_node.sentence.text_value).build
+      ConvictionSentenceBuilder.new(event_syntax_node.sentence).build
     end
   end
 end

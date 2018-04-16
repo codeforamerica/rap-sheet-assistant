@@ -34,16 +34,17 @@ module CountGrammar
 
     def sentence
       @sentence ||= begin
-        sentence_line = extra_conviction_info.find do |l|
-          l.is_a? SentenceLine
-        end
-
         if sentence_line
-          do_parsing(SentenceGrammarParser.new, sentence_line.sentence.text_value)
-        else
-          nil
+          sentence_text = TextCleaner.clean_sentence(sentence_line.sentence.text_value)
+          do_parsing(SentenceGrammarParser.new, sentence_text)
         end
       end
+    end
+
+    private
+    
+    def sentence_line
+      extra_conviction_info.find { |l| l.is_a? SentenceLine }
     end
   end
 

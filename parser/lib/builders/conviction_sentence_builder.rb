@@ -1,61 +1,40 @@
 class ConvictionSentenceBuilder
-  def initialize(sentence_string)
-    @sentence_string = sentence_string
+  def initialize(sentence_node)
+    @sentence_node = sentence_node
   end
 
   def build
-    str = sentence_string.split("\n").reject do |x|
-      x.length <= 3
-    end.join("\n")
-
-    parts = str.
-      downcase.
-      gsub(/[.']/, '').
-      gsub(/\n\s*/, ' ').
-      gsub(/(restn|rstn)/, 'restitution').
-      split(', ')
-
-    probation = nil
-    jail = nil
-    prison = nil
-    details = []
-
-    parts.each do |p|
-      match = p.match(/(\d+) (months|years|days)/)
-      if match
-        words = p.split(' ')
-        amount = words[0].to_i
-        unit = words[1][0]
-        duration = duration(amount, unit)
-        if words[2] == 'probation'
-          probation = duration
-        elsif words[2] == 'jail'
-          jail = duration
-        elsif words[2] == 'prison' && words[3] != 'ss'
-          prison = duration
-        end
-      else
-        details << p
-      end
-    end
-
     ConvictionSentence.new(
-      probation: probation,
-      jail: jail,
-      prison: prison,
+      probation: duration(sentence_node.probation),
+      jail: duration(sentence_node.jail),
+      prison: duration(sentence_node.prison),
       details: details
     )
   end
 
   private
 
-  attr_reader :sentence_string
+  attr_reader :sentence_node
 
-  def duration(amount, unit)
+  def details
+    sentence_node.details.map do |s|
+      s.text_value.
+        downcase.
+        gsub(/(restn|rstn)/, 'restitution')
+    end
+  end
+
+  def duration(node)
+    return unless node
+
+    words = node.text_value.split(' ')
+    amount = words[0].to_i
+    unit = words[1][0]
+
     {
-      'y' => amount.years,
-      'm' => amount.months,
-      'd' => amount.days
+      'Y' => amount.years,
+      'M' => amount.months,
+      'D' => amount.days
     }[unit]
   end
 end

@@ -13,6 +13,28 @@ describe TextCleaner do
       expect(clean('abcD')).to eq 'ABCD'
     end
   end
+  
+  describe '.clean_sentence' do
+    it 'removes periods' do
+      result = described_class.clean_sentence('01.2 MONTHS PROBATION')
+      expect(result).to eq '012 MONTHS PROBATION'
+    end
+
+    it 'removes quotes' do
+      result = described_class.clean_sentence("'006 MONTHS JAIL'")
+      expect(result).to eq '006 MONTHS JAIL'
+    end
+
+    it 'removes lines with less than 3 characters' do
+      result = described_class.clean_sentence("FINE SS,\nA\nBBB\nCCCC")
+      expect(result).to eq('FINE SS, CCCC')
+    end
+
+    it 'replaces newlines with spaces' do
+      result = described_class.clean_sentence("006 MONTHS JAIL,\nFINE")
+      expect(result).to eq('006 MONTHS JAIL, FINE')
+    end
+  end
 end
 
 def clean(text)

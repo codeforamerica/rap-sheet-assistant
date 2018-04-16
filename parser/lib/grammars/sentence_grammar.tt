@@ -6,15 +6,19 @@ grammar SentenceGrammar
   end
 
   rule sentence_content
-    probation / jail / detail
+    probation / jail / prison / detail
   end
 
   rule probation
-    (!'PROBATION' .)* 'PROBATION' <Probation>
+    (!'PROBATION' !',' .)* 'PROBATION' <Probation>
   end
 
   rule jail
-    (!'JAIL' .)* 'JAIL' <Jail>
+    (!'JAIL' !',' .)* 'JAIL' <Jail>
+  end
+  
+  rule prison
+    (!'PRISON' !',' .)* 'PRISON' !' SS' <Prison>
   end
 
   rule detail

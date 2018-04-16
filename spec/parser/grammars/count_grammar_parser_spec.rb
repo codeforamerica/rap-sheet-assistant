@@ -137,7 +137,7 @@ describe CountGrammarParser do
       TEXT
 
       count = described_class.new.parse(text)
-      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
+      expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT'
     end
 
     it 'parses out junk characters from sentences' do
@@ -166,7 +166,7 @@ describe CountGrammarParser do
       TEXT
 
       count = described_class.new.parse(text)
-      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
+      expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT'
     end
 
     it 'parses multiple line sentences where a date marker comes after the sentence' do
@@ -181,7 +181,7 @@ describe CountGrammarParser do
       TEXT
 
       count = described_class.new.parse(text)
-      expect(count.disposition.sentence.text_value).to eq "012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS,\n     CONCURRENT"
+      expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT'
     end
 
     it 'parses out punctuation around code section number' do
