@@ -63,7 +63,11 @@ grammar CountGrammar
     end
 
     rule comment_sentence_line
-      stray_punctuation 'COM' w ':' (!'SEN' !N .)* 'SEN' '-'? w 'X' sentence <CommentSentenceLine>
+      stray_punctuation 'COM' w ':' (!comment_sentence_tag !N .)* comment_sentence_tag sentence <CommentSentenceLine>
+    end
+    
+    rule comment_sentence_tag
+      ('SEN' w '-'? w 'X') / ('XSEN' w ':')
     end
     
     rule unknown_content_line
