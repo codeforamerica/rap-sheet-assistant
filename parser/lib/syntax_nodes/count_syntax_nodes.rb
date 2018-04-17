@@ -3,7 +3,7 @@ module CountGrammar
     def code_section
       if charge_line.is_a? CodeSectionLine
         charge_line.code_section
-      elsif charge_line.text_value.include? 'SEE COMMENT FOR CHARGE'
+      elsif charge_line.is_a? SeeCommentForCharge
         if disposition.is_a? Convicted
           comment_charge_line = disposition.extra_conviction_info.select do |l|
             l.is_a? CommentChargeLine
@@ -49,6 +49,8 @@ module CountGrammar
       end
     end
   end
+
+  class SeeCommentForCharge < Treetop::Runtime::SyntaxNode; end
 
   class CodeSectionLine < Treetop::Runtime::SyntaxNode; end
 

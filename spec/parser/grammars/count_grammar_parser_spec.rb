@@ -94,7 +94,7 @@ describe CountGrammarParser do
 
     it 'parses malformed charge comments' do
       text = <<~TEXT
-         SEE COMMENT FOR CHARGE
+         SEE. COMMENT FOR CHARGE
         DISPO:CONVICTED
         CONV STATUS:FELONY
         COM: SEN-X3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN
@@ -103,7 +103,7 @@ describe CountGrammarParser do
       TEXT
 
       count = described_class.new.parse(text)
-      expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
+      expect(count.charge_line).to be_a CountGrammar::SeeCommentForCharge
       expect(count.disposition).to be_a CountGrammar::Convicted
       expect(count.code_section.code.text_value).to eq 'PC'
       expect(count.code_section.number.text_value).to eq '490,2'

@@ -10,9 +10,13 @@ grammar CountGrammar
     end
 
     rule charge_line
-      'SEE COMMENT FOR CHARGE' /
+      see_comment_for_charge /
       code_section_line /
       (!dispo_header .)*
+    end
+
+    rule see_comment_for_charge
+      'SEE' stray_punctuation 'COMMENT' stray_punctuation 'FOR' stray_punctuation 'CHARGE' <SeeCommentForCharge>
     end
 
     rule code_section_line
