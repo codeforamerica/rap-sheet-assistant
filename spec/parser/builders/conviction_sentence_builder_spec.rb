@@ -61,7 +61,7 @@ describe ConvictionSentenceBuilder do
     sentence_node = tree.cycles[0].events[0].sentence
     expect(described_class.new(sentence_node).build.prison).to eq 12.years
   end
-  
+
   it 'parses times from comments' do
     text = <<~TEXT
       info
@@ -82,7 +82,7 @@ describe ConvictionSentenceBuilder do
     result = described_class.new(sentence_node).build
     expect(result.probation).to eq 24.months
     expect(result.jail).to eq 8.days
-    
+
     text = <<~TEXT
       info
       * * * *
@@ -140,5 +140,25 @@ describe ConvictionSentenceBuilder do
     tree = Parser.new.parse(text)
     sentence_node = tree.cycles[0].events[0].sentence
     expect(described_class.new(sentence_node).build.to_s).to eq('restitution, restitution, restitution')
+  end
+
+  it 'cleans up common strings' do
+    text = <<~TEXT
+      info
+      * * * *
+      COURT:
+      19941120 CASC SAN DIEGO
+
+      CNT: 001 #612
+      487.2 PC-GRAND THEFT FROM PERSON
+      DISPO:CONVICTED
+      CONV STATUS:MISDEMEANOR
+      SEN: BL FINE SS AH, CONCURRENT B A
+      * * * END OF MESSAGE * * *
+    TEXT
+
+    tree = Parser.new.parse(text)
+    sentence_node = tree.cycles[0].events[0].sentence
+    expect(described_class.new(sentence_node).build.to_s).to eq('fine ss, concurrent')
   end
 end

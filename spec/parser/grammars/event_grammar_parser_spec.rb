@@ -192,6 +192,21 @@ RSpec.describe EventGrammarParser do
         expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE ')
       end
 
+      it 'parses courthouse with NAM identifier in front' do
+        text = <<~TEXT
+          COURT:
+          20040102
+          NAM:001
+          NEW COURTHOUSE
+          CNT: 001 #312145
+          count 3 text
+        TEXT
+
+        tree = parse(text)
+
+        expect(tree.courthouse.text_value).to eq('NEW COURTHOUSE')
+      end
+
       it 'sets sentence correctly if sentence modified' do
         text = <<~TEXT
           COURT:

@@ -1,4 +1,6 @@
 class ConvictionSentenceBuilder
+  COMMON_PHRASES = ['fine ss', 'concurrent']
+
   def initialize(sentence_node)
     @sentence_node = sentence_node
   end
@@ -18,9 +20,11 @@ class ConvictionSentenceBuilder
 
   def details
     sentence_node.details.map do |s|
-      s.text_value.
+      detail = s.text_value.
         downcase.
         gsub(/(restn|rstn)/, 'restitution')
+
+      common_phrases(detail)
     end
   end
 
@@ -36,5 +40,13 @@ class ConvictionSentenceBuilder
       'M' => amount.months,
       'D' => amount.days
     }[unit]
+  end
+
+  def common_phrases(detail)
+    COMMON_PHRASES.each do |p|
+      return p if detail.include?(p)
+    end
+
+    detail
   end
 end
