@@ -92,13 +92,13 @@ describe CountGrammarParser do
       expect(count.code_section.number.text_value).to eq '484-487 (A)'
     end
 
-    it 'parses when charge is in the comments' do
+    it 'parses malformed charge comments' do
       text = <<~TEXT
          SEE COMMENT FOR CHARGE
         DISPO:CONVICTED
         CONV STATUS:FELONY
         COM: SEN-X3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN
-        .COM: CHRG 490,2 PC
+        .COM; CHRG 490,2 PC
         DCN:T11389422131233123000545
       TEXT
 

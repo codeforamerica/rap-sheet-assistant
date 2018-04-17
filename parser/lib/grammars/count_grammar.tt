@@ -58,12 +58,16 @@ grammar CountGrammar
       .*
     end
 
+    rule comment_tag
+      'COM' w (':' / ';')
+    end
+
     rule comment_charge_line
-      stray_punctuation 'COM' w ':' (!'CHRG' !N .)* 'CHRG' '-'? w code_section to_eol <CommentChargeLine>
+      stray_punctuation comment_tag (!'CHRG' !N .)* 'CHRG' '-'? w code_section to_eol <CommentChargeLine>
     end
 
     rule comment_sentence_line
-      stray_punctuation 'COM' w ':' (!comment_sentence_tag !N .)* comment_sentence_tag sentence <CommentSentenceLine>
+      stray_punctuation comment_tag (!comment_sentence_tag !N .)* comment_sentence_tag sentence <CommentSentenceLine>
     end
     
     rule comment_sentence_tag
@@ -95,7 +99,7 @@ grammar CountGrammar
     end
 
     rule next_dispo_info_item
-      N stray_punctuation ('*'? [A-Z]+ w ':' / date / !.)
+      N stray_punctuation ('*'? [A-Z]+ w (':' / ';') / date / !.)
     end
 
     rule convicted
