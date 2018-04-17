@@ -27,7 +27,7 @@ describe CaseNumberBuilder do
         COURT: NAME7OZ
         19820915 CAMC L05 ANGELES METRO
         
-        CNT: 001 #456.:
+        CNT: 001 #456.:-
         DISPO:CONVICTED
         * * * END OF MESSAGE * * *
     TEXT

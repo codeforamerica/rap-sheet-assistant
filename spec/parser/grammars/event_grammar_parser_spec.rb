@@ -63,6 +63,20 @@ RSpec.describe EventGrammarParser do
         expect(tree.counts[1].text_value).to eq "CNT: 003-011\ncount 3 text\n"
       end
 
+      it 'can parse dates with stray periods' do
+        text = <<~TEXT
+          COURT:
+          20040.102 SAN FRANCISCO
+
+          CNT: 001-004  #346477
+          blah
+        TEXT
+
+        tree = parse(text)
+
+        expect(tree.date.text_value).to eq '20040.102'
+      end
+
       it 'can parse two digit count' do
         text = <<~TEXT
           COURT:

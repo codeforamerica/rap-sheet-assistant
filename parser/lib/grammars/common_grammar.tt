@@ -24,7 +24,7 @@ grammar CommonGrammar
   end
 
   rule date
-    [0-9] 8..8
+    ([.]* [0-9] [.]*) 8..8
   end
 
   rule stray_punctuation

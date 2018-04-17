@@ -10,10 +10,14 @@ grammar CycleGrammar
   end
 
   rule event_delimiter
-     ( N w dash 2.. w N ) / ( N &event_identifier)
+     ( N dash 2.. w N ) / ( N &event_identifier)
   end
 
   rule dash
-    w [-]
+    stray_quote [-] stray_quote
+  end
+  
+  rule stray_quote
+    w [']* w
   end
 end

@@ -13,6 +13,11 @@ describe EventBuilder do
     event = build_event('19820002')
     expect(event.date).to eq nil
   end
+
+  it 'strips stray periods from date' do
+    event = build_event('198201.02')
+    expect(event.date).to eq Date.new(1982, 1, 2)
+  end
 end
 
 def build_event(text)

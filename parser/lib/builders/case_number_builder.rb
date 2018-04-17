@@ -10,7 +10,7 @@ class CaseNumberBuilder
   def self.strip_trailing_punctuation(str)
     new_str = str
 
-    while new_str.end_with?('.', ':')
+    while new_str.end_with?('.', ':', '-')
       new_str = new_str[0..-2]
     end
     new_str

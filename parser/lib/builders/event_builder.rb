@@ -8,8 +8,13 @@ module EventBuilder
   attr_reader :event_syntax_node
 
   def date
-    Date.strptime(event_syntax_node.date.text_value, '%Y%m%d')
+    Date.strptime(date_string, '%Y%m%d')
   rescue ArgumentError
     nil
+  end
+
+  def date_string
+    event_syntax_node.date.text_value.
+      gsub('.', '')
   end
 end
