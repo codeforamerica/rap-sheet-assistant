@@ -76,7 +76,7 @@ RSpec.describe CycleGrammarParser do
       end
     end
 
-    context 'when court event has missing event delimiter' do
+    context 'when arrest event has missing event delimiter' do
       let(:text) {
         <<~TEXT
           event one text

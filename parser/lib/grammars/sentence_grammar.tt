@@ -10,7 +10,7 @@ grammar SentenceGrammar
   end
 
   rule probation
-    (!probation_tag !',' .)* probation_tag <Probation>
+    (!probation_tag !',' .)* probation_tag &section_end <Probation>
   end
   
   rule probation_tag
@@ -18,7 +18,7 @@ grammar SentenceGrammar
   end
 
   rule jail
-    (!jail_tag !',' .)* jail_tag <Jail>
+    (!jail_tag !',' .)* jail_tag &section_end <Jail>
   end
   
   rule jail_tag
@@ -26,10 +26,14 @@ grammar SentenceGrammar
   end
   
   rule prison
-    (!'PRISON' !',' .)* 'PRISON' !' SS' <Prison>
+    (!'PRISON' !',' .)* 'PRISON' &section_end <Prison>
   end
 
   rule detail
     (!',' .)+ <Detail>
+  end
+
+  rule section_end
+    w (',' / !.)
   end
 end

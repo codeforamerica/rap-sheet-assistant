@@ -15,13 +15,11 @@ describe SentenceGrammarParser do
       expect(sentence.details[1].text_value).to eq 'ANOTHER ONE'
     end
 
-    it 'parses prison ss into details' do
-      text = '012 MONTHS PRISON SS'
+    it 'parses concurrent jail sentences and prison ss sentences' do
+      text = '1 YR PRISON SS, 1 YR JL CC'
 
       sentence = described_class.new.parse(text)
-
-      expect(sentence.prison).to eq nil
-      expect(sentence.details[0].text_value).to eq '012 MONTHS PRISON SS'
+      expect(sentence.details.length).to eq 2
     end
 
     it 'does not consume trailing commas into details' do
@@ -31,7 +29,7 @@ describe SentenceGrammarParser do
 
       expect(sentence.details.length).to eq 0
       expect(sentence.prison.text_value).to eq '012 MONTHS PRISON'
-      end
+    end
   end
 end
 
