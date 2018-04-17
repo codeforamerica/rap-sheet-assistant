@@ -6,19 +6,26 @@ module SentenceGrammar
 
   class Sentence < Treetop::Runtime::SyntaxNode
     def probation
-      recursive_select(Probation).first
+      content_class(Probation).first
     end
 
     def jail
-      recursive_select(Jail).first
+      content_class(Jail).first
     end
 
     def prison
-      recursive_select(Prison).first
+      content_class(Prison).first
     end
 
     def details
-      recursive_select(Detail)
+      content_class(Detail)
+    end
+    
+    private
+
+    def content_class(klass)
+      map(&:sentence_content).
+        select { |c| c.is_a? klass }
     end
   end
 end

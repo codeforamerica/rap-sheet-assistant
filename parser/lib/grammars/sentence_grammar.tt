@@ -2,7 +2,7 @@ grammar SentenceGrammar
   include CommonGrammar
 
   rule sentence
-    w sentence_content w (',' w sentence_content w)* ','? w <Sentence>
+    (w sentence_content w ','? w)* <Sentence>
   end
 
   rule sentence_content
