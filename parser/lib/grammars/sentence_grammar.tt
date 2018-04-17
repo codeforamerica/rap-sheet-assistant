@@ -2,7 +2,7 @@ grammar SentenceGrammar
   include CommonGrammar
 
   rule sentence
-    w sentence_content w (',' w sentence_content w)* <Sentence>
+    w sentence_content w (',' w sentence_content w)* ','? w <Sentence>
   end
 
   rule sentence_content
@@ -10,11 +10,19 @@ grammar SentenceGrammar
   end
 
   rule probation
-    (!'PROBATION' !',' .)* 'PROBATION' <Probation>
+    (!probation_tag !',' .)* probation_tag <Probation>
+  end
+  
+  rule probation_tag
+    'PROBATION' / 'PROB'
   end
 
   rule jail
-    (!'JAIL' !',' .)* 'JAIL' <Jail>
+    (!jail_tag !',' .)* jail_tag <Jail>
+  end
+  
+  rule jail_tag
+    'JAIL' / 'JL WORK' / 'JL'
   end
   
   rule prison
@@ -22,6 +30,6 @@ grammar SentenceGrammar
   end
 
   rule detail
-    (!',' .)* <Detail>
+    (!',' .)+ <Detail>
   end
 end

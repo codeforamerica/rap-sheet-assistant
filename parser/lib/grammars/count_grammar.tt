@@ -59,9 +59,13 @@ grammar CountGrammar
     end
 
     rule comment_charge_line
-      stray_punctuation 'COM' w ':' (!'CHRG' .)* 'CHRG' '-'? w code_section to_eol <CommentChargeLine>
+      stray_punctuation 'COM' w ':' (!'CHRG' !N .)* 'CHRG' '-'? w code_section to_eol <CommentChargeLine>
     end
 
+    rule comment_sentence_line
+      stray_punctuation 'COM' w ':' (!'SEN' !N .)* 'SEN' '-'? w 'X' sentence <CommentSentenceLine>
+    end
+    
     rule unknown_content_line
       to_eol
     end
@@ -95,7 +99,7 @@ grammar CountGrammar
     end
 
     rule extra_conviction_info
-      (comment_charge_line / severity_line / sentence_line / unknown_content_line)*
+      (comment_charge_line / severity_line / sentence_line / comment_sentence_line / unknown_content_line)*
     end
 
     rule dismissed

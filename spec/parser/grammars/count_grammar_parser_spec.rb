@@ -105,7 +105,6 @@ describe CountGrammarParser do
       count = described_class.new.parse(text)
       expect(count.charge_line.text_value).to eq('SEE COMMENT FOR CHARGE')
       expect(count.disposition).to be_a CountGrammar::Convicted
-
       expect(count.code_section.code.text_value).to eq 'PC'
       expect(count.code_section.number.text_value).to eq '490,2'
     end
@@ -182,6 +181,22 @@ describe CountGrammarParser do
 
       count = described_class.new.parse(text)
       expect(count.disposition.sentence.text_value).to eq '012 MONTHS PROBATION, 045 DAYS JAIL, FINE, FINE SS, CONCURRENT'
+    end
+    
+    it 'parses sentences found in comments' do
+      text = <<~TEXT
+        496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+        DISPO:CONVICTED
+        CONV STATUS:MISDEMEANOR
+        COM: SEN-X3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN
+        COM: CNT 01 CHRG-484-487 (A) PC
+      TEXT
+
+      count = described_class.new.parse(text)
+      expect(count.disposition.sentence.text_value).to eq '3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN'
+      expect(count.disposition.sentence.probation.text_value).to eq '3 YR PROB'
+      expect(count.disposition.sentence.jail.text_value).to eq '6 MO JL WORK'
+      expect(count.disposition.sentence.details[0].text_value).to eq '$971 FINE $420 RSTN'
     end
 
     it 'parses out punctuation around code section number' do

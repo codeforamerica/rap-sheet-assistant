@@ -44,7 +44,9 @@ module CountGrammar
     private
     
     def sentence_line
-      extra_conviction_info.find { |l| l.is_a? SentenceLine }
+      extra_conviction_info.find do |l|
+        l.is_a? SentenceLine or l.is_a? CommentSentenceLine
+      end
     end
   end
 
@@ -53,6 +55,8 @@ module CountGrammar
   class SeverityLine < Treetop::Runtime::SyntaxNode; end
 
   class CommentChargeLine < Treetop::Runtime::SyntaxNode; end
+  
+  class CommentSentenceLine < Treetop::Runtime::SyntaxNode; end
 
   class SentenceLine < Treetop::Runtime::SyntaxNode; end
 end

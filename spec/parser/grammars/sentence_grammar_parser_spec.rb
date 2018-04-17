@@ -23,6 +23,23 @@ describe SentenceGrammarParser do
       expect(sentence.prison).to eq nil
       expect(sentence.details[0].text_value).to eq '012 MONTHS PRISON SS'
     end
+
+    it 'does not consume trailing commas into details' do
+      text = '012 MONTHS PRISON, '
+
+      sentence = described_class.new.parse(text)
+
+      expect(sentence.details.length).to eq 0
+      expect(sentence.prison.text_value).to eq '012 MONTHS PRISON'
+      end
+    
+    # it 'works??' do
+    #   text = '3 YR PROB, 6 MO JL WORK, $971 FINE $420 RSTN'
+    # 
+    #   sentence = described_class.new.parse(text)
+    # 
+    #   expect(sentence.probation.text_value).to eq '3 YR PROB'
+    # end
   end
 end
 
