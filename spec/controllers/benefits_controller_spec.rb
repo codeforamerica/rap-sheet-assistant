@@ -3,10 +3,9 @@ require 'rails_helper'
 RSpec.describe Users::BenefitsController, type: :controller do
   describe '#create' do
     let(:user) {
-      FactoryBot.create(
-        :user,
-        financial_information: FactoryBot.build(:financial_information, employed: false),
-        rap_sheet: FactoryBot.build(:rap_sheet)
+      create(:user,
+        financial_information: build(:financial_information, employed: false),
+        rap_sheet: build(:rap_sheet)
       )
     }
     context 'user is on benefits programs' do

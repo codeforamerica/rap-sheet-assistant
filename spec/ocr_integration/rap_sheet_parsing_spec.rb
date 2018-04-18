@@ -145,7 +145,7 @@ end
 
 def create_rap_sheet(file_names, rap_sheet_prefix)
   pages = file_names.select { |f| f.starts_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg') }
-  rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: pages.count)
+  rap_sheet = create(:rap_sheet, number_of_pages: pages.count)
 
   pages.each do |page|
     text = fetch_or_scan_text(file_names, page)

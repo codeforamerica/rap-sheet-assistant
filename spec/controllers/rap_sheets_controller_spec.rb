@@ -42,8 +42,7 @@ RSpec.describe RapSheetsController, type: :controller do
     end
 
     let(:rap_sheet) do
-      FactoryBot.create(
-        :rap_sheet,
+      create(:rap_sheet,
         number_of_pages: 1,
         rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
       )
@@ -57,8 +56,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
     describe 'when the rap sheet cannot be parsed' do
       let(:rap_sheet) do
-        FactoryBot.create(
-          :rap_sheet,
+        create(:rap_sheet,
           number_of_pages: 1,
           rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
         )
@@ -110,8 +108,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
   describe '#details' do
     let(:rap_sheet) do
-      FactoryBot.create(
-        :rap_sheet,
+      create(:rap_sheet,
         number_of_pages: 1,
         rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
       )
@@ -146,8 +143,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
     describe 'when the rap sheet cannot be parsed' do
       let(:rap_sheet) do
-        FactoryBot.create(
-          :rap_sheet,
+        create(:rap_sheet,
           number_of_pages: 1,
           rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
         )
@@ -165,7 +161,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
   describe '#add_page' do
     it 'increments the page count' do
-      rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: 2)
+      rap_sheet = create(:rap_sheet, number_of_pages: 2)
       expect do
         put :add_page, params: { id: rap_sheet.id }
       end.to change { rap_sheet.reload.number_of_pages }.from(2).to(3)
@@ -175,7 +171,7 @@ RSpec.describe RapSheetsController, type: :controller do
   describe '#remove_page' do
     context 'when there is only one page' do
       it 'does nothing' do
-        rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: 1)
+        rap_sheet = create(:rap_sheet, number_of_pages: 1)
         expect do
           put :remove_page, params: { id: rap_sheet.id }
         end.not_to change { rap_sheet.reload.number_of_pages }
@@ -184,7 +180,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
     context 'when a last page has not been uploaded' do
       it 'decrements the page count' do
-        rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: 2)
+        rap_sheet = create(:rap_sheet, number_of_pages: 2)
         expect do
           put :remove_page, params: { id: rap_sheet.id }
         end.to change { rap_sheet.reload.number_of_pages }.from(2).to(1)
@@ -193,8 +189,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
     context 'when there is an image uploaded for the last page' do
       it 'deletes the last page and decrements the page count' do
-        rap_sheet = FactoryBot.create(
-          :rap_sheet,
+        rap_sheet = create(:rap_sheet,
           number_of_pages: 2,
           rap_sheet_pages: [
             RapSheetPage.new(text: 'sample_text', page_number: 1),

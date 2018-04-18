@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Users::FinancialInformationsController, type: :controller do
   describe '#create' do
-    let(:user) { FactoryBot.create :user }
+    let(:user) { create :user }
 
     context 'the user is submitting info for the first time' do
       it 'creates financial information' do

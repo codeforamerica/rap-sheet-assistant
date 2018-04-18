@@ -7,7 +7,7 @@ describe RapSheetPagesController do
 
   describe '#create' do
     it 'adds rap sheet page to rap sheet' do
-      rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: 3)
+      rap_sheet = create(:rap_sheet, number_of_pages: 3)
 
       post :create, params: {
         rap_sheet_page: {
@@ -29,7 +29,7 @@ describe RapSheetPagesController do
     let(:image) { File.new(Rails.root.join('spec', 'fixtures', 'skywalker_rap_sheet_page_1.jpg')) }
 
     it 'removes a page' do
-      rap_sheet = FactoryBot.create(:rap_sheet, number_of_pages: 1)
+      rap_sheet = create(:rap_sheet, number_of_pages: 1)
       rap_sheet_page = rap_sheet.rap_sheet_pages.create!(page_number: 1, rap_sheet_page_image: image)
 
       expect do

@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PC1203PetitionCreator do
   let(:user) do
-    FactoryBot.build(
-      :user,
+    build(:user,
       first_name: 'Test',
       last_name: 'User',
       date_of_birth: Date.parse('1970-01-01'),
@@ -15,7 +14,7 @@ RSpec.describe PC1203PetitionCreator do
       email: 'me@me.com'
     )
   end
-  let(:rap_sheet) { FactoryBot.create(:rap_sheet, user: user) }
+  let(:rap_sheet) { create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
     conviction_event = ConvictionEvent.new(

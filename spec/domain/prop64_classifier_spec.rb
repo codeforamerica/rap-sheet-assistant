@@ -6,7 +6,7 @@ describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
   let(:code_section) {}
-  let(:user) { FactoryBot.build(:user) }
+  let(:user) { build(:user) }
 
   let(:conviction_event) do
     instance_double(ConvictionEvent, date: date, sentence: sentence, counts: [conviction_count])

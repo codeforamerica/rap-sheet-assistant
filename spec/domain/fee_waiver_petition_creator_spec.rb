@@ -2,15 +2,11 @@ require 'rails_helper'
 
 RSpec.describe FeeWaiverPetitionCreator do
   let(:financial_information) do
-    FactoryBot.build(
-      :financial_information,
-      employed: false
-    )
+    build(:financial_information, employed: false)
   end
 
   let(:user) do
-    FactoryBot.build(
-      :user,
+    build(:user,
       first_name: 'Test',
       last_name: 'User',
       street_address: '123 Fake St',
@@ -39,13 +35,12 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   context 'user is employed' do
     let(:financial_information) do
-      FactoryBot.build(
-        :financial_information,
+      build(:financial_information,
         employed: true,
         job_title: 'Astronaut',
         employer_name: 'NASA',
         employer_address: '1 Space Age',
-        )
+      )
     end
 
     it 'populates employment information' do
@@ -60,8 +55,7 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   context 'user is on all public benefits' do
     let(:financial_information) do
-      FactoryBot.build(
-        :financial_information,
+      build(:financial_information,
         benefits_programs: [
           'food_stamps',
           'supp_sec_inc',
@@ -93,8 +87,7 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   context 'user is on some public benefits' do
     let(:financial_information) do
-      FactoryBot.build(
-        :financial_information,
+      build(:financial_information,
         benefits_programs: [
           'supp_sec_inc',
           'ssp',
@@ -120,8 +113,7 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   context 'user is not on public benefits and low income' do
     let(:financial_information) do
-      FactoryBot.build(
-        :financial_information,
+      build(:financial_information,
         benefits_programs: [],
         monthly_income_under_limit: true
       )
@@ -145,8 +137,7 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   context 'user is not on public benefits and not low income' do
     let(:financial_information) do
-      FactoryBot.build(
-        :financial_information,
+      build(:financial_information,
         benefits_programs: [],
         monthly_income_under_limit: false
       )

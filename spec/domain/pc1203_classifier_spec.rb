@@ -3,9 +3,9 @@ require 'spec_helper'
 require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
-  let(:user) { FactoryBot.build(:user) }
+  let(:user) { build(:user) }
   let(:all_events) {}
-  let(:conviction_event) { build_conviction_event(sentence: sentence) }
+  let(:conviction_event) { build(:conviction_event, sentence: sentence) }
 
   subject { described_class.new(user: user, event: conviction_event, event_collection: all_events) }
 
@@ -30,8 +30,7 @@ describe PC1203Classifier do
   describe '#eligible?' do
     let(:sentence) { ConvictionSentence.new(prison: nil) }
     let(:user) do
-      FactoryBot.build(
-        :user,
+      build(:user,
         on_parole: false,
         on_probation: false,
         outstanding_warrant: false,
@@ -96,7 +95,7 @@ describe PC1203Classifier do
     context 'sentence includes probation' do
       context 'probation successfully completed' do
         let(:conviction_event) do
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 5.months),
             date: Date.new(1991, 5, 1)
           )
@@ -124,7 +123,7 @@ describe PC1203Classifier do
 
       context 'probation violated' do
         let(:conviction_event) do
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 5.months),
             date: Date.new(1991, 5, 1)
           )
@@ -142,7 +141,7 @@ describe PC1203Classifier do
 
       context 'unknown probation completion status' do
         let(:conviction_event) do
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 5.months),
             date: nil
           )
@@ -160,7 +159,7 @@ describe PC1203Classifier do
 
     context 'sentence does not include probation' do
       let(:conviction_event) do
-        build_conviction_event(
+        build(:conviction_event,
           sentence: ConvictionSentence.new(probation: nil),
           date: Date.new(1991, 5, 1),
           counts: [build_conviction_count(severity: severity)]

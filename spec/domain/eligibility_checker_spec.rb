@@ -16,11 +16,11 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
             counts: [prop64_eligible_count_1, pc1203_eligible_count]
           ),
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
           ),
@@ -47,11 +47,11 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
             counts: [prop64_eligible_count_1, pc1203_eligible_count]
           ),
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [prop64_eligible_count_2]
           ),
@@ -76,12 +76,12 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      event_1 = build_conviction_event(
+      event_1 = build(:conviction_event,
         date: Date.new(2014, 6, 1),
         sentence: ConvictionSentence.new(probation: 1.year),
         counts: [prop64_eligible_count_1, pc1203_eligible_count]
       )
-      event_2 = build_conviction_event(
+      event_2 = build(:conviction_event,
         sentence: ConvictionSentence.new(prison: 1.year),
         counts: [prop64_eligible_count_2]
       )
@@ -130,7 +130,7 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
@@ -153,7 +153,7 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
@@ -180,7 +180,7 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [pc1203_eligible_count]
           )
@@ -200,7 +200,7 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
             counts: [pc1203_eligible_count]
           )
@@ -224,7 +224,7 @@ describe EligibilityChecker do
 
       events = EventCollection.new(
         [
-          build_conviction_event(
+          build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
             counts: [pc1203_eligible_count]
           )
