@@ -162,7 +162,7 @@ describe PC1203Classifier do
         build(:conviction_event,
           sentence: ConvictionSentence.new(probation: nil),
           date: Date.new(1991, 5, 1),
-          counts: [build_conviction_count(severity: severity)]
+          counts: [build(:conviction_count, severity: severity)]
         )
       end
 

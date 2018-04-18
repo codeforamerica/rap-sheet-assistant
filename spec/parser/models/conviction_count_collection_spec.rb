@@ -7,9 +7,9 @@ describe ConvictionCountCollection do
       event_2 = double(:event)
 
       subject = described_class.new([
-        build_conviction_count(event: event_1),
-        build_conviction_count(event: event_2),
-        build_conviction_count(event: event_1)
+        build(:conviction_count, event: event_1),
+        build(:conviction_count, event: event_2),
+        build(:conviction_count, event: event_1)
       ]).events
 
       expect(subject).to eq [event_1, event_2]
@@ -18,9 +18,9 @@ describe ConvictionCountCollection do
 
   describe 'severity filters' do
     it 'can filter counts by severity strings' do
-      count_1 = build_conviction_count(severity: 'F')
-      count_2 = build_conviction_count(severity: 'M')
-      count_3 = build_conviction_count(severity: nil)
+      count_1 = build(:conviction_count, severity: 'F')
+      count_2 = build(:conviction_count, severity: 'M')
+      count_3 = build(:conviction_count, severity: nil)
 
       subject = described_class.new([
         count_1, count_2, count_3
@@ -34,8 +34,8 @@ describe ConvictionCountCollection do
 
   describe '#-' do
     it 'wraps the subtraction result as a ConvictionCountCollection' do
-      count_1 = build_conviction_count
-      count_2 = build_conviction_count
+      count_1 = build(:conviction_count)
+      count_2 = build(:conviction_count)
 
       subject = described_class.new([count_1, count_2]) - described_class.new([count_1])
 
@@ -46,8 +46,8 @@ describe ConvictionCountCollection do
 
   describe '#select' do
     it 'wraps the selection result as a ConvictionCountCollection' do
-      count_1 = build_conviction_count(severity: 'F')
-      count_2 = build_conviction_count
+      count_1 = build(:conviction_count, severity: 'F')
+      count_2 = build(:conviction_count)
 
       subject = described_class.new([count_1, count_2]).select do |c|
         c.severity == 'F'

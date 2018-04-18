@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe EligibilityChecker do
-  let(:prop64_eligible_count_1) { build_conviction_count(code: 'HS', section: '11357') }
-  let(:prop64_eligible_count_2) { build_conviction_count(code: 'HS', section: '11357') }
-  let(:pc1203_eligible_count) { build_conviction_count(code: 'PC', section: '456') }
+  let(:prop64_eligible_count_1) { build(:conviction_count, code: 'HS', section: '11357') }
+  let(:prop64_eligible_count_2) { build(:conviction_count, code: 'HS', section: '11357') }
+  let(:pc1203_eligible_count) { build(:conviction_count, code: 'PC', section: '456') }
 
   describe '#all_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do
