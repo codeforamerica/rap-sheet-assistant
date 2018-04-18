@@ -134,7 +134,7 @@ RSpec.describe PC1203PetitionCreator do
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
-  context '1203.4 checkboxes' do
+  describe 'remedy checkboxes' do
     let(:conviction_event) {
       ConvictionEvent.new(
         case_number: '#ABCDE',
@@ -144,82 +144,124 @@ RSpec.describe PC1203PetitionCreator do
       )
     }
 
-    it 'fills out question 2 and 2a if probation successfully completed' do
-      pdf_file = PC1203PetitionCreator.new(
+    subject do
+      get_fields_from_pdf(PC1203PetitionCreator.new(
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: [],
-        remedy: {
+        remedy: remedy
+      ).create_petition)
+    end
+
+    context '1203.4 successful completion' do
+      let(:remedy) do
+        {
           code: '1203.4',
           scenario: :successful_completion
         }
-      ).create_petition
-
-      expected_values = {
-        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1',
-      }
-
-      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+      end
+      it 'fills out question 2 and 2a if probation successfully completed' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1',
+        )
+      end
     end
 
-    it 'fills out question 2 and 2b if probation successfully completed' do
-      pdf_file = PC1203PetitionCreator.new(
-        rap_sheet: rap_sheet,
-        conviction_event: conviction_event,
-        conviction_counts: [],
-        remedy: {
+    context '1203.4 probation terminated early' do
+      let(:remedy) do
+        {
           code: '1203.4',
           scenario: :early_termination
         }
-      ).create_petition
-
-      expected_values = {
-        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2',
-      }
-
-      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+      end
+      it 'fills out question 2 and 2a' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2',
+        )
+      end
     end
 
-    it 'fills out question 2 and 2c if probation successfully completed' do
-      pdf_file = PC1203PetitionCreator.new(
-        rap_sheet: rap_sheet,
-        conviction_event: conviction_event,
-        conviction_counts: [],
-        remedy: {
+    context '1203.4 discretionary' do
+      let(:remedy) do
+        {
           code: '1203.4',
           scenario: :discretionary
         }
-      ).create_petition
-
-      expected_values = {
-        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3',
-      }
-
-      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
+      it 'fills out question 2 and 2c' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3',
+        )
+      end
+    end
 
-    it 'fills out question 2 and no subcheckbox if probation status unknown' do
-      pdf_file = PC1203PetitionCreator.new(
-        rap_sheet: rap_sheet,
-        conviction_event: conviction_event,
-        conviction_counts: [],
-        remedy: {
+    context '1203.4 unknown remedy' do
+      let(:remedy) do
+        {
           code: '1203.4',
           scenario: :unknown
         }
-      ).create_petition
+      end
+      it 'fills out question 2 and no subcheckbox' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => 'Off',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => 'Off',
+          'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => 'Off',
+        )
+      end
+    end
 
-      expected_values = {
-        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => 'Off',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => 'Off',
-        'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => 'Off',
-      }
+    context '1203.4a successful completion' do
+      let(:remedy) do
+        {
+          code: '1203.4a',
+          scenario: :successful_completion
+        }
+      end
 
-      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+      it 'fills out question 3 and 3a' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationNotGrantedReason[1]' => '2',
+        )
+      end
+    end
+
+    context '1203.4a discretionary' do
+      let(:remedy) do
+        {
+          code: '1203.4a',
+          scenario: :discretionary
+        }
+      end
+
+      it 'fills out question 3 and 3b' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationNotGrantedReason[0]' => '1',
+        )
+      end
+    end
+
+    context '1203.4a unknown scenario' do
+      let(:remedy) do
+        {
+          code: '1203.4a',
+          scenario: :unknown
+        }
+      end
+
+      it 'fills out question 3 and no subcheckbox' do
+        expect(subject).to include(
+          'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
+          'topmostSubform[0].Page1[0].ProbationNotGrantedReason[1]' => 'Off',
+          'topmostSubform[0].Page1[0].ProbationNotGrantedReason[0]' => 'Off',
+        )
+      end
     end
   end
 end

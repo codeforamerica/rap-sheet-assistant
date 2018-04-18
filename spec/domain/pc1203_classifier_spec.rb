@@ -160,24 +160,66 @@ describe PC1203Classifier do
 
     context 'sentence does not include probation' do
       let(:conviction_event) do
-        instance_double(ConvictionEvent,
+        build_conviction_event(
           sentence: ConvictionSentence.new(probation: nil),
-          severity: severity)
+          date: Date.new(1991, 5, 1),
+          counts: [build_conviction_count(severity: severity)]
+        )
       end
 
       context 'when the event severity is misdemeanor' do
         let(:severity) { 'M' }
 
-        it 'returns 1203.4a' do
-          expect(subject.remedy[:code]).to eq '1203.4a'
+        context 'when rap sheet is clear for a year after sentencing' do
+          let(:arrest_event) { ArrestEvent.new(date: Date.new(1992, 7, 1)) }
+          let(:all_events) { EventCollection.new([conviction_event, arrest_event]) }
+
+          it 'returns 1203.4a and successful scenario' do
+            expect(subject.remedy).to eq({
+              code: '1203.4a',
+              scenario: :successful_completion
+            })
+          end
+        end
+
+        context 'when rap sheet has event within a year after sentencing' do
+          let(:arrest_event) { ArrestEvent.new(date: Date.new(1992, 4, 1)) }
+          let(:all_events) { EventCollection.new([conviction_event, arrest_event]) }
+
+          it 'returns 1203.4a and successful scenario' do
+            expect(subject.remedy).to eq({
+              code: '1203.4a',
+              scenario: :discretionary
+            })
+          end
         end
       end
 
       context 'when the event severity is infraction' do
         let(:severity) { 'I' }
 
-        it 'returns 1203.4a' do
-          expect(subject.remedy[:code]).to eq '1203.4a'
+        context 'when rap sheet is clear for a year after sentencing' do
+          let(:arrest_event) { ArrestEvent.new(date: Date.new(1992, 7, 1)) }
+          let(:all_events) { EventCollection.new([conviction_event, arrest_event]) }
+
+          it 'returns 1203.4a and successful scenario' do
+            expect(subject.remedy).to eq({
+              code: '1203.4a',
+              scenario: :successful_completion
+            })
+          end
+        end
+
+        context 'when rap sheet has event within a year after sentencing' do
+          let(:arrest_event) { ArrestEvent.new(date: Date.new(1992, 4, 1)) }
+          let(:all_events) { EventCollection.new([conviction_event, arrest_event]) }
+
+          it 'returns 1203.4a and successful scenario' do
+            expect(subject.remedy).to eq({
+              code: '1203.4a',
+              scenario: :discretionary
+            })
+          end
         end
       end
 
@@ -199,12 +241,25 @@ describe PC1203Classifier do
     end
   end
 
-  def build_conviction_event(date: nil, case_number: nil, courthouse: nil, sentence: nil)
-    ConvictionEvent.new(
+  def build_conviction_event(date: nil, case_number: nil, courthouse: nil, sentence: nil, counts: counts)
+    event = ConvictionEvent.new(
       date: date,
       case_number: case_number,
       courthouse: courthouse,
       sentence: sentence
+    )
+    event.counts = counts
+
+    event
+  end
+
+  def build_conviction_count(code: nil, section: nil, severity: nil)
+    ConvictionCount.new(
+      event: nil,
+      code_section_description: nil,
+      severity: severity,
+      code: code,
+      section: section
     )
   end
 end

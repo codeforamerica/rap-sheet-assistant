@@ -78,11 +78,19 @@ class PC1203PetitionCreator
       '1203.41' => 'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]'
     }[remedy[:code]]
 
-    sub_checkbox = {
-      successful_completion: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1' },
-      early_termination: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2' },
-      discretionary: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3' }
-    }[remedy[:scenario]]  
+    sub_checkbox =
+      if remedy[:code] == '1203.4'
+        {
+          successful_completion: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1' },
+          early_termination: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2' },
+          discretionary: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3' }
+        }[remedy[:scenario]]
+      elsif remedy[:code] == '1203.4a'
+        {
+          successful_completion: { 'topmostSubform[0].Page1[0].ProbationNotGrantedReason[1]' => '2' },
+          discretionary: { 'topmostSubform[0].Page1[0].ProbationNotGrantedReason[0]' => '1' }
+        }[remedy[:scenario]]
+      end
 
     sub_checkbox = {} if sub_checkbox.nil?
 

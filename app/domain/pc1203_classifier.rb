@@ -18,16 +18,6 @@ class PC1203Classifier
   def remedy
     if event.sentence.probation
       code = '1203.4'
-      probation_successful = event.successfully_completed_probation?(event_collection)
-
-      scenario =
-        if probation_successful
-          :successful_completion
-        elsif probation_successful == false
-          :discretionary
-        else
-          :unknown
-        end
     else
       code =
         case event.severity
@@ -40,14 +30,39 @@ class PC1203Classifier
           else
             nil
         end
-      scenario = nil
     end
 
     return nil if code.nil?
 
     {
       code: code,
-      scenario: scenario
+      scenario: scenario_for_code(code)
     }
+  end
+
+  private
+
+  def scenario_for_code(code)
+    if code == '1203.4'
+      probation_successful = event.successfully_completed_probation?(event_collection)
+      if probation_successful
+        :successful_completion
+      elsif probation_successful == false
+        :discretionary
+      else
+        :unknown
+      end
+    elsif code == '1203.4a'
+      year_successful = event.successfully_completed_year?(event_collection)
+      if year_successful
+        :successful_completion
+      elsif year_successful == false
+        :discretionary
+      else
+        :unknown
+      end
+    else
+      nil
+    end
   end
 end

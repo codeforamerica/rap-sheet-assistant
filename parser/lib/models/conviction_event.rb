@@ -10,13 +10,11 @@ class ConvictionEvent
   attr_accessor :counts
 
   def successfully_completed_probation?(events)
-    return nil if date.nil?
+    successfully_completed_duration?(events, sentence.probation)
+  end
 
-    events_with_dates = (events.arrests + events.custody_events).reject do |e|
-      e.date.nil?
-    end
-
-    events_with_dates.all? { |e| event_outside_probation_period(e) }
+  def successfully_completed_year?(events)
+    successfully_completed_duration?(events, 1.year)
   end
 
   def inspect
@@ -32,7 +30,17 @@ class ConvictionEvent
 
   private
 
-  def event_outside_probation_period(e)
-    e.date < date or e.date > (date + sentence.probation)
+  def successfully_completed_duration?(events, duration)
+    return nil if date.nil?
+
+    events_with_dates = (events.arrests + events.custody_events).reject do |e|
+      e.date.nil?
+    end
+
+    events_with_dates.all? { |e| event_outside_duration(e, duration) }
+  end
+
+  def event_outside_duration(e, duration)
+    e.date < date or e.date > (date + duration)
   end
 end
