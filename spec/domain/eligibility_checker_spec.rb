@@ -235,25 +235,4 @@ describe EligibilityChecker do
       expect(described_class.new(user).potentially_eligible?).to eq false
     end
   end
-
-  def build_conviction_event(date: nil, sentence: nil, counts: nil)
-    event = ConvictionEvent.new(
-      date: date,
-      case_number: nil,
-      courthouse: nil,
-      sentence: sentence
-    )
-    event.counts = counts
-    event
-  end
-
-  def build_conviction_count(code: nil, section: nil)
-    ConvictionCount.new(
-      event: nil,
-      code_section_description: nil,
-      severity: nil,
-      code: code,
-      section: section
-    )
-  end
 end

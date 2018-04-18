@@ -240,26 +240,4 @@ describe PC1203Classifier do
       end
     end
   end
-
-  def build_conviction_event(date: nil, case_number: nil, courthouse: nil, sentence: nil, counts: counts)
-    event = ConvictionEvent.new(
-      date: date,
-      case_number: case_number,
-      courthouse: courthouse,
-      sentence: sentence
-    )
-    event.counts = counts
-
-    event
-  end
-
-  def build_conviction_count(code: nil, section: nil, severity: nil)
-    ConvictionCount.new(
-      event: nil,
-      code_section_description: nil,
-      severity: severity,
-      code: code,
-      section: section
-    )
-  end
 end
