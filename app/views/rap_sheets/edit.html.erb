@@ -1,7 +1,12 @@
 <div class="container">
   <h1 class="mt-5 font-weight-normal">Upload all <%= pluralize(@rap_sheet.number_of_pages, 'page') %> of your RAP
     sheet</h1>
-  <p>Make sure to keep them in order</p>
+  <p>Please make sure to:</p>
+  <ul>
+    <li>Photograph one page at a time</li>
+    <li>Keep the pages in order</li>
+    <li>Take a clear photo, so the words aren't blurry</li>
+  </ul>
 
   <p class="mt-4"><%= @rap_sheet.rap_sheet_pages.length %> of <%= pluralize(@rap_sheet.number_of_pages, 'page') %> uploaded</p>
 

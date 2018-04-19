@@ -1,0 +1,49 @@
+<div class="container">
+  <h1 class="mt-5 font-weight-normal">Upload a PDF of your RAP sheet</h1>
+  <p>Make sure your PDF includes all pages of your RAP sheet.</p>
+
+  <div class="card">
+    <div class="card-content">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <%= content_tag :div, class: 'rap-sheet-page-row' do %>
+            <div class="rap-sheet-page-number-column">
+              <%= content_tag :div, class: "mr-2 page-indicator #{file_persisted ? 'completed' : ''}" do %>
+              <% end %>
+            </div>
+            <div class="rap-sheet-page-content">
+              <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: { multipart: true } do |f| %>
+                <div>
+                  <%= file_persisted ? 'PDF added' : 'Add a file' %>
+                </div>
+                <% if file_persisted %>
+                  <%= @rap_sheet_page.rap_sheet_page_image.file.filename %>
+                <% else %>
+                  <label class="mt-1 btn btn-info btn-sm">
+                    Browse
+                    <%= f.file_field :pdf_file, accept: 'document/pdf', class: 'hidden' %>
+                  </label>
+                <% end %>
+                <div><%= f.submit 'Upload', class: 'hidden' %></div>
+              <% end %>
+            </div>
+            <% if file_persisted %>
+              <div class="rap-sheet-page-delete"><%= button_to '×', rap_sheet_page_path(@rap_sheet_page), method: :delete %></div>
+            <% end %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="mt-4">
+    <% unless file_persisted %>
+      Add a file from your computer before proceeding.
+    <% end %>
+  </p>
+  <% if file_persisted %>
+    <%= link_to 'Next →', rap_sheet_path(@rap_sheet), class: 'btn btn-info mt-2' %>
+  <% else %>
+    <%= link_to 'Next →', '#', class: 'btn btn-info mt-2 disabled' %>
+  <% end %>
+</div>

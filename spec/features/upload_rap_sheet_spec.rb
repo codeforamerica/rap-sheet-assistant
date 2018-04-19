@@ -16,7 +16,7 @@ describe 'uploading a rap sheet' do
     it 'allows the user to upload their rap sheet and shows convictions', js: true do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Start'
+      click_on 'Take photos with my phone'
 
       upload_pages(scanned_pages)
 
@@ -76,7 +76,7 @@ describe 'uploading a rap sheet' do
     it 'generates multiple petitions for independent conviction events' do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Start'
+      click_on 'Take photos with my phone'
 
       upload_pages(scanned_pages)
 
@@ -112,7 +112,7 @@ describe 'uploading a rap sheet' do
     it 'shows that it is dismissible', js: true do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Start'
+      click_on 'Take photos with my phone'
 
       upload_pages(scanned_pages)
 
@@ -173,7 +173,7 @@ describe 'uploading a rap sheet' do
     it 'shows that it is dismissible', js: true do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Start'
+      click_on 'Take photos with my phone'
 
       upload_pages(scanned_pages)
 
@@ -235,7 +235,7 @@ describe 'uploading a rap sheet' do
     it 'shows an ineligible page' do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Start'
+      click_on 'Take photos with my phone'
 
       upload_pages(scanned_pages)
 
@@ -244,10 +244,23 @@ describe 'uploading a rap sheet' do
     end
   end
 
+  context 'when the rap sheet is uploaded as a pdf' do
+    it 'shows convictions' do
+      visit root_path
+      expect(page).to have_content 'Upload your California RAP sheet'
+      click_on 'Add a PDF from my computer'
+
+      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
+      click_on 'Upload'
+    
+      expect(page).to have_content 'We found 5 convictions on your record.'
+    end
+  end
+  
   it 'allows the user to delete and re-upload pages' do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
-    click_on 'Start'
+    click_on 'Take photos with my phone'
 
     expect(page).to have_content 'How many pages does your RAP sheet have?'
     fill_in 'How many pages does your RAP sheet have?', with: '2'
@@ -272,7 +285,7 @@ describe 'uploading a rap sheet' do
   it 'allows the user to add and remove pages' do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
-    click_on 'Start'
+    click_on 'Take photos with my phone'
 
     expect(page).to have_content 'How many pages does your RAP sheet have?'
     fill_in 'How many pages does your RAP sheet have?', with: '2'
