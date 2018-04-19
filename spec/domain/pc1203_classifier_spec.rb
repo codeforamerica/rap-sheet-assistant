@@ -5,7 +5,8 @@ require_relative '../../app/domain/pc1203_classifier'
 describe PC1203Classifier do
   let(:user) { build(:user) }
   let(:all_events) {}
-  let(:conviction_event) { build(:conviction_event, sentence: sentence) }
+  let(:conviction_event) { build(:conviction_event, sentence: sentence, date: date) }
+  let(:date) { Date.today - 5.years }
 
   subject { described_class.new(user: user, event: conviction_event, event_collection: all_events) }
 
@@ -23,6 +24,23 @@ describe PC1203Classifier do
 
       it 'returns true' do
         expect(subject).to be_potentially_eligible
+      end
+    end
+
+    context 'when the conviction is less than a year old' do
+      let(:date) { Date.today - 6.months }
+      let(:sentence) { ConvictionSentence.new(prison: nil) }
+
+      it 'returns false' do
+        expect(subject).not_to be_potentially_eligible
+      end
+    end
+    context 'when the conviction has no date' do
+      let(:date) { nil }
+      let(:sentence) { ConvictionSentence.new(prison: nil) }
+
+      it 'returns false' do
+        expect(subject).not_to be_potentially_eligible
       end
     end
   end

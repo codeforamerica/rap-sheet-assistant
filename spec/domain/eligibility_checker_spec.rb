@@ -18,11 +18,13 @@ describe EligibilityChecker do
         [
           build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
-            counts: [prop64_eligible_count_1, pc1203_eligible_count]
+            counts: [prop64_eligible_count_1, pc1203_eligible_count],
+            date: Date.today - 5.years
           ),
           build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
-            counts: [prop64_eligible_count_2]
+            counts: [prop64_eligible_count_2],
+            date: Date.today - 5.years
           ),
           ArrestEvent.new(date: Date.today)
         ]
@@ -49,11 +51,13 @@ describe EligibilityChecker do
         [
           build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
-            counts: [prop64_eligible_count_1, pc1203_eligible_count]
+            counts: [prop64_eligible_count_1, pc1203_eligible_count],
+            date: Date.today - 5.years
           ),
           build(:conviction_event,
             sentence: ConvictionSentence.new(prison: 1.year),
-            counts: [prop64_eligible_count_2]
+            counts: [prop64_eligible_count_2],
+            date: Date.today - 5.years
           ),
           ArrestEvent.new(date: Date.today)
         ]
@@ -132,7 +136,8 @@ describe EligibilityChecker do
         [
           build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
-            counts: [pc1203_eligible_count]
+            counts: [pc1203_eligible_count],
+            date: Date.today - 5.years
           )
         ]
       )
@@ -155,7 +160,8 @@ describe EligibilityChecker do
         [
           build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
-            counts: [pc1203_eligible_count]
+            counts: [pc1203_eligible_count],
+            date: Date.today - 5.years
           )
         ]
       )
@@ -202,7 +208,8 @@ describe EligibilityChecker do
         [
           build(:conviction_event,
             sentence: ConvictionSentence.new(probation: 1.year),
-            counts: [pc1203_eligible_count]
+            counts: [pc1203_eligible_count],
+            date: Date.today - 5.years
           )
         ]
       )

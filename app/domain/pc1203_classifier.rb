@@ -3,6 +3,8 @@ class PC1203Classifier
 
   def potentially_eligible?
     return false unless event.sentence
+    return false unless event.date
+    return false if event.date > Date.today - 1.year
 
     !event.sentence.prison
   end
@@ -21,14 +23,14 @@ class PC1203Classifier
     else
       code =
         case event.severity
-          when 'M'
-            '1203.4a'
-          when 'I'
-            '1203.4a'
-          when 'F'
-            '1203.41'
-          else
-            nil
+        when 'M'
+          '1203.4a'
+        when 'I'
+          '1203.4a'
+        when 'F'
+          '1203.41'
+        else
+          nil
         end
     end
 
