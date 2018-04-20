@@ -244,19 +244,27 @@ describe 'uploading a rap sheet' do
     end
   end
 
-  context 'when the rap sheet is uploaded as a pdf' do
+  context 'when the rap sheet is uploaded as a pdf', :js do
     it 'shows convictions' do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
       click_on 'Add a PDF from my computer'
 
-      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
-      click_on 'Upload'
-    
+      expect(page).to have_content 'Add a file'
+      attach_rap_sheet_pdf
+      expect(page).to have_content 'PDF added'
+      find('.rap-sheet-page-delete a').click
+      expect(page).not_to have_content 'PDF added'
+      expect(page).to have_content 'Add a file'
+      attach_rap_sheet_pdf
+      save_and_open_screenshot
+      expect(page).to have_content 'PDF added'
+      click_on 'Next'
+
       expect(page).to have_content 'We found 5 convictions on your record.'
     end
   end
-  
+
   it 'allows the user to delete and re-upload pages' do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
@@ -349,10 +357,21 @@ describe 'uploading a rap sheet' do
   def attach_rap_sheet_image_file
     # Make file field visible for capybara-webkit
     if page.driver.class == Capybara::Webkit::Driver
-      page.evaluate_script("$('#rap_sheet_page_rap_sheet_page_image').toggle()")
+      page.evaluate_script("$('#rap_sheet_page_rap_sheet_page_image').show()")
       attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
     else
       attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+      click_on 'Upload'
+    end
+  end
+
+  def attach_rap_sheet_pdf
+    # Make file field visible for capybara-webkit
+    if page.driver.class == Capybara::Webkit::Driver
+      page.evaluate_script("$('#rap_sheet_pdf_pdf_file').show()")
+      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
+    else
+      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
       click_on 'Upload'
     end
   end

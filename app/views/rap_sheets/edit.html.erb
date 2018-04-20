@@ -63,3 +63,9 @@
   </p>
   <%= link_to 'Next →', rap_sheet_path(@rap_sheet), class: "btn btn-info mt-2 #{'disabled' unless @rap_sheet.all_pages_uploaded?}" %>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+  $('input[type="file"]').change(function (event) {
+    $(this).closest('form').submit();
+  });
+</script>

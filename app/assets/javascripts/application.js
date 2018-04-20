@@ -15,13 +15,10 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+//= require vue
 //= require_tree .
 
 $(document).on('turbolinks:load', function () {
-  $('input[type="file"]').change(function (event) {
-    $(this).closest('form').submit();
-  });
-
   function controlElementActive(el) {
     if ($(el)[0].type === 'radio' || $(el)[0].type === 'checkbox') {
       return $(el + ":checked").val() === "true";
