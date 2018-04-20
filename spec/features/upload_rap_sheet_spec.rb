@@ -245,6 +245,15 @@ describe 'uploading a rap sheet' do
   end
 
   context 'when the rap sheet is uploaded as a pdf' do
+    before do
+      allow(ConvertPdfToImages).
+        to receive(:convert).
+          and_return(
+            ['./spec/fixtures/skywalker_rap_sheet_page_1.txt',
+              './spec/fixtures/skywalker_rap_sheet_page_2.txt']
+          )
+    end
+
     it 'shows convictions' do
       visit root_path
       expect(page).to have_content 'Upload your California RAP sheet'
@@ -252,11 +261,11 @@ describe 'uploading a rap sheet' do
 
       attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
       click_on 'Upload'
-    
+
       expect(page).to have_content 'We found 5 convictions on your record.'
     end
   end
-  
+
   it 'allows the user to delete and re-upload pages' do
     visit root_path
     expect(page).to have_content 'Upload your California RAP sheet'
