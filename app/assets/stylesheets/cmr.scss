@@ -53,7 +53,7 @@ body {
   align-items: center;
   font-size: 32px;
 
-  input[type=submit] {
+  input[type=submit], a {
     -webkit-appearance: none;
     border: none;
     cursor: pointer;

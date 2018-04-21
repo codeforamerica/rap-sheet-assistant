@@ -38,6 +38,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'fog-local'
   gem 'spring-commands-rspec'
+  gem 'launchy'
 end
 
 group :development do
