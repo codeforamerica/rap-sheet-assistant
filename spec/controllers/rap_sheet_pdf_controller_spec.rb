@@ -3,9 +3,14 @@ require 'rails_helper'
 RSpec.describe RapSheetPdfController, type: :controller do
   describe '#create' do
     before do
-      allow(TextScanner).to receive(:scan_text).and_return('page 1 ', 'page 2')
+      allow(TextScanner).to receive(:scan_text).
+        with('spec/fixtures/skywalker_rap_sheet_page_2.jpg').
+        and_return('page 2')
+      allow(TextScanner).to receive(:scan_text).
+        with('spec/fixtures/skywalker_rap_sheet_page_1.jpg').
+        and_return('page 1 ')
       allow(ConvertPdfToImages).to receive(:convert).and_return([
-        'spec/fixtures/skywalker_rap_sheet_page_1.jpg',
+        'spec/fixtures/skywalker_rap_sheet_page_2.jpg',
         'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
       ])
     end
