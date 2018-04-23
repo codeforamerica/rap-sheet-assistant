@@ -1,10 +1,11 @@
 class Prop64PetitionCreator
   include PetitionCreator
 
-  def initialize(rap_sheet, conviction_event, eligible_counts)
+  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy:)
     @rap_sheet = rap_sheet
     @conviction_event = conviction_event
-    @eligible_counts = eligible_counts
+    @conviction_counts = conviction_counts
+    @remedy = remedy
   end
 
   def create_petition
@@ -25,24 +26,21 @@ class Prop64PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[1].Checkbox[1]' => redesignation?,
       'topmostSubform[0].Page1[0].Checkbox[0]' => sentence_completed?,
       'topmostSubform[0].Page1[0].Checkbox[1]' => sentence_being_served?,
-      'topmostSubform[0].Page1[0].Checkbox[2]' => count_possession?,
-      'topmostSubform[0].Page1[0].Checkbox[3]' => count_cultivation?,
-      'topmostSubform[0].Page1[0].Checkbox[4]' => count_possession_for_sale?,
-      'topmostSubform[0].Page1[0].Checkbox[5]' => count_transportation?,
-      'topmostSubform[0].Page1[0].Checkbox[6]' => count_personal_use?,
       'topmostSubform[0].Page1[0].Checkbox[7]' => 'Yes',
       'topmostSubform[0].Page1[0].Checkbox[8]' => 'Yes'
     }
+    
+    pdf_fields.merge!(remedy_checkboxes)
 
     fill_petition('prop64_petition.pdf', pdf_fields)
   end
 
   private
 
-  attr_reader :rap_sheet, :conviction_event, :eligible_counts
+  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy
 
   def code_sections
-    eligible_counts.map(&:code_section)
+    conviction_counts.map(&:code_section)
   end
 
   def resentencing?
@@ -53,24 +51,16 @@ class Prop64PetitionCreator
     sentence_completed?
   end
 
-  def count_possession?
-    code_sections.include?('HS 11357')
-  end
+  def remedy_checkboxes
+    checkboxes = {
+      'HS 11357' => 'topmostSubform[0].Page1[0].Checkbox[2]',
+      'HS 11358' => 'topmostSubform[0].Page1[0].Checkbox[3]',
+      'HS 11359' => 'topmostSubform[0].Page1[0].Checkbox[4]',
+      'HS 11360' => 'topmostSubform[0].Page1[0].Checkbox[5]',
+      'HS 11362.1' => 'topmostSubform[0].Page1[0].Checkbox[6]',
+    }
 
-  def count_cultivation?
-    code_sections.include?('HS 11358')
-  end
-
-  def count_possession_for_sale?
-    code_sections.include?('HS 11359')
-  end
-
-  def count_transportation?
-    code_sections.include?('HS 11360')
-  end
-
-  def count_personal_use?
-    code_sections.include?('HS 11362.1')
+    remedy.map { |r| [checkboxes[r], 'Yes'] }.to_h
   end
 
   def sentence_being_served?

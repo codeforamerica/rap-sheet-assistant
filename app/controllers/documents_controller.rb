@@ -23,7 +23,12 @@ class DocumentsController < ApplicationController
       prop64_counts = eligible_event[:prop64][:counts]
       pc1203_counts = eligible_event[:pc1203][:counts]
       if prop64_counts.present?
-        result << Prop64PetitionCreator.new(@rap_sheet, eligible_event[:event], prop64_counts).create_petition
+        result << Prop64PetitionCreator.new(
+          rap_sheet: @rap_sheet,
+          conviction_event: eligible_event[:event],
+          conviction_counts: prop64_counts,
+          remedy: eligible_event[:prop64][:remedy],
+        ).create_petition
       end
 
       if pc1203_counts.present?

@@ -17,14 +17,12 @@ RSpec.describe PC1203PetitionCreator do
   let(:rap_sheet) { create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
-    conviction_event = ConvictionEvent.new(
+    conviction_event = build(:conviction_event,
       case_number: '#ABCDE',
-      date: Date.new(2010, 1, 1),
-      sentence: nil,
-      courthouse: nil
+      date: Date.new(2010, 1, 1)
     )
     conviction_counts = [
-      ConvictionCount.new(
+      build(:conviction_count,
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'FELONY',

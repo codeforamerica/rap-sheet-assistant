@@ -48,7 +48,8 @@ class EligibilityChecker
   attr_reader :user
 
   def eligible_counts(event)
-    prop64_counts = Prop64Classifier.new(user: user, event: event, event_collection: events).eligible_counts
+    prop64_classifier = Prop64Classifier.new(user: user, event: event, event_collection: events)
+    prop64_counts = prop64_classifier.eligible_counts
     pc1203_classifier = PC1203Classifier.new(user: user, event: event, event_collection: events)
     pc1203 =
       if pc1203_classifier.eligible?
@@ -65,7 +66,8 @@ class EligibilityChecker
 
     {
       prop64: {
-        counts: prop64_counts
+        counts: prop64_counts,
+        remedy: prop64_classifier.remedy
       },
       pc1203: pc1203
     }

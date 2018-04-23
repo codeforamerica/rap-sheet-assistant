@@ -16,6 +16,14 @@ class Prop64Classifier
       end
     end
   end
+  
+  def remedy
+    eligible_counts.map do |c|
+      dismissible_codes.find do |d|
+        c.code_section.starts_with? d
+      end
+    end
+  end
 
   def potentially_eligible_counts
     eligible_counts

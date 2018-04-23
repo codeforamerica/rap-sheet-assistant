@@ -10,8 +10,3 @@ module PdfHelpers
     end
   end
 end
-
-RSpec.configure do |config|
-  config.include PdfHelpers
-end
-

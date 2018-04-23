@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe EligibilityChecker do
-  let(:prop64_eligible_count_1) { build(:conviction_count, code: 'HS', section: '11357') }
-  let(:prop64_eligible_count_2) { build(:conviction_count, code: 'HS', section: '11357') }
+  let(:prop64_eligible_count_1) { build(:conviction_count, code: 'HS', section: '11357(b)') }
+  let(:prop64_eligible_count_2) { build(:conviction_count, code: 'HS', section: '11357(a)') }
   let(:pc1203_eligible_count) { build(:conviction_count, code: 'PC', section: '456') }
 
   describe '#all_eligible_counts' do
@@ -96,7 +96,8 @@ describe EligibilityChecker do
         {
           event: event_1,
           prop64: {
-            counts: [prop64_eligible_count_1]
+            counts: [prop64_eligible_count_1],
+            remedy: ['HS 11357']
           },
           pc1203: {
             counts: [pc1203_eligible_count],
@@ -106,7 +107,8 @@ describe EligibilityChecker do
         {
           event: event_2,
           prop64: {
-            counts: [prop64_eligible_count_2]
+            counts: [prop64_eligible_count_2],
+            remedy: ['HS 11357']
           },
           pc1203: {
             counts: [],

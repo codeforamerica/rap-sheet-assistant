@@ -54,6 +54,18 @@ describe Prop64Classifier do
     end
   end
 
+  describe '#remedy' do
+    let(:conviction_counts) { [
+      build(:conviction_count, section: '11359(a)(b)', code: 'HS'),
+      build(:conviction_count, section: 'blah', code: 'PC'),
+      build(:conviction_count, section: '11362.1(c)', code: 'HS')
+    ] }
+    let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
+    it 'returns a list of eligible remedies' do
+      expect(subject.remedy).to eq ['HS 11359', 'HS 11362.1']
+    end
+  end
+
   describe '#action' do
     context 'it is eligible for resentencing' do
       let(:date) { 2.months.ago }

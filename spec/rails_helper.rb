@@ -33,6 +33,8 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Dir["#{Rails.root}/public/test"])
   end
 
+  config.include ActiveSupport::Testing::TimeHelpers
+  
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
