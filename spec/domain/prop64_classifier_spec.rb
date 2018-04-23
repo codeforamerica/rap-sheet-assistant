@@ -5,15 +5,16 @@ require 'rap_sheet_parser'
 describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
-  let(:code_section) {}
+  let(:code) {}
+  let(:section) {}
   let(:user) { build(:user) }
 
   let(:conviction_event) do
-    instance_double(ConvictionEvent, date: date, sentence: sentence, counts: [conviction_count])
+    build(:conviction_event, date: date, sentence: sentence, counts: [conviction_count])
   end
 
   let(:conviction_count) do
-    instance_double(ConvictionCount, code_section: code_section)
+    build(:conviction_count, section: section, code: code)
   end
 
   let(:event_collection) { nil }
@@ -21,14 +22,24 @@ describe Prop64Classifier do
 
   describe '#eligible?' do
     context 'when the count is an eligible code' do
-      let(:code_section) { 'HS 11359' }
+      let(:code) { 'HS' }
+      let(:section) { '11359' }
+      it 'returns true' do
+        expect(subject).to be_eligible
+      end
+    end
+
+    context 'when the count is a subsection of an eligible code' do
+      let(:code) { 'HS' }
+      let(:section) { '11359(a)' }
       it 'returns true' do
         expect(subject).to be_eligible
       end
     end
 
     context 'when the count is an ineligible code' do
-      let(:code_section) { 'HS 12345' }
+      let(:code) { 'HS' }
+      let(:section) { '12345' }
       it 'returns true' do
         expect(subject).not_to be_eligible
       end
@@ -36,9 +47,9 @@ describe Prop64Classifier do
   end
 
   describe '#eligible_counts' do
-    let(:code_section) { 'HS 11359' }
-
-    it 'returns eligible count' do
+    let(:code) { 'HS' }
+    let(:section) { '11359' }
+    it 'returns eligible counts' do
       expect(subject.eligible_counts).to eq [conviction_count]
     end
   end
