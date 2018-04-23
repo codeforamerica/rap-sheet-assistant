@@ -25,6 +25,7 @@ gem 'bootstrap', '~> 4.0.0'
 gem 'bootsnap'
 gem 'pdf-forms'
 gem 'cliver'
+gem 'sentry-raven'
 gemspec path: './parser'
 
 group :development, :test do

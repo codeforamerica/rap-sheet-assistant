@@ -16,5 +16,11 @@ module CmrSelfHelp
     # -- all .rb files in that directory are automatically loaded.
 
     config.file_path_prefix = 'uploads'
+
+    if ENV['SENTRY_DSN']
+      Raven.configure do |config|
+        config.dsn = ENV['SENTRY_DSN']
+      end
+    end
   end
 end
