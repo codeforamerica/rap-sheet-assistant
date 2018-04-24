@@ -56,7 +56,7 @@ class Treetop::Runtime::SyntaxNode
 
   def do_parsing(parser, text)
     result = parser.parse(text)
-    raise RapSheetParserException.new(parser) unless result
+    raise RapSheetParserException.new(parser,  text) unless result
 
     result
   end

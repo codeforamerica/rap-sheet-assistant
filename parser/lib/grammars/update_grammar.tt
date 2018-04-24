@@ -2,7 +2,15 @@ grammar UpdateGrammar
   include CommonGrammar
 
   rule update
-    disposition* <Update>
+    stuff dispositions <Update>
+  end
+  
+  rule dispositions
+    disposition*
+  end
+  
+  rule stuff
+    (!dispo_header .)*
   end
 
   rule disposition

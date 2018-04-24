@@ -51,7 +51,7 @@ module EventGrammar
 
   class Update < Treetop::Runtime::SyntaxNode
     def dispositions
-      update_content.elements
+      update_content.dispositions.elements
     end
 
     def update_content
