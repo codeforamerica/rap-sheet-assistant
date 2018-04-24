@@ -97,7 +97,7 @@ describe EligibilityChecker do
           event: event_1,
           prop64: {
             counts: [prop64_eligible_count_1],
-            remedy: ['HS 11357']
+            remedy: { codes: ['HS 11357'], scenario: :redesignation }
           },
           pc1203: {
             counts: [pc1203_eligible_count],
@@ -108,7 +108,7 @@ describe EligibilityChecker do
           event: event_2,
           prop64: {
             counts: [prop64_eligible_count_2],
-            remedy: ['HS 11357']
+            remedy: { codes: ['HS 11357'], scenario: :unknown }
           },
           pc1203: {
             counts: [],

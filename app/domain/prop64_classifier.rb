@@ -16,30 +16,35 @@ class Prop64Classifier
       end
     end
   end
-  
+
   def remedy
-    eligible_counts.map do |c|
-      dismissible_codes.find do |d|
-        c.code_section.starts_with? d
-      end
-    end
+    {
+      codes: eligible_counts.map do |c|
+        dismissible_codes.find do |d|
+          c.code_section.starts_with? d
+        end
+      end,
+      scenario: scenario
+    }
   end
 
   def potentially_eligible_counts
     eligible_counts
   end
 
-  def action
+  private
+
+  def scenario
+    return :unknown if (event.date.nil? or event.sentence.nil?)
+
     end_of_sentence = event.date + event.sentence.total_duration
 
     if end_of_sentence > Date.today
-      'Resentencing'
+      :resentencing
     else
-      'Redesignation'
+      :redesignation
     end
   end
-
-  private
 
   def dismissible_codes
     [

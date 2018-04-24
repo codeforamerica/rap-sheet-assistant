@@ -55,33 +55,60 @@ describe Prop64Classifier do
   end
 
   describe '#remedy' do
-    let(:conviction_counts) { [
-      build(:conviction_count, section: '11359(a)(b)', code: 'HS'),
-      build(:conviction_count, section: 'blah', code: 'PC'),
-      build(:conviction_count, section: '11362.1(c)', code: 'HS')
-    ] }
-    let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
-    it 'returns a list of eligible remedies' do
-      expect(subject.remedy).to eq ['HS 11359', 'HS 11362.1']
-    end
-  end
+    describe 'resentencing' do
+      let(:conviction_counts) { [
+        build(:conviction_count, section: '11359(a)(b)', code: 'HS'),
+        build(:conviction_count, section: 'blah', code: 'PC'),
+        build(:conviction_count, section: '11362.1(c)', code: 'HS')
+      ] }
 
-  describe '#action' do
-    context 'it is eligible for resentencing' do
       let(:date) { 2.months.ago }
       let(:sentence) { ConvictionSentence.new(jail: 1.year) }
 
-      it 'returns resentencing' do
-        expect(subject.action).to eq 'Resentencing'
+      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
+      it 'returns a list of eligible remedies and scenario' do
+        expect(subject.remedy).to eq(
+          codes: ['HS 11359', 'HS 11362.1'],
+          scenario: :resentencing
+        )
       end
     end
 
-    context 'it is eligible for redesignation' do
+    describe 'redesignation' do
+      let(:conviction_counts) { [
+        build(:conviction_count, section: '11359(a)(b)', code: 'HS'),
+        build(:conviction_count, section: 'blah', code: 'PC'),
+        build(:conviction_count, section: '11362.1(c)', code: 'HS')
+      ] }
+
       let(:date) { 2.years.ago }
       let(:sentence) { ConvictionSentence.new(probation: 1.month) }
 
-      it 'returns redesignation' do
-        expect(subject.action).to eq 'Redesignation'
+      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
+      it 'returns a list of eligible remedies and scenario' do
+        expect(subject.remedy).to eq(
+          codes: ['HS 11359', 'HS 11362.1'],
+          scenario: :redesignation
+        )
+      end
+    end
+
+    describe 'unknown' do
+      let(:conviction_counts) { [
+        build(:conviction_count, section: '11359(a)(b)', code: 'HS'),
+        build(:conviction_count, section: 'blah', code: 'PC'),
+        build(:conviction_count, section: '11362.1(c)', code: 'HS')
+      ] }
+
+      let(:date) { nil }
+      let(:sentence) { ConvictionSentence.new(probation: 1.month) }
+
+      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
+      it 'returns a list of eligible remedies and scenario' do
+        expect(subject.remedy).to eq(
+          codes: ['HS 11359', 'HS 11362.1'],
+          scenario: :unknown
+        )
       end
     end
   end

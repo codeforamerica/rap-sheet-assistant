@@ -29,7 +29,10 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: []
+        remedy: {
+          codes: [],
+          scenario: :resentencing
+        },
       ).create_petition
     end
 
@@ -42,7 +45,7 @@ describe Prop64PetitionCreator do
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => '12345',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => '000-111-2222',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => 'me@me.com',
-      # 'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+      # 'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE', # We don't know why this isn't working
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '#ABCDE',
       'topmostSubform[0].Page1[0].ExecutedDate_dt[0]' => '03/03/2015',
       'topmostSubform[0].Page1[0].Checkbox[7]' => 'Yes',
@@ -51,7 +54,7 @@ describe Prop64PetitionCreator do
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
-  it 'fills resentencing checkbox if sentence being served' do
+  it 'fills resentencing and petition checkboxes if sentence being served' do
     conviction_event = build(:conviction_event,
       sentence: ConvictionSentence.new(jail: 1.year),
       date: Date.new(2014, 8, 8)
@@ -63,18 +66,23 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: []
+        remedy: {
+          codes: [],
+          scenario: :resentencing
+        }
       ).create_petition
     end
 
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[0].Checkbox[0]' => 'Yes',
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[1].Checkbox[1]' => 'Off',
+      'topmostSubform[0].Page1[0].Checkbox[0]' => 'Off',
+      'topmostSubform[0].Page1[0].Checkbox[1]' => 'Yes'
     }
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
-  it 'fills redesignation checkbox if sentence completed' do
+  it 'fills redesignation and application checkboxes if sentence completed' do
     conviction_event = build(:conviction_event,
       sentence: ConvictionSentence.new(jail: 1.year),
       date: Date.new(2014, 8, 8)
@@ -86,36 +94,44 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: []
+        remedy: {
+          codes: [],
+          scenario: :redesignation
+        }
       ).create_petition
     end
 
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[0].Checkbox[0]' => 'Off',
       'topmostSubform[0].Page1[0].Caption_sf[0].DefendantInfo[0].#area[1].Checkbox[1]' => 'Yes',
+      'topmostSubform[0].Page1[0].Checkbox[0]' => 'Yes',
+      'topmostSubform[0].Page1[0].Checkbox[1]' => 'Off'
     }
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
-  
+
   it 'fills remedy checkboxes' do
     conviction_event = build(:conviction_event,
       sentence: ConvictionSentence.new,
       date: Date.new(2014, 8, 8)
     )
     conviction_counts = [build(:conviction_count)]
-    remedy =  [
-      'HS 11357',
-      'HS 11358',
-      'HS 11359',
-      'HS 11360',
-      'HS 11362.1'
-    ]
-      pdf_file = described_class.new(
-        rap_sheet: rap_sheet,
-        conviction_event: conviction_event,
-        conviction_counts: conviction_counts,
-        remedy: remedy
-      ).create_petition
+    remedy = {
+      codes: [
+        'HS 11357',
+        'HS 11358',
+        'HS 11359',
+        'HS 11360',
+        'HS 11362.1'
+      ],
+      scenario: :resentencing
+    }
+    pdf_file = described_class.new(
+      rap_sheet: rap_sheet,
+      conviction_event: conviction_event,
+      conviction_counts: conviction_counts,
+      remedy: remedy
+    ).create_petition
 
     expected_values = {
       'topmostSubform[0].Page1[0].Checkbox[2]' => 'Yes',
@@ -133,10 +149,10 @@ describe Prop64PetitionCreator do
       date: Date.new(2014, 8, 8)
     )
     conviction_counts = [build(:conviction_count)]
-    remedy =  [
-      'HS 11359',
-      'HS 11362.1'
-    ]
+    remedy = {
+      codes: ['HS 11359', 'HS 11362.1'],
+      scenario: :redesignation
+    }
     pdf_file = described_class.new(
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,
