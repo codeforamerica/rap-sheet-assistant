@@ -331,7 +331,7 @@ DEPENDENCIES
   factory_bot_rails
   fog-aws
   fog-local
-  google-cloud-vision
+  google-cloud-vision (>= 0.28.0)
   jbuilder (~> 2.5)
   jquery-rails
   launchy
