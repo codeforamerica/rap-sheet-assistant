@@ -10,8 +10,8 @@ RSpec.describe RapSheetPdfController, type: :controller do
         with('spec/fixtures/skywalker_rap_sheet_page_1.jpg').
         and_return('page 1 ')
       allow(ConvertPdfToImages).to receive(:convert).and_return([
-        'spec/fixtures/skywalker_rap_sheet_page_2.jpg',
-        'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
+        'spec/fixtures/skywalker_rap_sheet_page_1.jpg',
+        'spec/fixtures/skywalker_rap_sheet_page_2.jpg'
       ])
     end
 

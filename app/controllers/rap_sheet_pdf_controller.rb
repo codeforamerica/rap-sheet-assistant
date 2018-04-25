@@ -10,9 +10,7 @@ class RapSheetPdfController < ApplicationController
       image_paths = ConvertPdfToImages.convert(rap_sheet_pdf_params[:pdf_file].path, dir)
       rap_sheet.number_of_pages = image_paths.length
       rap_sheet.save!
-      image_paths.
-        sort.
-        each_with_index do |page, index|
+      image_paths.each_with_index do |page, index|
         RapSheetPage.scan_and_create(
           image: File.new(page),
           rap_sheet: rap_sheet,

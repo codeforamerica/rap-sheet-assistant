@@ -8,6 +8,10 @@ class ConvertPdfToImages
       convert << "#{tmp_directory}/page.jpg"
     end
 
-    Dir["#{tmp_directory}/page-*.jpg"]
+    num_pages = Dir["#{tmp_directory}/page-*.jpg"].length
+
+    num_pages.times.map do |i|
+      "#{tmp_directory}/page-#{i}.jpg"
+    end
   end
 end
