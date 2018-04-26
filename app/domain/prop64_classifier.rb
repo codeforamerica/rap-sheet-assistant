@@ -11,7 +11,7 @@ class Prop64Classifier
 
   def eligible_counts
     event.counts.select do |c|
-      dismissible_codes.any? do |d|
+      c.code_section && dismissible_codes.any? do |d|
         c.code_section.starts_with? d
       end
     end

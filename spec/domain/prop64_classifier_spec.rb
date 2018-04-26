@@ -5,16 +5,14 @@ require 'rap_sheet_parser'
 describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
-  let(:code) {}
-  let(:section) {}
   let(:user) { build(:user) }
 
   let(:conviction_event) do
-    build(:conviction_event, date: date, sentence: sentence, counts: [conviction_count])
+    build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts)
   end
 
-  let(:conviction_count) do
-    build(:conviction_count, section: section, code: code)
+  let(:conviction_counts) do
+    [build(:conviction_count, section: section, code: code)]
   end
 
   let(:event_collection) { nil }
@@ -50,7 +48,17 @@ describe Prop64Classifier do
     let(:code) { 'HS' }
     let(:section) { '11359' }
     it 'returns eligible counts' do
-      expect(subject.eligible_counts).to eq [conviction_count]
+      expect(subject.eligible_counts).to eq conviction_counts
+    end
+
+    context 'when the code section is nil' do
+      let(:conviction_count) { build(:conviction_count, section: section, code: code) }
+      let(:nil_count) { build(:conviction_count, section: section, code: nil) }
+      let(:conviction_counts) { [conviction_count, nil_count] }
+
+      it 'skips counts with nil code sections' do
+        expect(subject.eligible_counts).to eq [conviction_count]
+      end
     end
   end
 
@@ -65,7 +73,6 @@ describe Prop64Classifier do
       let(:date) { 2.months.ago }
       let(:sentence) { ConvictionSentence.new(jail: 1.year) }
 
-      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
       it 'returns a list of eligible remedies and scenario' do
         expect(subject.remedy).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
@@ -84,7 +91,6 @@ describe Prop64Classifier do
       let(:date) { 2.years.ago }
       let(:sentence) { ConvictionSentence.new(probation: 1.month) }
 
-      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
       it 'returns a list of eligible remedies and scenario' do
         expect(subject.remedy).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
@@ -103,7 +109,6 @@ describe Prop64Classifier do
       let(:date) { nil }
       let(:sentence) { ConvictionSentence.new(probation: 1.month) }
 
-      let(:conviction_event) { build(:conviction_event, date: date, sentence: sentence, counts: conviction_counts) }
       it 'returns a list of eligible remedies and scenario' do
         expect(subject.remedy).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
