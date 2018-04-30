@@ -10,10 +10,11 @@ describe PC1203RemedyCheckboxes do
         scenario: :successful_completion
       }
     end
-    it 'fills out question 2 and 2a' do
+    it 'fills out questions 2, 2a, 8' do
       expect(subject).to eq(
         'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
         'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1'
       )
     end
   end
@@ -25,10 +26,11 @@ describe PC1203RemedyCheckboxes do
         scenario: :early_termination
       }
     end
-    it 'fills out question 2 and 2a' do
+    it 'fills out questions 2, 2b, 8' do
       expect(subject).to eq(
         'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
         'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2',
+        'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1'
       )
     end
   end
@@ -40,10 +42,11 @@ describe PC1203RemedyCheckboxes do
         scenario: :discretionary
       }
     end
-    it 'fills out question 2 and 2c' do
+    it 'fills out questions 2, 2c, 8' do
       expect(subject).to eq(
         'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
         'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3',
+        'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1'
       )
     end
   end
@@ -55,9 +58,10 @@ describe PC1203RemedyCheckboxes do
         scenario: :unknown
       }
     end
-    it 'fills out question 2 and no subcheckbox' do
+    it 'fills out question 2, no subcheckbox, 8' do
       expect(subject).to eq(
-        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1'
+        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1'
       )
     end
   end
@@ -70,10 +74,11 @@ describe PC1203RemedyCheckboxes do
       }
     end
 
-    it 'fills out question 3 and 3a' do
+    it 'fills out questions 3, 3a, 8' do
       expect(subject).to eq(
         'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
         'topmostSubform[0].Page1[0].ProbationNotGrantedReason[1]' => '2',
+        'topmostSubform[0].Page2[0].DismissSection_cb[0]' => '2'
       )
     end
   end
@@ -86,10 +91,11 @@ describe PC1203RemedyCheckboxes do
       }
     end
 
-    it 'fills out question 3 and 3b' do
+    it 'fills out questions 3, 3b, 8' do
       expect(subject).to eq(
         'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
         'topmostSubform[0].Page1[0].ProbationNotGrantedReason[0]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[0]' => '2'
       )
     end
   end
@@ -102,9 +108,26 @@ describe PC1203RemedyCheckboxes do
       }
     end
 
-    it 'fills out question 3 and no subcheckbox' do
+    it 'fills out questions 3, no subcheckbox, 8' do
       expect(subject).to eq(
-        'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1'
+        'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[0]' => '2'
+      )
+    end
+  end
+  
+  context '1203.41' do
+    let(:remedy) do
+      {
+        code: '1203.41',
+        scenario: nil
+      }
+    end
+
+    it 'fills out questions 5 and 8' do
+      expect(subject).to eq(
+        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[3]' => '3'
       )
     end
   end

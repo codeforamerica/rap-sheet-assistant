@@ -60,7 +60,8 @@ describe 'uploading a rap sheet' do
         'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
         'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
         'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050',
-        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1'
+        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[3]' => '3'
       }
       expect(fields_dict).to include(expected_values)
     end
