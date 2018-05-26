@@ -17,7 +17,7 @@ class RapSheetsController < ApplicationController
   def show
     @rap_sheet = RapSheet.find(params[:id])
     @conviction_counts =
-      ConvictionCountCollection.new(@rap_sheet.events.with_convictions.flat_map(&:counts))
+      RapSheetParser::ConvictionCountCollection.new(@rap_sheet.events.with_convictions.flat_map(&:counts))
   end
 
   def create
@@ -33,7 +33,7 @@ class RapSheetsController < ApplicationController
     @rap_sheet = RapSheet.find(params[:id])
     begin
       @conviction_events = @rap_sheet.events.with_convictions
-    rescue RapSheetParserException => e
+    rescue RapSheetParser::RapSheetParserException => e
       @conviction_events = []
       @rap_sheet_parse_error = e
       @wrapped_error = ActionDispatch::ExceptionWrapper.new(Rails::BacktraceCleaner.new, e)
@@ -95,7 +95,7 @@ class RapSheetsController < ApplicationController
     params.require(:rap_sheet).permit(:number_of_pages)
   end
 
-  rescue_from RapSheetParserException do |exception|
+  rescue_from RapSheetParser::RapSheetParserException do |exception|
     redirect_to debug_rap_sheet_path(@rap_sheet)
   end
 end

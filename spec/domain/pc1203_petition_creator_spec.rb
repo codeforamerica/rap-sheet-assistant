@@ -17,12 +17,14 @@ RSpec.describe PC1203PetitionCreator do
   let(:rap_sheet) { create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
-    conviction_event = build(:conviction_event,
+    conviction_event = RapSheetParser::ConvictionEvent.new(
       case_number: '#ABCDE',
-      date: Date.new(2010, 1, 1)
+      date: Date.new(2010, 1, 1),
+      courthouse: 'CASC SAN FRANCISCO',
+      sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year)
     )
     conviction_counts = [
-      build(:conviction_count,
+      RapSheetParser::ConvictionCount.new(
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'FELONY',
@@ -57,9 +59,9 @@ RSpec.describe PC1203PetitionCreator do
   end
 
   it 'fills out the offenses table with data from each count' do
-    sentence = ConvictionSentence.new(probation: nil)
+    sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
     conviction_event = instance_double(
-      ConvictionEvent,
+      RapSheetParser::ConvictionEvent,
       case_number: '#ABCDE',
       date: Date.parse('2010-01-01'),
       severity: 'F',
@@ -67,28 +69,28 @@ RSpec.describe PC1203PetitionCreator do
     )
 
     conviction_counts = [
-      ConvictionCount.new(
+      RapSheetParser::ConvictionCount.new(
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '107' # wobbler, felony
       ),
-      ConvictionCount.new(
+      RapSheetParser::ConvictionCount.new(
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',
         code: 'PC',
         section: '12355(b)' # wobbler but already misdemeanor
       ),
-      ConvictionCount.new(
+      RapSheetParser::ConvictionCount.new(
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '605' # made up (not a wobbler)
       ),
-      ConvictionCount.new(
+      RapSheetParser::ConvictionCount.new(
         event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',

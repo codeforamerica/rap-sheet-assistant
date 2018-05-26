@@ -23,8 +23,8 @@ class RapSheet < ApplicationRecord
 
   def events
     @events ||= begin
-      parsed_tree = Parser.new.parse(text)
-      EventCollectionBuilder.build(parsed_tree)
+      parsed_tree = RapSheetParser::Parser.new.parse(text)
+      RapSheetParser::EventCollectionBuilder.build(parsed_tree)
     end
   end
 end
