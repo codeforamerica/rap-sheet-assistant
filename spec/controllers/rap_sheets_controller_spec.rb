@@ -55,12 +55,11 @@ RSpec.describe RapSheetsController, type: :controller do
     end
 
     describe 'when the rap sheet cannot be parsed' do
-      let(:rap_sheet) do
-        create(:rap_sheet,
-          number_of_pages: 1,
-          rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
-        )
+      before do
+        allow_any_instance_of(RapSheet).to receive(:events).and_raise(RapSheetParser::RapSheetParserException.new(nil, nil))
       end
+      
+      let(:rap_sheet) { create(:rap_sheet) }
 
       it 'redirects to the debug page' do
         capture_output do
