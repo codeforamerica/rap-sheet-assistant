@@ -186,7 +186,9 @@ end
 def sorted(items)
   items.sort_by do |c|
     date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
-    [date, c[:case_number]]
+    case_number = c[:case_number] ? c[:case_number] : ''
+    
+    [date, case_number]
   end
 end
 
