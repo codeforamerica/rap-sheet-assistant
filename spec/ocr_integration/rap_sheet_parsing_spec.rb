@@ -188,7 +188,7 @@ def sorted(items)
     date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
     case_number = c[:case_number] ? c[:case_number] : ''
     
-    [date, case_number]
+    [date, case_number, c[:sentence]]
   end
 end
 
