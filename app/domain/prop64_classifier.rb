@@ -12,7 +12,7 @@ class Prop64Classifier
   def eligible_counts
     event.counts.select do |c|
       c.code_section && dismissible_codes.any? do |d|
-        c.code_section.starts_with? d
+        c.code_section.start_with? d
       end
     end
   end
@@ -21,7 +21,7 @@ class Prop64Classifier
     {
       codes: eligible_counts.map do |c|
         dismissible_codes.find do |d|
-          c.code_section.starts_with? d
+          c.code_section.start_with? d
         end
       end,
       scenario: scenario

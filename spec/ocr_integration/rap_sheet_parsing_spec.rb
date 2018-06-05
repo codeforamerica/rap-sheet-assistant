@@ -144,7 +144,7 @@ def fetch_or_scan_text(file_names, page)
 end
 
 def create_rap_sheet(file_names, rap_sheet_prefix)
-  pages = file_names.select { |f| f.starts_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg') }
+  pages = file_names.select { |f| f.start_with?("#{rap_sheet_prefix}/page_") && f.ends_with?('.jpg') }
   rap_sheet = create(:rap_sheet, number_of_pages: pages.count)
 
   pages.each do |page|
