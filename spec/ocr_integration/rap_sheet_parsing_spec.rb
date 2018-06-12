@@ -35,7 +35,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
 
     rap_sheets.each do |rap_sheet_prefix|
       puts "------------- For #{rap_sheet_prefix} -------------"
-      rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix)
+      rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix).parsed
       values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
       expected_values = JSON.parse(values_file.body, symbolize_names: true)
 
@@ -197,7 +197,7 @@ def diff(*args)
 end
 
 def detected_convictions(rap_sheet)
-  sorted(rap_sheet.events.with_convictions.map do |event|
+  sorted(rap_sheet.convictions.map do |event|
     {
       date: event.date,
       case_number: event.case_number,
@@ -214,7 +214,7 @@ def detected_convictions(rap_sheet)
 end
 
 def detected_arrests(rap_sheet)
-  sorted(rap_sheet.events.arrests.map do |event|
+  sorted(rap_sheet.arrests.map do |event|
     {
       date: event.date
     }
@@ -222,7 +222,7 @@ def detected_arrests(rap_sheet)
 end
 
 def detected_custody_events(rap_sheet)
-  sorted(rap_sheet.events.custody_events.map do |event|
+  sorted(rap_sheet.custody_events.map do |event|
     {
       date: event.date
     }

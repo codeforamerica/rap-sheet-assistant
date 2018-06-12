@@ -21,10 +21,7 @@ class RapSheet < ApplicationRecord
     rap_sheet_pages.length == number_of_pages
   end
 
-  def events
-    @events ||= begin
-      parsed_tree = RapSheetParser::Parser.new.parse(text)
-      RapSheetParser::EventCollectionBuilder.build(parsed_tree)
-    end
+  def parsed
+    @parsed ||= RapSheetParser::Parser.new.parse(text)
   end
 end

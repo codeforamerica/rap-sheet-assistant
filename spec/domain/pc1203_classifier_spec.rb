@@ -4,11 +4,11 @@ require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
   let(:user) { build(:user) }
-  let(:all_events) {}
+  let(:rap_sheet) {}
   let(:conviction_event) { build_conviction_event( sentence: sentence, date: date) }
   let(:date) { Date.today - 5.years }
 
-  subject { described_class.new(user: user, event: conviction_event, event_collection: all_events) }
+  subject { described_class.new(user: user, event: conviction_event, rap_sheet: rap_sheet) }
 
   describe '#potentially_eligible?' do
     context "when the conviction's sentence had prison" do
@@ -118,7 +118,7 @@ describe PC1203Classifier do
             date: Date.new(1991, 5, 1)
           )
         end
-        let(:all_events) { RapSheetParser::EventCollection.new([conviction_event]) }
+        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event]) }
 
         it 'returns successful completion' do
           expect(subject.remedy).to eq ({
@@ -128,17 +128,6 @@ describe PC1203Classifier do
         end
       end
 
-      # context 'probation terminated early' do
-      #   let(:all_events) { [conviction_event] }
-      #
-      #   it 'returns early termination' do
-      #     expect(subject.remedy).to eq ({
-      #       code: '1203.4',
-      #       scenario: :early_termination
-      #     })
-      #   end
-      # end
-
       context 'probation violated' do
         let(:conviction_event) do
           build_conviction_event(
@@ -147,7 +136,7 @@ describe PC1203Classifier do
           )
         end
         let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1991, 7, 1)) }
-        let(:all_events) { RapSheetParser::EventCollection.new([conviction_event, arrest_event]) }
+        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
 
         it 'returns discretionary' do
           expect(subject.remedy).to eq ({
@@ -164,7 +153,7 @@ describe PC1203Classifier do
             date: nil
           )
         end
-        let(:all_events) { RapSheetParser::EventCollection.new([conviction_event]) }
+        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event]) }
 
         it 'returns discretionary' do
           expect(subject.remedy).to eq ({
@@ -189,7 +178,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet is clear for a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
-          let(:all_events) { RapSheetParser::EventCollection.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -201,7 +190,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
-          let(:all_events) { RapSheetParser::EventCollection.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -217,7 +206,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet is clear for a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
-          let(:all_events) { RapSheetParser::EventCollection.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -229,7 +218,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
-          let(:all_events) { RapSheetParser::EventCollection.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({

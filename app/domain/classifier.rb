@@ -1,11 +1,11 @@
 module Classifier
-  def initialize(user:, event:, event_collection:)
+  def initialize(user:, event:, rap_sheet:)
     @user = user
     @event = event
-    @event_collection = event_collection
+    @rap_sheet = rap_sheet
   end
 
   private
 
-  attr_reader :event, :event_collection, :user
+  attr_reader :event, :rap_sheet, :user
 end

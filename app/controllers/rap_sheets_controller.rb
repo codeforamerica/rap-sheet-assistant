@@ -17,7 +17,7 @@ class RapSheetsController < ApplicationController
   def show
     @rap_sheet = RapSheet.find(params[:id])
     @conviction_counts =
-      RapSheetParser::ConvictionCountCollection.new(@rap_sheet.events.with_convictions.flat_map(&:counts))
+      RapSheetParser::ConvictionCountCollection.new(@rap_sheet.parsed.convictions.flat_map(&:counts))
   end
 
   def create
@@ -32,7 +32,7 @@ class RapSheetsController < ApplicationController
   def debug
     @rap_sheet = RapSheet.find(params[:id])
     begin
-      @conviction_events = @rap_sheet.events.with_convictions
+      @conviction_events = @rap_sheet.parsed.convictions
     rescue RapSheetParser::RapSheetParserException => e
       @conviction_events = []
       @rap_sheet_parse_error = e

@@ -14,7 +14,7 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
@@ -29,7 +29,7 @@ describe EligibilityChecker do
           RapSheetParser::ArrestEvent.new(date: Date.today)
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
@@ -47,7 +47,7 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
@@ -62,7 +62,7 @@ describe EligibilityChecker do
           RapSheetParser::ArrestEvent.new(date: Date.today)
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).all_potentially_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
@@ -90,8 +90,10 @@ describe EligibilityChecker do
         sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
         counts: [prop64_eligible_count_2]
       )
-      events = RapSheetParser::EventCollection.new([event_1, event_2, RapSheetParser::ArrestEvent.new(date: Date.new(2015, 1, 1))])
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
+        [event_1, event_2, RapSheetParser::ArrestEvent.new(date: Date.new(2015, 1, 1))]
+      )
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).eligible_events_with_counts).to eq ([
         {
@@ -129,13 +131,13 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      events = RapSheetParser::EventCollection.new([])
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      parsed_rap_sheet = RapSheetParser::RapSheet.new([])
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).needs_1203_info?).to eq false
 
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
@@ -144,7 +146,7 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).needs_1203_info?).to eq true
     end
@@ -159,7 +161,7 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
@@ -168,7 +170,7 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).eligible?).to eq true
     end
@@ -181,13 +183,13 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      events = RapSheetParser::EventCollection.new([])
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      parsed_rap_sheet = RapSheetParser::RapSheet.new([])
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).eligible?).to eq false
 
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
@@ -195,7 +197,7 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).eligible?).to eq false
     end
@@ -207,7 +209,7 @@ describe EligibilityChecker do
         rap_sheet: RapSheet.new,
       )
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
@@ -216,7 +218,7 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).potentially_eligible?).to eq true
     end
@@ -226,13 +228,13 @@ describe EligibilityChecker do
         rap_sheet: RapSheet.new,
       )
 
-      events = RapSheetParser::EventCollection.new([])
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      parsed_rap_sheet = RapSheetParser::RapSheet.new([])
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).potentially_eligible?).to eq false
 
 
-      events = RapSheetParser::EventCollection.new(
+      parsed_rap_sheet = RapSheetParser::RapSheet.new(
         [
           build_conviction_event(
             sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
@@ -240,7 +242,7 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:events).and_return(events)
+      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
       expect(described_class.new(user).potentially_eligible?).to eq false
     end

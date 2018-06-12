@@ -46,7 +46,7 @@ class PC1203Classifier
 
   def scenario_for_code(code)
     if code == '1203.4'
-      probation_successful = event.successfully_completed_probation?(event_collection)
+      probation_successful = event.successfully_completed_probation?(rap_sheet)
       if probation_successful
         :successful_completion
       elsif probation_successful == false
@@ -55,7 +55,7 @@ class PC1203Classifier
         :unknown
       end
     elsif code == '1203.4a'
-      year_successful = event.successfully_completed_year?(event_collection)
+      year_successful = event.successfully_completed_year?(rap_sheet)
       if year_successful
         :successful_completion
       elsif year_successful == false

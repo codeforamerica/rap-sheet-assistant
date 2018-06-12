@@ -15,8 +15,8 @@ describe Prop64Classifier do
     [build_conviction_count(section: section, code: code)]
   end
 
-  let(:event_collection) { nil }
-  subject { described_class.new(user: user, event: conviction_event, event_collection: event_collection) }
+  let(:rap_sheet) { nil }
+  subject { described_class.new(user: user, event: conviction_event, rap_sheet: rap_sheet) }
 
   describe '#eligible?' do
     context 'when the count is an eligible code' do

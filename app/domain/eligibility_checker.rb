@@ -4,7 +4,7 @@ class EligibilityChecker
   end
 
   def all_eligible_counts
-    all_counts = events.with_convictions.map do |conviction_event|
+    all_counts = rap_sheet.convictions.map do |conviction_event|
       eligible_counts(conviction_event)
     end
 
@@ -23,7 +23,7 @@ class EligibilityChecker
   end
 
   def all_potentially_eligible_counts
-    all_counts = events.with_convictions.map do |conviction_event|
+    all_counts = rap_sheet.convictions.map do |conviction_event|
       potentially_eligible_counts(conviction_event)
     end
 
@@ -34,7 +34,7 @@ class EligibilityChecker
   end
 
   def eligible_events_with_counts
-    events.with_convictions.map do |event|
+    rap_sheet.convictions.map do |event|
       { event: event }.merge(eligible_counts(event))
     end
   end
@@ -48,9 +48,9 @@ class EligibilityChecker
   attr_reader :user
 
   def eligible_counts(event)
-    prop64_classifier = Prop64Classifier.new(user: user, event: event, event_collection: events)
+    prop64_classifier = Prop64Classifier.new(user: user, event: event, rap_sheet: rap_sheet)
     prop64_counts = prop64_classifier.eligible_counts
-    pc1203_classifier = PC1203Classifier.new(user: user, event: event, event_collection: events)
+    pc1203_classifier = PC1203Classifier.new(user: user, event: event, rap_sheet: rap_sheet)
     pc1203 =
       if pc1203_classifier.eligible?
         {
@@ -74,9 +74,9 @@ class EligibilityChecker
   end
 
   def potentially_eligible_counts(event)
-    prop64_counts = Prop64Classifier.new(user: user, event: event, event_collection: events).potentially_eligible_counts
+    prop64_counts = Prop64Classifier.new(user: user, event: event, rap_sheet: rap_sheet).potentially_eligible_counts
     pc1203_counts =
-      if PC1203Classifier.new(user: user, event: event, event_collection: events).potentially_eligible?
+      if PC1203Classifier.new(user: user, event: event, rap_sheet: rap_sheet).potentially_eligible?
         event.counts - prop64_counts
       else
         RapSheetParser::ConvictionCountCollection.new([])
@@ -92,7 +92,7 @@ class EligibilityChecker
     }
   end
 
-  def events
-    @events ||= user.rap_sheet.events
+  def rap_sheet
+    @rap_sheet ||= user.rap_sheet.parsed
   end
 end
