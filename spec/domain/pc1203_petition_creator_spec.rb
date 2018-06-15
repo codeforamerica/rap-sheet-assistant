@@ -21,7 +21,8 @@ RSpec.describe PC1203PetitionCreator do
       case_number: '#ABCDE',
       date: Date.new(2010, 1, 1),
       courthouse: 'CASC SAN FRANCISCO',
-      sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year)
+      sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+      updates: nil
     )
     conviction_counts = [
       RapSheetParser::ConvictionCount.new(

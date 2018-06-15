@@ -267,7 +267,12 @@ def build_conviction_event(
 )
 
   event = RapSheetParser::ConvictionEvent.new(
-    date: date, courthouse: courthouse, case_number: case_number, sentence: sentence)
+    date: date,
+    courthouse: courthouse,
+    case_number: case_number,
+    sentence: sentence,
+    updates: nil
+  )
   event.counts = counts
   event
 end
