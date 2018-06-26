@@ -165,7 +165,8 @@ CNT:01    #036-99999
 ** WITH THIS RECORD BASED UPON SOFT CRITERIA CONSISTING OF A NAME  **
 ** OR NUMBER MATCH. POSITIVE IDENTIFICATION HAS NOT BEEN MADE      **
 ** BECAUSE FINGERPRINTS WERE NOT RECEIVED FOR THE ENTRIES. USE OF  **
-** THIS INFORMATION IS THE RECEIVERS RESPONSIBILITY.               ** *********************************************************************
+** THIS INFORMATION IS THE RECEIVERS RESPONSIBILITY.               **
+*********************************************************************
 * * * *
 
 
@@ -195,11 +196,14 @@ CNT:01     #XR09005
 MAY NOT BE BASED ON FINGERPRINT IDENTIFICATION”
 
 *    *    *    *
-**************************************************************** ****************************************************************
+****************************************************************
+****************************************************************
 NOTE: 8 POTENTIAL ENTRIES WITH FELONY CONVICTION DATA WERE
 FOUND FOR THIS SUBJECT. SEE ENTRIES IN THE RECORD ANNOTATED
 WITH “POTENTIAL FELONY STRIKE ENTRY” FOR DETAILS. THIS RECORD
-MAY ALSO CONTAIN ADDITIONAL DATA RELATED TO “STRIKE” CONDITIONS. **************************************************************** ****************************************************************
+MAY ALSO CONTAIN ADDITIONAL DATA RELATED TO “STRIKE” CONDITIONS.
+****************************************************************
+****************************************************************
      *    *    *    END OF MESSAGE    *    *    *
 
 
