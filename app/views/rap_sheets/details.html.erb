@@ -11,8 +11,10 @@
         <h2>We can help you apply to reclassify <%= pluralize(@eligible_counts[:prop64].length, 'marijuana conviction') %></h2>
         <p>If the judge approves, these offenses will be reduced to misdemeanors or changed to "dismissed"</p>
         <ul>
-          <% @eligible_counts[:prop64].each do |conviction_count| %>
-            <li><%= "#{conviction_count.code_section_description} on #{conviction_count.event.date.strftime('%m/%d/%Y')} in #{conviction_count.event.courthouse}" %></li>
+          <% @eligible_events.each do |event| %>
+            <% event[:prop64][:counts].each do |conviction_count| %>
+              <li><%= "#{conviction_count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+            <% end %>
           <% end %>
         </ul>
       </div>
@@ -25,8 +27,10 @@
         <h2>We can help you apply to dismiss <%= pluralize(@eligible_counts[:pc1203].length, 'conviction') %> (1203.4)</h2>
         <p> If the judge approves, these offenses will be changed to "dismissed"</p>
         <ul>
-          <% @eligible_counts[:pc1203].each do |conviction_count| %>
-            <li><%= "#{conviction_count.code_section_description} on #{conviction_count.event.date.strftime('%m/%d/%Y')} in #{conviction_count.event.courthouse}" %></li>
+          <% @eligible_events.each do |event| %>
+            <% event[:pc1203][:counts].each do |conviction_count| %>
+              <li><%= "#{conviction_count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+            <% end %>
           <% end %>
         </ul>
       </div>
