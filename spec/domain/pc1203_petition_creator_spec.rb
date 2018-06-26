@@ -17,22 +17,22 @@ RSpec.describe PC1203PetitionCreator do
   let(:rap_sheet) { create(:rap_sheet, user: user) }
 
   it 'creates a filled-out form with the users contact info' do
+    conviction_counts = [
+      RapSheetParser::ConvictionCount.new(
+        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+        severity: 'FELONY',
+        code: 'PC',
+        section: '111'
+      )
+    ]
     conviction_event = RapSheetParser::ConvictionEvent.new(
       case_number: '#ABCDE',
       date: Date.new(2010, 1, 1),
       courthouse: 'CASC SAN FRANCISCO',
       sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
-      updates: nil
+      updates: nil,
+      counts: conviction_counts
     )
-    conviction_counts = [
-      RapSheetParser::ConvictionCount.new(
-        event: conviction_event,
-        code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'FELONY',
-        code: 'PC',
-        section: '111'
-      ),
-    ]
     remedy = { code: '1203.41' }
 
     pdf_file = PC1203PetitionCreator.new(
@@ -71,28 +71,24 @@ RSpec.describe PC1203PetitionCreator do
 
     conviction_counts = [
       RapSheetParser::ConvictionCount.new(
-        event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '107' # wobbler, felony
       ),
       RapSheetParser::ConvictionCount.new(
-        event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',
         code: 'PC',
         section: '12355(b)' # wobbler but already misdemeanor
       ),
       RapSheetParser::ConvictionCount.new(
-        event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '605' # made up (not a wobbler)
       ),
       RapSheetParser::ConvictionCount.new(
-        event: conviction_event,
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',
         code: 'PC',

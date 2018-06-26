@@ -29,6 +29,8 @@ describe 'uploading a rap sheet' do
       fill_in_case_information
       click_on 'Next'
 
+      save_and_open_screenshot
+      
       expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
       expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
       expect(page).to have_content 'POSSESS MARIJUANA'

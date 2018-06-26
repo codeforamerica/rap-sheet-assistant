@@ -251,11 +251,11 @@ end
 
 def build_conviction_count(code:, section:)
   RapSheetParser::ConvictionCount.new(
-    event: double(:event),
     code_section_description: 'foo',
     severity: 'M',
     code: code,
-    section: section)
+    section: section
+  )
 end
 
 def build_conviction_event(
@@ -266,13 +266,12 @@ def build_conviction_event(
   counts: []
 )
 
-  event = RapSheetParser::ConvictionEvent.new(
+  RapSheetParser::ConvictionEvent.new(
     date: date,
     courthouse: courthouse,
     case_number: case_number,
     sentence: sentence,
-    updates: nil
+    counts: counts,
+    updates: []
   )
-  event.counts = counts
-  event
 end
