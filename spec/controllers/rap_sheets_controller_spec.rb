@@ -119,7 +119,7 @@ RSpec.describe RapSheetsController, type: :controller do
       it 'renders a detail page' do
         get :details, params: { id: rap_sheet.id }
 
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
