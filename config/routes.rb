@@ -31,4 +31,7 @@ Rails.application.routes.draw do
   
   resources :rap_sheet_pages, only: [:create, :destroy]
   get 'healthcheck', to: proc { [200, {}, ['']] }
+
+  # keep last
+  match '*path', via: [:all], to: 'application#not_found'
 end
