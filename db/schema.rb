@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309230420) do
+ActiveRecord::Schema.define(version: 2018_07_11_202136) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pgcrypto"
+  enable_extension "plpgsql"
+
+  create_table "court_counts", force: :cascade do |t|
+    t.string "section"
+    t.string "code"
+    t.string "severity"
+    t.string "code_section_description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "financial_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
@@ -29,6 +38,12 @@ ActiveRecord::Schema.define(version: 20180309230420) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_financial_informations_on_user_id"
+  end
+
+  create_table "personal_infos", force: :cascade do |t|
+    t.string "sex"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rap_sheet_pages", force: :cascade do |t|

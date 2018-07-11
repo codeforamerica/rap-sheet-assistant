@@ -9,8 +9,8 @@ class EligibilityChecker
     end
 
     {
-      prop64: RapSheetParser::ConvictionCountCollection.new(all_counts.flat_map { |c| c[:prop64][:counts] }),
-      pc1203: RapSheetParser::ConvictionCountCollection.new(all_counts.flat_map { |c| c[:pc1203][:counts] })
+      prop64: all_counts.flat_map { |c| c[:prop64][:counts] },
+      pc1203: all_counts.flat_map { |c| c[:pc1203][:counts] }
     }
   end
 
@@ -28,8 +28,8 @@ class EligibilityChecker
     end
 
     {
-      prop64: RapSheetParser::ConvictionCountCollection.new(all_counts.flat_map { |c| c[:prop64][:counts] }),
-      pc1203: RapSheetParser::ConvictionCountCollection.new(all_counts.flat_map { |c| c[:pc1203][:counts] })
+      prop64: all_counts.flat_map { |c| c[:prop64][:counts] },
+      pc1203: all_counts.flat_map { |c| c[:pc1203][:counts] }
     }
   end
 
@@ -59,7 +59,7 @@ class EligibilityChecker
         }
       else
         {
-          counts: RapSheetParser::ConvictionCountCollection.new([]),
+          counts: [],
           remedy: nil
         }
       end
@@ -79,7 +79,7 @@ class EligibilityChecker
       if PC1203Classifier.new(user: user, event: event, rap_sheet: rap_sheet).potentially_eligible?
         event.counts - prop64_counts
       else
-        RapSheetParser::ConvictionCountCollection.new([])
+        []
       end
 
     {

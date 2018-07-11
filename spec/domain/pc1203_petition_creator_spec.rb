@@ -18,14 +18,14 @@ RSpec.describe PC1203PetitionCreator do
 
   it 'creates a filled-out form with the users contact info' do
     conviction_counts = [
-      RapSheetParser::ConvictionCount.new(
+      build_court_count(
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'FELONY',
         code: 'PC',
         section: '111'
       )
     ]
-    conviction_event = RapSheetParser::ConvictionEvent.new(
+    conviction_event = build_conviction_event(
       case_number: '#ABCDE',
       date: Date.new(2010, 1, 1),
       courthouse: 'CASC SAN FRANCISCO',
@@ -70,25 +70,25 @@ RSpec.describe PC1203PetitionCreator do
     )
 
     conviction_counts = [
-      RapSheetParser::ConvictionCount.new(
+      build_court_count(
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '107' # wobbler, felony
       ),
-      RapSheetParser::ConvictionCount.new(
+      build_court_count(
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',
         code: 'PC',
         section: '12355(b)' # wobbler but already misdemeanor
       ),
-      RapSheetParser::ConvictionCount.new(
+      build_court_count(
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'F',
         code: 'PC',
         section: '605' # made up (not a wobbler)
       ),
-      RapSheetParser::ConvictionCount.new(
+      build_court_count(
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         severity: 'M',
         code: 'PC',

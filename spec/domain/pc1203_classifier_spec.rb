@@ -118,7 +118,7 @@ describe PC1203Classifier do
             date: Date.new(1991, 5, 1)
           )
         end
-        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event]) }
+        let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
         it 'returns successful completion' do
           expect(subject.remedy).to eq ({
@@ -136,7 +136,7 @@ describe PC1203Classifier do
           )
         end
         let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1991, 7, 1)) }
-        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
+        let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
         it 'returns discretionary' do
           expect(subject.remedy).to eq ({
@@ -153,7 +153,7 @@ describe PC1203Classifier do
             date: nil
           )
         end
-        let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event]) }
+        let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
         it 'returns discretionary' do
           expect(subject.remedy).to eq ({
@@ -169,7 +169,7 @@ describe PC1203Classifier do
         build_conviction_event(
           sentence: RapSheetParser::ConvictionSentence.new(probation: nil),
           date: Date.new(1991, 5, 1),
-          counts: [build_conviction_count(severity: severity)]
+          counts: [build_court_count(severity: severity)]
         )
       end
 
@@ -178,7 +178,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet is clear for a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
-          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -190,7 +190,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
-          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -206,7 +206,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet is clear for a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
-          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -218,7 +218,7 @@ describe PC1203Classifier do
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
-          let(:rap_sheet) { RapSheetParser::RapSheet.new([conviction_event, arrest_event]) }
+          let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy).to eq({
@@ -246,31 +246,4 @@ describe PC1203Classifier do
       end
     end
   end
-end
-
-def build_conviction_count(code:'PC', section:'123', severity:'M')
-  RapSheetParser::ConvictionCount.new(
-    code_section_description: 'foo',
-    severity: severity,
-    code: code,
-    section: section
-  )
-end
-
-def build_conviction_event(
-  date: Date.new(1994, 1, 2),
-  case_number: '12345',
-  courthouse: 'CASC SAN FRANCISCO',
-  sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
-  counts: []
-)
-
-  RapSheetParser::ConvictionEvent.new(
-    date: date,
-    courthouse: courthouse,
-    case_number: case_number,
-    sentence: sentence,
-    updates: [],
-    counts: counts
-  )
 end

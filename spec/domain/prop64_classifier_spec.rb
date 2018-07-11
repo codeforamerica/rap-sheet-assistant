@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'rap_sheet_parser'
-
 describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
@@ -12,7 +10,7 @@ describe Prop64Classifier do
   end
 
   let(:conviction_counts) do
-    [build_conviction_count(section: section, code: code)]
+    [build_court_count(section: section, code: code)]
   end
 
   let(:rap_sheet) { nil }
@@ -52,8 +50,8 @@ describe Prop64Classifier do
     end
 
     context 'when the code section is nil' do
-      let(:conviction_count) { build_conviction_count(section: section, code: code) }
-      let(:nil_count) { build_conviction_count(section: section, code: nil) }
+      let(:conviction_count) { build_court_count(section: section, code: code) }
+      let(:nil_count) { build_court_count(section: section, code: nil) }
       let(:conviction_counts) { [conviction_count, nil_count] }
 
       it 'skips counts with nil code sections' do
@@ -65,9 +63,9 @@ describe Prop64Classifier do
   describe '#remedy' do
     describe 'resentencing' do
       let(:conviction_counts) { [
-        build_conviction_count(section: '11359(a)(b)', code: 'HS'),
-        build_conviction_count(section: 'blah', code: 'PC'),
-        build_conviction_count(section: '11362.1(c)', code: 'HS')
+        build_court_count(section: '11359(a)(b)', code: 'HS'),
+        build_court_count(section: 'blah', code: 'PC'),
+        build_court_count(section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { 2.months.ago }
@@ -83,9 +81,9 @@ describe Prop64Classifier do
 
     describe 'redesignation' do
       let(:conviction_counts) { [
-        build_conviction_count(section: '11359(a)(b)', code: 'HS'),
-        build_conviction_count(section: 'blah', code: 'PC'),
-        build_conviction_count(section: '11362.1(c)', code: 'HS')
+        build_court_count(section: '11359(a)(b)', code: 'HS'),
+        build_court_count(section: 'blah', code: 'PC'),
+        build_court_count(section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { 2.years.ago }
@@ -101,9 +99,9 @@ describe Prop64Classifier do
 
     describe 'unknown' do
       let(:conviction_counts) { [
-        build_conviction_count(section: '11359(a)(b)', code: 'HS'),
-        build_conviction_count(section: 'blah', code: 'PC'),
-        build_conviction_count(section: '11362.1(c)', code: 'HS')
+        build_court_count(section: '11359(a)(b)', code: 'HS'),
+        build_court_count(section: 'blah', code: 'PC'),
+        build_court_count(section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { nil }
@@ -117,31 +115,4 @@ describe Prop64Classifier do
       end
     end
   end
-end
-
-def build_conviction_count(code:'PC', section:'123', severity:'M')
-  RapSheetParser::ConvictionCount.new(
-    code_section_description: 'foo',
-    severity: severity,
-    code: code,
-    section: section
-  )
-end
-
-def build_conviction_event(
-  date: Date.new(1994, 1, 2),
-  case_number: '12345',
-  courthouse: 'CASC SAN FRANCISCO',
-  sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
-  counts: []
-)
-
-  RapSheetParser::ConvictionEvent.new(
-    date: date,
-    courthouse: courthouse,
-    case_number: case_number,
-    sentence: sentence,
-    updates: [],
-    counts: counts
-  )
 end

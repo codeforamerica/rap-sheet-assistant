@@ -1,3 +1,5 @@
+require 'rap_sheet_parser'
+require 'rap_sheet_factory'
 require 'factory_bot'
 
 Dir[File.join(__dir__, 'support/**/*.rb')].each { |f| require f }
@@ -18,6 +20,7 @@ Dir[File.join(__dir__, 'support/**/*.rb')].each { |f| require f }
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+  config.include RapSheetParser::RapSheetFactory
   config.include FactoryBot::Syntax::Methods
   config.include PdfHelpers
 
