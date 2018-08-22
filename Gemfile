@@ -40,6 +40,7 @@ group :development, :test do
   gem 'fog-local'
   gem 'spring-commands-rspec'
   gem 'launchy'
+  gem 'bundler-audit'
 end
 
 group :development do

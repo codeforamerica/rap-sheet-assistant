@@ -13,6 +13,15 @@ rescue NameError
   # rspec is not available
 end
 
+begin
+  require 'bundler/audit/task'
+  Bundler::Audit::Task.new
+
+  task default: 'bundle:audit'
+rescue NameError, LoadError
+  # bundler-audit is not available
+end
+
 task :upload_test_images, [:pdf] do |t, args|
   pdf = args[:pdf]
   system "convert -verbose -density 300 -trim #{pdf}.pdf -quality 100 page.jpg"
