@@ -5,7 +5,8 @@ require_relative '../../app/domain/pc1203_classifier'
 describe PC1203Classifier do
   let(:user) { build(:user) }
   let(:rap_sheet) {}
-  let(:conviction_event) { build_conviction_event( sentence: sentence, date: date) }
+  let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
+  let(:conviction_event) { build_court_event(counts: [count], date: date) }
   let(:date) { Date.today - 5.years }
 
   subject { described_class.new(user: user, event: conviction_event, rap_sheet: rap_sheet) }
@@ -72,32 +73,6 @@ describe PC1203Classifier do
       end
     end
 
-    context 'when the user is on probation' do
-      before do
-        user.on_probation = true
-      end
-
-      xcontext 'and they have not yet finished 1/2 of their probation' do
-        before do
-          user.finished_half_of_probation = false
-        end
-
-        it 'returns false' do
-          expect(subject).not_to be_eligible
-        end
-      end
-
-      xcontext 'and they have finished 1/2 of their probation' do
-        before do
-          user.finished_half_of_probation = true
-        end
-
-        it 'returns true' do
-          expect(subject).to be_eligible
-        end
-      end
-    end
-
     context 'when the user has a warrant' do
       before do
         user.outstanding_warrant = true
@@ -112,9 +87,10 @@ describe PC1203Classifier do
   describe '#remedy' do
     context 'sentence includes probation' do
       context 'probation successfully completed' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 5.months) }
         let(:conviction_event) do
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 5.months),
+          build_court_event(
+            counts: [count],
             date: Date.new(1991, 5, 1)
           )
         end
@@ -129,13 +105,14 @@ describe PC1203Classifier do
       end
 
       context 'probation violated' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 5.months) }
         let(:conviction_event) do
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 5.months),
+          build_court_event(
+            counts: [count],
             date: Date.new(1991, 5, 1)
           )
         end
-        let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1991, 7, 1)) }
+        let(:arrest_event) { build_other_event(event_type: 'arrest', date: Date.new(1991, 7, 1)) }
         let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
         it 'returns discretionary' do
@@ -147,9 +124,10 @@ describe PC1203Classifier do
       end
 
       context 'unknown probation completion status' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 5.months) }
         let(:conviction_event) do
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 5.months),
+          build_court_event(
+            counts: [count],
             date: nil
           )
         end
@@ -165,19 +143,21 @@ describe PC1203Classifier do
     end
 
     context 'sentence does not include probation' do
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: nil) }
       let(:conviction_event) do
-        build_conviction_event(
-          sentence: RapSheetParser::ConvictionSentence.new(probation: nil),
+        build_court_event(
           date: Date.new(1991, 5, 1),
-          counts: [build_court_count(severity: severity)]
+          counts: [build_count(disposition: build_disposition(severity: severity, sentence: sentence))]
         )
       end
+
+      let(:arrest_event) { build_other_event(event_type: 'arrest', date: arrest_date) }
 
       context 'when the event severity is misdemeanor' do
         let(:severity) { 'M' }
 
         context 'when rap sheet is clear for a year after sentencing' do
-          let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
+          let(:arrest_date) { Date.new(1992, 7, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
@@ -189,7 +169,7 @@ describe PC1203Classifier do
         end
 
         context 'when rap sheet has event within a year after sentencing' do
-          let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
+          let(:arrest_date) { Date.new(1992, 4, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
@@ -205,7 +185,7 @@ describe PC1203Classifier do
         let(:severity) { 'I' }
 
         context 'when rap sheet is clear for a year after sentencing' do
-          let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 7, 1)) }
+          let(:arrest_date) { Date.new(1992, 7, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
@@ -217,7 +197,7 @@ describe PC1203Classifier do
         end
 
         context 'when rap sheet has event within a year after sentencing' do
-          let(:arrest_event) { RapSheetParser::ArrestEvent.new(date: Date.new(1992, 4, 1)) }
+          let(:arrest_date) { Date.new(1992, 4, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do

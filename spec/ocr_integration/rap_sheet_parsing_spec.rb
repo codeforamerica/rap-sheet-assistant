@@ -2,8 +2,21 @@ require 'rails_helper'
 
 RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
   let(:directory) do
-    connection = Fog::Storage.new(fog_params)
-    connection.directories.new(key: 'rap-sheet-test-data')
+    if ENV['LOCAL_RAP_SHEETS_DIR']
+      puts "using local root: #{ENV['LOCAL_RAP_SHEETS_DIR']}"
+      Fog::Storage.new(
+        provider: 'Local',
+        local_root: ENV['LOCAL_RAP_SHEETS_DIR']
+      ).directories.new(key: '.')
+
+    else
+      puts "using AWS S3 bucket"
+      Fog::Storage.new(
+        provider: 'aws',
+        aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key: ENV['AWS_SECRET_KEY']
+      ).directories.new(key: 'rap-sheet-test-data')
+    end
   end
 
   it 'is accurate' do
@@ -84,9 +97,9 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     puts "Arrest Accuracy: #{arrest_accuracy}%"
     puts "Custody Event Accuracy: #{custody_accuracy}%"
 
-    expect(conviction_accuracy).to be > 75
-    expect(arrest_accuracy).to be > 75
-    expect(custody_accuracy).to be > 75
+    expect(conviction_accuracy).to be > 70
+    expect(arrest_accuracy).to be > 90
+    expect(custody_accuracy).to be > 90
   end
 end
 
@@ -95,12 +108,12 @@ def expected_convictions(expected_values)
     {
       date: Date.strptime(c[:date], '%m/%d/%Y'),
       case_number: c[:case_number]&.gsub(' ', ''),
-      courthouse: c[:courthouse].upcase.chomp(' CO'),
-      sentence: c[:sentence],
+      courthouse: c[:courthouse].upcase,
       counts: c[:counts].map do |count|
         {
           'code_section' => count[:code_section],
-          'severity' => count[:severity]
+          'severity' => count[:severity],
+          'sentence' => count[:sentence]
         }
       end
     }
@@ -168,27 +181,12 @@ def compute_accuracy(matches, actual_convictions, key)
   (matches.to_f / actual_convictions.to_f * 100).round(2)
 end
 
-def fog_params
-  if ENV['LOCAL_ROOT']
-    {
-      provider: 'Local',
-      local_root: ENV['LOCAL_ROOT'],
-    }
-  else
-    {
-      provider: 'aws',
-      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      aws_secret_access_key: ENV['AWS_SECRET_KEY']
-    }
-  end
-end
-
 def sorted(items)
   items.sort_by do |c|
     date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
     case_number = c[:case_number] ? c[:case_number] : ''
     
-    [date, case_number, c[:sentence]]
+    [date, case_number]
   end
 end
 
@@ -200,13 +198,13 @@ def detected_convictions(rap_sheet)
   sorted(rap_sheet.convictions.map do |event|
     {
       date: event.date,
-      case_number: event.case_number,
-      courthouse: event.courthouse.upcase,
-      sentence: event.sentence.to_s,
-      counts: event.counts.map do |count|
+      case_number: event.case_number&.gsub(' ', ''),
+      courthouse: event.courthouse&.upcase,
+      counts: event.convicted_counts.map do |count|
         {
           'code_section' => count.code_section&.upcase,
-          'severity' => count.severity&.first,
+          'severity' => count.disposition.severity&.first,
+          'sentence' => count.disposition&.sentence&.to_s
         }
       end
     }
@@ -214,7 +212,7 @@ def detected_convictions(rap_sheet)
 end
 
 def detected_arrests(rap_sheet)
-  sorted(rap_sheet.arrests.map do |event|
+  sorted(rap_sheet.arrest_events.map do |event|
     {
       date: event.date
     }

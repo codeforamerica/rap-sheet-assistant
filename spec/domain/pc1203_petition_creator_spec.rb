@@ -18,19 +18,17 @@ RSpec.describe PC1203PetitionCreator do
 
   it 'creates a filled-out form with the users contact info' do
     conviction_counts = [
-      build_court_count(
+      build_count(
+        disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'FELONY',
         code: 'PC',
         section: '111'
       )
     ]
-    conviction_event = build_conviction_event(
+    conviction_event = build_court_event(
       case_number: '#ABCDE',
       date: Date.new(2010, 1, 1),
       courthouse: 'CASC SAN FRANCISCO',
-      sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
-      updates: nil,
       counts: conviction_counts
     )
     remedy = { code: '1203.41' }
@@ -61,40 +59,38 @@ RSpec.describe PC1203PetitionCreator do
 
   it 'fills out the offenses table with data from each count' do
     sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
-    conviction_event = instance_double(
-      RapSheetParser::ConvictionEvent,
-      case_number: '#ABCDE',
-      date: Date.parse('2010-01-01'),
-      severity: 'F',
-      sentence: sentence
-    )
-
     conviction_counts = [
-      build_court_count(
+      build_count(
+        disposition: build_disposition(sentence: sentence, severity: 'F'),
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'F',
         code: 'PC',
         section: '107' # wobbler, felony
       ),
-      build_court_count(
+      build_count(
+        disposition: build_disposition(sentence: sentence, severity: 'M'),
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'M',
         code: 'PC',
         section: '12355(b)' # wobbler but already misdemeanor
       ),
-      build_court_count(
+      build_count(
+        disposition: build_disposition(sentence: sentence, severity: 'F'),
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'F',
         code: 'PC',
         section: '605' # made up (not a wobbler)
       ),
-      build_court_count(
+      build_count(
+        disposition: build_disposition(sentence: sentence, severity: 'M'),
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
-        severity: 'M',
         code: 'PC',
         section: '330' # reducible to infraction
       )
     ]
+    conviction_event = build_court_event(
+      case_number: '#ABCDE',
+      date: Date.parse('2010-01-01'),
+      counts: conviction_counts
+    )
+
     pdf_file = PC1203PetitionCreator.new(
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,

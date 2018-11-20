@@ -16,7 +16,10 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
-    @conviction_counts = RapSheetParser::CourtCount.where(id: @rap_sheet.parsed.convictions.flat_map(&:counts).map(&:id)) 
+    @conviction_counts = @rap_sheet.parsed.convictions.flat_map(&:convicted_counts)
+    @number_of_felonies = @conviction_counts.select { |c| c.disposition&.severity == 'F' }.length
+    @number_of_misdemeanors = @conviction_counts.select { |c| c.disposition&.severity == 'M' }.length
+    @number_of_unknown = @conviction_counts.select { |c| c.disposition&.severity.nil? }.length
   end
 
   def create

@@ -54,7 +54,7 @@ class EligibilityChecker
     pc1203 =
       if pc1203_classifier.eligible?
         {
-          counts: event.counts - prop64_counts,
+          counts: event.convicted_counts - prop64_counts,
           remedy: pc1203_classifier.remedy
         }
       else
@@ -77,7 +77,7 @@ class EligibilityChecker
     prop64_counts = Prop64Classifier.new(user: user, event: event, rap_sheet: rap_sheet).potentially_eligible_counts
     pc1203_counts =
       if PC1203Classifier.new(user: user, event: event, rap_sheet: rap_sheet).potentially_eligible?
-        event.counts - prop64_counts
+        event.convicted_counts - prop64_counts
       else
         []
       end

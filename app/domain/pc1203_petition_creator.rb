@@ -53,19 +53,23 @@ class PC1203PetitionCreator
     {
       "topmostSubform[0].Page1[0].Code#{index}_ft[0]" => count.code,
       "topmostSubform[0].Page1[0].Section#{index}_ft[0]" => count.section,
-      "topmostSubform[0].Page1[0].TypeOff#{index}_ft[0]" => count.long_severity,
+      "topmostSubform[0].Page1[0].TypeOff#{index}_ft[0]" => long_severity(count),
       "topmostSubform[0].Page1[0].Reduce#{index}_ft[0]" => reducible_to_misdemeanor(count),
       "topmostSubform[0].Page1[0].Offense#{index}_ft[0]" => reducible_to_infraction(count)
     }
   end
 
   def reducible_to_misdemeanor(count)
-    is_reducible = count.severity == 'F' && Constants::WOBBLERS.include?(count.code_section)
+    is_reducible = count.disposition.severity == 'F' && Constants::WOBBLERS.include?(count.code_section)
     is_reducible ? 'yes' : 'no'
   end
 
   def reducible_to_infraction(count)
-    is_reducible = count.severity == 'M' && Constants::REDUCIBLE_TO_INFRACTION.include?(count.code_section)
+    is_reducible = count.disposition.severity == 'M' && Constants::REDUCIBLE_TO_INFRACTION.include?(count.code_section)
     is_reducible ? 'yes' : 'no'
+  end
+
+  def long_severity(count)
+    {'F' => 'felony', 'M' => 'misdemeanor', 'I' => 'infraction'}[count.disposition.severity]
   end
 end

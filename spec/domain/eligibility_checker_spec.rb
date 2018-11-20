@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 describe EligibilityChecker do
-  let(:prop64_eligible_count_1) { build_court_count(code: 'HS', section: '11357(b)') }
-  let(:prop64_eligible_count_2) { build_court_count(code: 'HS', section: '11357(a)') }
-  let(:pc1203_eligible_count) { build_court_count(code: 'PC', section: '456') }
+  let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'M') }
+  let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), severity: 'F') }
+  let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', disposition: probation_dispo) }
+  let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357(a)', disposition: prison_dispo) }
+  let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', disposition: probation_dispo) }
+  let(:pc1203_ineligible_count) { build_count(code: 'PC', section: '456', disposition: prison_dispo) }
 
   describe '#all_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do
@@ -16,17 +19,15 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+          build_court_event(
             counts: [prop64_eligible_count_1, pc1203_eligible_count],
             date: Date.today - 5.years
           ),
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
+          build_court_event(
             counts: [prop64_eligible_count_2],
             date: Date.today - 5.years
           ),
-          RapSheetParser::ArrestEvent.new(date: Date.today)
+          build_other_event(event_type: 'arrest', date: Date.today)
         ]
       )
       allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
@@ -49,17 +50,15 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+          build_court_event(
             counts: [prop64_eligible_count_1, pc1203_eligible_count],
             date: Date.today - 5.years
           ),
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
+          build_court_event(
             counts: [prop64_eligible_count_2],
             date: Date.today - 5.years
           ),
-          RapSheetParser::ArrestEvent.new(date: Date.today)
+          build_other_event(event_type: 'arrest', date: Date.today)
         ]
       )
       allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
@@ -80,18 +79,16 @@ describe EligibilityChecker do
         outstanding_warrant: false
       )
 
-      event_1 = build_conviction_event(
+      event_1 = build_court_event(
         date: Date.new(2014, 6, 1),
-        sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
         counts: [prop64_eligible_count_1, pc1203_eligible_count]
       )
-      event_2 = build_conviction_event(
+      event_2 = build_court_event(
         date: nil,
-        sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
         counts: [prop64_eligible_count_2]
       )
       parsed_rap_sheet = build_rap_sheet(
-        events: [event_1, event_2, RapSheetParser::ArrestEvent.new(date: Date.new(2015, 1, 1))]
+        events: [event_1, event_2, build_other_event(event_type: 'arrest', date: Date.new(2015, 1, 1))]
       )
       allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
@@ -139,8 +136,7 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+          build_court_event(
             counts: [pc1203_eligible_count],
             date: Date.today - 5.years
           )
@@ -163,8 +159,7 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+          build_court_event(
             counts: [pc1203_eligible_count],
             date: Date.today - 5.years
           )
@@ -191,9 +186,8 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
-            counts: [pc1203_eligible_count]
+          build_court_event(
+            counts: [pc1203_ineligible_count]
           )
         ]
       )
@@ -211,8 +205,7 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year),
+          build_court_event(
             counts: [pc1203_eligible_count],
             date: Date.today - 5.years
           )
@@ -236,9 +229,8 @@ describe EligibilityChecker do
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
-          build_conviction_event(
-            sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year),
-            counts: [pc1203_eligible_count]
+          build_court_event(
+            counts: [pc1203_ineligible_count]
           )
         ]
       )

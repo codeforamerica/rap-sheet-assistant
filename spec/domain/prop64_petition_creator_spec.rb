@@ -16,12 +16,12 @@ describe Prop64PetitionCreator do
   let(:rap_sheet) { create(:rap_sheet, user: user) }
 
   it 'fills out contact info' do
-    conviction_event = build_conviction_event(
+    conviction_counts = [build_count]
+    conviction_event = build_court_event(
       case_number: '#ABCDE',
       date: Date.new(2010, 1, 1),
-      sentence: RapSheetParser::ConvictionSentence.new
+      counts: conviction_counts
     )
-    conviction_counts = [build_court_count]
 
     pdf_file = nil
     travel_to Date.new(2015, 3, 3) do
@@ -55,11 +55,11 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills resentencing and petition checkboxes if sentence being served' do
-    conviction_event = build_conviction_event(
-      sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year),
-      date: Date.new(2014, 8, 8)
+    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year)))]
+    conviction_event = build_court_event(
+      date: Date.new(2014, 8, 8),
+      counts: conviction_counts
     )
-    conviction_counts = [build_court_count]
     pdf_file = nil
     travel_to Date.new(2015, 3, 3) do
       pdf_file = described_class.new(
@@ -83,11 +83,11 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills redesignation and application checkboxes if sentence completed' do
-    conviction_event = build_conviction_event(
-      sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year),
-      date: Date.new(2014, 8, 8)
+    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year)))]
+    conviction_event = build_court_event(
+      date: Date.new(2014, 8, 8),
+      counts: conviction_counts
     )
-    conviction_counts = [build_court_count]
     pdf_file = nil
     travel_to Date.new(2015, 8, 9) do
       pdf_file = described_class.new(
@@ -111,11 +111,11 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills remedy checkboxes' do
-    conviction_event = build_conviction_event(
-      sentence: RapSheetParser::ConvictionSentence.new,
-      date: Date.new(2014, 8, 8)
+    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
+    conviction_event = build_court_event(
+      date: Date.new(2014, 8, 8),
+      counts: conviction_counts
     )
-    conviction_counts = [build_court_count]
     remedy = {
       codes: [
         'HS 11357',
@@ -144,11 +144,11 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills remedy checkboxes' do
-    conviction_event = build_conviction_event(
-      sentence: RapSheetParser::ConvictionSentence.new,
-      date: Date.new(2014, 8, 8)
+    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
+    conviction_event = build_court_event(
+      date: Date.new(2014, 8, 8),
+      counts: conviction_counts
     )
-    conviction_counts = [build_court_count]
     remedy = {
       codes: ['HS 11359', 'HS 11362.1'],
       scenario: :redesignation
