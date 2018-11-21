@@ -15,7 +15,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
         provider: 'aws',
         aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
         aws_secret_access_key: ENV['AWS_SECRET_KEY']
-      ).directories.new(key: 'rap-sheet-test-data')
+      ).directories.new(key: ENV['RAP_SHEETS_BUCKET'] || 'rap-sheet-test-data')
     end
   end
 
