@@ -90,3 +90,6 @@ If you would like to only run the tests on one specific RAP sheet, set the envir
 Because the OCR step is the slowest and most expensive step in the process, the tests will automatically cache the OCR results as a text file `page_#.txt` for each page.
 If a text file exists, the OCR will not be run, the text file will be used instead. To clear the cache, simply delete the `.txt` files from the subfolder.
 
+**Creating test images for the test suite:**
+If you have a PDF of a RAP sheet and you would like to create jpgs of each page for the test suite to consume, you can run `rake upload_test_images["my_test_rap_sheet"]`, where `my_test_rap_sheet.pdf` is the name of the file you wish to convert.
+This will create a file for each page and upload it to a folder in your S3 bucket with the name provided.
