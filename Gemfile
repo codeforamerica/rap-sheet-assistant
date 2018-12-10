@@ -26,6 +26,8 @@ gem 'pdf-forms'
 gem 'cliver'
 gem 'sentry-raven'
 gem 'rap_sheet_parser', :git => 'https://github.com/codeforamerica/rap_sheet_parser'
+gem 'webpacker'
+gem 'react-rails'
 # gem 'rap_sheet_parser', path: '../rap_sheet_parser'
 
 group :development, :test do
