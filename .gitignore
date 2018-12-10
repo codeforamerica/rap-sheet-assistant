@@ -23,6 +23,8 @@ public/uploads/
 public/test/
 test_rap_sheet_data/
 
+tags
+
 .env
 
 .DS_Store
