@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
   let(:directory) do
     if ENV['LOCAL_RAP_SHEETS_DIR']
-      puts "using local root: #{ENV['LOCAL_RAP_SHEETS_DIR']}"
+      ci_safe_puts "using local root: #{ENV['LOCAL_RAP_SHEETS_DIR']}"
       Fog::Storage.new(
         provider: 'Local',
         local_root: ENV['LOCAL_RAP_SHEETS_DIR']
       ).directories.new(key: '.')
 
     else
-      puts "using AWS S3 bucket"
+      ci_safe_puts "using AWS S3 bucket"
       Fog::Storage.new(
         provider: 'aws',
         aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
@@ -47,26 +47,26 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
     end
 
     rap_sheets.each do |rap_sheet_prefix|
-      puts "------------- For #{rap_sheet_prefix} -------------"
+      ci_safe_puts "------------- For #{rap_sheet_prefix} -------------"
       rap_sheet = create_rap_sheet(file_names, rap_sheet_prefix).parsed
       values_file = directory.files.get("#{rap_sheet_prefix}/expected_values.json")
       expected_values = JSON.parse(values_file.body, symbolize_names: true)
 
-      puts 'Convictions:'
+      ci_safe_puts 'Convictions:'
       summarize(
         detected_convictions(rap_sheet),
         expected_convictions(expected_values),
         :convictions
       )
 
-      puts 'Arrests:'
+      ci_safe_puts 'Arrests:'
       summarize(
         detected_arrests(rap_sheet),
         expected_arrests(expected_values),
         :arrests
       )
 
-      puts 'Custody Events:'
+      ci_safe_puts 'Custody Events:'
       summarize(
         detected_custody_events(rap_sheet),
         expected_custody_events(expected_values),
@@ -74,7 +74,7 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       )
     end
 
-    puts '------------- Summary -------------'
+    ci_safe_puts '------------- Summary -------------'
     conviction_accuracy = compute_accuracy(
       @summary_stats[:convictions][:correctly_detected],
       @summary_stats[:convictions][:actual],
@@ -93,14 +93,18 @@ RSpec.describe 'ocr parsing accuracy', ocr_integration: true do
       :custody_events
     )
 
-    puts "Conviction Accuracy: #{conviction_accuracy}%"
-    puts "Arrest Accuracy: #{arrest_accuracy}%"
-    puts "Custody Event Accuracy: #{custody_accuracy}%"
+    ci_safe_puts "Conviction Accuracy: #{conviction_accuracy}%"
+    ci_safe_puts "Arrest Accuracy: #{arrest_accuracy}%"
+    ci_safe_puts "Custody Event Accuracy: #{custody_accuracy}%"
 
     expect(conviction_accuracy).to be > 70
     expect(arrest_accuracy).to be > 90
     expect(custody_accuracy).to be > 90
   end
+end
+
+def ci_safe_puts(to_put)
+  puts to_put if ENV['RSPEC_SHOW_OCR_OUTPUT']
 end
 
 def expected_convictions(expected_values)
@@ -174,7 +178,7 @@ def create_rap_sheet(file_names, rap_sheet_prefix)
 end
 
 def compute_accuracy(matches, actual_convictions, key)
-  puts "Correctly detected #{matches} out of #{actual_convictions} #{key}"
+  ci_safe_puts "Correctly detected #{matches} out of #{actual_convictions} #{key}"
 
   return 100 if actual_convictions == 0
 
@@ -185,7 +189,7 @@ def sorted(items)
   items.sort_by do |c|
     date = c[:date] ? c[:date] : Date.new(1000, 1, 1) # arbitrarily old date
     case_number = c[:case_number] ? c[:case_number] : ''
-    
+
     [date, case_number]
   end
 end
@@ -228,7 +232,7 @@ def detected_custody_events(rap_sheet)
 end
 
 def num_matches(detected, expected)
-  puts diff(detected, expected)
+  ci_safe_puts diff(detected, expected)
 
   detected.select { |c| expected.include?(c) }.length
 end
@@ -236,8 +240,8 @@ end
 def summarize(detected, expected, key)
   matches = num_matches(detected, expected)
 
-  puts "Detected #{key}: #{detected.length}"
-  puts "Accuracy: #{compute_accuracy(matches, expected.length, key)}%"
+  ci_safe_puts "Detected #{key}: #{detected.length}"
+  ci_safe_puts "Accuracy: #{compute_accuracy(matches, expected.length, key)}%"
 
   @summary_stats[key][:actual] += expected.length
   @summary_stats[key][:detected] += detected.length

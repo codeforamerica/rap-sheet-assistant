@@ -78,6 +78,8 @@ The structure of the `expected_values.json` file is as follows:
 
 In order to use a local folder, set the environment variable `LOCAL_RAP_SHEETS_DIR`
 
+When running the tests verbose output is hidden by default. If you are running OCR tests on a system that is CJI/PII safe you can set the `RSPEC_SHOW_OCR_OUTPUT` environment variable to see summary output
+
 In order to use AWS S3, ensure the following environment variables are set:
 ```
 RAP_SHEETS_BUCKET
