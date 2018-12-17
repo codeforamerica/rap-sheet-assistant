@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_17_212004) do
+ActiveRecord::Schema.define(version: 2018_12_17_215511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_12_17_212004) do
     t.index ["user_id"], name: "index_financial_informations_on_user_id"
   end
 
-  create_table "rap_sheet_pages", force: :cascade do |t|
+  create_table "rap_sheet_pages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "rap_sheet_page_image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
