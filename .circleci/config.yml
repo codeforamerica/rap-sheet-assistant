@@ -7,7 +7,7 @@ jobs:
            RAILS_ENV: test
            PGHOST: 127.0.0.1
            PGUSER: cmr-self-help-user
-- image: circleci/postgres:9.6.5-alpine
+       - image: circleci/postgres:9.6.5-alpine
          environment:
            POSTGRES_USER: cmr-self-help-user
            POSTGRES_DB: cmr_self_help_test

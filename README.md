@@ -53,7 +53,7 @@ The structure of the `expected_values.json` file is as follows:
     },
     {
       "date": "02/05/2015"
-    },
+    }
   ],
   "convictions": [
     {
