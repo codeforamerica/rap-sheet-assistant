@@ -15,6 +15,12 @@
 
  - [Install PDFTK from here](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg)
 
+## Running in CI
+This repo has a CircleCI config and internal tests are run (privately) in CircleCI. CfA members should ask the Clear My Record team for access. 
+There is a `Dockerfile` in this repo that we use due to version issues with the `circleci/ruby:node-browsers`. In particular this Dockerfile installs
+the latest version of Chrome and ChromeDriver as well as PDFTK. We do not rebuild the Docker image every time to avoid bumping versions unnecessarily.
+The image is pushed to the `codeforamerica/rap-sheet-assistant-ci` docker hub repo.
+
 ## Integration tests
 This repo also includes an integration test suite which has the ability to take in a set of RAP sheet images and expectations and ensure that the parsed RAP sheets agree with the expectations.
 The test suite will compute an accuracy percentage for how well the output matched the expectations.
