@@ -14,6 +14,8 @@ class Prop64Classifier
       c.code_section && dismissible_codes.any? do |d|
         c.code_section.start_with? d
       end
+    end.map do |c|
+      { code_section: c.code_section, remedy: count_remedy(c), level: c.disposition.severity, date: event.date }
     end
   end
 
@@ -33,6 +35,10 @@ class Prop64Classifier
   end
 
   private
+
+  def count_remedy(count)
+    count.disposition.severity == 'F' ? 'reduce' : 'dismiss'
+  end
 
   def scenario
     return :unknown if (event.date.nil? or event.sentence.nil?)
