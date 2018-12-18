@@ -76,7 +76,7 @@ jobs:
       - checkout
       - run: sudo pip install awsebcli
       - run: bash ./bin/setup_eb.sh
-      - run: eb deploy
+      - run: eb deploy --profile eb-cli
 
 workflows:
   version: 2
