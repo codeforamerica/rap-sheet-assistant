@@ -283,7 +283,7 @@ describe 'uploading a rap sheet' do
 
   def get_fields_from_downloaded_pdf(firstname, lastname)
     today = Date.today
-    tempfile = "/tmp/downloads/cmr_petitions_#{firstname}_#{lastname}_#{today.year}-#{today.month}-#{today.day}.pdf"
+    tempfile = "/tmp/downloads/cmr_petitions_#{firstname}_#{lastname}_#{today.year}-#{today.month}-#{today.day}.pdf".downcase
     wait_until do
       File.exist?(tempfile)
     end

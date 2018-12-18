@@ -34,7 +34,6 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
-  gem 'capybara-webkit'
   gem 'rspec-rails', '~> 3.7'
   gem 'rspec_junit_formatter'
   gem 'dotenv-rails'
