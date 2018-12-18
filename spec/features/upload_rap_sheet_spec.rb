@@ -9,16 +9,23 @@ describe 'uploading a rap sheet' do
   end
 
   before do
+    allow(ConvertPdfToImages).
+      to receive(:convert).
+        and_return(
+          ['./spec/fixtures/skywalker_rap_sheet_page_1.jpg',
+           './spec/fixtures/skywalker_rap_sheet_page_2.jpg']
+        )
+  end
+
+  before do
     allow(TextScanner).to receive(:scan_text).and_return(*scanned_pages)
   end
 
   context 'when a user has both prop64 and 1203 dismissal eligible convictions' do
-    it 'allows the user to upload their rap sheet and shows convictions', js: true do
+    it 'allows the user to upload their rap sheet and shows convictions' do
       visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Take photos with my phone'
-
-      upload_pages(scanned_pages)
+      expect(page).to have_content 'Upload a California RAP sheet'
+      upload_pdf
 
       expect(page).to have_content 'We found 5 convictions on your record.'
       expect(page).to have_content '3 Felonies'
@@ -54,7 +61,7 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       click_on 'download'
-      fields_dict = get_fields_from_downloaded_pdf
+      fields_dict = get_fields_from_downloaded_pdf('Test', 'User')
       expected_values = {
         'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
         'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
@@ -76,15 +83,13 @@ describe 'uploading a rap sheet' do
 
     it 'generates multiple petitions for independent conviction events' do
       visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Take photos with my phone'
-
-      upload_pages(scanned_pages)
+      expect(page).to have_content 'Upload a California RAP sheet'
+      upload_pdf
 
       click_on 'Next'
       click_on 'Next'
 
-      fill_in_contact_form(first_name: 'Testuser')
+      fill_in_contact_form(first_name: 'Testuser', last_name: 'Lastname')
       click_on 'Next'
 
       find('.form-group', text: 'Are you currently employed?').choose 'Yes'
@@ -94,7 +99,7 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       click_on 'download'
-      fields_dict = get_fields_from_downloaded_pdf
+      fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Lastname')
       expected_values = {
         'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
         '1.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
@@ -110,12 +115,10 @@ describe 'uploading a rap sheet' do
       ]
     end
 
-    it 'shows that it is dismissible', js: true do
+    it 'shows that it is dismissible' do
       visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Take photos with my phone'
-
-      upload_pages(scanned_pages)
+      expect(page).to have_content 'Upload a California RAP sheet'
+      upload_pdf
 
       expect(page).to have_content 'We found 1 conviction on your record'
       click_on 'Next'
@@ -148,7 +151,7 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       click_on 'download'
-      fields_dict = get_fields_from_downloaded_pdf
+      fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Smith')
       expected_values = {
         'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
         'name' => 'Testuser Smith',
@@ -171,12 +174,10 @@ describe 'uploading a rap sheet' do
       ]
     end
 
-    it 'shows that it is dismissible', js: true do
+    it 'shows that it is dismissible' do
       visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Take photos with my phone'
-
-      upload_pages(scanned_pages)
+      expect(page).to have_content 'Upload a California RAP sheet'
+      upload_pdf
 
       expect(page).to have_content 'We found 1 conviction on your record'
       click_on 'Next'
@@ -211,7 +212,7 @@ describe 'uploading a rap sheet' do
       click_on 'Next'
 
       click_on 'download'
-      fields_dict = get_fields_from_downloaded_pdf
+      fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Smith')
       expected_values = {
         'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
         'name' => 'Testuser Smith',
@@ -235,105 +236,28 @@ describe 'uploading a rap sheet' do
 
     it 'shows an ineligible page' do
       visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Take photos with my phone'
-
-      upload_pages(scanned_pages)
+      upload_pdf
 
       click_on 'Next'
       expect(page).to have_content 'none of your convictions are eligible'
     end
   end
 
-  context 'when the rap sheet is uploaded as a pdf', :js do
-    before do
-      allow(ConvertPdfToImages).
-        to receive(:convert).
-          and_return(
-            ['./spec/fixtures/skywalker_rap_sheet_page_1.txt',
-              './spec/fixtures/skywalker_rap_sheet_page_2.txt']
-          )
-    end
-
-    it 'shows convictions' do
-      visit root_path
-      expect(page).to have_content 'Upload your California RAP sheet'
-      click_on 'Add a PDF from my computer'
-
-      expect(page).to have_content 'Add a file'
-      page.evaluate_script("$('#rap_sheet_pdf_pdf_file').show()")
-      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet_page_1.txt'
-
-      expect(page).to have_content 'PDF added'
-      find('.rap-sheet-page-delete a').click
-      expect(page).not_to have_content 'PDF added'
-      expect(page).to have_content 'Add a file'
-      attach_file 'Browse', 'spec/fixtures/skywalker_rap_sheet.pdf'
-      expect(page).to have_content 'PDF added'
-      click_on 'Next'
-
-      expect(page).to have_content 'We found 5 convictions on your record.'
-    end
-  end
-
-  it 'allows the user to delete and re-upload pages' do
+  it 'allows the user to select a different file' do
     visit root_path
-    expect(page).to have_content 'Upload your California RAP sheet'
-    click_on 'Take photos with my phone'
+    expect(page).to have_content 'Upload a California RAP sheet'
 
-    expect(page).to have_content 'How many pages does your RAP sheet have?'
-    fill_in 'How many pages does your RAP sheet have?', with: '2'
-    click_on 'Next'
-
-    expect(page).to have_content 'Upload all 2 pages of your RAP sheet'
-    expect(page).to have_content '0 of 2 pages uploaded'
-    within '#rap_sheet_page_1' do
-      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-      click_on 'Upload'
-    end
-
-    expect(RapSheet.last.rap_sheet_pages.length).to eq(1)
-
-    within '#rap_sheet_page_1' do
-      click_on '×'
-    end
-
-    expect(RapSheet.last.rap_sheet_pages.length).to eq(0)
+    expect(page).to have_content 'Select a PDF file to upload'
+    attach_rap_pdf_file
+    expect(page).to have_content 'PDF added'
+    find('.icon-close').click
+    expect(page).not_to have_content 'PDF added'
   end
 
-  it 'allows the user to add and remove pages' do
-    visit root_path
-    expect(page).to have_content 'Upload your California RAP sheet'
-    click_on 'Take photos with my phone'
-
-    expect(page).to have_content 'How many pages does your RAP sheet have?'
-    fill_in 'How many pages does your RAP sheet have?', with: '2'
-    click_on 'Next'
-
-    click_on '+ add a page'
-    expect(page).to have_css('.rap-sheet-page-row', count: 3)
-
-    click_on '- remove a page'
-    expect(page).to have_css('.rap-sheet-page-row', count: 2)
-  end
-
-  def upload_pages(rap_sheet_pages)
-    expect(page).to have_content 'How many pages does your RAP sheet have?'
-    fill_in 'How many pages does your RAP sheet have?', with: rap_sheet_pages.length
-    click_on 'Next'
-
-    pluralized_rap_sheet_pages = "#{rap_sheet_pages.length} #{'page'.pluralize(rap_sheet_pages.length)}"
-    expect(page).to have_content "Upload all #{pluralized_rap_sheet_pages} of your RAP sheet"
-
-    rap_sheet_pages.each_with_index do |_rap_sheet_page, index|
-      expect(page).to have_content "#{index} of #{pluralized_rap_sheet_pages} uploaded"
-      within "#rap_sheet_page_#{index + 1}" do
-        attach_rap_sheet_image_file
-      end
-    end
-
-    expect(page).to have_content "All #{pluralized_rap_sheet_pages} added!"
-    click_on 'Next'
+  def upload_pdf
+    expect(page).to have_content 'Select a PDF file to upload'
+    attach_rap_pdf_file
+    click_on 'Upload'
   end
 
   def fill_in_case_information
@@ -357,22 +281,24 @@ describe 'uploading a rap sheet' do
     select params[:dob_year] || '1980', from: 'contact_information_form[date_of_birth(1i)]'
   end
 
-  def get_fields_from_downloaded_pdf
-    tempfile = Tempfile.new('downloaded_pdf', :encoding => 'ascii-8bit')
-    tempfile.write(page.body)
-    tempfile.close
-
-    get_fields_from_pdf(tempfile)
+  def get_fields_from_downloaded_pdf(firstname, lastname)
+    today = Date.today
+    tempfile = "/tmp/downloads/cmr_petitions_#{firstname}_#{lastname}_#{today.year}-#{today.month}-#{today.day}.pdf"
+    wait_until do
+      File.exist?(tempfile)
+    end
+    get_fields_from_pdf(File.new(tempfile))
   end
 
-  def attach_rap_sheet_image_file
-    # Make file field visible for capybara-webkit
-    if page.driver.class == Capybara::Webkit::Driver
-      page.evaluate_script("$('#rap_sheet_page_rap_sheet_page_image').show()")
-      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-    else
-      attach_file '+ add', 'spec/fixtures/skywalker_rap_sheet_page_1.jpg'
-      click_on 'Upload'
+  def attach_rap_pdf_file
+    attach_file 'Select file', File.absolute_path('spec/fixtures/skywalker_rap_sheet.pdf'), make_visible: true
+  end
+
+  def wait_until
+    times = 0
+    until yield || times > 10 do
+      times += 1
+      sleep 0.1
     end
   end
 end

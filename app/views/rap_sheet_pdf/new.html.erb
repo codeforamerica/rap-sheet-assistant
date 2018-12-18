@@ -1,40 +1,31 @@
-<div id="vue-app-div" class="container">
-  <h1 class="mt-5 font-weight-normal">Upload a PDF of your RAP sheet</h1>
-  <p>Make sure your PDF includes all pages of your RAP sheet.</p>
+<div id="vue-app-div">
+  <div class="slab">
+    <div class="form-card">
+      <div class="form-card__header">
+        <h1 class="form-card__title">Upload a California RAP sheet</h1>
+      </div>
 
-  <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: { multipart: true } do |f| %>
-    <div class="card">
-      <div class="card-content">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <%= content_tag :div, class: 'rap-sheet-page-row' do %>
-              <div class="rap-sheet-page-number-column">
-                <%= content_tag :div, class: 'mr-2 page-indicator', 'v-bind:class': '{completed: selectedFile}' do %>
-                <% end %>
-              </div>
-              <div class="rap-sheet-page-content">
-                <div v-if="selectedFile">PDF added</div>
-                <div v-else>Add a file</div>
-                <div v-if="selectedFile">{{ selectedFile }}</div>
-                <label v-show="!selectedFile" class="mt-1 btn btn-info btn-sm">
-                  Browse
-                  <%= f.file_field :pdf_file, { accept: 'document/pdf', class: 'hidden', 'v-on:change': 'fileInputChanged' } %>
-                </label>
-              </div>
-              <div class="rap-sheet-page-delete" v-if='selectedFile'>
-                <a v-on:click='clearFileInput'>×</a>
-              </div>
-            <% end %>
-          </li>
-        </ul>
+      <div class="form-card__content">
+        <p>Select a PDF file to upload.</p>
+        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: { multipart: true } do |f| %>
+          <div class="file-picker-box">
+            <div class="flex-row">
+              <label v-show="!selectedFile" class="button">
+                Select file
+                <%= f.file_field :pdf_file, { accept: 'application/pdf', class: 'hidden', 'v-on:change': 'fileInputChanged' } %>
+              </label>
+              <div v-if="selectedFile" class="flex-row"><span class="truncate-text">PDF added: {{ selectedFile }}</span><i class="icon-close" v-on:click='clearFileInput'></i> </div>
+              <div v-else>no file selected</div>
+            </div>
+          </div>
+
+          <div class="form-card__footer">
+            <%= f.submit 'Upload →', class: 'button button--primary', 'v-bind:disabled': '!selectedFile' %>
+          </div>
+        <% end %>
       </div>
     </div>
-
-    <p class="mt-4" v-if="!selectedFile">
-      Add a file from your computer before proceeding.
-    </p>
-    <%= f.submit 'Next →', class: 'btn btn-info mt-2', 'v-bind:disabled': '!selectedFile' %>
-  <% end %>
+  </div>
 </div>
 
 <script>

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'static_pages#index'
+  root 'rap_sheet_pdf#new'
 
   resources :users do
     scope module: :users do
@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
   resources :rap_sheet_pages, only: [:create, :destroy]
   get 'healthcheck', to: proc { [200, {}, ['']] }
+
+  mount Cfa::Styleguide::Engine => "/cfa"
 
   # keep last
   match '*path', via: [:all], to: 'application#not_found'

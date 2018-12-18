@@ -25,6 +25,7 @@ gem 'bootsnap'
 gem 'pdf-forms'
 gem 'cliver'
 gem 'sentry-raven'
+gem 'cfa-styleguide', git: 'https://github.com/codeforamerica/cfa-styleguide-gem'
 gem 'rap_sheet_parser', :git => 'https://github.com/codeforamerica/rap_sheet_parser'
 # gem 'rap_sheet_parser', path: '../rap_sheet_parser'
 

@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Clear My Record - Self Help</title>
-    <%= csrf_meta_tags %>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <% if Rails.env.development? %>
-      <%= favicon_link_tag 'dev_favicon.ico' %>
-    <% end %>
+<head>
+  <title>Clear My Record - Self Help</title>
+  <%= csrf_meta_tags %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <% if Rails.env.development? %>
+    <%= favicon_link_tag 'dev_favicon.ico' %>
+  <% end %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-  <body>
-    <% flash.each do |name, msg| -%>
-      <%= content_tag :div, msg, class: name %>
-    <% end -%>
-
+<body>
+<div class="page-wrapper">
+  <header class="main-header">
+    <div class="toolbar">
+      Clear My Record
+    </div>
+  </header>
+  <% flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, class: name %>
+  <% end -%>
+  <div class="container">
     <%= yield %>
-  </body>
+  </div>
+  <footer class="cmr-footer main-footer">
+    <div class="grid-container">
+      <div class="flex-grid">
+        <div class="flex-grid-item">
+          <div class="main-footer__legal">Clear My Record is a service delivered by
+            <a class="link--subtle" href="https://www.codeforamerica.org">Code for America</a> on behalf of the people
+            of
+            California.
+          </div>
+        </div>
+        <div class="flex-grid-item">
+          <a href="https://www.codeforamerica.org">
+            <div class="illustration--cfa-logo"><span class="sr-only">Code for America</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</body>
 </html>
