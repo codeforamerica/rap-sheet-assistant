@@ -2,7 +2,11 @@
 
 ## Prerequisites
  - Ability to [compile capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
- - PostgreSQL with [pgcrypto](https://www.postgresql.org/docs/current/pgcrypto.html)
+
+ - PostgreSQL with [pgcrypto](https://www.postgresql.org/docs/current/pgcrypto.html) running
+ 
+   Note: Change the setttings in `config/database.yml` if the database is not at `localhost:5432`
+
  - Access to a [Google Cloud](https://cloud.google.com) project with the [Cloud Vision API](https://cloud.google.com/vision/docs/) enabled. The enviroment variable `GOOGLE_CLOUD_KEYFILE` should point at a file containing your [service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys)
 
 ## Setup
