@@ -1,5 +1,10 @@
 # README
 
+## Prerequisites
+ - Ability to [compile capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit)
+ - PostgreSQL with [pgcrypto](https://www.postgresql.org/docs/current/pgcrypto.html)
+ - Access to a [Google Cloud](https://cloud.google.com) project with the [Cloud Vision API](https://cloud.google.com/vision/docs/) enabled. The enviroment variable `GOOGLE_CLOUD_KEYFILE` should point at a file containing your [service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys)
+
 ## Setup
  - `brew bundle` to install system dependencies
  - Install ruby version specified in `.ruby-version`.
