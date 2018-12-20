@@ -22,7 +22,7 @@ class TextScanner
 
     require 'google/cloud/vision'
     image_annotator = Google::Cloud::Vision::ImageAnnotator.new
-    response_batch = image_annotator.document_text_detection image: image_path, image_context: { "language_hints" => [:en] }
+    response_batch = image_annotator.document_text_detection image: image_path
     scanned_text = ""
     response_batch.responses.each do |res|
       scanned_text << res.full_text_annotation.text
