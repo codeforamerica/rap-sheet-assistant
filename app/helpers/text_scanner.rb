@@ -21,10 +21,13 @@ class TextScanner
     self.retrieve_key_file
 
     require 'google/cloud/vision'
-    vision = Google::Cloud::Vision.new(project: ENV['GOOGLE_PROJECT_ID'])
-    image = vision.image(image_path)
-    image.context.languages = [:en]
-    image.document.text
+    image_annotator = Google::Cloud::Vision::ImageAnnotator.new
+    response_batch = image_annotator.document_text_detection image: image_path, image_context: { "language_hints" => [:en] }
+    scanned_text = ""
+    response_batch.responses.each do |res|
+      scanned_text << res.full_text_annotation.text
+    end
+    scanned_text
   end
 
   def self.retrieve_key_file
