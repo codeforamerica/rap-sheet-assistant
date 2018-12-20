@@ -34,7 +34,7 @@ RSpec.describe RapSheetsController, type: :controller do
         * * * *
         COURT:
         19740102 CASC SAN PRANCISCU rm
-        
+
         CNT: 001 #123
         DISPO:DISMISSED
         * * * END OF MESSAGE * * *
@@ -48,17 +48,34 @@ RSpec.describe RapSheetsController, type: :controller do
       )
     end
 
-    it 'shows conviction counts' do
+    it 'alerts the user if no convictions are found' do
       get :show, params: { id: rap_sheet.id }
 
       expect(response.body).to include("we didn't find any convictions")
     end
 
-    describe 'when the rap sheet cannot be parsed' do
+    context 'there is a eligible p64 conviction' do
+      let(:text) { single_conviction_rap_sheet('11357 HS-POSSESS MARIJUANA') }
+
+      it 'shows the eligible conviction details' do
+        get :show, params: { id: rap_sheet.id }
+
+        expect(response.body).to include('We found 1 conviction that may be eligible for record clearance.')
+        expect(response.body).to include('Prop 64 (1)')
+        expect(response.body).to include('09/18/1984')
+        expect(response.body).to include('M')
+        expect(response.body).to include('CASC Los Angeles')
+        expect(response.body).to include('HS 11357')
+        expect(response.body).to include('Possess Marijuana')
+        expect(response.body).to include('#1234567')
+      end
+    end
+
+    context 'when the rap sheet cannot be parsed' do
       before do
         allow_any_instance_of(RapSheet).to receive(:parsed).and_raise(RapSheetParser::RapSheetParserException.new(nil, nil))
       end
-      
+
       let(:rap_sheet) { create(:rap_sheet) }
 
       it 'redirects to the debug page' do
@@ -71,16 +88,6 @@ RSpec.describe RapSheetsController, type: :controller do
     end
 
     describe 'the "Next" link' do
-      context 'when there are only prop64 convictions' do
-        let(:text) { single_conviction_rap_sheet('11357 HS-POSSESS MARIJUANA') }
-
-        it 'goes to the detail page' do
-          get :show, params: { id: rap_sheet.id }
-
-          expect(response.body).to include(details_rap_sheet_path(rap_sheet.id))
-        end
-      end
-
       context 'when there are convictions that are only eligible for pc1203 dismissal' do
         let(:text) { single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY') }
 
@@ -210,12 +217,12 @@ RSpec.describe RapSheetsController, type: :controller do
       * * * *
       COURT:                NAM:01
       19840918  CASC LOS ANGELES
-      
+
       CNT:01     #1234567
         #{conviction_description}
       *DISPO:CONVICTED
          CONV STATUS:MISDEMEANOR
-         SEN: #{sentence}      
+         SEN: #{sentence}
 
       *    *    *    END OF MESSAGE    *    *    *
     EOT

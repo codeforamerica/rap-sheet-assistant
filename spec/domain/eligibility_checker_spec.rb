@@ -5,6 +5,7 @@ describe EligibilityChecker do
   let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), severity: 'F') }
   let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', disposition: probation_dispo) }
   let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357(a)', disposition: prison_dispo) }
+  let(:prop64_eligible_count_3) { build_count(code: 'HS', section: '11360', disposition: prison_dispo) }
   let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', disposition: probation_dispo) }
   let(:pc1203_ineligible_count) { build_count(code: 'PC', section: '456', disposition: prison_dispo) }
 
@@ -69,6 +70,43 @@ describe EligibilityChecker do
       })
     end
   end
+
+  # describe '#events_by_courthouse' do
+  #   it 'returns a hash with all events sorted by courthouse' do
+  #     user = User.create!(
+  #       rap_sheet: RapSheet.new,
+  #       on_parole: false,
+  #       on_probation: false,
+  #       outstanding_warrant: false
+  #     )
+  #
+  #     parsed_rap_sheet = build_rap_sheet(
+  #       events: [
+  #         build_court_event(
+  #           counts: [prop64_eligible_count_1, pc1203_eligible_count],
+  #           date: Date.today - 5.years,
+  #           courthouse: 'courthouse 1'
+  #         ),
+  #         build_court_event(
+  #           counts: [prop64_eligible_count_2],
+  #           date: Date.today - 5.years,
+  #           courthouse: 'courthouse 1'
+  #         ),
+  #         build_court_event(
+  #           counts: [prop64_eligible_count_3],
+  #           date: Date.today - 5.years,
+  #           courthouse: 'courthouse 2'
+  #         )
+  #       ]
+  #     )
+  #     allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
+  #
+  #     expect(described_class.new(user).events_by_courthouse).to eq ([
+  #       { 'courthouse 1': [prop64_eligible_count_1, prop64_eligible_count_2]},
+  #       { 'courthouse 2': [prop64_eligible_count_3] }
+  #     ])
+  #   end
+  # end
 
   describe '#eligible_events_with_counts' do
     it 'returns a hash with all events and counts split by remedy type' do

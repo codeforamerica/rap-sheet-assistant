@@ -27,10 +27,13 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 5 convictions on your record.'
-      expect(page).to have_content '3 Felonies'
-      expect(page).to have_content '1 Misdemeanor'
-      expect(page).to have_content '1 Unknown'
+      expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
+      expect(page).to have_content 'Prop 64 (1)'
+      expect(page).to have_content '05/01/1986'
+      expect(page).to have_content 'M'
+      expect(page).to have_content 'HS 11357'
+      expect(page).to have_content 'Possess Marijuana'
+      expect(page).to have_content '#19514114'
       click_on 'Next'
 
       fill_in_case_information
@@ -120,7 +123,7 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 1 conviction on your record'
+      expect(page).to have_content 'We found 0 convictions that may be eligible for record clearance.'
       click_on 'Next'
 
       fill_in_case_information
@@ -179,7 +182,7 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 1 conviction on your record'
+      expect(page).to have_content 'We found 0 convictions that may be eligible for record clearance.'
       click_on 'Next'
 
       fill_in_case_information

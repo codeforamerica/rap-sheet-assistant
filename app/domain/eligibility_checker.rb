@@ -22,6 +22,7 @@ class EligibilityChecker
     all_potentially_eligible_counts.any? { |key, value| value.present? }
   end
 
+
   def all_potentially_eligible_counts
     all_counts = rap_sheet.convictions.map do |conviction_event|
       potentially_eligible_counts(conviction_event)
@@ -38,6 +39,11 @@ class EligibilityChecker
       { event: event }.merge(eligible_counts(event))
     end
   end
+
+  # def events_by_courthouse
+  #   puts eligible_events_with_counts
+  #   eligible_events_with_counts.sort_by { |event| event[:courthouse] }
+  # end
 
   def needs_1203_info?
     !all_potentially_eligible_counts[:pc1203].empty?

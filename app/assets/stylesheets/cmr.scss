@@ -99,6 +99,18 @@ body {
   height: 100%;
 }
 
+.formatted-table-row{
+  justify-content: space-between;
+  border-bottom: 1px solid #EAEAE9;
+}
+
+.formatted-table-item{
+  color: #80807cfa;
+  padding-top: 10px;
+  font-size: 14px;
+  display: flex;
+}
+
 .flex-row {
   display: flex;
   align-items: center;

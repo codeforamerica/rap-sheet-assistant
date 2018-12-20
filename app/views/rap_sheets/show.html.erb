@@ -1,32 +1,65 @@
 <div class="container">
-  <% if @conviction_counts.length > 0 %>
-    <h1 class="mt-5">We found <mark><%= pluralize(@conviction_counts.length, 'conviction') %></mark> on your record.</h1>
-    <ul>
-      <% if @number_of_felonies > 0 %>
-        <li><%= pluralize(@number_of_felonies, 'Felony') %></li>
-      <% end %>
-      <% if @number_of_misdemeanors > 0 %>
-        <li><%= pluralize(@number_of_misdemeanors, 'Misdemeanor') %></li>
-      <% end %>
-      <% if @number_of_unknown > 0 %>
-        <li><%= pluralize(@number_of_unknown, 'Unknown') %></li>
-      <% end %>
-    </ul>
+  <div class="slab">
+    <div class="form-card">
+      <% if @conviction_counts.length > 0 %>
+        <header class="form-card__header text--centered">
+          <div class="emoji emoji--med emoji--ok"></div>
+          <h3>We found <%= pluralize(@eligible_counts[:prop64].length, 'conviction') %> that may be eligible for record clearance.</h3>
+        </header>
+        <% if @eligible_counts[:prop64].present? %>
+          <h4>Prop 64 (<%= @eligible_counts[:prop64].length %>)</h4>
+            <% @eligible_events.each do |event| %>
+              <% event[:prop64][:counts].each do |conviction_count| %>
+              <% if event[:event].courthouse %>
+              <div class="formatted-table-item formatted-table-row"><%= event[:event].courthouse %></div>
+                <% else %>
+                <div class="formatted-table-item formatted-table-row">Unknown Courthouse</div>
+                <% end %>
+                <div class="flex-grid formatted-table-row">
+                  <% if event[:event].date %>
+                  <div class="formatted-table-item"><%= event[:event].date.strftime('%m/%d/%Y') %></div>
+                    <%else%>
+                    <div class="formatted-table-item">-</div>
+                    <% end %>
+                  <% if conviction_count.disposition.severity %>
+                  <div class="formatted-table-item"><%= conviction_count.disposition.severity %></div>
+                    <% else %>
+                    <div class="formatted-table-item">-</div>
+                    <% end %>
+                  <% if conviction_count.code_section %>
+                    <div class="formatted-table-item"><%= conviction_count.code_section %></div>
+                    <% else %>
+                    <div class="formatted-table-item">-</div>
+                    <% end %>
+                  <% if conviction_count.code_section_description %>
+                    <div class="formatted-table-item"><%= conviction_count.code_section_description.titleize %></div>
+                  <% else %>
+                    <div class="formatted-table-item">-</div>
+                  <% end %>
+                  <% if event[:event].case_number %>
+                    <div class="formatted-table-item">#<%= event[:event].case_number %></div>
+                  <% else %>
+                    <div class="formatted-table-item">-</div>
+                  <% end %>
+              </div>
+              <% end %>
+            <% end %>
+        <% end %>
+        <div class="form-card__footer">
+          <%= link_to 'Next →', after_show_path, class: 'button button--primary' %>
+        </div>
 
-    <div class="row">
-      <div class="col-sm-2">
-        <%= link_to 'Next →', after_show_path, class: 'btn btn-info btn-block' %>
-      </div>
+      <% else %>
+        <h1 class="mt-5">Good news, we didn't find any convictions on your record!</h1>
+
+        <p>This means you don't need to apply for record clearance because you have no convictions to clear.</p>
+
+        <div class="row">
+          <div class="col-sm-2">
+            <%= link_to 'Done', root_path, class: 'btn btn-info btn-block' %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% else %>
-    <h1 class="mt-5">Good news, we didn't find any convictions on your record!</h1>
-
-    <p>This means you don't need to apply for record clearance because you have no convictions to clear.</p>
-
-    <div class="row">
-      <div class="col-sm-2">
-        <%= link_to 'Done', root_path, class: 'btn btn-info btn-block' %>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>
