@@ -1,7 +1,7 @@
 # README
 
 ## Prerequisites
- - Dependencies for [compiling capybara-webkit](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit) installed
+ - [chromedriver](http://chromedriver.chromium.org/) installed. `brew install chromedriver` with homebrew.
 
  - PostgreSQL with [pgcrypto](https://www.postgresql.org/docs/current/pgcrypto.html) running
  
