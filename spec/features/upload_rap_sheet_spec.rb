@@ -42,7 +42,6 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
       expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
       expect(page).to have_content 'POSSESS MARIJUANA'
-      expect(page).to have_content '#19514114'
       click_on 'Next'
 
       # COMMENTING OLD TEST, WHILE NEW STORIES ARE APPLIED

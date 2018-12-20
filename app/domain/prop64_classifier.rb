@@ -14,8 +14,6 @@ class Prop64Classifier
       c.code_section && dismissible_codes.any? do |d|
         c.code_section.start_with? d
       end
-    end.map do |c|
-      { code_section: c.code_section, remedy: count_remedy(c), level: c.disposition.severity, date: event.date }
     end
   end
 
