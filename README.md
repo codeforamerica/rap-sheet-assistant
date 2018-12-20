@@ -25,7 +25,7 @@ The image is pushed to the `codeforamerica/rap-sheet-assistant-ci` docker hub re
 This repo also includes an integration test suite which has the ability to take in a set of RAP sheet images and expectations and ensure that the parsed RAP sheets agree with the expectations.
 The test suite will compute an accuracy percentage for how well the output matched the expectations.
 
-You can run the integration tests with `rake ocr`.
+You can run the integration tests with `rake ocr`. Set the `RSPEC_SHOW_OCR_OUTPUT` environment variable for detailed test output.
  
 The test suite expects a local folder or Amazon S3 bucket containing subfolders for each RAP sheet to be tested.  
 In each subfolder, it expects to find an image file for each page of the RAP sheet named `page_#.jpg`, where `#` is replaced by the page number.
