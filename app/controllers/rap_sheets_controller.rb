@@ -17,9 +17,9 @@ class RapSheetsController < ApplicationController
   def show
     @rap_sheet = RapSheet.find(params[:id])
     @conviction_counts = @rap_sheet.parsed.convictions.flat_map(&:convicted_counts)
-    @number_of_felonies = @conviction_counts.select { |c| c.disposition&.severity == 'F' }.length
-    @number_of_misdemeanors = @conviction_counts.select { |c| c.disposition&.severity == 'M' }.length
-    @number_of_unknown = @conviction_counts.select { |c| c.disposition&.severity.nil? }.length
+    eligibility = EligibilityChecker.new(@rap_sheet.user)
+    @eligible_events = eligibility.eligible_events_with_counts.select { |e| e[:prop64][:counts].present? }.group_by { |e| e[:event].courthouse }
+    @eligible_counts = eligibility.all_eligible_counts
   end
 
   def create

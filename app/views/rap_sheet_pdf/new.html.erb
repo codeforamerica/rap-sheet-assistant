@@ -7,14 +7,16 @@
 
       <div class="form-card__content">
         <p>Select a PDF file to upload.</p>
-        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: { multipart: true } do |f| %>
+        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: {multipart: true} do |f| %>
           <div class="file-picker-box">
             <div class="flex-row">
               <label v-show="!selectedFile" class="button">
                 Select file
-                <%= f.file_field :pdf_file, { accept: 'application/pdf', class: 'hidden', 'v-on:change': 'fileInputChanged' } %>
+                <%= f.file_field :pdf_file, {accept: 'application/pdf', class: 'hidden', 'v-on:change': 'fileInputChanged'} %>
               </label>
-              <div v-if="selectedFile" class="flex-row"><span class="truncate-text">PDF added: {{ selectedFile }}</span><i class="icon-close" v-on:click='clearFileInput'></i> </div>
+              <div v-if="selectedFile" class="flex-row">
+                <span class="truncate-text">PDF added: {{ selectedFile }}</span><i class="icon-close" v-on:click='clearFileInput'></i>
+              </div>
               <div v-else>no file selected</div>
             </div>
           </div>
@@ -29,21 +31,21 @@
 </div>
 
 <script>
-  var store = {
-    selectedFile: null
-  };
+    var store = {
+        selectedFile: null
+    };
 
-  new Vue({
-    el: '#vue-app-div',
-    data: store,
-    methods: {
-      fileInputChanged: function (event) {
-        store.selectedFile = event.target.files[0].name
-      },
-      clearFileInput: function () {
-        store.selectedFile = null;
-      }
-    }
+    new Vue({
+        el: '#vue-app-div',
+        data: store,
+        methods: {
+            fileInputChanged: function (event) {
+                store.selectedFile = event.target.files[0].name
+            },
+            clearFileInput: function () {
+                store.selectedFile = null;
+            }
+        }
 
-  });
+    });
 </script>

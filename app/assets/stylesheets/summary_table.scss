@@ -1,0 +1,42 @@
+.big-emoji {
+  font-size: 60px;
+  margin-bottom: -30px;
+}
+
+.summary-table {
+  margin-left: -40px;
+  margin-right: -40px;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2em;
+  }
+  caption {
+    color: #AAAAAA;
+    font-size: 16px;
+    text-align: left;
+    padding-left: 40px;
+    font-weight: bold;
+  }
+
+  td:first-child {
+    padding-left: 40px;
+  }
+
+  td:last-child {
+    padding-right: 40px;
+  }
+
+  th, td {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  tr td {
+    border-bottom: 1px solid #EAEAE9;
+    border-top: 1px solid #EAEAE9;
+  }
+}

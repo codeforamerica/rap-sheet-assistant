@@ -6,8 +6,7 @@ $container-max-widths: (
 $site-max-width: 960px;
 
 
-// Custom bootstrap variables must be set or imported *before* bootstrap.
-@import "bootstrap";
-@import "cmr";
 @import "debug";
 @import 'cfa_styleguide_main';
+@import "cmr";
+@import "summary_table";
