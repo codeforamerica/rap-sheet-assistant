@@ -3,27 +3,19 @@
     <% if @conviction_counts.length > 0 %>
       <header class="form-card__header text--centered">
         <h1 class="big-emoji">😀</h1>
-        <h3>We found <%= pluralize(@eligible_counts[:prop64].length, 'conviction') %> that may be eligible for record clearance.</h3>
+        <h3>We found <%= pluralize(@eligible_counts.values.flatten.length, 'conviction') %> that may be eligible for record clearance.</h3>
       </header>
       <% if @eligible_counts[:prop64].present? %>
         <h2>Prop 64 (<%= @eligible_counts[:prop64].length %>)</h2>
-        <% @eligible_events.each do |courthouse, events| %>
-          <div class="summary-table">
-            <table>
-              <caption><%= courthouse %></caption>
-              <% events.each do |event| %>
-                <% event[:prop64][:counts].each do |conviction_count| %>
-                  <tr>
-                    <td><%= event[:event].date&.strftime('%m/%d/%Y') %></td>
-                    <td><%= conviction_count.disposition&.severity %></td>
-                    <td><%= conviction_count.code_section %></td>
-                    <td><%= conviction_count.code_section_description&.titleize %></td>
-                    <td>#<%= event[:event].case_number %></td>
-                  </tr>
-                <% end %>
-              <% end %>
-            </table>
-          </div>
+        <% @eligible_prop64_events.each do |courthouse, events| %>
+          <%= render 'summary_table', courthouse: courthouse, events: events %>
+        <% end %>
+      <% end %>
+
+      <% if @eligible_counts[:pc1203].present? %>
+        <h2>1203.4 mandatory dismissal (<%= @eligible_counts[:pc1203].length %>)</h2>
+        <% @eligible_pc1203_events.each do |courthouse, events| %>
+          <%= render 'summary_table', courthouse: courthouse, events: events %>
         <% end %>
       <% end %>
       <div class="form-card__footer">
