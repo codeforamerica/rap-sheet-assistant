@@ -43,8 +43,8 @@ RSpec.describe RapSheetsController, type: :controller do
 
     let(:rap_sheet) do
       create(:rap_sheet,
-        number_of_pages: 1,
-        rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
+             number_of_pages: 1,
+             rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
       )
     end
 
@@ -67,6 +67,23 @@ RSpec.describe RapSheetsController, type: :controller do
         expect(response.body).to include('CASC Los Angeles')
         expect(response.body).to include('HS 11357')
         expect(response.body).to include('Possess Marijuana')
+        expect(response.body).to include('#1234567')
+      end
+    end
+
+    context 'there are eligible 1203.4 convictions' do
+      let(:text) { single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY') }
+
+      it 'shows the eligible conviction details' do
+        get :show, params: { id: rap_sheet.id }
+
+        expect(response.body).to include('We found 1 conviction that may be eligible for record clearance.')
+        expect(response.body).to include('1203.4 mandatory dismissal (1)')
+        expect(response.body).to include('09/18/1984')
+        expect(response.body).to include('M')
+        expect(response.body).to include('CASC Los Angeles')
+        expect(response.body).to include('PC 496')
+        expect(response.body).to include('Receive/Etc Known Stolen Property')
         expect(response.body).to include('#1234567')
       end
     end
@@ -116,8 +133,8 @@ RSpec.describe RapSheetsController, type: :controller do
   describe '#details' do
     let(:rap_sheet) do
       create(:rap_sheet,
-        number_of_pages: 1,
-        rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
+             number_of_pages: 1,
+             rap_sheet_pages: [RapSheetPage.new(text: text, page_number: 1)]
       )
     end
 
@@ -151,8 +168,8 @@ RSpec.describe RapSheetsController, type: :controller do
     describe 'when the rap sheet cannot be parsed' do
       let(:rap_sheet) do
         create(:rap_sheet,
-          number_of_pages: 1,
-          rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
+               number_of_pages: 1,
+               rap_sheet_pages: [RapSheetPage.new(text: "fancy fjord\n", page_number: 1)]
         )
       end
 
@@ -197,11 +214,11 @@ RSpec.describe RapSheetsController, type: :controller do
     context 'when there is an image uploaded for the last page' do
       it 'deletes the last page and decrements the page count' do
         rap_sheet = create(:rap_sheet,
-          number_of_pages: 2,
-          rap_sheet_pages: [
-            RapSheetPage.new(text: 'sample_text', page_number: 1),
-            RapSheetPage.new(text: 'sample_text', page_number: 2)
-          ]
+                           number_of_pages: 2,
+                           rap_sheet_pages: [
+                             RapSheetPage.new(text: 'sample_text', page_number: 1),
+                             RapSheetPage.new(text: 'sample_text', page_number: 2)
+                           ]
         )
         expect do
           put :remove_page, params: { id: rap_sheet.id }

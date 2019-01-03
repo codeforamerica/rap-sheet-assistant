@@ -34,7 +34,7 @@ describe EligibilityChecker do
 
       expect(described_class.new(user).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
-        pc1203: [pc1203_eligible_count]
+        pc1203: [prop64_eligible_count_1, pc1203_eligible_count]
       })
     end
   end
@@ -100,7 +100,7 @@ describe EligibilityChecker do
             remedy: { codes: ['HS 11357'], scenario: :redesignation }
           },
           pc1203: {
-            counts: [pc1203_eligible_count],
+            counts: [prop64_eligible_count_1, pc1203_eligible_count],
             remedy: { code: '1203.4', scenario: :discretionary }
           }
         },

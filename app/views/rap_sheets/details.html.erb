@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="mt-5">
-    Good news, you might be eligible to clear <mark><%= pluralize((@eligible_counts[:prop64].length + @eligible_counts[:pc1203].length), 'conviction') %></mark> on your record!
+    Good news, you might be eligible to clear <mark><%= pluralize(((@eligible_counts[:prop64]+ @eligible_counts[:pc1203]).uniq.length), 'conviction') %></mark> on your record!
   </h1>
 
   <p> There are different forms of record clearance. Here’s what we can help you with:</p>

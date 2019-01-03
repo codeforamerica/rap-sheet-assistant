@@ -54,7 +54,7 @@ class EligibilityChecker
     pc1203 =
       if pc1203_classifier.eligible?
         {
-          counts: event.convicted_counts - prop64_counts,
+          counts: event.convicted_counts,
           remedy: pc1203_classifier.remedy
         }
       else

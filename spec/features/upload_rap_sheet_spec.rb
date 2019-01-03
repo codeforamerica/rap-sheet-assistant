@@ -27,13 +27,20 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
+      expect(page).to have_content 'We found 3 convictions that may be eligible for record clearance.'
       expect(page).to have_content 'Prop 64 (1)'
       expect(page).to have_content '05/01/1986'
       expect(page).to have_content 'M'
       expect(page).to have_content 'HS 11357'
       expect(page).to have_content 'Possess Marijuana'
       expect(page).to have_content '#19514114'
+
+      expect(page).to have_content '1203.4 mandatory dismissal (3)'
+      expect(page).to have_content '11/15/2004'
+      expect(page).to have_content 'F'
+      expect(page).to have_content 'PC 451(a)'
+      expect(page).to have_content 'Arson Causing Great Bodily Injury'
+      expect(page).to have_content '#44050'
       click_on 'Next'
 
       fill_in_case_information
@@ -42,47 +49,42 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
       expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
       expect(page).to have_content 'POSSESS MARIJUANA'
+      click_on 'Debug'
+
+      expect(page).to have_content '1990-12-14'
+      expect(page).to have_content 'XR09005'
+      expect(page).to have_content 'CASC LOS ANGELES'
+      expect(page).to have_content 'PC 192.3(a) --- VEH MANSL W/GROSS NEGLIGENCE'
+      expect(page).to have_content '3y probation, 30d jail, fine, restitution'
+      click_on 'Back'
       click_on 'Next'
 
-      # COMMENTING OLD TEST, WHILE NEW STORIES ARE APPLIED
-      # fill_in_case_information
-      # click_on 'Next'
-      #
-      # expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
-      # expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
-      # expect(page).to have_content 'POSSESS MARIJUANA'
-      # click_on 'Debug'
-      #
-      # expect(page).to have_content '1990-12-14'
-      # expect(page).to have_content 'XR09005'
-      # expect(page).to have_content 'CASC LOS ANGELES'
-      # expect(page).to have_content 'PC 192.3(a) --- VEH MANSL W/GROSS NEGLIGENCE'
-      # expect(page).to have_content '3y probation, 30d jail, fine, restitution'
-      # click_on 'Back'
-      # click_on 'Next'
-      #
-      # fill_in_contact_form(first_name: 'Test', last_name: 'User')
-      # click_on 'Next'
-      #
-      # find('.form-group', text: 'Are you currently employed?').choose 'No'
-      #
-      # click_on 'Next'
-      #
-      # check 'Food Stamps'
-      #
-      # click_on 'Next'
-      #
-      # click_on 'download'
-      # fields_dict = get_fields_from_downloaded_pdf('Test', 'User')
-      # expected_values = {
-      #   'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-      #   'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
-      #   'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
-      #   'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050',
-      #   'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
-      #   'topmostSubform[0].Page2[0].DismissSection_cb[3]' => '3'
-      # }
-      # expect(fields_dict).to include(expected_values)
+      fill_in_contact_form(first_name: 'Test', last_name: 'User')
+      click_on 'Next'
+
+      find('.form-group', text: 'Are you currently employed?').choose 'No'
+
+      click_on 'Next'
+
+      check 'Food Stamps'
+
+      click_on 'Next'
+
+      click_on 'download'
+      fields_dict = get_fields_from_downloaded_pdf('Test', 'User')
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+        # Prop 64 form for marijuana case
+        'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
+        # 1203 dismissal form for marijuana case
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '19514114',
+        'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
+        'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1',
+        # 1203 dismissal form for arson case
+        '2.topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050'
+      }
+      expect(fields_dict).to include(expected_values)
     end
   end
 
@@ -114,7 +116,7 @@ describe 'uploading a rap sheet' do
       fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Lastname')
       expected_values = {
         'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
-        '1.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
+        '2.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
       }
       expect(fields_dict).to include(expected_values)
     end
@@ -132,7 +134,7 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 0 convictions that may be eligible for record clearance.'
+      expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
       click_on 'Next'
 
       fill_in_case_information
@@ -191,7 +193,7 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 0 convictions that may be eligible for record clearance.'
+      expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
       click_on 'Next'
 
       fill_in_case_information

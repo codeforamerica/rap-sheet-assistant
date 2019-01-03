@@ -1,0 +1,16 @@
+<div class="summary-table">
+  <table>
+    <caption><%= courthouse %></caption>
+    <% events.each do |event| %>
+      <% event[remedy][:counts].each do |conviction_count| %>
+        <tr>
+          <td><%= event[:event].date&.strftime('%m/%d/%Y') %></td>
+          <td><%= conviction_count.disposition&.severity %></td>
+          <td><%= conviction_count.code_section %></td>
+          <td><%= conviction_count.code_section_description&.titleize %></td>
+          <td>#<%= event[:event].case_number %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
