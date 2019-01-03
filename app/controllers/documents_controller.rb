@@ -1,7 +1,7 @@
 class DocumentsController < ApplicationController
   def index
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
-    eligible_events = EligibilityChecker.new(@rap_sheet.user).eligible_events_with_counts
+    eligible_events = EligibilityChecker.new(@rap_sheet.parsed).eligible_events_with_counts
     @prop64_events = eligible_events.reject do |e|
       e[:prop64][:counts].empty?
     end
@@ -13,7 +13,7 @@ class DocumentsController < ApplicationController
   def download
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
     @user = @rap_sheet.user
-    eligibility = EligibilityChecker.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
 
     petitions = create_petitions(eligibility)
 

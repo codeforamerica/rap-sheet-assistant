@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Prop64Classifier do
   let(:date) {}
   let(:sentence) {}
-  let(:user) { build(:user) }
 
   let(:conviction_event) do
     build_court_event(date: date, counts: conviction_counts)
@@ -16,7 +15,7 @@ describe Prop64Classifier do
   end
 
   let(:rap_sheet) { nil }
-  subject { described_class.new(user: user, event: conviction_event, rap_sheet: rap_sheet) }
+  subject { described_class.new(event: conviction_event, rap_sheet: rap_sheet) }
 
   describe '#eligible?' do
     context 'when the count is an eligible code' do

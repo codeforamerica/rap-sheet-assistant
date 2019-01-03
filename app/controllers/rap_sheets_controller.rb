@@ -16,8 +16,9 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
-    @conviction_counts = @rap_sheet.parsed.convictions.flat_map(&:convicted_counts)
-    eligibility = EligibilityChecker.new(@rap_sheet.user)
+    parsed = @rap_sheet.parsed
+    @conviction_counts = parsed.convictions.flat_map(&:convicted_counts)
+    eligibility = EligibilityChecker.new(parsed)
     @eligible_events = eligibility.eligible_events_with_counts
     @eligible_prop64_events = @eligible_events.select { |e| e[:prop64][:counts].present? }.group_by { |e| e[:event].courthouse }
     @eligible_pc1203_events = @eligible_events.select { |e| e[:pc1203][:counts].present? }.group_by { |e| e[:event].courthouse }
@@ -47,7 +48,7 @@ class RapSheetsController < ApplicationController
 
   def details
     @rap_sheet = RapSheet.find(params[:id])
-    eligibility = EligibilityChecker.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
 
     if eligibility.eligible?
       @eligible_events = eligibility.eligible_events_with_counts
@@ -84,7 +85,7 @@ class RapSheetsController < ApplicationController
   private
 
   def after_show_path
-    eligibility = EligibilityChecker.new(@rap_sheet.user)
+    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
 
     if !eligibility.potentially_eligible?
       return ineligible_rap_sheet_path(@rap_sheet)

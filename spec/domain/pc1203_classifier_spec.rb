@@ -3,20 +3,19 @@ require 'spec_helper'
 require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
-  let(:user) { build(:user) }
   let(:rap_sheet) {}
   let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
   let(:conviction_event) { build_court_event(counts: [count], date: date) }
   let(:date) { Date.today - 5.years }
 
-  subject { described_class.new(user: user, event: conviction_event, rap_sheet: rap_sheet) }
+  subject { described_class.new(event: conviction_event, rap_sheet: rap_sheet) }
 
-  describe '#potentially_eligible?' do
+  describe '#eligible?' do
     context "when the conviction's sentence had prison" do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 1.year) }
 
       it 'returns false' do
-        expect(subject).not_to be_potentially_eligible
+        expect(subject).not_to be_eligible
       end
     end
 
@@ -24,7 +23,7 @@ describe PC1203Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
 
       it 'returns true' do
-        expect(subject).to be_potentially_eligible
+        expect(subject).to be_eligible
       end
     end
 
@@ -33,50 +32,12 @@ describe PC1203Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
 
       it 'returns false' do
-        expect(subject).not_to be_potentially_eligible
+        expect(subject).not_to be_eligible
       end
     end
     context 'when the conviction has no date' do
       let(:date) { nil }
       let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
-
-      it 'returns false' do
-        expect(subject).not_to be_potentially_eligible
-      end
-    end
-  end
-
-  describe '#eligible?' do
-    let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
-    let(:user) do
-      build(:user,
-        on_parole: false,
-        on_probation: false,
-        outstanding_warrant: false,
-        owe_fees: false
-      )
-    end
-
-    context 'when the user is in good standing' do
-      it 'returns true' do
-        expect(subject).to be_eligible
-      end
-    end
-
-    context 'when the user is on parole' do
-      before do
-        user.on_parole = true
-      end
-
-      it 'returns false' do
-        expect(subject).not_to be_eligible
-      end
-    end
-
-    context 'when the user has a warrant' do
-      before do
-        user.outstanding_warrant = true
-      end
 
       it 'returns false' do
         expect(subject).not_to be_eligible

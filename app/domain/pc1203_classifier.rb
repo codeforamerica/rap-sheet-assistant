@@ -1,20 +1,13 @@
 class PC1203Classifier
   include Classifier
 
-  def potentially_eligible?
+  def eligible?
+    #TODO fix this logic
     return false unless event.sentence
     return false unless event.date
     return false if event.date > Date.today - 1.year
 
     !event.sentence.prison
-  end
-
-  def eligible?
-    return false if @user.on_parole
-    return false if @user.on_probation
-    return false if @user.outstanding_warrant
-
-    potentially_eligible?
   end
 
   def remedy

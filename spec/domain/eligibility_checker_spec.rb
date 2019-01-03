@@ -10,13 +10,6 @@ describe EligibilityChecker do
 
   describe '#all_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: false,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       parsed_rap_sheet = build_rap_sheet(
         events: [
           build_court_event(
@@ -30,9 +23,8 @@ describe EligibilityChecker do
           build_other_event(event_type: 'arrest', date: Date.today)
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).all_eligible_counts).to eq ({
+      expect(described_class.new(parsed_rap_sheet).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
         pc1203: [prop64_eligible_count_1, pc1203_eligible_count]
       })
@@ -41,13 +33,6 @@ describe EligibilityChecker do
 
   describe '#all_potentially_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: true,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       parsed_rap_sheet = build_rap_sheet(
         events: [
           build_court_event(
@@ -61,9 +46,8 @@ describe EligibilityChecker do
           build_other_event(event_type: 'arrest', date: Date.today)
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).all_potentially_eligible_counts).to eq ({
+      expect(described_class.new(parsed_rap_sheet).all_potentially_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
         pc1203: [pc1203_eligible_count]
       })
@@ -72,13 +56,6 @@ describe EligibilityChecker do
 
   describe '#eligible_events_with_counts' do
     it 'returns a hash with all events and counts split by remedy type' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: false,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       event_1 = build_court_event(
         date: Date.new(2014, 6, 1),
         counts: [prop64_eligible_count_1, pc1203_eligible_count]
@@ -90,9 +67,8 @@ describe EligibilityChecker do
       parsed_rap_sheet = build_rap_sheet(
         events: [event_1, event_2, build_other_event(event_type: 'arrest', date: Date.new(2015, 1, 1))]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).eligible_events_with_counts).to eq ([
+      expect(described_class.new(parsed_rap_sheet).eligible_events_with_counts).to eq ([
         {
           event: event_1,
           prop64: {
@@ -121,18 +97,9 @@ describe EligibilityChecker do
 
   describe '#needs_1203_info?' do
     it 'returns true if there are potentially 1203 eligible counts' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: true,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       parsed_rap_sheet = build_rap_sheet(events: [])
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).needs_1203_info?).to eq false
-
+      expect(described_class.new(parsed_rap_sheet).needs_1203_info?).to eq false
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
@@ -142,21 +109,13 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).needs_1203_info?).to eq true
+      expect(described_class.new(parsed_rap_sheet).needs_1203_info?).to eq true
     end
   end
 
   describe '#eligible' do
     it 'returns true if there are any eligible counts' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: false,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       parsed_rap_sheet = build_rap_sheet(
         events: [
           build_court_event(
@@ -165,24 +124,14 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).eligible?).to eq true
+      expect(described_class.new(parsed_rap_sheet).eligible?).to eq true
     end
 
     it 'returns false if there are no eligible counts' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-        on_parole: true,
-        on_probation: false,
-        outstanding_warrant: false
-      )
-
       parsed_rap_sheet = build_rap_sheet
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).eligible?).to eq false
-
+      expect(described_class.new(parsed_rap_sheet).eligible?).to eq false
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
@@ -191,18 +140,13 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).eligible?).to eq false
+      expect(described_class.new(parsed_rap_sheet).eligible?).to eq false
     end
   end
 
   describe '#potentially_eligible' do
     it 'returns true if there are any potentially eligible counts' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-      )
-
       parsed_rap_sheet = build_rap_sheet(
         events: [
           build_court_event(
@@ -211,21 +155,14 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).potentially_eligible?).to eq true
+      expect(described_class.new(parsed_rap_sheet).potentially_eligible?).to eq true
     end
 
     it 'returns false if there are no potentially eligible counts' do
-      user = User.create!(
-        rap_sheet: RapSheet.new,
-      )
-
       parsed_rap_sheet = build_rap_sheet
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).potentially_eligible?).to eq false
-
+      expect(described_class.new(parsed_rap_sheet).potentially_eligible?).to eq false
 
       parsed_rap_sheet = build_rap_sheet(
         events: [
@@ -234,9 +171,8 @@ describe EligibilityChecker do
           )
         ]
       )
-      allow(user.rap_sheet).to receive(:parsed).and_return(parsed_rap_sheet)
 
-      expect(described_class.new(user).potentially_eligible?).to eq false
+      expect(described_class.new(parsed_rap_sheet).potentially_eligible?).to eq false
     end
   end
 end
