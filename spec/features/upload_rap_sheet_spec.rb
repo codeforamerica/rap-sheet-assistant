@@ -43,9 +43,6 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content '#44050'
       click_on 'Next'
 
-      fill_in_case_information
-      click_on 'Next'
-
       expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
       expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
       expect(page).to have_content 'POSSESS MARIJUANA'
@@ -137,9 +134,6 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
       click_on 'Next'
 
-      fill_in_case_information
-      click_on 'Next'
-
       expect(page).to have_content 'We can help you apply to dismiss 1 conviction'
       expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
       click_on 'Next'
@@ -194,9 +188,6 @@ describe 'uploading a rap sheet' do
       upload_pdf
 
       expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
-      click_on 'Next'
-
-      fill_in_case_information
       click_on 'Next'
 
       expect(page).to have_content 'We can help you apply to dismiss 1 conviction'

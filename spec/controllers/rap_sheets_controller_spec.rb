@@ -105,14 +105,13 @@ RSpec.describe RapSheetsController, type: :controller do
     end
 
     describe 'the "Next" link' do
-
-      context 'when there are convictions that are only eligible for pc1203 dismissal' do
+      context 'when there are eligible convictions' do
         let(:text) { single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY') }
 
-        it 'goes to the case information form' do
+        it 'goes details path' do
           get :show, params: { id: rap_sheet.id }
 
-          expect(response.body).to include(edit_user_case_information_path(rap_sheet.user))
+          expect(response.body).to include(details_rap_sheet_path(rap_sheet))
         end
       end
 
@@ -150,9 +149,6 @@ RSpec.describe RapSheetsController, type: :controller do
 
     context 'when there are no eligible convictions' do
       let(:text) { File.read('./spec/fixtures/skywalker_ineligible.txt') }
-      before do
-        rap_sheet.user.update(outstanding_warrant: true)
-      end
 
       it 'redirects to the ineligible page' do
         get :details, params: { id: rap_sheet.id }

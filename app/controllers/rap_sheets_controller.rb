@@ -87,10 +87,8 @@ class RapSheetsController < ApplicationController
   def after_show_path
     eligibility = EligibilityChecker.new(@rap_sheet.parsed)
 
-    if !eligibility.potentially_eligible?
+    if !eligibility.eligible?
       return ineligible_rap_sheet_path(@rap_sheet)
-    elsif eligibility.needs_1203_info?
-      edit_user_case_information_path(@rap_sheet.user)
     else
       details_rap_sheet_path(@rap_sheet)
     end

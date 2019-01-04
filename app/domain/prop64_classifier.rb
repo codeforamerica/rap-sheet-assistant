@@ -5,10 +5,6 @@ class Prop64Classifier
     !eligible_counts.empty?
   end
 
-  def potentially_eligible?
-    eligible?
-  end
-
   def eligible_counts
     event.convicted_counts.select do |c|
       c.code_section && dismissible_codes.any? do |d|
@@ -27,11 +23,7 @@ class Prop64Classifier
       scenario: scenario
     }
   end
-
-  def potentially_eligible_counts
-    eligible_counts
-  end
-
+  
   private
 
   def scenario
