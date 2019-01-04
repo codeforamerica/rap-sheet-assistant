@@ -19,9 +19,15 @@ class RapSheetsController < ApplicationController
     parsed = @rap_sheet.parsed
     @conviction_counts = parsed.convictions.flat_map(&:convicted_counts)
     eligibility = EligibilityChecker.new(parsed)
-    @eligible_events = eligibility.eligible_events_with_counts
-    @eligible_prop64_events = @eligible_events.select { |e| e[:prop64][:counts].present? }.group_by { |e| e[:event].courthouse }
-    @eligible_pc1203_events = @eligible_events.select { |e| e[:pc1203][:counts].present? }.group_by { |e| e[:event].courthouse }
+    @remedy_names = EligibilityChecker::REMEDIES.map {|r| [r[:key], r[:name]]}.to_h
+    eligible_events = eligibility.eligible_events_with_counts
+    @eligible_events_by_remedy = {}
+
+    EligibilityChecker::REMEDIES.each do |remedy|
+      grouped_events = eligible_events.select { |e| e[remedy[:key]].present? }.group_by { |e| e[:event].courthouse }
+      @eligible_events_by_remedy[remedy[:key]] = grouped_events
+    end
+
     @eligible_counts = eligibility.all_eligible_counts
     @number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
   end

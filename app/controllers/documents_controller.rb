@@ -27,7 +27,6 @@ class DocumentsController < ApplicationController
 
   def create_petitions(eligibility)
     result = []
-
     eligibility.eligible_events_with_counts.each do |eligible_event|
       EligibilityChecker::REMEDIES.each do |remedy|
         eligible_counts = eligible_event[remedy[:key]][:counts]
