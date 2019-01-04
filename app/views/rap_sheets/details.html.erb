@@ -1,40 +1,27 @@
 <div class="container">
   <h1 class="mt-5">
-    Good news, you might be eligible to clear <mark><%= pluralize(((@eligible_counts[:prop64]+ @eligible_counts[:pc1203]).uniq.length), 'conviction') %></mark> on your record!
+    Good news, you might be eligible to clear
+    <mark><%= pluralize(@number_of_eligible_counts, 'conviction') %></mark>
+    on your record!
   </h1>
 
   <p> There are different forms of record clearance. Here’s what we can help you with:</p>
-
-  <% if @eligible_counts[:prop64].present? %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h2>We can help you apply to reclassify <%= pluralize(@eligible_counts[:prop64].length, 'marijuana conviction') %></h2>
-        <p>If the judge approves, these offenses will be reduced to misdemeanors or changed to "dismissed"</p>
-        <ul>
-          <% @eligible_events.each do |event| %>
-            <% event[:prop64][:counts].each do |conviction_count| %>
-              <li><%= "#{conviction_count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+  <% @remedies.each do |remedy| %>
+    <% if @eligible_counts[remedy[:key]].present? %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2>We can help you apply to <%= @eligible_counts[remedy[:details_page_remedy_string]]%> <%= pluralize(@eligible_counts[remedy[:key]].length, @eligible_counts[remedy[:details_page_toc_string]]) %></h2>
+          <p>If the judge approves, these offenses will be <%= @eligible_counts[remedy[:details_page_remedy_string]] %> changed to "dismissed"</p>
+          <ul>
+            <% @eligible_events.each do |event| %>
+              <% event[remedy[:key]][:counts].each do |conviction_count| %>
+                <li><%= "#{conviction_count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
-  <% end %>
-
-  <% if @eligible_counts[:pc1203].present? %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h2>We can help you apply to dismiss <%= pluralize(@eligible_counts[:pc1203].length, 'conviction') %> (1203.4)</h2>
-        <p> If the judge approves, these offenses will be changed to "dismissed"</p>
-        <ul>
-          <% @eligible_events.each do |event| %>
-            <% event[:pc1203][:counts].each do |conviction_count| %>
-              <li><%= "#{conviction_count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
-            <% end %>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+    <% end %>
   <% end %>
 
   <%= link_to 'Next →', edit_user_contact_information_path(@rap_sheet.user), class: 'btn btn-info mt-3' %>

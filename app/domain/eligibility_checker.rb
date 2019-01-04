@@ -3,19 +3,20 @@ class EligibilityChecker
     {
       key: :prop64,
       name: "Prop 64",
-      description_string: 'clear these marijuana convictions',
-      details_page_toc_string: 'marijuana conviction',
-      details_page_remedy_string: 'reclassify',
-      details_page_if_judge_approval: 'reduced to misdemeanors or',
+      description_string: "clear these marijuana convictions",
+      details_page_toc_string: "marijuana conviction",
+      details_page_remedy_string: "reclassify",
+      details_page_if_judge_approval: "reduced to misdemeanors or",
       classifier: Prop64Classifier,
       petition_creator: Prop64PetitionCreator
     },
     {
       key: :pc1203,
       name: "1203.4 mandatory dismissal",
-      description_string: 'dismiss these convictions',
-      details_page_toc_string: 'conviction',
-      details_page_remedy_string: 'dismiss',
+      description_string: "dismiss these convictions",
+      details_page_toc_string: "conviction",
+      details_page_remedy_string: "dismiss",
+      details_page_if_judge_approval: "",
       classifier: PC1203Classifier,
       petition_creator: PC1203PetitionCreator
     }

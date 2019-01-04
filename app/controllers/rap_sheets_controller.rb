@@ -55,10 +55,11 @@ class RapSheetsController < ApplicationController
   def details
     @rap_sheet = RapSheet.find(params[:id])
     eligibility = EligibilityChecker.new(@rap_sheet.parsed)
-
+    @remedies = EligibilityChecker::REMEDIES
     if eligibility.eligible?
       @eligible_events = eligibility.eligible_events_with_counts
       @eligible_counts = eligibility.all_eligible_counts
+      @number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
     else
       redirect_to ineligible_rap_sheet_path(@rap_sheet)
     end
