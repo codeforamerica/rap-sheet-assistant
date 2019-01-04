@@ -1,4 +1,19 @@
 class EligibilityChecker
+  REMEDIES = [
+    {
+      key: :prop64,
+      name: "Prop 64",
+      classifier: Prop64Classifier,
+      petition_creator: Prop64PetitionCreator
+    },
+    {
+      key: :pc1203,
+      name: "1203.4 dismissal",
+      classifier: PC1203Classifier,
+      petition_creator: PC1203PetitionCreator
+    }
+  ]
+
   def initialize(parsed_rap_sheet)
      @parsed_rap_sheet = parsed_rap_sheet
   end
@@ -29,28 +44,15 @@ class EligibilityChecker
   attr_reader  :parsed_rap_sheet
 
   def eligible_counts(event)
-    prop64_classifier = Prop64Classifier.new(event: event, rap_sheet: parsed_rap_sheet)
-    prop64_counts = prop64_classifier.eligible_counts
-    pc1203_classifier = PC1203Classifier.new(event: event, rap_sheet: parsed_rap_sheet)
-    pc1203 =
-      if pc1203_classifier.eligible?
-        {
-          counts: event.convicted_counts,
-          remedy: pc1203_classifier.remedy
-        }
-      else
-        {
-          counts: [],
-          remedy: nil
-        }
-      end
+    result = {}
+    for remedy in REMEDIES
+      classifier = remedy[:classifier].new(event: event, rap_sheet: parsed_rap_sheet)
+      result[remedy[:key]] = {
+        counts: classifier.eligible_counts,
+        remedy: classifier.remedy
+      }
+    end
 
-    {
-      prop64: {
-        counts: prop64_counts,
-        remedy: prop64_classifier.remedy
-      },
-      pc1203: pc1203
-    }
+    result
   end
 end

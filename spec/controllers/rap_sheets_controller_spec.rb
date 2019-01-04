@@ -117,7 +117,7 @@ RSpec.describe RapSheetsController, type: :controller do
 
       context 'when there are convictions but none are eligible for any kind of dismissal' do
         let(:text) do
-          single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON')
+          single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON', severity: 'FELONY')
         end
 
         it 'goes to the ineligible page' do
@@ -225,7 +225,7 @@ RSpec.describe RapSheetsController, type: :controller do
     end
   end
 
-  def single_conviction_rap_sheet(conviction_description, sentence: '012 MONTHS PROBATION, 045 DAYS JAIL')
+  def single_conviction_rap_sheet(conviction_description, sentence: '012 MONTHS PROBATION, 045 DAYS JAIL', severity: 'MISDEMEANOR')
     <<~EOT
       info
       * * * *
@@ -235,7 +235,7 @@ RSpec.describe RapSheetsController, type: :controller do
       CNT:01     #1234567
         #{conviction_description}
       *DISPO:CONVICTED
-         CONV STATUS:MISDEMEANOR
+         CONV STATUS:#{severity}
          SEN: #{sentence}      
 
       *    *    *    END OF MESSAGE    *    *    *

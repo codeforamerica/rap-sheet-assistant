@@ -3,50 +3,127 @@ require 'spec_helper'
 require_relative '../../app/domain/pc1203_classifier'
 
 describe PC1203Classifier do
-  let(:rap_sheet) {}
-  let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
-  let(:conviction_event) { build_court_event(counts: [count], date: date) }
-  let(:date) { Date.today - 5.years }
+  let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
   subject { described_class.new(event: conviction_event, rap_sheet: rap_sheet) }
 
   describe '#eligible?' do
-    context "when the conviction's sentence had prison" do
-      let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 1.year) }
+    let(:conviction_event) do
+      build_court_event(
+        date: date,
+        counts: [build_count(disposition: build_disposition(severity: severity, sentence: sentence))]
+      )
+    end
 
-      it 'returns false' do
-        expect(subject).not_to be_eligible
+    context 'probation sentences' do
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: 1.year) }
+      let(:severity) { 'F' }
+
+      context 'when sentence is not yet completed' do
+        let(:date) { Date.today - 8.months }
+
+        it 'returns false' do
+          expect(subject.eligible?).to be false
+        end
+      end
+
+      context 'when sentence is completed' do
+        let(:date) { Date.today - 3.years }
+
+        it 'returns true' do
+          expect(subject.eligible?).to be true
+        end
       end
     end
 
-    context "when the conviction's sentence did not include prison" do
-      let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
+    context 'non-probation misdemeanors' do
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil) }
+      let(:severity) { 'M' }
+      context 'when it is less than a year from the conviction date' do
+        let(:date) { Date.today - 8.months }
+        it 'returns false' do
+          expect(subject.eligible?).to be false
+        end
+      end
 
-      it 'returns true' do
-        expect(subject).to be_eligible
+      context 'when it is more than a year from the conviction date' do
+        let(:date) { Date.today - 13.months }
+        it 'returns true' do
+          expect(subject.eligible?).to be true
+        end
       end
     end
 
-    context 'when the conviction is less than a year old' do
-      let(:date) { Date.today - 6.months }
-      let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
+    context 'non-probation infractions' do
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil) }
+      let(:severity) { 'I' }
+      context 'when it is less than a year from the conviction date' do
+        let(:date) { Date.today - 8.months }
+        it 'returns false' do
+          expect(subject.eligible?).to be false
+        end
+      end
 
-      it 'returns false' do
-        expect(subject).not_to be_eligible
+      context 'when it is more than a year from the conviction date' do
+        let(:date) { Date.today - 13.months }
+        it 'returns true' do
+          expect(subject.eligible?).to be true
+        end
       end
     end
+
+    context 'non-probation felonies' do
+      let(:severity) { 'F' }
+      context 'when it has a prison sentence' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 6.months, probation: nil) }
+        let(:date) { Date.today - 5.years }
+        it 'returns false' do
+          expect(subject.eligible?).to be false
+        end
+      end
+
+      context 'when it has no prison and is less than two years from the end of sentence' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: nil) }
+        let(:date) { Date.today - 25.months}
+        it 'returns false' do
+          expect(subject.eligible?).to be false
+        end
+      end
+
+      context 'when it has no prison and is more than two years from the end of sentence' do
+        let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: nil) }
+        let(:date) { Date.today - 4.years }
+        it 'returns true' do
+          expect(subject.eligible?).to be true
+        end
+      end
+    end
+
     context 'when the conviction has no date' do
       let(:date) { nil }
+      let(:severity) { 'F' }
       let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: nil) }
 
       it 'returns false' do
-        expect(subject).not_to be_eligible
+        expect(subject.eligible?).to be false
+      end
+    end
+
+    context 'when the conviction has no severity' do
+      let(:date) { Date.today - 5.years }
+      let(:severity) { nil }
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: nil) }
+
+      it 'returns false' do
+        expect(subject.eligible?).to be false
       end
     end
   end
 
   describe '#remedy' do
     context 'sentence includes probation' do
+      let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
+
       context 'probation successfully completed' do
         let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 5.months) }
         let(:conviction_event) do
@@ -94,11 +171,8 @@ describe PC1203Classifier do
         end
         let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
-        it 'returns discretionary' do
-          expect(subject.remedy).to eq ({
-            code: '1203.4',
-            scenario: :unknown
-          })
+        it 'returns nil' do
+          expect(subject.remedy).to eq nil
         end
       end
     end
