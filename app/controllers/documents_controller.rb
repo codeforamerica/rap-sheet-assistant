@@ -2,11 +2,14 @@ class DocumentsController < ApplicationController
   def index
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
     eligible_events = EligibilityChecker.new(@rap_sheet.parsed).eligible_events_with_counts
-    @prop64_events = eligible_events.reject do |e|
-      e[:prop64][:counts].empty?
-    end
-    @pc1203_events = eligible_events.reject do |e|
-      e[:pc1203][:counts].empty?
+
+    @info_per_remedy = EligibilityChecker::REMEDIES.map do |remedy|
+      {
+        key: remedy[:key],
+        name: remedy[:name],
+        description_string: remedy[:description_string],
+        events: eligible_events.reject { |e| e[remedy[:key]][:counts].empty? }
+      }
     end
   end
 
@@ -26,25 +29,15 @@ class DocumentsController < ApplicationController
     result = []
 
     eligibility.eligible_events_with_counts.each do |eligible_event|
-      prop64_counts = eligible_event[:prop64][:counts]
-      pc1203_counts = eligible_event[:pc1203][:counts]
-      if prop64_counts.present?
-        result << Prop64PetitionCreator.new(
-          rap_sheet: @rap_sheet,
-          conviction_event: eligible_event[:event],
-          conviction_counts: prop64_counts,
-          remedy: eligible_event[:prop64][:remedy],
-        ).create_petition
-      end
-
-      if pc1203_counts.present?
-        if pc1203_counts.present?
-          result << PC1203PetitionCreator.new(
+      EligibilityChecker::REMEDIES.each do |remedy|
+        eligible_counts = eligible_event[remedy[:key]][:counts]
+        if eligible_counts.present?
+          result << remedy[:petition_creator].new(
             rap_sheet: @rap_sheet,
             conviction_event: eligible_event[:event],
-            conviction_counts: pc1203_counts,
-            remedy: eligible_event[:pc1203][:remedy]
-          ).create_petition
+            conviction_counts: eligible_counts,
+            remedy: eligible_event[remedy[:key]][:remedy],
+            ).create_petition
         end
       end
     end

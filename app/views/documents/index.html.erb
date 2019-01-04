@@ -6,35 +6,21 @@
   <hr>
 
   <p>Here's what paperwork we filled out for you:</p>
-
-  <% if @prop64_events.present? %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h2><%= pluralize(@prop64_events.length, 'petition') %> to clear these marijuana convictions:</h2>
-        <ul>
-          <% @prop64_events.each do |event| %>
-            <% event[:prop64][:counts].each do |count| %>
-              <li><%= "#{count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+  <% @info_per_remedy.each do |info| %>
+    <% if info[:events].present? %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2><%= pluralize(info[:events].length, 'petition') %> to <%= info[:description_string]%>:</h2>
+          <ul>
+            <% info[:events].each do |event| %>
+              <% event[info[:key]][:counts].each do |count| %>
+                <li><%= "#{count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
-  <% end %>
-
-  <% if @pc1203_events.present? %>
-    <div class="card mb-3">
-      <div class="card-body">
-        <h2><%= pluralize(@pc1203_events.length, 'petition') %> to dismiss these convictions:</h2>
-        <ul>
-          <% @pc1203_events.each do |event| %>
-            <% event[:pc1203][:counts].each do |count| %>
-              <li><%= "#{count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
-            <% end %>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+    <% end %>
   <% end %>
 
 

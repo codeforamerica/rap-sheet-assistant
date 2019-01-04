@@ -3,12 +3,14 @@ class EligibilityChecker
     {
       key: :prop64,
       name: "Prop 64",
+      description_string: 'clear these marijuana convictions',
       classifier: Prop64Classifier,
       petition_creator: Prop64PetitionCreator
     },
     {
       key: :pc1203,
       name: "1203.4 dismissal",
+      description_string: 'dismiss these convictions',
       classifier: PC1203Classifier,
       petition_creator: PC1203PetitionCreator
     }
