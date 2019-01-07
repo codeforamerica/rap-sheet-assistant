@@ -10,8 +10,8 @@
     <% if @eligible_counts[remedy[:key]].present? %>
       <div class="card mb-3">
         <div class="card-body">
-          <h2>We can help you apply to <%= @eligible_counts[remedy[:details_page_remedy_string]]%> <%= pluralize(@eligible_counts[remedy[:key]].length, @eligible_counts[remedy[:details_page_toc_string]]) %></h2>
-          <p>If the judge approves, these offenses will be <%= @eligible_counts[remedy[:details_page_remedy_string]] %> changed to "dismissed"</p>
+          <h2><%= @eligible_counts[remedy[:details_page_remedy_string]]%> <%= pluralize(@eligible_counts[remedy[:key]].length, @eligible_counts[remedy[:details_page_toc_string]]) %></h2>
+          <p>If the judge approves, these offenses will be <%= @eligible_counts[remedy[:details_page_if_judge_approval]] %></p>
           <ul>
             <% @eligible_events.each do |event| %>
               <% event[remedy[:key]][:counts].each do |conviction_count| %>
