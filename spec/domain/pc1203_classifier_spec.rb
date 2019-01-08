@@ -120,7 +120,7 @@ describe PC1203Classifier do
     end
   end
 
-  describe '#remedy and #discretionary?' do
+  describe '#remedy_details and #discretionary?' do
     context 'sentence includes probation' do
       let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
 
@@ -135,7 +135,7 @@ describe PC1203Classifier do
         let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
         it 'returns successful completion' do
-          expect(subject.remedy).to eq ({
+          expect(subject.remedy_details).to eq ({
             code: '1203.4',
             scenario: :successful_completion
           })
@@ -158,7 +158,7 @@ describe PC1203Classifier do
         let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
         it 'returns discretionary' do
-          expect(subject.remedy).to eq ({
+          expect(subject.remedy_details).to eq ({
             code: '1203.4',
             scenario: :discretionary
           })
@@ -180,7 +180,7 @@ describe PC1203Classifier do
         let(:rap_sheet) { build_rap_sheet(events: [conviction_event]) }
 
         it 'returns nil' do
-          expect(subject.remedy).to eq nil
+          expect(subject.remedy_details).to eq nil
         end
       end
     end
@@ -204,7 +204,7 @@ describe PC1203Classifier do
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
-            expect(subject.remedy).to eq({
+            expect(subject.remedy_details).to eq({
               code: '1203.4a',
               scenario: :successful_completion
             })
@@ -220,7 +220,7 @@ describe PC1203Classifier do
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and discretionary scenario' do
-            expect(subject.remedy).to eq({
+            expect(subject.remedy_details).to eq({
               code: '1203.4a',
               scenario: :discretionary
             })
@@ -240,7 +240,7 @@ describe PC1203Classifier do
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and successful scenario' do
-            expect(subject.remedy).to eq({
+            expect(subject.remedy_details).to eq({
               code: '1203.4a',
               scenario: :successful_completion
             })
@@ -256,7 +256,7 @@ describe PC1203Classifier do
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
           it 'returns 1203.4a and discretionary scenario' do
-            expect(subject.remedy).to eq({
+            expect(subject.remedy_details).to eq({
               code: '1203.4a',
               scenario: :discretionary
             })
@@ -272,7 +272,7 @@ describe PC1203Classifier do
         let(:severity) { 'F' }
 
         it 'returns 1203.41' do
-          expect(subject.remedy[:code]).to eq '1203.41'
+          expect(subject.remedy_details[:code]).to eq '1203.41'
         end
 
         it 'is discretionary' do
@@ -284,7 +284,7 @@ describe PC1203Classifier do
         let(:severity) { nil }
 
         it 'returns nil' do
-          expect(subject.remedy).to eq nil
+          expect(subject.remedy_details).to eq nil
         end
 
         it 'discretionary returns nil' do

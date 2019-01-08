@@ -1,11 +1,11 @@
 class PC1203PetitionCreator
   include PetitionCreator
 
-  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy:)
+  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy_details:)
     @rap_sheet = rap_sheet
     @conviction_event = conviction_event
     @conviction_counts = conviction_counts
-    @remedy = remedy
+    @remedy_details = remedy_details
   end
 
   def create_petition
@@ -36,14 +36,14 @@ class PC1203PetitionCreator
       pdf_fields.merge!(fields_for_count(count, index + 1))
     end
 
-    pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy).fields)
+    pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy_details).fields)
 
     fill_petition('pc1203_petition.pdf', pdf_fields)
   end
 
   private
 
-  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy
+  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy_details
 
   def code_sections
     conviction_counts.map(&:code_section)

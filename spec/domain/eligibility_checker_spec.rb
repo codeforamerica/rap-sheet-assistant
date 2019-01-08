@@ -51,30 +51,30 @@ describe EligibilityChecker do
           event: event_1,
           prop64: {
             counts: [prop64_eligible_count_1],
-            remedy: { codes: ['HS 11357'], scenario: :redesignation }
+            remedy_details: { codes: ['HS 11357'], scenario: :redesignation }
           },
           pc1203_mandatory: {
             counts: [],
-            remedy: nil
+            remedy_details: nil
           },
           pc1203_discretionary: {
             counts: [prop64_eligible_count_1, pc1203_eligible_count],
-            remedy: { code: '1203.4', scenario: :discretionary }
+            remedy_details: { code: '1203.4', scenario: :discretionary }
           }
         },
         {
           event: event_2,
           prop64: {
             counts: [prop64_eligible_count_2],
-            remedy: { codes: ['HS 11357'], scenario: :unknown }
+            remedy_details: { codes: ['HS 11357'], scenario: :unknown }
           },
           pc1203_mandatory: {
             counts: [],
-            remedy: nil
+            remedy_details: nil
           },
           pc1203_discretionary: {
             counts: [],
-            remedy: nil
+            remedy_details: nil
           }
         }
       ])

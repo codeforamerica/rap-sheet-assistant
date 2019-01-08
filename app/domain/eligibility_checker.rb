@@ -65,7 +65,7 @@ class EligibilityChecker
       classifier = remedy[:classifier].new(event: event, rap_sheet: parsed_rap_sheet)
       result[remedy[:key]] = {
         counts: classifier.eligible_counts,
-        remedy: classifier.remedy
+        remedy_details: classifier.remedy_details
       }
     end
 

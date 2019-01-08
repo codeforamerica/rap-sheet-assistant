@@ -5,7 +5,7 @@ class PC1203Classifier
     return false unless event.sentence
     return false unless event.date
 
-    code = remedy_hash[:code]
+    code = remedy_details_hash[:code]
     if code == '1203.4'
       return true if event.date < Date.today - event.sentence.total_duration
     elsif code == '1203.4a'
@@ -17,16 +17,16 @@ class PC1203Classifier
     false
   end
 
-  def remedy
+  def remedy_details
     if eligible?
-      remedy_hash
+      remedy_details_hash
     else
       nil
     end
   end
 
   def discretionary?
-    r = remedy_hash
+    r = remedy_details_hash
     return nil if r.empty?
     r[:code] == '1203.41' || r[:scenario] == :discretionary
   end
@@ -53,7 +53,7 @@ class PC1203Classifier
     success ? :successful_completion : :discretionary
   end
 
-  def remedy_hash
+  def remedy_details_hash
     return {} unless event.sentence
 
     if event.sentence.probation

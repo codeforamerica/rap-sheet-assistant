@@ -61,7 +61,7 @@ describe Prop64Classifier do
     end
   end
 
-  describe '#remedy' do
+  describe '#remedy_details' do
     describe 'resentencing' do
       let(:conviction_counts) { [
         build_count(disposition: dispo, section: '11359(a)(b)', code: 'HS'),
@@ -73,7 +73,7 @@ describe Prop64Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year) }
 
       it 'returns a list of eligible remedies and scenario' do
-        expect(subject.remedy).to eq(
+        expect(subject.remedy_details).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
           scenario: :resentencing
         )
@@ -91,7 +91,7 @@ describe Prop64Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 1.month) }
 
       it 'returns a list of eligible remedies and scenario' do
-        expect(subject.remedy).to eq(
+        expect(subject.remedy_details).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
           scenario: :redesignation
         )
@@ -109,7 +109,7 @@ describe Prop64Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 1.month) }
 
       it 'returns a list of eligible remedies and scenario' do
-        expect(subject.remedy).to eq(
+        expect(subject.remedy_details).to eq(
           codes: ['HS 11359', 'HS 11362.1'],
           scenario: :unknown
         )

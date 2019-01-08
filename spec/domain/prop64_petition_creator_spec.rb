@@ -29,7 +29,7 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: {
+        remedy_details: {
           codes: [],
           scenario: :resentencing
         },
@@ -66,7 +66,7 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: {
+        remedy_details: {
           codes: [],
           scenario: :resentencing
         }
@@ -94,7 +94,7 @@ describe Prop64PetitionCreator do
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy: {
+        remedy_details: {
           codes: [],
           scenario: :redesignation
         }
@@ -110,13 +110,13 @@ describe Prop64PetitionCreator do
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
-  it 'fills remedy checkboxes' do
+  it 'fills remedy checkboxes for all applicable codes' do
     conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts
     )
-    remedy = {
+    remedy_details = {
       codes: [
         'HS 11357',
         'HS 11358',
@@ -130,7 +130,7 @@ describe Prop64PetitionCreator do
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,
       conviction_counts: conviction_counts,
-      remedy: remedy
+      remedy_details: remedy_details
     ).create_petition
 
     expected_values = {
@@ -143,13 +143,13 @@ describe Prop64PetitionCreator do
     expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
   end
 
-  it 'fills remedy checkboxes' do
+  it 'fills remedy checkboxes for only the appropriate codes' do
     conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts
     )
-    remedy = {
+    remedy_details = {
       codes: ['HS 11359', 'HS 11362.1'],
       scenario: :redesignation
     }
@@ -157,7 +157,7 @@ describe Prop64PetitionCreator do
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,
       conviction_counts: conviction_counts,
-      remedy: remedy
+      remedy_details: remedy_details
     ).create_petition
 
     expected_values = {

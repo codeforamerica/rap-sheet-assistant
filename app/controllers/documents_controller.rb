@@ -35,7 +35,7 @@ class DocumentsController < ApplicationController
             rap_sheet: @rap_sheet,
             conviction_event: eligible_event[:event],
             conviction_counts: eligible_counts,
-            remedy: eligible_event[remedy[:key]][:remedy],
+            remedy_details: eligible_event[remedy[:key]][:remedy_details],
             ).create_petition
         end
       end

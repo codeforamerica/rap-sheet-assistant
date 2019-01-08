@@ -13,7 +13,7 @@ class Prop64Classifier
     end
   end
 
-  def remedy
+  def remedy_details
     {
       codes: eligible_counts.map do |c|
         dismissible_codes.find do |d|

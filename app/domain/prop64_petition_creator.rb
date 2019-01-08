@@ -1,11 +1,11 @@
 class Prop64PetitionCreator
   include PetitionCreator
 
-  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy:)
+  def initialize(rap_sheet:, conviction_event:, conviction_counts:, remedy_details:)
     @rap_sheet = rap_sheet
     @conviction_event = conviction_event
     @conviction_counts = conviction_counts
-    @remedy = remedy
+    @remedy_details = remedy_details
   end
 
   def create_petition
@@ -34,7 +34,7 @@ class Prop64PetitionCreator
 
   private
 
-  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy
+  attr_reader :rap_sheet, :conviction_event, :conviction_counts, :remedy_details
 
   def code_sections
     conviction_counts.map(&:code_section)
@@ -49,7 +49,7 @@ class Prop64PetitionCreator
       'HS 11362.1' => 'topmostSubform[0].Page1[0].Checkbox[6]',
     }
 
-    remedy[:codes].map { |r| [checkboxes[r], 'Yes'] }.to_h
+    remedy_details[:codes].map { |r| [checkboxes[r], 'Yes'] }.to_h
   end
 
   def scenario_checkboxes
@@ -64,8 +64,8 @@ class Prop64PetitionCreator
     }
 
     {
-      scenario_checkboxes[remedy[:scenario]] => 'Yes',
-      request_checkboxes[remedy[:scenario]] => 'Yes'
+      scenario_checkboxes[remedy_details[:scenario]] => 'Yes',
+      request_checkboxes[remedy_details[:scenario]] => 'Yes'
     }
   end
 end

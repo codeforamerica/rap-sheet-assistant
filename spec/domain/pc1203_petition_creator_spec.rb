@@ -31,13 +31,13 @@ RSpec.describe PC1203PetitionCreator do
       courthouse: 'CASC SAN FRANCISCO',
       counts: conviction_counts
     )
-    remedy = { code: '1203.41' }
+    remedy_details = { code: '1203.41' }
 
     pdf_file = PC1203PetitionCreator.new(
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,
       conviction_counts: conviction_counts,
-      remedy: remedy
+      remedy_details: remedy_details
     ).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
@@ -95,7 +95,7 @@ RSpec.describe PC1203PetitionCreator do
       rap_sheet: rap_sheet,
       conviction_event: conviction_event,
       conviction_counts: conviction_counts,
-      remedy: nil
+      remedy_details: nil
     ).create_petition
     expected_values = {
       'topmostSubform[0].Page1[0].Code1_ft[0]' => 'PC',
