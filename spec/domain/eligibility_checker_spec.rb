@@ -4,9 +4,10 @@ describe EligibilityChecker do
   let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'M') }
   let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), severity: 'F') }
   let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', disposition: probation_dispo) }
-  let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357(a)', disposition: prison_dispo) }
+  let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357', disposition: prison_dispo) }
   let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', disposition: probation_dispo) }
   let(:pc1203_ineligible_count) { build_count(code: 'PC', section: '456', disposition: prison_dispo) }
+  let(:prop47_eligible_count) { build_count(code: 'PC', section: '459', disposition: build_disposition(severity: 'F')) }
 
   describe '#all_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do
@@ -20,6 +21,10 @@ describe EligibilityChecker do
             counts: [prop64_eligible_count_2],
             date: Date.today - 5.years
           ),
+          build_court_event(
+            counts: [prop47_eligible_count],
+            date: Date.today - 6.years
+          ),
           build_other_event(event_type: 'arrest', date: Date.today)
         ]
       )
@@ -27,7 +32,8 @@ describe EligibilityChecker do
       expect(described_class.new(parsed_rap_sheet).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
         pc1203_discretionary: [],
-        pc1203_mandatory: [prop64_eligible_count_1, pc1203_eligible_count]
+        pc1203_mandatory: [prop64_eligible_count_1, pc1203_eligible_count],
+        prop47: [prop47_eligible_count]
       })
     end
   end
@@ -40,7 +46,7 @@ describe EligibilityChecker do
       )
       event_2 = build_court_event(
         date: nil,
-        counts: [prop64_eligible_count_2]
+        counts: [prop64_eligible_count_2, prop47_eligible_count]
       )
       parsed_rap_sheet = build_rap_sheet(
         events: [event_1, event_2, build_other_event(event_type: 'arrest', date: Date.new(2015, 1, 1))]
@@ -60,6 +66,10 @@ describe EligibilityChecker do
           pc1203_discretionary: {
             counts: [prop64_eligible_count_1, pc1203_eligible_count],
             remedy_details: { code: '1203.4', scenario: :discretionary }
+          },
+          prop47: {
+            counts: [],
+            remedy_details: nil
           }
         },
         {
@@ -74,6 +84,10 @@ describe EligibilityChecker do
           },
           pc1203_discretionary: {
             counts: [],
+            remedy_details: nil
+          },
+          prop47: {
+            counts: [prop47_eligible_count],
             remedy_details: nil
           }
         }

@@ -21,13 +21,13 @@ describe 'uploading a rap sheet' do
     allow(TextScanner).to receive(:scan_text).and_return(*scanned_pages)
   end
 
-  context 'when a user has both prop64 and 1203 dismissal eligible convictions' do
+  context 'when a user has multiple remedy types of eligible convictions' do
     it 'allows the user to upload their rap sheet and shows convictions' do
       visit root_path
       expect(page).to have_content 'Upload a California RAP sheet'
       upload_pdf
 
-      expect(page).to have_content 'We found 3 convictions that may be eligible for record clearance.'
+      expect(page).to have_content 'We found 4 convictions that may be eligible for record clearance.'
       expect(page).to have_content 'Prop 64 (1)'
       expect(page).to have_content '05/01/1986'
       expect(page).to have_content 'M'
@@ -41,18 +41,25 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'PC 451(a)'
       expect(page).to have_content 'Arson Causing Great Bodily Injury'
       expect(page).to have_content '#44050'
+
+      expect(page).to have_content 'Prop 47 felony reduction (1)'
+      expect(page).to have_content '09/06/2011'
+      expect(page).to have_content 'F'
+      expect(page).to have_content 'PC 496(a)'
+      expect(page).to have_content 'Receive/Etc Known Stolen Property'
+      expect(page).to have_content '#99999988887777'
       click_on 'Next'
 
-      expect(page).to have_content 'Good news, you might be eligible to clear 3 convictions on your record'
+      expect(page).to have_content 'Good news, you might be eligible to clear 4 convictions on your record'
       expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
       expect(page).to have_content 'POSSESS MARIJUANA'
       click_on 'Debug'
 
-      expect(page).to have_content '1990-12-14'
-      expect(page).to have_content 'XR09005'
+      expect(page).to have_content '20041115'
+      expect(page).to have_content '44050'
       expect(page).to have_content 'CASC LOS ANGELES'
-      expect(page).to have_content 'PC 192.3(a) --- VEH MANSL W/GROSS NEGLIGENCE'
-      expect(page).to have_content '3y probation, 30d jail, fine, restitution'
+      expect(page).to have_content 'PC 451(a) --- ARSON CAUSING GREAT BODILY INJURY'
+      expect(page).to have_content '2y jail, fine, restitution'
       click_on 'Back'
       click_on 'Next'
 

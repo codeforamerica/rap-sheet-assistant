@@ -29,7 +29,7 @@ class DocumentsController < ApplicationController
     eligibility.eligible_events_with_counts.each do |eligible_event|
       EligibilityChecker::REMEDIES.each do |remedy|
         eligible_counts = eligible_event[remedy[:key]][:counts]
-        if eligible_counts.present?
+        if eligible_counts.present? && remedy[:petition_creator]
           result << remedy[:petition_creator].new(
             rap_sheet: @rap_sheet,
             conviction_event: eligible_event[:event],

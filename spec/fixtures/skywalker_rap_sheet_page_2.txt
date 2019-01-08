@@ -68,6 +68,15 @@ APPLICANT:            NAM:01
 CNT:01    #S12345
   APPLICANT IDENTITY THEFT VICTIM
    COM:  SCN-N7342881234 ATI-D073XRT125
+
+* * * *
+COURT:                  NAM:01
+20110906  CASC LOS ANGELES
+
+CNT:01        #99999988887777
+496(A) PC-RECEIVE/ETC KNOWN STOLEN PROPERTY
+*DISPO:CONVICTED
+   CONV STATUS:FELONY
 * * * *
 
 ARR/DET/CITE:         NAM:03  DOB:19600915
@@ -147,63 +156,7 @@ CNT:02
 
 20060309
  DISPO:PAROLED
-* * * * * * * * * * *
-**   POTENTIAL FELONY STRIKE ENTRY  **
-* * * * * * * * * * *
-* * * *
 
-DECEASED:             NAM:01
-20060311 CACO LOS ANGELES COUNTY
-
-CNT:01    #036-99999
-  DECEASED HOMICIDE
-
-*********************************************************************
-**                                                                 **
-** THE ENTRIES PROVIDED BELOW ARE BASED UPON AN ARREST OR COURT    **
-** DISPOSITION REPORT. THE SUBJECT OF THE ENTRY HAS BEEN IDENTIFIED *
-** WITH THIS RECORD BASED UPON SOFT CRITERIA CONSISTING OF A NAME  **
-** OR NUMBER MATCH. POSITIVE IDENTIFICATION HAS NOT BEEN MADE      **
-** BECAUSE FINGERPRINTS WERE NOT RECEIVED FOR THE ENTRIES. USE OF  **
-** THIS INFORMATION IS THE RECEIVERS RESPONSIBILITY.               **
-*********************************************************************
-* * * *
-
-
-
-ARR/DET/CITE:        NAM:01
-19900730 CASO LOS ANGELES
-
-CNT:01    #AR09005
-  NO ARREST RECEIVED
-
-CNT:03    #AR09005
-  187(A) PC-MURDER
-- - - -
-COURT:               NAM:01
-19901214  CASC LOS ANGELES
-
-CNT:01     #XR09005
-  187(A) PC-MURDER
-*DISPO:CONVICTED
-   CONV STATUS:FELONY
-   SEN:20 YEARS PRISON
-* * * * * * * * * * *
-** POTENTIAL FELONY STRIKE ENTRY   **
-* * * * * * * * * * *
-*    *    *    *
-“PROBATION FLAGS AND/OR DEPARTMENT OF MENTAL HEALTH FLAGS ON THIS RECORD
-MAY NOT BE BASED ON FINGERPRINT IDENTIFICATION”
-
-*    *    *    *
-****************************************************************
-****************************************************************
-NOTE: 8 POTENTIAL ENTRIES WITH FELONY CONVICTION DATA WERE
-FOUND FOR THIS SUBJECT. SEE ENTRIES IN THE RECORD ANNOTATED
-WITH “POTENTIAL FELONY STRIKE ENTRY” FOR DETAILS. THIS RECORD
-MAY ALSO CONTAIN ADDITIONAL DATA RELATED TO “STRIKE” CONDITIONS.
-****************************************************************
-****************************************************************
      *    *    *    END OF MESSAGE    *    *    *
 
 

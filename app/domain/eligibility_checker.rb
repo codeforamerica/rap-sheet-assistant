@@ -26,6 +26,15 @@ class EligibilityChecker
       details_page_if_judge_approval: "changed to 'dismissed'",
       classifier: PC1203DiscretionaryClassifier,
       petition_creator: PC1203PetitionCreator
+    },
+    {
+      key: :prop47,
+      name: "Prop 47 felony reduction",
+      details_page_toc_string: "felony conviction",
+      details_page_remedy_string: "We can help you apply to reduce",
+      details_page_if_judge_approval: "reduced to misdemeanor",
+      classifier: Prop47Classifier,
+      petition_creator: nil
     }
   ]
 

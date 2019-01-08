@@ -61,27 +61,6 @@ SMT/TAT UR ARM; TAT LF ARM; MISS L HND
 MDS/NUMEROUS TATTOOS; HAIR-GRAYING; SKILLED WITH THE FORCE
 OCC/FARMER; MECHANIC; JEDI
 
-PROBATION:   EXP:19990503
-   CAPR LOS ANGELES           #X5523 EXP 2003
-
-PAROLE:  CDC
-   CAPA LOS ANGELES CO        #X099999
-* * * *
-
-REGISTRATION:         NAM:01
-19860309  CASO LOS ANGELES
-
-CNT:01     *89096
-  457.1 PC-REGISTRATION OF ARSON OFFENDER
-- - - -
-19860629  CASO LOS ANGELES
-  290 PC-REGISTRATION OF SEX OFFENDER
-   ADR: 288 COUNTRY LANE, TATOOINE, CA
-**********************************************************************
-**                                                                  **
-** FOR CURRENT REGISTRANT ADDRESS INFORMATION INQUIRE INTO          **
-** THE VCIN SYSTEM                                                  **
-**                                                                  ** **********************************************************************
 * * * *
 ARR/DET/CITE:         NAME:02
 19731009  CAPD SAN FRANCISCO
