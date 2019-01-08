@@ -26,7 +26,8 @@ describe EligibilityChecker do
 
       expect(described_class.new(parsed_rap_sheet).all_eligible_counts).to eq ({
         prop64: [prop64_eligible_count_1, prop64_eligible_count_2],
-        pc1203: [prop64_eligible_count_1, pc1203_eligible_count]
+        pc1203_discretionary: [],
+        pc1203_mandatory: [prop64_eligible_count_1, pc1203_eligible_count]
       })
     end
   end
@@ -52,7 +53,11 @@ describe EligibilityChecker do
             counts: [prop64_eligible_count_1],
             remedy: { codes: ['HS 11357'], scenario: :redesignation }
           },
-          pc1203: {
+          pc1203_mandatory: {
+            counts: [],
+            remedy: nil
+          },
+          pc1203_discretionary: {
             counts: [prop64_eligible_count_1, pc1203_eligible_count],
             remedy: { code: '1203.4', scenario: :discretionary }
           }
@@ -63,7 +68,11 @@ describe EligibilityChecker do
             counts: [prop64_eligible_count_2],
             remedy: { codes: ['HS 11357'], scenario: :unknown }
           },
-          pc1203: {
+          pc1203_mandatory: {
+            counts: [],
+            remedy: nil
+          },
+          pc1203_discretionary: {
             counts: [],
             remedy: nil
           }

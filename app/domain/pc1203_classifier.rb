@@ -26,8 +26,9 @@ class PC1203Classifier
   end
 
   def discretionary?
-    r = remedy
-    r[:code] != '1203.41' && r[:scenario] != :discretionary
+    r = remedy_hash
+    return nil if r.empty?
+    r[:code] == '1203.41' || r[:scenario] == :discretionary
   end
 
   def eligible_counts

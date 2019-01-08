@@ -86,6 +86,12 @@ RSpec.describe RapSheetsController, type: :controller do
         expect(response.body).to include('Receive/Etc Known Stolen Property')
         expect(response.body).to include('#1234567')
       end
+
+      it 'does not show remedies that the user is not eligible for' do
+        get :show, params: { id: rap_sheet.id }
+
+        expect(response.body).not_to include('Prop 64')
+      end
     end
 
     context 'when the rap sheet cannot be parsed' do

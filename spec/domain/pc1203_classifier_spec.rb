@@ -120,7 +120,7 @@ describe PC1203Classifier do
     end
   end
 
-  describe '#remedy' do
+  describe '#remedy and #discretionary?' do
     context 'sentence includes probation' do
       let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
 
@@ -140,6 +140,10 @@ describe PC1203Classifier do
             scenario: :successful_completion
           })
         end
+
+        it 'is not discretionary' do
+          expect(subject.discretionary?).to eq false
+        end
       end
 
       context 'probation violated' do
@@ -158,6 +162,10 @@ describe PC1203Classifier do
             code: '1203.4',
             scenario: :discretionary
           })
+        end
+
+        it 'is discretionary' do
+          expect(subject.discretionary?).to eq true
         end
       end
 
@@ -201,17 +209,25 @@ describe PC1203Classifier do
               scenario: :successful_completion
             })
           end
+
+          it 'is not discretionary' do
+            expect(subject.discretionary?).to eq false
+          end
         end
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_date) { Date.new(1992, 4, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
-          it 'returns 1203.4a and successful scenario' do
+          it 'returns 1203.4a and discretionary scenario' do
             expect(subject.remedy).to eq({
               code: '1203.4a',
               scenario: :discretionary
             })
+          end
+
+          it 'is discretionary' do
+            expect(subject.discretionary?).to eq true
           end
         end
       end
@@ -229,17 +245,25 @@ describe PC1203Classifier do
               scenario: :successful_completion
             })
           end
+
+          it 'is not discretionary' do
+            expect(subject.discretionary?).to eq false
+          end
         end
 
         context 'when rap sheet has event within a year after sentencing' do
           let(:arrest_date) { Date.new(1992, 4, 1) }
           let(:rap_sheet) { build_rap_sheet(events: [conviction_event, arrest_event]) }
 
-          it 'returns 1203.4a and successful scenario' do
+          it 'returns 1203.4a and discretionary scenario' do
             expect(subject.remedy).to eq({
               code: '1203.4a',
               scenario: :discretionary
             })
+          end
+
+          it 'is discretionary' do
+            expect(subject.discretionary?).to eq true
           end
         end
       end
@@ -250,6 +274,10 @@ describe PC1203Classifier do
         it 'returns 1203.41' do
           expect(subject.remedy[:code]).to eq '1203.41'
         end
+
+        it 'is discretionary' do
+          expect(subject.discretionary?).to eq true
+        end
       end
 
       context 'unknown severity' do
@@ -257,6 +285,10 @@ describe PC1203Classifier do
 
         it 'returns nil' do
           expect(subject.remedy).to eq nil
+        end
+
+        it 'discretionary returns nil' do
+          expect(subject.discretionary?).to eq nil
         end
       end
     end

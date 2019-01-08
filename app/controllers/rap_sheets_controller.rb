@@ -24,7 +24,8 @@ class RapSheetsController < ApplicationController
     @eligible_events_by_remedy = {}
 
     EligibilityChecker::REMEDIES.each do |remedy|
-      grouped_events = eligible_events.select { |e| e[remedy[:key]].present? }.group_by { |e| e[:event].courthouse }
+      selected_events = eligible_events.select { |e| e[remedy[:key]][:counts].present? }
+      grouped_events = selected_events.group_by { |e| e[:event].courthouse }
       @eligible_events_by_remedy[remedy[:key]] = grouped_events
     end
 

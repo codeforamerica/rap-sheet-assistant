@@ -35,7 +35,7 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'Possess Marijuana'
       expect(page).to have_content '#19514114'
 
-      expect(page).to have_content '1203.4 mandatory dismissal (3)'
+      expect(page).to have_content '1203.4 discretionary dismissal (3)'
       expect(page).to have_content '11/15/2004'
       expect(page).to have_content 'F'
       expect(page).to have_content 'PC 451(a)'
