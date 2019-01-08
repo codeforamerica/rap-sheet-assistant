@@ -10,7 +10,7 @@
     <% if info[:events].present? %>
       <div class="card mb-3">
         <div class="card-body">
-          <h2><%= pluralize(info[:events].length, 'petition') %> to <%= info[:description_string]%>:</h2>
+          <h2><%= pluralize(info[:events].length, 'petition') %> for <%=info[:name]%>:</h2>
           <ul>
             <% info[:events].each do |event| %>
               <% event[info[:key]][:counts].each do |count| %>

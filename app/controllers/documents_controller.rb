@@ -7,7 +7,6 @@ class DocumentsController < ApplicationController
       {
         key: remedy[:key],
         name: remedy[:name],
-        description_string: remedy[:description_string],
         events: eligible_events.reject { |e| e[remedy[:key]][:counts].empty? }
       }
     end
