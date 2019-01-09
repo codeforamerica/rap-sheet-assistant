@@ -6,6 +6,8 @@ class Prop64Classifier
   end
 
   def eligible_counts
+    return [] if event.date && event.date > Date.new(2016, 11, 8)
+
     event.convicted_counts.select do |c|
       c.code_section && dismissible_codes.any? do |d|
         c.code_section.start_with? d
@@ -23,7 +25,7 @@ class Prop64Classifier
       scenario: scenario
     }
   end
-  
+
   private
 
   def scenario
