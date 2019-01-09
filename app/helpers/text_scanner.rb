@@ -25,7 +25,10 @@ class TextScanner
     response_batch = image_annotator.document_text_detection image: image_path
     scanned_text = ""
     response_batch.responses.each do |res|
-      scanned_text << res.full_text_annotation.text
+      full_text_annotation = res.full_text_annotation
+      if full_text_annotation
+        scanned_text << full_text_annotation.text
+      end
     end
     scanned_text
   end
