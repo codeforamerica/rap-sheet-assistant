@@ -51,7 +51,7 @@ RSpec.describe RapSheetsController, type: :controller do
     it 'alerts the user if no convictions are found' do
       get :show, params: { id: rap_sheet.id }
 
-      expect(response.body).to include("we didn't find any convictions")
+      expect(response).to redirect_to(ineligible_rap_sheet_path(rap_sheet.id))
     end
 
     context 'there is a eligible p64 conviction' do
@@ -110,27 +110,14 @@ RSpec.describe RapSheetsController, type: :controller do
       end
     end
 
-    describe 'the "Next" link' do
-      context 'when there are eligible convictions' do
-        let(:text) { single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY') }
-
-        it 'goes details path' do
-          get :show, params: { id: rap_sheet.id }
-
-          expect(response.body).to include(details_rap_sheet_path(rap_sheet))
-        end
+    context 'when there are no eligible convictions' do
+      let(:text) do
+        single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON', severity: 'FELONY')
       end
 
-      context 'when there are convictions but none are eligible for any kind of dismissal' do
-        let(:text) do
-          single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON', severity: 'FELONY')
-        end
-
-        it 'goes to the ineligible page' do
-          get :show, params: { id: rap_sheet.id }
-
-          expect(response.body).to include(ineligible_rap_sheet_path(rap_sheet))
-        end
+      it 'redirects to the ineligible page' do
+        get :show, params: { id: rap_sheet.id }
+        expect(response).to redirect_to(ineligible_rap_sheet_path(rap_sheet.id))
       end
     end
   end

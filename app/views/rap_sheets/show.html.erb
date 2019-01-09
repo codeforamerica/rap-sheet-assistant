@@ -1,33 +1,21 @@
 <div class="slab">
   <div class="form-card">
-    <% if @conviction_counts.length > 0 %>
-      <header class="form-card__header text--centered">
-        <h1 class="big-emoji">😀</h1>
-        <h3>We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</h3>
-      </header>
+    <header class="form-card__header text--centered">
+      <h1 class="big-emoji">😀</h1>
+      <h3>We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</h3>
+    </header>
 
-      <% @eligible_events_by_remedy.each do |key, grouped_events| %>
-        <% if grouped_events.present? %>
-          <h2> <%= @remedy_names[key] %> (<%= @eligible_counts[key].length %>)</h2>
-          <% grouped_events.each do |courthouse, events| %>
-            <%= render 'summary_table', remedy: key, courthouse: courthouse, events: events %>
-          <% end %>
+    <% @eligible_events_by_remedy.each do |key, grouped_events| %>
+      <% if grouped_events.present? %>
+        <h2> <%= @remedy_names[key] %> (<%= @eligible_counts[key].length %>)</h2>
+        <% grouped_events.each do |courthouse, events| %>
+          <%= render 'summary_table', remedy: key, courthouse: courthouse, events: events %>
         <% end %>
       <% end %>
-
-      <div class="form-card__footer">
-        <%= link_to 'Next →', after_show_path, class: 'button button--primary' %>
-      </div>
-    <% else %>
-      <h1 class="mt-5">Good news, we didn't find any convictions on your record!</h1>
-
-      <p>This means you don't need to apply for record clearance because you have no convictions to clear.</p>
-
-      <div class="row">
-        <div class="col-sm-2">
-          <%= link_to 'Done', root_path, class: 'btn btn-info btn-block' %>
-        </div>
-      </div>
     <% end %>
+
+    <div class="form-card__footer">
+      <%= link_to 'Next →', details_rap_sheet_path(@rap_sheet), class: 'button button--primary' %>
+    </div>
   </div>
 </div>

@@ -1,7 +1,9 @@
-<div class="container">
-  <h1 class="mt-5">We're sorry, it appears that none of your convictions are eligible to be cleared.</h1>
-
-  <p>We recommend getting a second opinion from a public defender or legal aid attorney in your area.</p>
-
-  <%= link_to 'done', root_path, class: 'btn btn-info btn-block' %>
+<div class="slab">
+  <div class="form-card text--centered form-card--narrow">
+    <h2 class="margin-top-med">No eligible convictions found</h2>
+    <p class="text--large">We didn't find any convictions that seemed eligible for record clearance.</p>
+    <div class="form-card__footer">
+      <%= link_to 'Done', root_path, class: 'button button--primary' %>
+    </div>
+  </div>
 </div>

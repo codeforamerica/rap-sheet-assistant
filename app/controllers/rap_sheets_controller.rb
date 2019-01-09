@@ -16,21 +16,23 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
-    parsed = @rap_sheet.parsed
-    @conviction_counts = parsed.convictions.flat_map(&:convicted_counts)
-    eligibility = EligibilityChecker.new(parsed)
-    @remedy_names = EligibilityChecker::REMEDIES.map {|r| [r[:key], r[:name]]}.to_h
-    eligible_events = eligibility.eligible_events_with_counts
-    @eligible_events_by_remedy = {}
+    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
+    if eligibility.eligible?
+      @remedy_names = EligibilityChecker::REMEDIES.map { |r| [r[:key], r[:name]] }.to_h
+      eligible_events = eligibility.eligible_events_with_counts
+      @eligible_events_by_remedy = {}
 
-    EligibilityChecker::REMEDIES.each do |remedy|
-      selected_events = eligible_events.select { |e| e[remedy[:key]][:counts].present? }
-      grouped_events = selected_events.group_by { |e| e[:event].courthouse }
-      @eligible_events_by_remedy[remedy[:key]] = grouped_events
+      EligibilityChecker::REMEDIES.each do |remedy|
+        selected_events = eligible_events.select { |e| e[remedy[:key]][:counts].present? }
+        grouped_events = selected_events.group_by { |e| e[:event].courthouse }
+        @eligible_events_by_remedy[remedy[:key]] = grouped_events
+      end
+
+      @eligible_counts = eligibility.all_eligible_counts
+      @number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
+    else
+      redirect_to ineligible_rap_sheet_path(@rap_sheet)
     end
-
-    @eligible_counts = eligibility.all_eligible_counts
-    @number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
   end
 
   def create
@@ -91,17 +93,6 @@ class RapSheetsController < ApplicationController
   end
 
   private
-
-  def after_show_path
-    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
-
-    if !eligibility.eligible?
-      return ineligible_rap_sheet_path(@rap_sheet)
-    else
-      details_rap_sheet_path(@rap_sheet)
-    end
-  end
-  helper_method :after_show_path
 
   def rap_sheet_params
     params.require(:rap_sheet).permit(:number_of_pages)

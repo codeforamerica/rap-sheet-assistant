@@ -249,9 +249,7 @@ describe 'uploading a rap sheet' do
     it 'shows an ineligible page' do
       visit root_path
       upload_pdf
-
-      click_on 'Next'
-      expect(page).to have_content 'none of your convictions are eligible'
+      expect(page).to have_content 'No eligible convictions found'
     end
   end
 
