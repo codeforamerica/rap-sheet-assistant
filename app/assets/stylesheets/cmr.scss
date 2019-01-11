@@ -9,7 +9,9 @@ body {
 .hidden {
   display: none;
 }
-
+.margin-left{
+  margin-left: 80px;
+}
 .page-indicator {
   text-align: center;
   border: 1px solid black;
@@ -170,6 +172,8 @@ a.delete-button {
 .margin-top-large {
   margin-top: 2em;
 }
+
+
 
 .no-outline{
   background: transparent;
