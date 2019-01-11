@@ -21,7 +21,7 @@ class RapSheetPdfController < ApplicationController
 
       redirect_to rap_sheet_path(rap_sheet)
 
-    rescue Exception => error
+    rescue StandardError => error
       puts "in error exception #{error}'"
       render :template => 'rap_sheet_pdf/error_page', :status => 500
     end

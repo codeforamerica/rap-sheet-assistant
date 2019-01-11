@@ -1,54 +1,88 @@
-<div class="rap-sheet-debug">
-  <% if @rap_sheet_parse_error %>
-    <p class="rap-sheet-debug-page-marker">Error!</p>
-    <p>There was a problem parsing your RAP sheet. Here's some technical details:</p>
-    <pre class="rap-sheet-debug-backtrace"><%= @rap_sheet_parse_error.message %><%= "\n\n" %><%= @wrapped_error.application_trace.join("\n") %></pre>
-  <% else %>
-    <h1>Here is your rap sheet:</h1>
-  <% end %>
-
-  <% if @conviction_events.present? %>
-    <p class="rap-sheet-debug-page-marker">Convictions:</p>
-    <div class="border">
-      <table>
-        <thead>
-        <tr>
-          <th>Date</th>
-          <th>Case#</th>
-          <th>Courthouse</th>
-          <th>Sentence</th>
-          <th>Counts</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @conviction_events.each do |conviction_event| %>
-          <tr>
-            <td style="white-space: nowrap;"><%= conviction_event.date %></td>
-            <td><%= conviction_event.case_number %></td>
-            <td><%= conviction_event.courthouse %></td>
-            <td><%= conviction_event.sentence %></td>
-            <td>
-              <ul>
-                <% conviction_event.counts.each do |count| %>
-                  <li><%= "#{ count.code_section} --- #{count.code_section_description }" %></li>
-                <% end %>
-              </ul>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+ <div id= "errorPage">
+    <div class="form-card text--centered form-card--narrow">
+      <div class="form-card--narrow">
+        <div class="emoji emoji--big emoji--warning"></div>
+        <h2 class="margin-top-med">Upload error</h2>
+        <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
+      </div>
+      <div class="form-card__footer">
+        <%= link_to 'Done', root_path, class: 'button button--primary' %>
+      </div>
     </div>
-  <% end %>
 
-  <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
-    <p class="rap-sheet-debug-page-marker">Page <%= i + 1 %>:</p>
-    <pre><%= r.text %></pre>
-  <% end %>
+    <div id="errorContent" v-show="isOpen">
+      <% if @rap_sheet_parse_error %>
+        <p class="rap-sheet-debug-page-marker">Error!</p>
+        <p>There was a problem parsing your RAP sheet. Here's some technical details:</p>
+        <pre class="rap-sheet-debug-backtrace"><%= @rap_sheet_parse_error.message %><%= "\n\n" %><%= @wrapped_error.application_trace.join("\n") %></pre>
+      <% else %>
+        <h1>Here is your rap sheet:</h1>
+      <% end %>
 
-  <div class="row">
-    <div class="col-sm-2">
-      <%= link_to 'Back', :back, class: 'btn btn-info btn-block' %>
+      <% if @conviction_events.present? %>
+        <p class="rap-sheet-debug-page-marker">Convictions:</p>
+        <div class="border">
+          <table>
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Case#</th>
+              <th>Courthouse</th>
+              <th>Sentence</th>
+              <th>Counts</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @conviction_events.each do |conviction_event| %>
+              <tr>
+                <td style="white-space: nowrap;"><%= conviction_event.date %></td>
+                <td><%= conviction_event.case_number %></td>
+                <td><%= conviction_event.courthouse %></td>
+                <td><%= conviction_event.sentence %></td>
+                <td>
+                  <ul>
+                    <% conviction_event.counts.each do |count| %>
+                      <li><%= "#{ count.code_section} --- #{count.code_section_description }" %></li>
+                    <% end %>
+                  </ul>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+
+      <% @rap_sheet.rap_sheet_pages.each.with_index do |r, i| %>
+        <p class="rap-sheet-debug-page-marker">Page <%= i + 1 %>:</p>
+        <pre><%= r.text %></pre>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <button id='errorButton' class="button no-outline" @click='toggle()'>
+          <i v-bind:class="[isOpen ? 'icon-arrow_drop_up' : 'icon-arrow_drop_down']"></i>
+        </button>
+        <%= link_to 'Back', :back, class: 'btn btn-info btn-block' %>
+      </div>
     </div>
   </div>
-</div>
+
+  <script>
+      new Vue({
+          el: '#errorPage',
+          data: {
+              isOpen: false
+          },
+          methods:{
+              toggle: function(){
+                  this.isOpen = !this.isOpen
+              }
+          }
+      })
+  </script>
+
+
+
+

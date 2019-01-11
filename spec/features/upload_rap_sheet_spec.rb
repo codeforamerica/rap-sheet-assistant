@@ -71,6 +71,8 @@ describe 'uploading a rap sheet' do
         expect(page).to have_content 'POSSESS MARIJUANA'
         click_on 'Debug'
 
+        find('#errorButton', visible: false).click
+
         expect(page).to have_content '20041115'
         expect(page).to have_content '44050'
         expect(page).to have_content 'CASC LOS ANGELES'

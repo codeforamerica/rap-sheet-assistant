@@ -167,6 +167,13 @@ a.delete-button {
   margin-top: 1em;
 }
 
+.no-outline{
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
 body {
   background: transparent;
 }
