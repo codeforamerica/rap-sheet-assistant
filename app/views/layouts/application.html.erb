@@ -17,17 +17,19 @@
 <div class="page-wrapper">
   <header class="main-header">
     <div class="toolbar">
-      Clear My Record
+      <div class="main-header__title">
+        <%= link_to 'Clear My Record', root_path %>
+      </div>
     </div>
   </header>
   <% flash.each do |name, msg| -%>
     <%= content_tag :div, msg, class: name %>
   <% end -%>
-    <div class="grid">
-      <div class="grid__item width-five-sixths shift-one-twelfth">
-        <%= yield %>
-      </div>
+  <div class="grid">
+    <div class="grid__item width-five-sixths shift-one-twelfth">
+      <%= yield %>
     </div>
+  </div>
   <footer class="cmr-footer main-footer">
     <div class="grid-container">
       <div class="flex-grid">
