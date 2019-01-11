@@ -1,7 +1,8 @@
- <div id= "errorPage">
+<div id="errorPage">
+  <div class="slab">
     <div class="form-card text--centered form-card--narrow">
       <div class="form-card--narrow">
-        <div class="emoji emoji--big emoji--warning"></div>
+        <div class="emoji emoji--big emoji--warning margin-top-large"></div>
         <h2 class="margin-top-med">Upload error</h2>
         <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
       </div>
@@ -9,7 +10,13 @@
         <%= link_to 'Done', root_path, class: 'button button--primary' %>
       </div>
     </div>
-
+    <div class="row">
+      <div class="col-sm-2">
+        <button id='errorButton' class="pattern__button" @click='toggle()'>
+          More information<i v-bind:class="[isOpen ? 'icon-arrow_drop_up' : 'icon-arrow_drop_down']"></i>
+        </button>
+      </div>
+    </div>
     <div id="errorContent" v-show="isOpen">
       <% if @rap_sheet_parse_error %>
         <p class="rap-sheet-debug-page-marker">Error!</p>
@@ -58,30 +65,22 @@
         <pre><%= r.text %></pre>
       <% end %>
     </div>
-
-    <div class="row">
-      <div class="col-sm-2">
-        <button id='errorButton' class="button no-outline" @click='toggle()'>
-          <i v-bind:class="[isOpen ? 'icon-arrow_drop_up' : 'icon-arrow_drop_down']"></i>
-        </button>
-        <%= link_to 'Back', :back, class: 'btn btn-info btn-block' %>
-      </div>
-    </div>
   </div>
+</div>
 
-  <script>
-      new Vue({
-          el: '#errorPage',
-          data: {
-              isOpen: false
-          },
-          methods:{
-              toggle: function(){
-                  this.isOpen = !this.isOpen
-              }
-          }
-      })
-  </script>
+<script>
+    new Vue({
+        el: '#errorPage',
+        data: {
+            isOpen: false
+        },
+        methods: {
+            toggle: function () {
+                this.isOpen = !this.isOpen
+            }
+        }
+    })
+</script>
 
 
 
