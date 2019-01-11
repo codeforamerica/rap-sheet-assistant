@@ -1,15 +1,6 @@
 <div id="errorPage">
   <div class="slab">
-    <div class="form-card text--centered form-card--narrow">
-      <div class="form-card--narrow">
-        <div class="emoji emoji--big emoji--warning margin-top-large"></div>
-        <h2 class="margin-top-med">Upload error</h2>
-        <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
-      </div>
-      <div class="form-card__footer">
-        <%= link_to 'Done', root_path, class: 'button button--primary' %>
-      </div>
-    </div>
+    <%= render 'shared/error_card', error_title: 'Upload error', error_message: "Apologies, we weren't able to read the file you uploaded", show_emoji: true%>
     <div class="row">
       <div class="col-sm-2">
         <button id='errorButton' class="pattern__button" @click='toggle()'>

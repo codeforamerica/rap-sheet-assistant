@@ -1,0 +1,12 @@
+<div class="form-card text--centered form-card--narrow">
+  <div class="form-card--narrow">
+    <% if show_emoji %>
+      <div class="emoji emoji--big emoji--warning margin-top-large"></div>
+    <% end %>
+    <h2 class="margin-top-med"><%= error_title %></h2>
+    <p class="text--large"><%= error_message %></p>
+  </div>
+  <div class="form-card__footer">
+    <%= link_to 'Done', root_path, class: 'button button--primary' %>
+  </div>
+</div>

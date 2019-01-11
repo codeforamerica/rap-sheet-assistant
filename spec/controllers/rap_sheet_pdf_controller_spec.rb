@@ -42,7 +42,7 @@ RSpec.describe RapSheetPdfController, type: :controller do
           }
         }
         expect(response.body).to include('Upload error')
-        expect(response.body).to include("Apologies, we weren't able to read the file you uploaded")
+        expect(response.body).to include("Apologies")
       end
     end
   end

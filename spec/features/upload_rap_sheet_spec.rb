@@ -69,16 +69,6 @@ describe 'uploading a rap sheet' do
         expect(page).to have_content 'Good news, you might be eligible to clear 4 convictions on your record'
         expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
         expect(page).to have_content 'POSSESS MARIJUANA'
-        click_on 'Debug'
-
-        find('#errorButton', visible: false).click
-
-        expect(page).to have_content '20041115'
-        expect(page).to have_content '44050'
-        expect(page).to have_content 'CASC LOS ANGELES'
-        expect(page).to have_content 'PC 451(a) --- ARSON CAUSING GREAT BODILY INJURY'
-        expect(page).to have_content '2y jail, fine, restitution'
-        click_on 'Back'
         click_on 'Next'
 
         fill_in_contact_form(first_name: 'Test', last_name: 'User')
@@ -107,6 +97,24 @@ describe 'uploading a rap sheet' do
           '2.topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050'
         }
         expect(fields_dict).to include(expected_values)
+      end
+
+      it 'has a debugging page' do
+        visit root_path
+        expect(page).to have_content 'Upload a California RAP sheet'
+        upload_pdf
+        click_on 'Next'
+        click_on 'Debug'
+
+        expect(page).not_to have_content '20041115'
+
+        click_on 'More information'
+
+        expect(page).to have_content '20041115'
+        expect(page).to have_content '44050'
+        expect(page).to have_content 'CASC LOS ANGELES'
+        expect(page).to have_content 'PC 451(a) --- ARSON CAUSING GREAT BODILY INJURY'
+        expect(page).to have_content '2y jail, fine, restitution'
       end
     end
 
