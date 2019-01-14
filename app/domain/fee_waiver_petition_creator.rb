@@ -6,7 +6,7 @@ class FeeWaiverPetitionCreator
   end
 
   def create_petition
-    financial_information = user.financial_information
+    financial_information = user.financial_information || FinancialInformation.new
 
     pdf_fields = {
       'name' => user.full_name,
