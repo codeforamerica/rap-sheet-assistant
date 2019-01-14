@@ -3,36 +3,24 @@ class EligibilityChecker
     {
       key: :prop64,
       name: "Prop 64",
-      details_page_toc_string: "marijuana conviction",
-      details_page_remedy_string: "We can help you apply to reclassify",
-      details_page_if_judge_approval: "reduced to misdemeanors or changed to 'dismissed'",
       classifier: Prop64Classifier,
       petition_creator: Prop64PetitionCreator
     },
     {
       key: :pc1203_mandatory,
       name: "1203.4 mandatory dismissal",
-      details_page_toc_string: "conviction",
-      details_page_remedy_string: "We can help you apply to dismiss",
-      details_page_if_judge_approval: "changed to 'dismissed'",
       classifier: PC1203MandatoryClassifier,
       petition_creator: PC1203PetitionCreator
     },
     {
       key: :pc1203_discretionary,
       name: "1203.4 discretionary dismissal",
-      details_page_toc_string: "conviction",
-      details_page_remedy_string: "We can help you apply to dismiss",
-      details_page_if_judge_approval: "changed to 'dismissed'",
       classifier: PC1203DiscretionaryClassifier,
       petition_creator: PC1203PetitionCreator
     },
     {
       key: :prop47,
       name: "Prop 47 felony reduction",
-      details_page_toc_string: "felony conviction",
-      details_page_remedy_string: "We can help you apply to reduce",
-      details_page_if_judge_approval: "reduced to misdemeanor",
       classifier: Prop47Classifier,
       petition_creator: nil
     }

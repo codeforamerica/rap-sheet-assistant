@@ -66,11 +66,6 @@ describe 'uploading a rap sheet' do
         expect(page).to have_content '#99999988887777'
         click_on 'Next'
 
-        expect(page).to have_content 'Good news, you might be eligible to clear 4 convictions on your record'
-        expect(page).to have_content 'We can help you apply to reclassify 1 marijuana conviction'
-        expect(page).to have_content 'POSSESS MARIJUANA'
-        click_on 'Next'
-
         fill_in_contact_form(first_name: 'Test', last_name: 'User')
         click_on 'Next'
 
@@ -103,8 +98,7 @@ describe 'uploading a rap sheet' do
         visit root_path
         expect(page).to have_content 'Upload a California RAP sheet'
         upload_pdf
-        click_on 'Next'
-        click_on 'Debug'
+        visit current_url + '/debug'
 
         expect(page).not_to have_content '20041115'
 
@@ -130,7 +124,6 @@ describe 'uploading a rap sheet' do
         expect(page).to have_content 'Upload a California RAP sheet'
         upload_pdf
 
-        click_on 'Next'
         click_on 'Next'
 
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Lastname')
@@ -165,10 +158,6 @@ describe 'uploading a rap sheet' do
         upload_pdf
 
         expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
-        click_on 'Next'
-
-        expect(page).to have_content 'We can help you apply to dismiss 1 conviction'
-        expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
         click_on 'Next'
 
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
@@ -221,10 +210,6 @@ describe 'uploading a rap sheet' do
         upload_pdf
 
         expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
-        click_on 'Next'
-
-        expect(page).to have_content 'We can help you apply to dismiss 1 conviction'
-        expect(page).to have_content 'RECEIVE/ETC KNOWN STOLEN PROPERTY'
         click_on 'Next'
 
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
