@@ -1,15 +1,6 @@
 class DocumentsController < ApplicationController
   def index
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
-    eligible_events = EligibilityChecker.new(@rap_sheet.parsed).eligible_events_with_counts
-
-    @info_per_remedy = EligibilityChecker::REMEDIES.map do |remedy|
-      {
-        key: remedy[:key],
-        name: remedy[:name],
-        events: eligible_events.reject { |e| e[remedy[:key]][:counts].empty? }
-      }
-    end
   end
 
   def download

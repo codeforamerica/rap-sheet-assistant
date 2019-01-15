@@ -69,7 +69,7 @@ describe 'uploading a rap sheet' do
         fill_in_contact_form(first_name: 'Test', last_name: 'User')
         click_on 'Next'
 
-        click_on 'download'
+        click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Test', 'User')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
@@ -121,7 +121,7 @@ describe 'uploading a rap sheet' do
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Lastname')
         click_on 'Next'
 
-        click_on 'download'
+        click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Lastname')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
@@ -149,7 +149,7 @@ describe 'uploading a rap sheet' do
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
         click_on 'Next'
 
-        click_on 'download'
+        click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Smith')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',

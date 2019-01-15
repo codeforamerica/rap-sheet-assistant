@@ -1,28 +1,15 @@
-<div class="container">
-  <h1 class="mt-5">Done!</h1>
-
-  <p>Download and print your paperwork</p>
-
-  <hr>
-
-  <p>Here's what paperwork we filled out for you:</p>
-  <% @info_per_remedy.each do |info| %>
-    <% if info[:events].present? %>
-      <div class="card mb-3">
-        <div class="card-body">
-          <h2><%= pluralize(info[:events].length, 'petition') %> for <%=info[:name]%>:</h2>
-          <ul>
-            <% info[:events].each do |event| %>
-              <% event[info[:key]][:counts].each do |count| %>
-                <li><%= "#{count.code_section_description} on #{event[:event].date.strftime('%m/%d/%Y')} in #{event[:event].courthouse}" %></li>
-              <% end %>
-            <% end %>
-          </ul>
-        </div>
-      </div>
+<div class="slab">
+  <div class="form-card text--centered">
+    <div class="margin-top-large">
+      <i class="icon-check_circle icon-large icon-teal"></i>
+    </div>
+    <h2 class="margin-top-med">Your court forms are ready!</h2>
+    <p>Download and print your paperwork.</p>
+    <%= link_to(download_rap_sheet_documents_path(@rap_sheet), class: 'button button--primary margin-bottom-large', data: { turbolinks: false }) do %>
+      <i class="icon-vertical_align_bottom"></i> Download paperwork
     <% end %>
-  <% end %>
-
-
-  <%= link_to '✓ download paperwork', download_rap_sheet_documents_path(@rap_sheet), class: 'btn btn-info mt-3', data: { turbolinks: false } %>
+    <div class="form-card__footer">
+      <%= link_to 'Done', root_path, class: 'button' %>
+    </div>
+  </div>
 </div>
