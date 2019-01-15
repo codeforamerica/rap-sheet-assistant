@@ -1,6 +1,4 @@
-<div class="summary-table">
-  <table>
-    <caption><%= courthouse %></caption>
+    <tr><th class="minor-header" colspan="5"><%= courthouse %></th></tr>
     <% events.each do |event| %>
       <% event[remedy][:counts].each do |conviction_count| %>
         <tr>
@@ -12,5 +10,3 @@
         </tr>
       <% end %>
     <% end %>
-  </table>
-</div>

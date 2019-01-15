@@ -5,14 +5,18 @@
       <h3>We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</h3>
     </header>
 
-    <% @eligible_events_by_remedy.each do |key, grouped_events| %>
-      <% if grouped_events.present? %>
-        <h2> <%= @remedy_names[key] %> (<%= @eligible_counts[key].length %>)</h2>
-        <% grouped_events.each do |courthouse, events| %>
-          <%= render 'summary_table', remedy: key, courthouse: courthouse, events: events %>
+    <div class="summary-table">
+      <table>
+        <% @eligible_events_by_remedy.each do |key, grouped_events| %>
+          <% if grouped_events.present? %>
+            <tr><th class="major-header" colspan="5"> <%= @remedy_names[key] %> (<%= @eligible_counts[key].length %>)</th></tr>
+            <% grouped_events.each do |courthouse, events| %>
+              <%= render 'summary_table_rows', remedy: key, courthouse: courthouse, events: events %>
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
-    <% end %>
+      </table>
+    </div>
 
     <div class="form-card__footer">
       <%= link_to 'Next →', edit_user_contact_information_path(@rap_sheet.user), class: 'button button--primary' %>

@@ -12,12 +12,28 @@
     width: 100%;
     margin-bottom: 2em;
   }
-  caption {
+
+  tr:first-child th {
+    padding-top: 0.5em;
+  }
+
+  th.major-header {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.3em;
+    padding-top: 1.5em;
+    padding-bottom: 0;
+    text-align: left;
+    padding-left: 40px;
+  }
+
+  th.minor-header {
     color: #AAAAAA;
     font-size: 16px;
     text-align: left;
     padding-left: 40px;
     font-weight: bold;
+    padding-top: 2em;
   }
 
   td:first-child {
@@ -28,8 +44,11 @@
     padding-right: 40px;
   }
 
-  th, td {
+  td {
     padding-top: 1em;
+  }
+
+  th, td {
     padding-bottom: 1em;
     font-size: 16px;
     text-align: left;
