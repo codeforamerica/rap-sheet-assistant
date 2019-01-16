@@ -183,6 +183,8 @@ describe 'uploading a rap sheet' do
       expect(page).to have_content 'PDF added'
       find('.icon-close').click
       expect(page).not_to have_content 'PDF added'
+      attach_rap_pdf_file
+      expect(page).to have_content 'PDF added'
     end
   end
 
