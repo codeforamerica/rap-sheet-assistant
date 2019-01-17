@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'uploading a rap sheet' do
+describe 'uploading a rap sheet', js: true, type: :feature do
   let(:scanned_pages) do
     [
       File.read('./spec/fixtures/skywalker_rap_sheet_page_1.txt'),
@@ -90,6 +90,7 @@ describe 'uploading a rap sheet' do
         visit root_path
         expect(page).to have_content 'Upload a California RAP sheet'
         upload_pdf
+        expect(page).to have_content 'We found'
         visit current_url + '/debug'
 
         expect(page).not_to have_content '20041115'
@@ -193,6 +194,7 @@ describe 'uploading a rap sheet' do
     expect(page).to have_content 'Select a PDF file to upload'
     attach_rap_pdf_file
     click_on 'Upload'
+    # expect(page).to have_content 'Searching for convictions'
   end
 
   def fill_in_case_information
