@@ -1,13 +1,13 @@
 <div id="vue-app-div">
   <div class="slab">
-    <div class="form-card">
-      <div class="form-card__header">
+    <div class="form-card" v-if="!loading">
+      <div class="form-card__header" v-if="!loading">
         <h1 class="form-card__title">Upload a California RAP sheet</h1>
       </div>
 
-      <div class="form-card__content">
+      <div class="form-card__content" v-if="!loading">
         <p>Select a PDF file to upload.</p>
-        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: {multipart: true} do |f| %>
+        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, remote: true, method: :post, html: {multipart: true} do |f| %>
           <div class="file-picker-box">
             <div class="flex-row">
               <label v-show="!selectedFile" class="button">
@@ -22,29 +22,58 @@
           </div>
 
           <div class="form-card__footer">
-            <%= f.submit 'Upload →', class: 'button button--primary', 'v-bind:disabled': '!selectedFile' %>
+            <%= f.submit 'Upload →', class: 'button button--primary', 'v-bind:disabled': '!selectedFile', "v-on:click": "uploadPDF" %>
           </div>
         <% end %>
+      </div>
+    </div>
+
+    <div class="form-card form-card--transition" v-if="loading">
+      <div class="form-card__header">
+        <div class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
+        <h3 class="form-card__title margin-top-small">Searching for convictions that might be eligible for record clearance...</h3>
+      </div>
+      <progress-bar v-bind:percent="percent"></progress-bar>
+      <div class="form-card__footer">
+        <button class="button" v-on:click="cancelLoad">Cancel</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+    Vue.component('progress-bar', {
+      props: ['percent'],
+      template: `<div class="progress-indicator">
+      <div class="progress-indicator__bar" :style="'width:' + percent + '%'"></div>
+      <div class="progress-indicator__percentage">{{percent}}%</div>
+          </div>`
+    })
+
     var store = {
-        selectedFile: null
+        selectedFile: null,
+        loading: false,
+        percent: 0
     };
 
     new Vue({
         el: '#vue-app-div',
         data: store,
         methods: {
+            cancelLoad: function() {
+              window.stop();
+              Turbolinks.visit('/');
+            },
             fileInputChanged: function (event) {
                 store.selectedFile = event.target.files[0].name
             },
             clearFileInput: function () {
                 store.selectedFile = null;
                 document.getElementsByTagName('form')[0].reset();
+            },
+            uploadPDF: function() {
+              store.loading = true;
+              window.setInterval(function() { store.percent++ }, 2000)
             }
         }
 
