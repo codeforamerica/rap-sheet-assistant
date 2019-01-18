@@ -1,20 +1,21 @@
 GIT
+  remote: https://github.com/codeforamerica/cfa-styleguide-gem
+  revision: 242fa44fb4a6dacf133f7155ed2522ff4dd49194
+  specs:
+    cfa-styleguide (0.5.5)
+      autoprefixer-rails
+      bourbon
+      jquery-rails
+      neat (~> 1.8.0)
+      prism-rails
+
+GIT
   remote: https://github.com/codeforamerica/rap_sheet_parser
   revision: 6cbb6bd84b4696a80465206195473489b45c4d67
   specs:
     rap_sheet_parser (0.1.0)
       activesupport
       treetop
-
-PATH
-  remote: ../cfa-styleguide-gem
-  specs:
-    cfa-styleguide (0.5.4)
-      autoprefixer-rails
-      bourbon
-      jquery-rails
-      neat (~> 1.8.0)
-      prism-rails
 
 GEM
   remote: https://rubygems.org/
