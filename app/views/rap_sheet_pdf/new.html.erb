@@ -100,8 +100,8 @@
             store.loading = true;
             store.percent = 0;
             tick = function() {
-              store.percent++;
               if (store.percent < 100) {
+                store.percent++;
                 store.tickMethod = window.setTimeout(tick, -6.5 * store.percent + 800)
               }
             }
