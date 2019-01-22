@@ -1,13 +1,13 @@
 <div id="vue-app-div">
   <div class="slab">
-    <div class="form-card" v-if="!loading">
+    <div class="form-card" v-if="!loading && !error">
       <div class="form-card__header">
         <h1 class="form-card__title">Upload a California RAP sheet</h1>
       </div>
 
       <div class="form-card__content">
         <p>Select a PDF file to upload.</p>
-        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, method: :post, html: { multipart: true, id: "rap_sheet_pdf_form"} do |f| %>
+        <%= form_for :rap_sheet_pdf, url: rap_sheet_pdf_index_path, remote: true, method: :post, html: { multipart: true, id: "rap_sheet_pdf_form", 'v-on:ajax:success': 'uploadSuccess', 'v-on:ajax:error': 'uploadError', 'data-type': 'json'} do |f| %>
           <div class="file-picker-box">
             <div class="flex-row">
               <label v-show="!selectedFile" class="button">
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="form-card form-card--transition" v-if="loading">
+    <div class="form-card form-card--transition" v-if="loading && !error">
       <div class="form-card__header">
         <div class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
         <h3 class="form-card__title margin-top-small">Searching for convictions that might be eligible for record
@@ -39,13 +39,21 @@
         <button class="button" v-on:click="cancelLoad">Cancel</button>
       </div>
     </div>
+
+    <div class="form-card text--centered form-card--narrow" v-if="error">
+      <div class="form-card--narrow">
+        <h2 class="margin-top-med">Upload error</h2>
+        <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
+      </div>
+      <div class="form-card__footer">
+        <%= link_to 'Done', root_path, class: 'button button--primary' %>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  document.addEventListener('turbolinks:load', function() {
-    console.log('turbolinks ready')
-
+  $(document).ready(function() {
     Vue.component('progress-bar', {
       props: ['percent'],
       template: `<div class="progress-indicator">
@@ -57,38 +65,51 @@
     var store = {
       selectedFile: null,
       loading: false,
+      error: false,
       percent: 0,
     };
 
-    new Vue({
-      el: '#vue-app-div',
-      data: store,
-      methods: {
-        cancelLoad: function () {
-          window.clearTimeout(store.tickMethod);
-          window.stop();
-          window.location = '/';
-        },
-        fileInputChanged: function (event) {
-          store.selectedFile = event.target.files[0].name
-        },
-        clearFileInput: function () {
-          store.selectedFile = null;
-          document.getElementsByTagName('form')[0].reset();
-        },
-        uploadPDF: function () {
-          store.loading = true;
-          store.percent = 0;
-          tick = function() {
-            store.percent++;
-            if (store.percent < 100) {
-              store.tickMethod = window.setTimeout(tick, -6.5 * store.percent + 800)
+    if ($('#vue-app-div').length) {
+      new Vue({
+        el: '#vue-app-div',
+        data: store,
+        methods: {
+          uploadSuccess: function(e) {
+            e.preventDefault();
+            console.log(e);
+            [rapSheet, statusCode, request] = e.detail;
+            window.location = '/rap_sheets/' + rapSheet['id'];
+          },
+          uploadError: function(e) {
+            store.error = true;
+          },
+          cancelLoad: function () {
+            window.clearTimeout(store.tickMethod);
+            window.stop();
+            window.location = '/';
+          },
+          fileInputChanged: function (event) {
+            console.log('file input changed');
+            store.selectedFile = event.target.files[0].name
+          },
+          clearFileInput: function () {
+            store.selectedFile = null;
+            document.getElementsByTagName('form')[0].reset();
+          },
+          uploadPDF: function () {
+            store.loading = true;
+            store.percent = 0;
+            tick = function() {
+              store.percent++;
+              if (store.percent < 100) {
+                store.tickMethod = window.setTimeout(tick, -6.5 * store.percent + 800)
+              }
             }
+            tick();
           }
-          tick();
         }
-      }
 
-    });
+      });
+    }
   });
 </script>

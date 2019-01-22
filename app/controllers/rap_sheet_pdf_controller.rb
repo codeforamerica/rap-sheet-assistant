@@ -19,7 +19,10 @@ class RapSheetPdfController < ApplicationController
         end
       end
 
-      redirect_to rap_sheet_path(rap_sheet)
+      respond_to do |format|
+        format.html { redirect_to rap_sheet_path(rap_sheet) }
+        format.json { render json: rap_sheet }
+      end
 
     rescue StandardError => error
       logger.error "Exception in RapSheetPdfController: #{error}'"
