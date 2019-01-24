@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_002539) do
+ActiveRecord::Schema.define(version: 2019_01_25_194015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "attorneys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "state_bar_number"
+    t.string "firm_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "financial_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
@@ -61,6 +69,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_002539) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "middle_name"
+    t.boolean "pro_se"
   end
 
   add_foreign_key "rap_sheets", "users"

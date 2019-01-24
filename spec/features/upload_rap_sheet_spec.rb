@@ -147,6 +147,10 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
         click_on 'Next'
 
+        expect(page).to have_content 'Does the client have an attorney to represent them in court?'
+
+        click_on 'Yes, has a lawyer'
+
         fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
         click_on 'Next'
 
