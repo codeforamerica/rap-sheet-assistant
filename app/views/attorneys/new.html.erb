@@ -1,0 +1,73 @@
+<div class="slab">
+  <div class="form-card">
+    <%= form_for :attorney do |f| %>
+      <header class="form-card__header small_padding_bottom">
+        <h2 class="form-card__title">Enter attorney details</h2>
+        <p class="text--small">This information will be used to fill out petitions.</p>
+      </header>
+      <div>
+        <div class="form-group">
+          <%= f.label :name, "Attorney's name", class: "form-question" %>
+          <%= f.text_field :name, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :bar_number, "State bar number", class: "form-question" %>
+          <%= f.text_field :bar_number, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :firm_name, "Firm name", class: "form-question" %>
+          <%= f.text_field :firm_name, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :street_address, "Street address", class: "form-question" %>
+          <%= f.text_field :street_address, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="form-card__content">
+          <div class="form-group grid__item width-one-fourth">
+            <%= f.label :city, "City", class: "form-question" %>
+            <%= f.text_field :city, class: "text-input form-width--medium" %>
+          </div>
+        </div>
+        <div class="form-card__content">
+          <div class="form-group grid__item width-one-fourth">
+            <%= f.label :state, "State", class: "form-question" %>
+            <%= f.text_field :state, class: "text-input form-width--short" %>
+          </div>
+        </div>
+        <div class="form-card__content">
+          <div class="form-group grid__item width-one-fourth">
+            <%= f.label :zip, "Zip", class: "form-question" %>
+            <%= f.text_field :zip, class: "text-input form-width--zip" %>
+          </div>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :phone_number, "Phone number", class: "form-question" %>
+          <%= f.text_field :phone_number, class: "text-input form-width--phone" %>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :email_address, "Email address", class: "form-question" %>
+          <%= f.text_field :email_address, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div class="form-card__footer">
+        <%= f.submit 'Next', class: 'button button--primary' %>
+        <i class="icon icon-arrow_forward"></i>
+        <%= link_to(new_user_representations_path(@user), class: 'button button--primary', method: :post) do %>
+          Cancel
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

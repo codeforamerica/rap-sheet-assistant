@@ -7,5 +7,7 @@ class CreateAttorneys < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    add_belongs_to :users, :attorney, type: :uuid
   end
 end

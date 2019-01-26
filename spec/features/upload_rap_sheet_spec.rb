@@ -66,6 +66,12 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content '#99999988887777'
         click_on 'Next'
 
+        click_on 'Yes, has a lawyer'
+
+        fill_in_attorney_form
+
+        click_on 'Next'
+
         fill_in_contact_form(first_name: 'Test', last_name: 'User')
         click_on 'Next'
 
@@ -220,6 +226,18 @@ describe 'uploading a rap sheet', js: true, type: :feature do
     select params[:dob_month] || 'January', from: 'contact_information_form[date_of_birth(2i)]'
     select params[:dob_day] || '1', from: 'contact_information_form[date_of_birth(3i)]'
     select params[:dob_year] || '1980', from: 'contact_information_form[date_of_birth(1i)]'
+  end
+
+  def fill_in_attorney_form(params = {})
+    fill_in "Attorney's name", with: params[:name] || 'Ms. Attorney'
+    fill_in 'State bar number', with: params[:state_bar_number] || '678999212'
+    fill_in 'Firm name', with: params[:firm_name] || 'Issa Firm'
+    fill_in 'Street address', with: params[:street_address] || '123 Main St'
+    fill_in 'City', with: params[:city] || 'San Francisco'
+    fill_in 'State', with: params[:state] || 'CA'
+    fill_in 'Zip', with: params[:zip_code] || '94103'
+    fill_in 'Phone number', with: params[:phone_number] || '555555555'
+    fill_in 'Email address', with: params[:email_address] || 'testuser@example.com'
   end
 
   def get_fields_from_downloaded_pdf(firstname, lastname)

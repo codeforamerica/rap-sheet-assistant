@@ -19,6 +19,8 @@ class RapSheetPdfController < ApplicationController
         end
       end
 
+      session[:current_user_id] = rap_sheet.user.id
+
       respond_to do |format|
         format.html { redirect_to rap_sheet_path(rap_sheet) }
         format.json { render json: rap_sheet }

@@ -1,7 +1,7 @@
 module Users
   class ContactInformationsController < ApplicationController
     def show
-      @user = User.find(params[:user_id])
+      @user = User.find(session[:current_user_id])
       redirect_to edit_user_contact_information_path(@user)
     end
 

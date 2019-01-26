@@ -7,7 +7,7 @@ module Users
     def yes
       @user = User.find(params[:user_id]).update(pro_se: false)
       user = User.find(params[:user_id])
-      redirect_to new_confirm_attorneys_path(user)
+      redirect_to new_attorney_path(@user)
     end
 
     def no

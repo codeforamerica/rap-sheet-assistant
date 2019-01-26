@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_194015) do
+ActiveRecord::Schema.define(version: 2019_01_25_184136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 2019_01_25_194015) do
     t.datetime "updated_at", null: false
     t.string "middle_name"
     t.boolean "pro_se"
+    t.uuid "attorney_id"
+    t.index ["attorney_id"], name: "index_users_on_attorney_id"
   end
 
   add_foreign_key "rap_sheets", "users"
