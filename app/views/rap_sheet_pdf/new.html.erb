@@ -14,7 +14,7 @@
                 Select file
                 <%= f.file_field :pdf_file, { accept: 'application/pdf', class: 'hidden', 'v-on:change': 'fileInputChanged' } %>
               </label>
-              <div v-if="selectedFile" class="flex-row">
+              <div v-cloak v-if="selectedFile" class="flex-row">
                 <span class="truncate-text">PDF added: {{ selectedFile }}</span><i class="icon-close" v-on:click='clearFileInput'></i>
               </div>
               <div v-else>no file selected</div>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="form-card form-card--transition" v-if="loading && !error">
+    <div v-cloak class="form-card form-card--transition" v-if="loading && !error">
       <div class="form-card__header">
         <div class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
         <h3 class="form-card__title margin-top-small">Searching for convictions that might be eligible for record
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="form-card text--centered form-card--narrow" v-if="error">
+    <div v-cloak class="form-card text--centered form-card--narrow" v-if="error">
       <div class="form-card--narrow">
         <h2 class="margin-top-med">Upload error</h2>
         <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
