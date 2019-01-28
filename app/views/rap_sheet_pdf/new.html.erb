@@ -84,8 +84,6 @@
             store.error = true;
           },
           cancelLoad: function () {
-            window.clearTimeout(store.tickMethod);
-            window.stop();
             window.location = '/';
           },
           fileInputChanged: function (event) {
@@ -104,7 +102,7 @@
                 store.percent++;
                 store.tickMethod = window.setTimeout(tick, -6.5 * store.percent + 800)
               }
-            }
+            };
             tick();
           }
         }
