@@ -2,6 +2,10 @@ body {
   padding-bottom: 20px;
 }
 
+[v-cloak] {
+  display: none !important;
+}
+
 .border {
   border: 1px solid black;
 }
