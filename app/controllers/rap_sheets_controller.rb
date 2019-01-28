@@ -38,7 +38,6 @@ class RapSheetsController < ApplicationController
   def create
     @rap_sheet = RapSheet.new(rap_sheet_params.merge(user: User.new))
     if @rap_sheet.save
-      session[:current_user_id] = rap_sheet.user.id
       redirect_to edit_rap_sheet_path(@rap_sheet)
     else
       render :index

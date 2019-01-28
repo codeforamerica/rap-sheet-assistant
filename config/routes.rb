@@ -14,9 +14,9 @@ Rails.application.routes.draw do
         end
       end
     end
+    resources :attorneys, only: [:new, :create]
   end
 
-  resources :attorneys, only: [:new, :create]
 
   resources :rap_sheets, only: [:index, :edit, :show, :create] do
     member do
