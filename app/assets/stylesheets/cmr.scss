@@ -240,5 +240,32 @@ body {
 }
 
 .select {
-  margin-right: .4em;
+	margin-right: .4em;
+}
+
+.input-group--inline {
+	display: block;
+	@include clearfix();
+	.radio-button, .checkbox {
+		display: inline-block;
+		margin-right: .3em;
+	}
+	.select {
+		display: inline-block;
+		margin-right: .5em;
+	}
+
+	.input {
+		display: inline-block;
+		margin-right: .5em;
+
+		.form-width--city {
+			width: 10em;
+		}
+		.form-width--state {
+			width: 2.8em;
+		}
+	}
+
+	margin-bottom: .5em;
 }

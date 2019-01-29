@@ -35,29 +35,29 @@
             <%= f.text_field :street_address, class: "text-input form-width--long" %>
           </div>
         </div>
-        <div class="grid">
-          <div class="form-card__content">
-            <div class="form-group grid__item">
-              <div class="inline-form">
-                <%= f.label :city, "City", class: "form-question" %>
-                <%= f.text_field :city, class: "text-input form-width--short" %>
-              </div>
-              <div class="inline-form">
-                <%= f.label :state, "State", class: "form-question" %>
-                <%= f.text_field :state, class: "text-input form-width--short" %>
-              </div>
-              <div class="inline-form">
-                <%= f.label :zip, "Zip", class: "form-question" %>
-                <%= f.text_field :zip, class: "text-input form-width--short" %>
-              </div>
-            </div>
-          </div>
-        </div>
+				<div class="grid">
+					<div class="form-card__content">
+						<div class="input-group--inline">
+							<div class="input">
+								<%= f.label :city, "City", class: "form-question" %>
+								<%= f.text_field :city, class: "text-input form-width--city" %>
+							</div>
+							<div class="input">
+								<%= f.label :state, "State", class: "form-question" %>
+								<%= f.text_field :state, class: "text-input form-width--state" %>
+							</div>
+							<div class="input">
+								<%= f.label :zip, "Zip", class: "form-question" %>
+								<%= f.text_field :zip, class: "text-input form-width--zip" %>
+							</div>
+						</div>
+					</div>
+				</div>
       </div>
       <div class="form-card__content">
         <div class="form-group">
           <%= f.label :phone_number, "Phone number", class: "form-question" %>
-          <%= f.text_field :phone_number, class: "text-input form-width--phone" %>
+          <%= f.text_field :phone_number, class: "text-input form-width--long" %>
         </div>
       </div>
       <div class="form-card__content">
