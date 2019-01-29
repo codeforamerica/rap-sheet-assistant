@@ -7,12 +7,11 @@ RSpec.describe FeeWaiverPetitionCreator do
 
   let(:user) do
     build(:user,
-      first_name: 'Test',
-      last_name: 'User',
+      name: 'Test User',
       street_address: '123 Fake St',
       city: 'San Francisco',
       state: 'CA',
-      zip_code: '12345',
+      zip: '12345',
       phone_number: '000-111-2222',
       financial_information: financial_information
     )

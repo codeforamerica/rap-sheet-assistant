@@ -1,9 +1,9 @@
 <div class="slab">
   <div class="form-card">
-    <%= form_for :attorney do |f| %>
+    <%= form_for :attorney, url: user_attorneys_path(@user) do |f| %>
       <header class="form-card__header small_padding_bottom">
         <h2 class="form-card__title">Enter attorney details</h2>
-        <p class="text--small">This information will be used to fill out petitions.</p>
+        <p class="text--small">This information will be used to fill out court paperwork.</p>
       </header>
       <div>
         <div class="form-group">
@@ -13,8 +13,8 @@
       </div>
       <div class="form-card__content">
         <div class="form-group">
-          <%= f.label :bar_number, "State bar number", class: "form-question" %>
-          <%= f.text_field :bar_number, class: "text-input form-width--long" %>
+          <%= f.label :state_bar_number, "State bar number", class: "form-question" %>
+          <%= f.text_field :state_bar_number, class: "text-input form-width--long" %>
         </div>
       </div>
       <div class="form-card__content">
@@ -31,21 +31,19 @@
       </div>
       <div class="grid">
         <div class="form-card__content">
-          <div class="form-group grid__item width-one-fourth">
-            <%= f.label :city, "City", class: "form-question" %>
-            <%= f.text_field :city, class: "text-input form-width--medium" %>
-          </div>
-        </div>
-        <div class="form-card__content">
-          <div class="form-group grid__item width-one-fourth">
-            <%= f.label :state, "State", class: "form-question" %>
-            <%= f.text_field :state, class: "text-input form-width--short" %>
-          </div>
-        </div>
-        <div class="form-card__content">
-          <div class="form-group grid__item width-one-fourth">
-            <%= f.label :zip, "Zip", class: "form-question" %>
-            <%= f.text_field :zip, class: "text-input form-width--zip" %>
+          <div class="form-group grid__item">
+            <div class="inline-form">
+              <%= f.label :city, "City", class: "form-question" %>
+              <%= f.text_field :city, class: "text-input form-width--short" %>
+            </div>
+            <div class="inline-form">
+              <%= f.label :state, "State", class: "form-question" %>
+              <%= f.text_field :state, class: "text-input form-width--short" %>
+            </div>
+            <div class="inline-form">
+              <%= f.label :zip, "Zip", class: "form-question" %>
+              <%= f.text_field :zip, class: "text-input form-width--short" %>
+            </div>
           </div>
         </div>
       </div>
@@ -57,14 +55,13 @@
       </div>
       <div class="form-card__content">
         <div class="form-group">
-          <%= f.label :email_address, "Email address", class: "form-question" %>
-          <%= f.text_field :email_address, class: "text-input form-width--long" %>
+          <%= f.label :email, "Email address", class: "form-question" %>
+          <%= f.text_field :email, class: "text-input form-width--long" %>
         </div>
       </div>
       <div class="form-card__footer">
-        <%= f.submit 'Next', class: 'button button--primary' %>
-        <i class="icon icon-arrow_forward"></i>
-        <%= link_to(new_user_representations_path(@user), class: 'button button--primary', method: :post) do %>
+        <%= f.submit 'Next →', class: 'button button--primary' %>
+        <%= link_to(new_user_legal_representations_path(@user), class: 'button', method: :post) do %>
           Cancel
         <% end %>
       </div>

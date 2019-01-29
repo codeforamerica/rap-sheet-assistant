@@ -72,11 +72,11 @@ describe 'uploading a rap sheet', js: true, type: :feature do
 
         click_on 'Next'
 
-        fill_in_contact_form(first_name: 'Test', last_name: 'User')
+        fill_in_contact_form(name: 'Test User')
         click_on 'Next'
 
         click_on 'Download paperwork'
-        fields_dict = get_fields_from_downloaded_pdf('Test', 'User')
+        fields_dict = get_fields_from_downloaded_pdf('Test User')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
           'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
@@ -125,11 +125,17 @@ describe 'uploading a rap sheet', js: true, type: :feature do
 
         click_on 'Next'
 
-        fill_in_contact_form(first_name: 'Testuser', last_name: 'Lastname')
+        click_on 'Yes, has a lawyer'
+
+        fill_in_attorney_form
+
+        click_on 'Next'
+
+        fill_in_contact_form(name: 'Testuser Lastname')
         click_on 'Next'
 
         click_on 'Download paperwork'
-        fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Lastname')
+        fields_dict = get_fields_from_downloaded_pdf('Testuser Lastname')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
           '2.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
@@ -153,15 +159,13 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'We found 1 conviction that may be eligible for record clearance.'
         click_on 'Next'
 
-        expect(page).to have_content 'Does the client have an attorney to represent them in court?'
+        click_on 'No, filing pro se'
 
-        click_on 'Yes, has a lawyer'
-
-        fill_in_contact_form(first_name: 'Testuser', last_name: 'Smith')
+        fill_in_contact_form(name: 'Testuser Smith')
         click_on 'Next'
 
         click_on 'Download paperwork'
-        fields_dict = get_fields_from_downloaded_pdf('Testuser', 'Smith')
+        fields_dict = get_fields_from_downloaded_pdf('Testuser Smith')
         expected_values = {
           'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
           'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
@@ -215,8 +219,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
   end
 
   def fill_in_contact_form(params = {})
-    fill_in 'What is your first name?', with: params[:first_name] || 'Clearme'
-    fill_in 'What is your last name?', with: params[:last_name] || 'Smith'
+    fill_in 'Name', with: params[:name] || 'Clearme'
     fill_in 'Phone number', with: params[:phone_number] || '415 555 1212'
     fill_in 'Email address', with: params[:email_address] || 'testuser@example.com'
     fill_in 'Street address', with: params[:street_address] || '123 Main St'
@@ -240,9 +243,9 @@ describe 'uploading a rap sheet', js: true, type: :feature do
     fill_in 'Email address', with: params[:email_address] || 'testuser@example.com'
   end
 
-  def get_fields_from_downloaded_pdf(firstname, lastname)
+  def get_fields_from_downloaded_pdf(name)
     today = Date.today
-    tempfile = "/tmp/downloads/cmr_petitions_#{firstname}_#{lastname}_#{today.strftime("%Y-%m-%d")}.pdf".downcase
+    tempfile = "/tmp/downloads/cmr_petitions_#{name.tr(" ", "_")}_#{today.strftime("%Y-%m-%d")}.pdf".downcase
     wait_until do
       File.exist?(tempfile)
     end

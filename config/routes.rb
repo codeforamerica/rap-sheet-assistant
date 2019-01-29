@@ -7,16 +7,16 @@ Rails.application.routes.draw do
       resource :financial_information, only: [:new, :create]
       resource :benefits, only: [:new, :create]
       resource :income_information, only: [:new, :create]
-      resource :representations, only: [:new] do
+      resource :legal_representations, only: [:new] do
         collection do
           post :yes
           post :no
         end
       end
     end
+    resources :attorneys, only: [:new, :create]
   end
 
-  resources :attorneys, only: [:new, :create]
 
   resources :rap_sheets, only: [:index, :edit, :show, :create] do
     member do
