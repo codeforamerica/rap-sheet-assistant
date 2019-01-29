@@ -8,19 +8,19 @@ class EligibilityChecker
     },
     {
       key: :pc1203_mandatory,
-      name: "1203.4 mandatory dismissal",
+      name: "1203.4 mandatory",
       classifier: PC1203MandatoryClassifier,
       petition_creator: PC1203PetitionCreator
     },
     {
       key: :pc1203_discretionary,
-      name: "1203.4 discretionary dismissal",
+      name: "1203.4 discretionary",
       classifier: PC1203DiscretionaryClassifier,
       petition_creator: PC1203PetitionCreator
     },
     {
       key: :prop47,
-      name: "Prop 47 felony reduction",
+      name: "Prop 47",
       classifier: Prop47Classifier,
       petition_creator: Prop47PetitionCreator
     }

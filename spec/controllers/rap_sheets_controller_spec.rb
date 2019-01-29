@@ -78,7 +78,7 @@ RSpec.describe RapSheetsController, type: :controller do
         get :show, params: { id: rap_sheet.id }
 
         expect(response.body).to include('We found 1 conviction that may be eligible for record clearance.')
-        expect(response.body).to include('1203.4 mandatory dismissal (1)')
+        expect(response.body).to include('1203.4 mandatory (1)')
         expect(response.body).to include('09/18/1984')
         expect(response.body).to include('M')
         expect(response.body).to include('CASC Los Angeles')

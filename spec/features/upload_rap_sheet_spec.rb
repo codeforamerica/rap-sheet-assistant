@@ -51,14 +51,14 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'Possess Marijuana'
         expect(page).to have_content '#19514114'
 
-        expect(page).to have_content '1203.4 discretionary dismissal (3)'
+        expect(page).to have_content '1203.4 discretionary (3)'
         expect(page).to have_content '11/15/2004'
         expect(page).to have_content 'F'
         expect(page).to have_content 'PC 451(a)'
         expect(page).to have_content 'Arson Causing Great Bodily Injury'
         expect(page).to have_content '#44050'
 
-        expect(page).to have_content 'Prop 47 felony reduction (1)'
+        expect(page).to have_content 'Prop 47 (1)'
         expect(page).to have_content '09/06/2011'
         expect(page).to have_content 'F'
         expect(page).to have_content 'PC 496(a)'
