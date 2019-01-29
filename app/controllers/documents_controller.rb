@@ -44,7 +44,7 @@ class DocumentsController < ApplicationController
   end
 
   def download_filename
-    full_name_for_filename = @user.full_name.gsub(/[^0-9A-Za-z]/, '_').downcase
+    full_name_for_filename = @user.name.tr(" ", "_").downcase
     ['cmr_petitions', full_name_for_filename, Date.today].join('_') + '.pdf'
   end
 end

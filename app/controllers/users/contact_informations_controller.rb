@@ -1,13 +1,14 @@
 module Users
   class ContactInformationsController < ApplicationController
     def show
-      @user = User.find(session[:current_user_id])
+      @user = User.find(params[:user_id])
       redirect_to edit_user_contact_information_path(@user)
     end
 
     def edit
       @user = User.find(params[:user_id])
       @form = ContactInformationForm.from_user(@user)
+      #redirect_to rap_sheet_documents_path(@user.rap_sheet)
     end
 
     def update
@@ -23,7 +24,16 @@ module Users
     private
 
     def contact_information_params
-      params.require(:contact_information_form).permit(:first_name, :last_name, :phone_number, :email, :street_address, :city, :state, :zip_code, :date_of_birth)
+      params.require(:contact_information_form).permit(
+        :name,
+        :phone_number,
+        :email,
+        :street_address,
+        :city,
+        :state,
+        :zip,
+        :date_of_birth
+      )
     end
   end
 end

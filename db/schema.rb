@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_25_184136) do
+ActiveRecord::Schema.define(version: 2019_01_29_004025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 2019_01_25_184136) do
     t.string "firm_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "street_address"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "phone_number"
+    t.string "email"
   end
 
   create_table "financial_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -57,20 +63,20 @@ ActiveRecord::Schema.define(version: 2019_01_25_184136) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
+    t.string "name"
     t.string "phone_number"
     t.string "email"
     t.string "street_address"
     t.string "city"
     t.string "state"
-    t.string "zip_code"
+    t.string "zip"
     t.date "date_of_birth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "middle_name"
     t.boolean "pro_se"
     t.uuid "attorney_id"
+    t.boolean "prefer_email"
+    t.boolean "prefer_text"
     t.index ["attorney_id"], name: "index_users_on_attorney_id"
   end
 

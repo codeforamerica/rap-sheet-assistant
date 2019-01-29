@@ -19,29 +19,29 @@ class ContactInformationForm
   end
 
   ATTRIBUTES = [
-    :first_name,
-    :middle_name,
-    :last_name,
+    :name,
     :phone_number,
     :email,
     :street_address,
     :city,
     :state,
-    :zip_code,
-    :date_of_birth
+    :zip,
+    :date_of_birth,
+    :prefer_email,
+    :prefer_text
   ]
 
   attr_accessor(*ATTRIBUTES)
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :phone_number, presence: true
-  validates :email, presence: true
-  validates :street_address, presence: true
-  validates :city, presence: true
-  validates :state, presence: true
-  validates :zip_code, presence: true
-  validates :date_of_birth, presence: true
+  # validates :name, presence: true
+  # validates :phone_number, presence: true
+  # validates :email, presence: true
+  # validates :street_address, presence: true
+  # validates :city, presence: true
+  # validates :state, presence: true
+  # validates :zip, presence: true
+  # validates :date_of_birth, presence: true
+  # validates :preferred_contact_method, presence: true
 
   def save(user)
     if valid?

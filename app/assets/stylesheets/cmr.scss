@@ -81,6 +81,10 @@ body {
   }
 }
 
+.pointer_cursor {
+  cursor: pointer;
+}
+
 .boolean-choice {
   display: inline-block;
   cursor: pointer;
@@ -166,6 +170,7 @@ a.delete-button {
 .text--large {
   font-size: 2.8rem;
 }
+
 
 .form-card--narrow {
   margin-left: 80px;
