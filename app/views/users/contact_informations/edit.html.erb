@@ -1,81 +1,106 @@
-<div class="container">
-  <h1 class="mt-5">Contact Info</h1>
-
-  <p>This information will be used to communicate with you about your case and file your petitions with the court.
-
-  <%= form_for @form, url: user_contact_information_path(@user), method: :put do |f| %>
-    <div class="row">
-      <div class="col-md-6">
+<div id='clientInformation' class="slab">
+  <div class="form-card">
+    <%= form_for @form, url: user_contact_information_path(@user), method: :put do |f| %>
+      <header class="form-card__header small_padding_bottom">
+        <h2 class="form-card__title">Enter client's personal details</h2>
+        <p class="text--small">This information will be used to fill out court paperwork.</p>
+      </header>
+      <div>
         <div class="form-group">
-          <%= f.label :first_name, 'What is your first name?' %>
-          <%= f.text_field :first_name, class: 'form-control', required: true %>
+          <%= f.label :name, "Name", class: "form-question" %>
+          <%= f.text_field :name, class: "text-input form-width--long" %>
         </div>
-        <div class="form-group">
-          <%= f.label :middle_name, 'What is your middle name (optional)?' %>
-          <%= f.text_field :middle_name, class: 'form-control' %>
-        </div>
-        <div class="form-group">
-          <%= f.label :last_name, 'What is your last name?' %>
-          <%= f.text_field :last_name, class: 'form-control', required: true %>
-        </div>
-        <div class="form-group">
-          <%= f.label :phone_number, 'Phone number' %>
-          <%= f.text_field :phone_number, class: 'form-control', required: true %>
-        </div>
-        <div class="form-group">
-          <%= f.label :email, 'Email address' %>
-          <%= f.text_field :email, class: 'form-control' %>
-        </div>
-        <div class="form-group">
-          <%= f.label :street_address, 'Street address' %>
-          <%= f.text_field :street_address, class: 'form-control', required: true %>
-        </div>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-sm-6">
-              <%= f.label :city, 'City' %>
-              <%= f.text_field :city, class: 'form-control', required: true  %>
-            </div>
-            <div class="col-sm-3">
-              <%= f.label :state %>
-              <%= f.text_field :state, class: 'form-control', required: true  %>
-            </div>
-            <div class="col-sm-3">
-              <%= f.label :zip_code, 'Zip' %>
-              <%= f.text_field :zip_code, class: 'form-control', required: true  %>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div><%= f.label :date_of_birth %></div>
-          <div class="date-select-row">
-            <%= f.date_select :date_of_birth, {
+      </div>
+      <div class="form-group">
+        <div><%= f.label :date_of_birth %></div>
+        <div class="date-select-row">
+          <%= f.date_select :date_of_birth, {
               include_blank: true,
               start_year: 100.years.ago.year,
               end_year: 5.years.ago.year,
               with_css_classes: true,
               order: [:month, :day, :year]
-            }, {
-              class: 'form-control date-select',
-              required: true
-            } %>
+          }, {
+                                class: 'form-control date-select'
+                            } %>
+        </div>
+      </div>
+      <div id="user_address">
+        <div class="form-card__content">
+          <div class="form-group">
+            <%= f.label :street_address, "Street address", class: "form-question" %>
+            <%= f.text_field :street_address, class: "text-input form-width--long" %>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="form-card__content">
+            <div class="form-group grid__item">
+              <div class="inline-form">
+                <%= f.label :city, "City", class: "form-question" %>
+                <%= f.text_field :city, class: "text-input form-width--short" %>
+              </div>
+              <div class="inline-form">
+                <%= f.label :state, "State", class: "form-question" %>
+                <%= f.text_field :state, class: "text-input form-width--short" %>
+              </div>
+              <div class="inline-form">
+                <%= f.label :zip, "Zip", class: "form-question" %>
+                <%= f.text_field :zip, class: "text-input form-width--short" %>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :phone_number, "Phone number", class: "form-question" %>
+          <%= f.text_field :phone_number, class: "text-input form-width--phone" %>
+        </div>
+      </div>
+      <div class="form-card__content">
+        <div class="form-group">
+          <%= f.label :email, "Email address", class: "form-question" %>
+          <%= f.text_field :email, class: "text-input form-width--long" %>
+        </div>
+      </div>
+      <div>
+        <%= f.label :preferred_contact_method, "Client's preferred contact method", class: "form-question" %>
+        <p class="text--help">We may may follow up with clients to make sure they have succesfully filed their
+          documents.
+          We will never give a client's personal information to third parties or law enforcement.</p>
+        <label for="email_checkbox" class="checkbox">
+          <%= f.check_box :prefer_email, class: "pointer_cursor"%>
+<!--        <input type="checkbox" name="email_checkbox" id="email_checkbox" value="email" v-model="preferred_contact">-->
+          Email
+        </label>
+        <label for="text_checkbox" class="checkbox">
+          <%= f.check_box :prefer_text, class: "pointer_cursor"%>
 
-    <% if @form.errors.count > 0 %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@form.errors.count, "error") %> prohibited this contact information from being saved:</h2>
-
-        <ul>
-          <% @form.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+          <!--          <input type="checkbox" name="text_checkbox" id="text_checkbox" value="text" v-model="preferred_contact">-->
+          Text message
+        </label>
+      </div>
+      <div class="form-card__footer">
+        <%= f.submit 'Next →', class: 'button button--primary' %>
+        <%= link_to(new_user_representations_path(@user), class: 'button', method: :post) do %>
+          Cancel
+        <% end %>
       </div>
     <% end %>
-
-    <%= f.submit 'Next →', class: 'btn btn-info' %>
-  <% end %>
+  </div>
 </div>
+
+
+
+<% if @form.errors.count > 0 %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@form.errors.count, "error") %> prohibited this contact information from being saved:</h2>
+
+    <ul>
+      <% @form.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
