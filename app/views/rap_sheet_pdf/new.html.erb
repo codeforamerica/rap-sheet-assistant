@@ -26,13 +26,16 @@
           </div>
         <% end %>
       </div>
+            <button v-on:click="uploadPDF" class="button--primary">clicky!</button>
     </div>
 
     <div v-cloak class="form-card form-card--transition" v-if="loading && !error">
       <div class="form-card__header">
-        <div class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
-        <h3 class="form-card__title margin-top-small">Searching for convictions that might be eligible for record
+        <div v-if="!finishingUpload" class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
+        <div v-cloak v-if="finishingUpload" class="emoji emoji--bigger emoji--clipboard">Almost Done</div>
+        <h3 v-if="!finishingUpload" class="form-card__title margin-top-small">Searching for convictions that might be eligible for record
           clearance...</h3>
+        <h3 v-cloak v-if="finishingUpload" class="form-card__title margin-top-small">Almost done! Just a few more seconds while we prepare your eligibility report...</h3>
       </div>
       <progress-bar v-bind:percent="percent"></progress-bar>
       <div class="form-card__footer">
@@ -67,6 +70,7 @@
       loading: false,
       error: false,
       percent: 0,
+      finishingUpload: false,
     };
 
     if ($('#vue-app-div').length) {
@@ -101,8 +105,10 @@
               if (store.percent < 100) {
                 store.percent++;
                 store.tickMethod = window.setTimeout(tick, -6.5 * store.percent + 800)
+              } else {
+                store.finishingUpload = true;
               }
-            };
+            }
             tick();
           }
         }
