@@ -14,15 +14,18 @@
       <div class="form-group">
         <div><%= f.label :date_of_birth %></div>
         <div class="date-select-row">
+          <div class="select">
           <%= f.date_select :date_of_birth, {
               include_blank: true,
+              date_separator: '</div><div class="select">',
               start_year: 100.years.ago.year,
               end_year: 5.years.ago.year,
               with_css_classes: true,
               order: [:month, :day, :year]
           }, {
-                                class: 'form-control date-select'
+                                class: 'form-control date-select select__element'
                             } %>
+          </div>
         </div>
       </div>
       <div id="user_address">
@@ -82,7 +85,7 @@
       </div>
       <div class="form-card__footer">
         <%= f.submit 'Next →', class: 'button button--primary' %>
-        <%= link_to(new_user_representations_path(@user), class: 'button', method: :post) do %>
+        <%= link_to(new_user_legal_representations_path(@user), class: 'button', method: :post) do %>
           Cancel
         <% end %>
       </div>

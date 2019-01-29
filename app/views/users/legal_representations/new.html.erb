@@ -5,10 +5,10 @@
       <h3 class="form-card__title">Does the client have an attorney to represent them in court?</h3>
     </div>
     <div class="form-card__footer">
-      <%= link_to(yes_user_representations_path(@user), class: 'button', method: :post) do %>
+      <%= link_to(yes_user_legal_representations_path(@user), class: 'button', method: :post) do %>
         <i class="icon-check icon-green icon-medium vertical-align-middle"></i>Yes, has a lawyer
       <% end %>
-      <%= link_to(no_user_representations_path(@user), class: 'button', method: :post) do %>
+      <%= link_to(no_user_legal_representations_path(@user), class: 'button', method: :post) do %>
         <i class="icon-close icon-red icon-medium vertical-align-middle"></i>No, filing pro se
       <% end %>
     </div>
