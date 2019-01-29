@@ -10,20 +10,31 @@ class Prop64PetitionCreator
 
   def create_petition
     user = rap_sheet.user
+    if user.has_attorney
+      attorney = user.attorney
+      contact_info_person = attorney
+      client_name = user.name
+      state_bar_number = "#{attorney.state_bar_number}"
+    else
+      contact_info_person = user
+      client_name = 'PRO-SE'
+      state_bar_number = ''
+    end
     pdf_fields = {
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => user.name,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => contact_info_person.name,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => user.street_address,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => user.city,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => user.state,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => user.zip,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => user.phone_number,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => user.email,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => contact_info_person.street_address,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => contact_info_person.city,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => contact_info_person.state,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => contact_info_person.zip,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => contact_info_person.phone_number,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => contact_info_person.email,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => client_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
       'topmostSubform[0].Page1[0].Checkbox[7]' => 'Yes',
-      'topmostSubform[0].Page1[0].Checkbox[8]' => 'Yes'
+      'topmostSubform[0].Page1[0].Checkbox[8]' => 'Yes',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => state_bar_number
     }
 
     pdf_fields.merge!(remedy_checkboxes)

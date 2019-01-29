@@ -10,19 +10,29 @@ class PC1203PetitionCreator
 
   def create_petition
     user = rap_sheet.user
-
+    if user.has_attorney
+      attorney = user.attorney
+      contact_info_person = attorney
+      client_name = user.name
+      state_bar_number = "#{attorney.state_bar_number}"
+    else
+      contact_info_person = user
+      client_name = 'PRO-SE'
+      state_bar_number = ''
+    end
 
     pdf_fields = {
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => user.name,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => contact_info_person.name,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => state_bar_number,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => user.street_address,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => contact_info_person.street_address,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => user.date_of_birth.strftime('%m/%d/%Y'),
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => user.city,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => user.state,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => user.zip,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => user.phone_number,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => user.email,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => contact_info_person.city,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => contact_info_person.state,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => contact_info_person.zip,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => contact_info_person.phone_number,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => contact_info_person.email,
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => client_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => conviction_event.date.strftime('%m/%d/%Y'),
       'topmostSubform[0].Page2[0].PxCaption_sf[0].Defendant_ft[0]' => user.name,
@@ -33,32 +43,6 @@ class PC1203PetitionCreator
       'topmostSubform[0].Page2[0].T218[0]' => user.state,
       'topmostSubform[0].Page2[0].T219[0]' => user.zip,
     }
-
-    if user.has_attorney
-      attorney = user.attorney
-      pdf_fields = {
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => attorney.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => attorney.state_bar_number,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => attorney.street_address,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => user.date_of_birth.strftime('%m/%d/%Y'),
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => attorney.city,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => attorney.state,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => attorney.zip,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => attorney.phone_number,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => attorney.email,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => user.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => conviction_event.case_number,
-        'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => conviction_event.date.strftime('%m/%d/%Y'),
-        'topmostSubform[0].Page2[0].PxCaption_sf[0].Defendant_ft[0]' => user.name,
-        'topmostSubform[0].Page2[0].PxCaption_sf[0].CaseNumber_ft[0]' => conviction_event.case_number,
-        'topmostSubform[0].Page2[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
-        'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
-        'topmostSubform[0].Page2[0].T217[0]' => user.city,
-        'topmostSubform[0].Page2[0].T218[0]' => user.state,
-        'topmostSubform[0].Page2[0].T219[0]' => user.zip,
-      }
-    end
 
     conviction_counts.each_with_index do |count, index|
       pdf_fields.merge!(fields_for_count(count, index + 1))

@@ -78,8 +78,8 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Test User')
         expected_values = {
-          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'Test User',
+          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Ms. Attorney',
           # Prop 64 form for marijuana case
           'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
           # 1203 dismissal form for marijuana case
