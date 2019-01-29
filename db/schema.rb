@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_004025) do
+ActiveRecord::Schema.define(version: 2019_01_29_191952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2019_01_29_004025) do
     t.date "date_of_birth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "pro_se"
+    t.boolean "has_attorney"
     t.uuid "attorney_id"
     t.boolean "prefer_email"
     t.boolean "prefer_text"
