@@ -9,11 +9,11 @@ class FeeWaiverPetitionCreator
     financial_information = user.financial_information || FinancialInformation.new
 
     pdf_fields = {
-      'name' => user.full_name,
+      'name' => user.name,
       'street_address' => user.street_address,
       'city' => user.city,
       'state' => user.state,
-      'zip_code' => user.zip_code,
+      'zip_code' => user.zip,
       'phone_number' => user.phone_number,
       'lawyer' => 'PRO-SE',
       'job_title' => financial_information.job_title,

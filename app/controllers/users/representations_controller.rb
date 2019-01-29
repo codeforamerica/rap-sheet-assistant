@@ -13,7 +13,7 @@ module Users
     def no
       @user = User.find(params[:user_id]).update(pro_se: true)
       user = User.find(params[:user_id])
-      redirect_to new_user_contact_information_path(user)
+      redirect_to user_contact_information_path(user)
     end
   end
 end

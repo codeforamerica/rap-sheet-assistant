@@ -3,13 +3,12 @@ require 'rails_helper'
 RSpec.describe PC1203PetitionCreator do
   let(:user) do
     build(:user,
-      first_name: 'Test',
-      last_name: 'User',
+      name: 'Test User',
       date_of_birth: Date.parse('1970-01-01'),
       street_address: '123 Fake St',
       city: 'San Francisco',
       state: 'CA',
-      zip_code: '12345',
+      zip: '12345',
       phone_number: '000-111-2222',
       email: 'me@me.com'
     )
