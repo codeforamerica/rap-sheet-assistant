@@ -22,7 +22,7 @@ class EligibilityChecker
       key: :prop47,
       name: "Prop 47 felony reduction",
       classifier: Prop47Classifier,
-      petition_creator: nil
+      petition_creator: Prop47PetitionCreator
     }
   ]
 

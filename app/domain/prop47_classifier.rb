@@ -13,7 +13,23 @@ class Prop47Classifier
   end
 
   def remedy_details
-    nil
+    return nil unless eligible?
+
+    { scenario: scenario }
+  end
+
+  private
+
+  def scenario
+    return :unknown if (event.date.nil? or event.sentence.nil?)
+
+    end_of_sentence = event.date + event.sentence.total_duration
+
+    if end_of_sentence > Date.today
+      :resentencing
+    else
+      :redesignation
+    end
   end
 
   PROP47_CODE_SECTIONS = [

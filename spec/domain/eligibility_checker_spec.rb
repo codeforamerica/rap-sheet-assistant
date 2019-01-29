@@ -88,7 +88,7 @@ describe EligibilityChecker do
           },
           prop47: {
             counts: [prop47_eligible_count],
-            remedy_details: nil
+            remedy_details: {scenario: :unknown}
           }
         }
       ])

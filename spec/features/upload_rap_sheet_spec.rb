@@ -87,7 +87,10 @@ describe 'uploading a rap sheet', js: true, type: :feature do
           'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
           'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1',
           # 1203 dismissal form for arson case
-          '2.topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050'
+          '2.topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050',
+          # Prop47 case
+          'case_number' => '99999988887777',
+          'code_sections' => 'PC 496(a)'
         }
         expect(fields_dict).to include(expected_values)
       end
