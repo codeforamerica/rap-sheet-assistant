@@ -28,7 +28,7 @@ class PC1203PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => state_bar_number,
       'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => contact_info_person.street_address,
-      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => user.date_of_birth.strftime('%m/%d/%Y'),
+      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => nil_checked_date(user.date_of_birth),
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => contact_info_person.city,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => contact_info_person.state,
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => contact_info_person.zip,
@@ -62,6 +62,13 @@ class PC1203PetitionCreator
 
   def code_sections
     conviction_counts.map(&:code_section)
+  end
+
+  def nil_checked_date(date)
+    if date.nil?
+      return ''
+    end
+    date.strftime('%m/%d/%Y')
   end
 
   def fields_for_count(count, index)

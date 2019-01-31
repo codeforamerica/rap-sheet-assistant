@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe PC1203PetitionCreator do
   let(:has_attorney) { true }
+  let(:dob) { Date.parse('1970-01-01') }
   let(:user) do
     create(:user,
            name: 'Test User',
-           date_of_birth: Date.parse('1970-01-01'),
+           date_of_birth: dob,
            street_address: '123 Fake St',
            city: 'San Francisco',
            state: 'CA',
@@ -201,6 +202,55 @@ RSpec.describe PC1203PetitionCreator do
       }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
+  end
+  context 'if dob is empty' do
+    let(:dob) {}
+    let(:has_attorney) { false }
 
+    it 'returns dob as nil' do
+      conviction_counts = [
+        build_count(
+          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '111'
+        )
+      ]
+      conviction_event = build_court_event(
+        case_number: '#ABCDE',
+        date: Date.new(2010, 1, 1),
+        courthouse: 'CASC SAN FRANCISCO',
+        counts: conviction_counts
+      )
+      remedy_details = { code: '1203.41' }
+
+      pdf_file = PC1203PetitionCreator.new(
+        rap_sheet: rap_sheet,
+        conviction_event: conviction_event,
+        conviction_counts: conviction_counts,
+        remedy_details: remedy_details
+      ).create_petition
+      expected_values = {
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => '123 Fake St',
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => '',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => 'San Francisco',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => 'CA',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => '12345',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => '000-111-2222',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => 'me@me.com',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
+        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => '',
+        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
+        'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
+        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
+        'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
+        'topmostSubform[0].Page2[0].T217[0]' => user.city,
+        'topmostSubform[0].Page2[0].T218[0]' => user.state,
+        'topmostSubform[0].Page2[0].T219[0]' => user.zip
+      }
+      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+    end
   end
 end
