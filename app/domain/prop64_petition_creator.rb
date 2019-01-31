@@ -14,11 +14,13 @@ class Prop64PetitionCreator
       attorney = user.attorney
       contact_info_person = attorney
       client_name = user.name
-      state_bar_number = "#{attorney.state_bar_number}"
+      state_bar_number = attorney.state_bar_number
+      firm = attorney.firm_name
     else
       contact_info_person = user
       client_name = 'PRO-SE'
       state_bar_number = ''
+      firm = ''
     end
     pdf_fields = {
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => contact_info_person.name,
@@ -32,6 +34,7 @@ class Prop64PetitionCreator
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => client_name,
       'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => conviction_event.case_number,
       'topmostSubform[0].Page1[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
+      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => firm,
       'topmostSubform[0].Page1[0].Checkbox[7]' => 'Yes',
       'topmostSubform[0].Page1[0].Checkbox[8]' => 'Yes',
       'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => state_bar_number
