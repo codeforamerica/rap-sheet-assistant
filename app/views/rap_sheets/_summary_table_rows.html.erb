@@ -5,7 +5,7 @@
           <td><%= event[:event].date&.strftime('%m/%d/%Y') || '–' %></td>
           <td><%= conviction_count.disposition&.severity || '–' %></td>
           <td><%= conviction_count.code_section || '–' %></td>
-          <td><%= conviction_count.code_section_description&.titleize || 'check RAP sheet for charge description' %></td>
+          <td><%= conviction_count.code_section_description&.titleize || '–' %></td>
           <td>#<%= event[:event].case_number || '–' %></td>
         </tr>
       <% end %>
