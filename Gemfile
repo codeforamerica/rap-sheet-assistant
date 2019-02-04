@@ -31,7 +31,8 @@ gem 'rap_sheet_parser', :git => 'https://github.com/codeforamerica/rap_sheet_par
 
 group :development, :test do
   gem 'factory_bot_rails'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'faker'
+  gem 'pry-byebug'
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'rspec-rails', '~> 3.7'

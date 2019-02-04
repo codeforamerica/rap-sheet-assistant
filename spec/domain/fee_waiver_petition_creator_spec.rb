@@ -5,15 +5,18 @@ RSpec.describe FeeWaiverPetitionCreator do
     build(:financial_information, employed: false)
   end
 
+  let(:attorney) { nil }
   let(:user) do
-    build(:user,
+    create(:user,
       name: 'Test User',
       street_address: '123 Fake St',
       city: 'San Francisco',
       state: 'CA',
       zip: '12345',
       phone_number: '000-111-2222',
-      financial_information: financial_information
+      financial_information: financial_information,
+      has_attorney: attorney.present?,
+      attorney: attorney
     )
   end
 
@@ -30,6 +33,18 @@ RSpec.describe FeeWaiverPetitionCreator do
       'lawyer' => 'PRO-SE',
     }
     expect(subject).to include(expected_values)
+  end
+
+  context 'user has an attorney' do
+    let(:attorney) { create :attorney }
+
+    it 'creates a filled-out form with the users contact info' do
+      expected_values = {
+        'lawyer' => 'Anita Earls, NC Center for Civil Rights, 2 E Morgan St, Raleigh, NC 27601, SB #12345678',
+      }
+
+      expect(subject).to include(expected_values)
+    end
   end
 
   context 'user is employed' do

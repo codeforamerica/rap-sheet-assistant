@@ -8,6 +8,13 @@ class FeeWaiverPetitionCreator
   def create_petition
     financial_information = user.financial_information || FinancialInformation.new
 
+    if user.has_attorney
+      attorney = user.attorney
+      lawyer_sentence = "#{attorney.name}, #{attorney.firm_name}, #{attorney.street_address}, #{attorney.city}, #{attorney.state} #{attorney.zip}, SB ##{attorney.state_bar_number}"
+    else
+      lawyer_sentence = 'PRO-SE'
+    end
+
     pdf_fields = {
       'name' => user.name,
       'street_address' => user.street_address,
@@ -15,7 +22,7 @@ class FeeWaiverPetitionCreator
       'state' => user.state,
       'zip_code' => user.zip,
       'phone_number' => user.phone_number,
-      'lawyer' => 'PRO-SE',
+      'lawyer' => lawyer_sentence,
       'job_title' => financial_information.job_title,
       'employer_name' => financial_information.employer_name,
       'employer_address' => financial_information.employer_address,

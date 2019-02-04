@@ -77,7 +77,6 @@ describe Prop64PetitionCreator do
           'topmostSubform[0].Page1[0].Checkbox[7]' => 'Yes',
           'topmostSubform[0].Page1[0].Checkbox[8]' => 'Yes'
         }
-        puts "firm name #{expected_values['topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]']}"
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
     end

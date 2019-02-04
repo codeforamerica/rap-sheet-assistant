@@ -91,6 +91,7 @@ GEM
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     cliver (0.3.2)
+    coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -113,6 +114,8 @@ GEM
     factory_bot_rails (4.11.1)
       factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
+    faker (1.9.1)
+      i18n (>= 0.7)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
@@ -213,6 +216,12 @@ GEM
     polyglot (0.3.5)
     prism-rails (1.6.0.3)
       railties (>= 4.2, < 6)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
     public_suffix (3.0.3)
     puma (3.12.0)
     rack (2.0.6)
@@ -332,7 +341,6 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   bundler-audit
-  byebug
   capybara (~> 2.13)
   carrierwave (~> 1.0)
   cfa-styleguide!
@@ -340,6 +348,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   dotenv-rails
   factory_bot_rails
+  faker
   fog-aws
   fog-local
   google-cloud-vision (>= 0.32.0)
@@ -350,6 +359,7 @@ DEPENDENCIES
   mini_magick
   pdf-forms
   pg (~> 0.18)
+  pry-byebug
   puma (~> 3.7)
   rails (~> 5.2.0)
   rap_sheet_parser!
