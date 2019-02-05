@@ -71,15 +71,13 @@
         <p class="text--help">We may may follow up with clients to make sure they have succesfully filed their
           documents.
           We will never give a client's personal information to third parties or law enforcement.</p>
-        <label for="email_checkbox" class="checkbox">
+        <label for="contact_information_form_prefer_email" class="checkbox">
           <%= f.check_box :prefer_email, class: "pointer_cursor"%>
-<!--        <input type="checkbox" name="email_checkbox" id="email_checkbox" value="email" v-model="preferred_contact">-->
           Email
         </label>
-        <label for="text_checkbox" class="checkbox">
+        <label for="contact_information_form_prefer_text" class="checkbox">
           <%= f.check_box :prefer_text, class: "pointer_cursor"%>
 
-          <!--          <input type="checkbox" name="text_checkbox" id="text_checkbox" value="text" v-model="preferred_contact">-->
           Text message
         </label>
       </div>
