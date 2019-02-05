@@ -14,7 +14,7 @@ class PC1203PetitionCreator
       attorney = user.attorney
       contact_info_person = attorney
       client_name = user.name
-      state_bar_number = attorney.state_bar_number
+      state_bar_number = "    State Bar No: #{attorney.state_bar_number}"
       firm = attorney.firm_name
     else
       contact_info_person = user
@@ -24,31 +24,30 @@ class PC1203PetitionCreator
     end
 
     pdf_fields = {
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => contact_info_person.name,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => state_bar_number,
-      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => contact_info_person.street_address,
-      'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => nil_checked_date(user.date_of_birth),
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => contact_info_person.city,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => contact_info_person.state,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => contact_info_person.zip,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => contact_info_person.phone_number,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => contact_info_person.email,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => client_name,
-      'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => conviction_event.case_number,
-      'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => firm,
-      'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => conviction_event.date.strftime('%m/%d/%Y'),
-      'topmostSubform[0].Page2[0].PxCaption_sf[0].Defendant_ft[0]' => user.name,
-      'topmostSubform[0].Page2[0].PxCaption_sf[0].CaseNumber_ft[0]' => conviction_event.case_number,
-      'topmostSubform[0].Page2[0].ExecutedDate_dt[0]' => Date.today.strftime('%m/%d/%Y'),
-      'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
-      'topmostSubform[0].Page2[0].T217[0]' => user.city,
-      'topmostSubform[0].Page2[0].T218[0]' => user.state,
-      'topmostSubform[0].Page2[0].T219[0]' => user.zip,
+      'Field1' => "#{contact_info_person.name}#{state_bar_number}",
+      'Field2' => firm,
+      'Field3' => contact_info_person.street_address,
+      'Field4' => contact_info_person.city,
+      'Field5' => contact_info_person.state,
+      'Field6' => contact_info_person.zip,
+      'Field7' => contact_info_person.phone_number,
+      'Field9' => contact_info_person.email,
+      'Field10' => client_name,
+      'Field11' => user.name,
+      'Field12' => nil_checked_date(user.date_of_birth),
+      'Field13' => conviction_event.case_number,
+      'Field17' => conviction_event.date.strftime('%m/%d/%Y'),
+      'Field49' => user.name,
+      'Field50' => conviction_event.case_number,
+      'Field62' => user.name,
+      'Field63' => conviction_event.case_number,
+      'Field72' => Date.today.strftime('%m/%d/%Y'),
+      'Field74' => user.street_address,
+      'Field75' => "#{user.city}, #{user.state}  #{user.zip}",
     }
 
     conviction_counts.each_with_index do |count, index|
-      pdf_fields.merge!(fields_for_count(count, index + 1))
+      pdf_fields.merge!(fields_for_count(count, index))
     end
 
     pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy_details).fields)
@@ -72,12 +71,13 @@ class PC1203PetitionCreator
   end
 
   def fields_for_count(count, index)
+    starting_field_number = 18 + (index*5)
     {
-      "topmostSubform[0].Page1[0].Code#{index}_ft[0]" => count.code,
-      "topmostSubform[0].Page1[0].Section#{index}_ft[0]" => count.section,
-      "topmostSubform[0].Page1[0].TypeOff#{index}_ft[0]" => long_severity(count),
-      "topmostSubform[0].Page1[0].Reduce#{index}_ft[0]" => reducible_to_misdemeanor(count),
-      "topmostSubform[0].Page1[0].Offense#{index}_ft[0]" => reducible_to_infraction(count)
+      "Field#{starting_field_number}" => count.code,
+      "Field#{starting_field_number+1}" => count.section,
+      "Field#{starting_field_number+2}" => long_severity(count),
+      "Field#{starting_field_number+3}" => reducible_to_misdemeanor(count),
+      "Field#{starting_field_number+4}" => reducible_to_infraction(count)
     }
   end
 

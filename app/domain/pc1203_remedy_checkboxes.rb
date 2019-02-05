@@ -4,49 +4,37 @@ class PC1203RemedyCheckboxes
   end
 
   def fields
-    return {} unless remedy_details
+    result = {}
+    return result unless remedy_details
 
-    remedy_checkbox.
-      merge(sub_checkbox).
-      merge(question_8_checkbox)
+    result[remedy_checkbox] = 'Yes'
+    result[sub_checkbox] = 'Yes' if sub_checkbox
+    result
   end
 
   private
 
   def remedy_checkbox
     {
-      {
-        '1203.4' => 'topmostSubform[0].Page1[0].ProbationGranted_cb[0]',
-        '1203.4a' => 'topmostSubform[0].Page1[0].OffenseWSentence_cb[0]',
-        '1203.41' => 'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]'
-      }[remedy_details[:code]] => '1'
-    }
+      '1203.4' => 'Field43',
+      '1203.4a' => 'Field51',
+      '1203.41' => 'Field57'
+    }[remedy_details[:code]]
   end
 
   def sub_checkbox
-    sub =
-      if remedy_details[:code] == '1203.4'
-        {
-          successful_completion: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1' },
-          early_termination: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[1]' => '2' },
-          discretionary: { 'topmostSubform[0].Page1[0].ProbationGrantedReason[2]' => '3' }
-        }[remedy_details[:scenario]]
-      elsif remedy_details[:code] == '1203.4a'
-        {
-          successful_completion: { 'topmostSubform[0].Page1[0].ProbationNotGrantedReason[1]' => '2' },
-          discretionary: { 'topmostSubform[0].Page1[0].ProbationNotGrantedReason[0]' => '1' }
-        }[remedy_details[:scenario]]
-      end
-
-    sub.present? ? sub : {}
-  end
-
-  def question_8_checkbox
-    {
-      '1203.4' => { 'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1' },
-      '1203.4a' => { 'topmostSubform[0].Page2[0].DismissSection_cb[0]' => '2' },
-      '1203.41' => { 'topmostSubform[0].Page2[0].DismissSection_cb[3]' => '3' }
-    }[remedy_details[:code]]
+    if remedy_details[:code] == '1203.4'
+      {
+        successful_completion: 'Field44',
+        early_termination: 'Field45',
+        discretionary: 'Field46'
+      }[remedy_details[:scenario]]
+    elsif remedy_details[:code] == '1203.4a'
+      {
+        successful_completion: 'Field52',
+        discretionary: 'Field53'
+      }[remedy_details[:scenario]]
+    end
   end
 
   attr_reader :remedy_details

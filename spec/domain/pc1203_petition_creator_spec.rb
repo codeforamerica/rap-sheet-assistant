@@ -61,25 +61,22 @@ RSpec.describe PC1203PetitionCreator do
         remedy_details: remedy_details
       ).create_petition
       expected_values = {
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => attorney.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => user.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => attorney.street_address,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => '01/01/1970',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => attorney.city,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => attorney.state,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => attorney.zip,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => attorney.phone_number,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => attorney.email,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => user.name,
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => 'The Firm',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyBarNo_dc[0]' => attorney.state_bar_number,
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
-        'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
-        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
-        'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
-        'topmostSubform[0].Page2[0].T217[0]' => user.city,
-        'topmostSubform[0].Page2[0].T218[0]' => user.state,
-        'topmostSubform[0].Page2[0].T219[0]' => user.zip
+        'Field1' => 'Ms. Attorney    State Bar No: 1234567',
+        'Field11' => user.name,
+        'Field3' => attorney.street_address,
+        'Field12' => '01/01/1970',
+        'Field4' => attorney.city,
+        'Field5' => attorney.state,
+        'Field6' => attorney.zip,
+        'Field7' => attorney.phone_number,
+        'Field9' => attorney.email,
+        'Field10' => user.name,
+        'Field2' => 'The Firm',
+        'Field13' => '#ABCDE',
+        'Field17' => '01/01/2010',
+        'Field57' => 'Yes',
+        'Field74' => user.street_address,
+        'Field75' => 'San Francisco, CA  12345'
       }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
@@ -125,29 +122,29 @@ RSpec.describe PC1203PetitionCreator do
         remedy_details: nil
       ).create_petition
       expected_values = {
-        'topmostSubform[0].Page1[0].Code1_ft[0]' => 'PC',
-        'topmostSubform[0].Page1[0].Section1_ft[0]' => '107',
-        'topmostSubform[0].Page1[0].TypeOff1_ft[0]' => 'felony',
-        'topmostSubform[0].Page1[0].Reduce1_ft[0]' => 'yes',
-        'topmostSubform[0].Page1[0].Offense1_ft[0]' => 'no',
+        'Field18' => 'PC',
+        'Field19' => '107',
+        'Field20' => 'felony',
+        'Field21' => 'yes',
+        'Field22' => 'no',
 
-        'topmostSubform[0].Page1[0].Code2_ft[0]' => 'PC',
-        'topmostSubform[0].Page1[0].Section2_ft[0]' => '12355(b)',
-        'topmostSubform[0].Page1[0].TypeOff2_ft[0]' => 'misdemeanor',
-        'topmostSubform[0].Page1[0].Reduce2_ft[0]' => 'no',
-        'topmostSubform[0].Page1[0].Offense2_ft[0]' => 'no',
+        'Field23' => 'PC',
+        'Field24' => '12355(b)',
+        'Field25' => 'misdemeanor',
+        'Field26' => 'no',
+        'Field27' => 'no',
 
-        'topmostSubform[0].Page1[0].Code3_ft[0]' => 'PC',
-        'topmostSubform[0].Page1[0].Section3_ft[0]' => '605',
-        'topmostSubform[0].Page1[0].TypeOff3_ft[0]' => 'felony',
-        'topmostSubform[0].Page1[0].Reduce3_ft[0]' => 'no',
-        'topmostSubform[0].Page1[0].Offense3_ft[0]' => 'no',
+        'Field28' => 'PC',
+        'Field29' => '605',
+        'Field30' => 'felony',
+        'Field31' => 'no',
+        'Field32' => 'no',
 
-        'topmostSubform[0].Page1[0].Code4_ft[0]' => 'PC',
-        'topmostSubform[0].Page1[0].Section4_ft[0]' => '330',
-        'topmostSubform[0].Page1[0].TypeOff4_ft[0]' => 'misdemeanor',
-        'topmostSubform[0].Page1[0].Reduce4_ft[0]' => 'no',
-        'topmostSubform[0].Page1[0].Offense4_ft[0]' => 'yes'
+        'Field33' => 'PC',
+        'Field34' => '330',
+        'Field35' => 'misdemeanor',
+        'Field36' => 'no',
+        'Field37' => 'yes'
       }
 
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
@@ -181,24 +178,22 @@ RSpec.describe PC1203PetitionCreator do
         remedy_details: remedy_details
       ).create_petition
       expected_values = {
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => '123 Fake St',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => '01/01/1970',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => 'San Francisco',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => 'CA',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => '12345',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => '000-111-2222',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => 'me@me.com',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => '',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
-        'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
-        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
-        'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
-        'topmostSubform[0].Page2[0].T217[0]' => user.city,
-        'topmostSubform[0].Page2[0].T218[0]' => user.state,
-        'topmostSubform[0].Page2[0].T219[0]' => user.zip
+        'Field1' => 'Test User',
+        'Field11' => 'Test User',
+        'Field3' => '123 Fake St',
+        'Field12' => '01/01/1970',
+        'Field4' => 'San Francisco',
+        'Field5' => 'CA',
+        'Field6' => '12345',
+        'Field7' => '000-111-2222',
+        'Field9' => 'me@me.com',
+        'Field10' => 'PRO-SE',
+        'Field2' => '',
+        'Field13' => '#ABCDE',
+        'Field17' => '01/01/2010',
+        'Field57' => 'Yes',
+        'Field74' => user.street_address,
+        'Field75' => 'San Francisco, CA  12345'
       }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
@@ -231,24 +226,7 @@ RSpec.describe PC1203PetitionCreator do
         remedy_details: remedy_details
       ).create_petition
       expected_values = {
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Test User',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].Defendant_ft[0]' => 'Test User',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyStreet_ft[0]' => '123 Fake St',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseName[0].DefendantDOB_dt[0]' => '',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyCity_ft[0]' => 'San Francisco',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyState_ft[0]' => 'CA',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyZip_ft[0]' => '12345',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Phone_ft[0]' => '000-111-2222',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].Email_ft[0]' => 'me@me.com',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'PRO-SE',
-        'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFirm_ft[0]' => '',
-        'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '#ABCDE',
-        'topmostSubform[0].Page1[0].ConvictionDate_dt[0]' => '01/01/2010',
-        'topmostSubform[0].Page2[0].OffenseWSentence_cb[1]' => '1',
-        'topmostSubform[0].Page2[0].T215[0]' => user.street_address,
-        'topmostSubform[0].Page2[0].T217[0]' => user.city,
-        'topmostSubform[0].Page2[0].T218[0]' => user.state,
-        'topmostSubform[0].Page2[0].T219[0]' => user.zip
+        'Field12' => ''
       }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end

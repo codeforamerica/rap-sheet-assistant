@@ -78,16 +78,15 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Test User')
         expected_values = {
-          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyFor_ft[0]' => 'Test User',
-          'topmostSubform[0].Page1[0].Caption_sf[0].AttyInfo[0].AttyName_ft[0]' => 'Ms. Attorney',
+          'Field10' => 'Test User',
+          'Field1' => 'Ms. Attorney    State Bar No: 678999212',
           # Prop 64 form for marijuana case
           'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '19514114',
           # 1203 dismissal form for marijuana case
-          'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '19514114',
-          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-          'topmostSubform[0].Page2[0].DismissSection_cb[1]' => '1',
+          'Field13' => '19514114',
+          'Field43' => 'Yes',
           # 1203 dismissal form for arson case
-          '3.topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '44050',
+          '2.Field13' => '44050',
           # Prop47 case
           'case_number' => '99999988887777',
           'code_sections' => 'PC 496(a)',
@@ -141,8 +140,8 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Testuser Lastname')
         expected_values = {
-          'topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '1234567',
-          '2.topmostSubform[0].Page1[0].Caption_sf[0].Stamp[0].CaseNumber_ft[0]' => '3456789'
+          'Field13' => '1234567',
+          '2.Field13' => '3456789'
         }
         expect(fields_dict).to include(expected_values)
       end
@@ -171,9 +170,9 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         click_on 'Download paperwork'
         fields_dict = get_fields_from_downloaded_pdf('Testuser Smith')
         expected_values = {
-          'topmostSubform[0].Page1[0].Caption_sf[0].CaseNumber[0].CaseNumber_ft[0]' => '5678901',
-          'topmostSubform[0].Page1[0].ProbationGranted_cb[0]' => '1',
-          'topmostSubform[0].Page1[0].ProbationGrantedReason[0]' => '1'
+          'Field13' => '5678901', # Case number
+          'Field43' => 'Yes', # Box 2 (1203.4)
+          'Field44' => 'Yes'  # Box 2a (successful completion)
         }
         expect(fields_dict).to include(expected_values)
       end
