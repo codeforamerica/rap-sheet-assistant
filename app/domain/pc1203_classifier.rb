@@ -49,6 +49,7 @@ class PC1203Classifier
     else
       return nil
     end
+    return :discretionary if event.counts.any?{ |count| count.dui? }
     return :unknown if event.date.nil? || success.nil?
     success ? :successful_completion : :discretionary
   end

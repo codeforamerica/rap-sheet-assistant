@@ -84,7 +84,7 @@ describe PC1203Classifier do
 
       context 'when it has no prison and is less than two years from the end of sentence' do
         let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: nil) }
-        let(:date) { Date.today - 25.months}
+        let(:date) { Date.today - 25.months }
         it 'returns false' do
           expect(subject.eligible?).to be false
         end
@@ -144,6 +144,27 @@ describe PC1203Classifier do
         it 'is not discretionary' do
           expect(subject.discretionary?).to eq false
         end
+
+        context 'when it includes a DUI charge' do
+          let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
+          let(:conviction_event) do
+            build_court_event(
+              counts: [count, dui_count],
+              date: Date.new(1991, 5, 1)
+            )
+          end
+
+          it 'returns discretionary' do
+            expect(subject.remedy_details).to eq ({
+              code: '1203.4',
+              scenario: :discretionary
+            })
+          end
+
+          it 'is discretionary' do
+            expect(subject.discretionary?).to eq true
+          end
+        end
       end
 
       context 'probation violated' do
@@ -187,10 +208,11 @@ describe PC1203Classifier do
 
     context 'sentence does not include probation' do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: nil) }
+      let(:count) { build_count(disposition: build_disposition(severity: severity, sentence: sentence)) }
       let(:conviction_event) do
         build_court_event(
           date: Date.new(1991, 5, 1),
-          counts: [build_count(disposition: build_disposition(severity: severity, sentence: sentence))]
+          counts: [count]
         )
       end
 
@@ -212,6 +234,27 @@ describe PC1203Classifier do
 
           it 'is not discretionary' do
             expect(subject.discretionary?).to eq false
+          end
+
+          context 'when it includes a DUI charge' do
+            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
+            let(:conviction_event) do
+              build_court_event(
+                counts: [count, dui_count],
+                date: Date.new(1991, 5, 1)
+              )
+            end
+
+            it 'returns discretionary' do
+              expect(subject.remedy_details).to eq ({
+                code: '1203.4a',
+                scenario: :discretionary
+              })
+            end
+
+            it 'is discretionary' do
+              expect(subject.discretionary?).to eq true
+            end
           end
         end
 

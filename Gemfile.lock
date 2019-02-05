@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: https://github.com/codeforamerica/rap_sheet_parser
-  revision: 6cbb6bd84b4696a80465206195473489b45c4d67
+  revision: cd888fc0c2e45ac68533a4076746d6d3a4c405ac
   specs:
     rap_sheet_parser (0.1.0)
       activesupport
@@ -165,7 +165,7 @@ GEM
     grpc (1.17.0)
       google-protobuf (~> 3.1)
       googleapis-common-protos-types (~> 1.0.0)
-    i18n (1.2.0)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     ipaddress (0.8.3)
     jbuilder (2.8.0)
