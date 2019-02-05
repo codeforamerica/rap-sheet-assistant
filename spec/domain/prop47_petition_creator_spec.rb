@@ -41,7 +41,7 @@ RSpec.describe Prop47PetitionCreator do
     )
   end
 
-  let(:remedy_details) { { scenario: 'redesignation' } }
+  let(:remedy_details) { { scenario: :redesignation } }
 
   let(:pdf_file) do
     Prop47PetitionCreator.new(
@@ -121,28 +121,30 @@ RSpec.describe Prop47PetitionCreator do
 
     context 'when the scenario is redesignation' do
       it 'fills out the reduction checkboxes' do
-        {
+        expected_values = {
           'reduction_checkbox' => 'Yes',
           'reduction_checkbox_2' => 'Yes',
           'reduction_checkbox_3' => 'Yes',
-          'resentencing_checkbox' => 'Off',
-          'resentencing_checkbox_2' => 'Off',
-          'resentencing_checkbox_3' => 'Off'
+          'resentencing_checkbox' => '',
+          'resentencing_checkbox_2' => '',
+          'resentencing_checkbox_3' => ''
         }
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
     end
 
     context 'when the scenario is resentencing' do
-      let(:remedy_details) { { scenario: 'resentencing' } }
+      let(:remedy_details) { { scenario: :resentencing } }
       it 'fills out the resentencing checkboxes' do
-        {
-          'reduction_checkbox' => 'Off',
-          'reduction_checkbox_2' => 'Off',
-          'reduction_checkbox_3' => 'Off',
+        expected_values = {
+          'reduction_checkbox' => '',
+          'reduction_checkbox_2' => '',
+          'reduction_checkbox_3' => '',
           'resentencing_checkbox' => 'Yes',
           'resentencing_checkbox_2' => 'Yes',
           'resentencing_checkbox_3' => 'Yes'
         }
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
     end
   end

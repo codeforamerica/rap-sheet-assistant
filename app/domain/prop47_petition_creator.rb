@@ -60,13 +60,13 @@ class Prop47PetitionCreator
     end
 
     def checkboxes
-      if remedy_details[:scenario] == 'redesignation'
+      if remedy_details[:scenario] == :redesignation
         {
           'reduction_checkbox' => 'Yes',
           'reduction_checkbox_2' => 'Yes',
           'reduction_checkbox_3' => 'Yes'
         }
-      elsif remedy_details[:scenario] == 'resentencing'
+      elsif remedy_details[:scenario] == :resentencing
         {
           'resentencing_checkbox' => 'Yes',
           'resentencing_checkbox_2' => 'Yes',
