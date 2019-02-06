@@ -28,7 +28,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_preference(:download, prompt_for_download: false,
-                       default_directory: '/tmp/downloads')
+                       default_directory: '/tmp/downloads/rap-sheet-assistant')
 
 options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
@@ -53,7 +53,7 @@ Capybara.register_driver :headless_chrome do |app|
   bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
                    params: {
                      behavior: 'allow',
-                     downloadPath: '/tmp/downloads'
+                     downloadPath: '/tmp/downloads/rap-sheet-assistant'
                    })
 
   driver
@@ -65,6 +65,7 @@ Capybara.default_driver = :headless_chrome
 RSpec.configure do |config|
   config.after(:suite) do
     FileUtils.rm_rf(Dir["#{Rails.root}/public/test"])
+    FileUtils.rm_rf(Dir["/tmp/downloads/rap-sheet-assistant"])
   end
 
   config.include ActiveSupport::Testing::TimeHelpers

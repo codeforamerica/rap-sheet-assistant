@@ -253,7 +253,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
 
   def get_fields_from_downloaded_pdf(name)
     today = Date.today
-    tempfile = "/tmp/downloads/cmr_petitions_#{name.tr(" ", "_")}_#{today.strftime("%Y-%m-%d")}.pdf".downcase
+    tempfile = "/tmp/downloads/rap-sheet-assistant/cmr_petitions_#{name.tr(" ", "_")}_#{today.strftime("%Y-%m-%d")}.pdf".downcase
     wait_until do
       File.exist?(tempfile)
     end
