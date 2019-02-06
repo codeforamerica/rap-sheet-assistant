@@ -299,26 +299,27 @@ RSpec.describe PC1203PetitionCreator do
         'Field41' => 'no',
         'Field42' => 'no',
 
+        'CASE NUMBER' => '#ABCDE',
         'ATTACHMENT NUMBER' => '1',
         'PAGE' => '1',
         'OF TOTAL PAGES' => '1',
         'CODE' => 'Code',
         'SECTION' => 'Section',
         'OFFENSE_TYPE' => 'Type of Offense',
-        'REDUCTION_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
-        'REDUCTION_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)',
+        'REDUCE_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
+        'REDUCE_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)',
+
+        'CODE_0' => 'PC',
+        'SECTION_0' => '605',
+        'OFFENSE_0' => 'felony',
+        'MISD_0' => 'no',
+        'INFR_0' => 'no',
 
         'CODE_1' => 'PC',
-        'SECTION_1' => '605',
+        'SECTION_1' => '608',
         'OFFENSE_1' => 'felony',
         'MISD_1' => 'no',
-        'INFR_1' => 'no',
-
-        'CODE_2' => 'PC',
-        'SECTION_2' => '608',
-        'OFFENSE_2' => 'felony',
-        'MISD_2' => 'no',
-        'INFR_2' => 'no'
+        'INFR_1' => 'no'
       }
 
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
