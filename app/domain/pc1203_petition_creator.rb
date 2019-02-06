@@ -47,12 +47,18 @@ class PC1203PetitionCreator
     }
 
     conviction_counts.each_with_index do |count, index|
+      if index < 5
       pdf_fields.merge!(fields_for_count(count, index))
+      else
+        mc_025_form(count)
+      end
     end
 
     pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy_details).fields)
 
-    fill_petition('pc1203_petition.pdf', pdf_fields)
+    result = [fill_petition('pc1203_petition.pdf', pdf_fields)]
+    result << fill_petition('mc_025_for_pc1203_form.pdf', mc_025_fields)
+
   end
 
   private
@@ -71,14 +77,41 @@ class PC1203PetitionCreator
   end
 
   def fields_for_count(count, index)
-    starting_field_number = 18 + (index*5)
-    {
-      "Field#{starting_field_number}" => count.code,
-      "Field#{starting_field_number+1}" => count.section,
-      "Field#{starting_field_number+2}" => long_severity(count),
-      "Field#{starting_field_number+3}" => reducible_to_misdemeanor(count),
-      "Field#{starting_field_number+4}" => reducible_to_infraction(count)
+    starting_field_number = 18 + (index * 5)
+      {
+        "Field#{starting_field_number}" => count.code,
+        "Field#{starting_field_number + 1}" => count.section,
+        "Field#{starting_field_number + 2}" => long_severity(count),
+        "Field#{starting_field_number + 3}" => reducible_to_misdemeanor(count),
+        "Field#{starting_field_number + 4}" => reducible_to_infraction(count)
+      }
+  end
+
+  def mc_025_form(count)
+    top_of_form = {
+      'ATTACHMENT NUMBER' => '1',
+      'PAGE' => '1',
+      'OF TOTAL PAGES' => '1',
+      'CODE' => 'Code',
+      'SECTION' => 'Section',
+      'OFFENSE_TYPE' => 'Type of Offense',
+      'REDUCTION_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
+      'REDUCTION_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)'
     }
+    top_of_form.merge!(fields_for_mc_025_body(count))
+  end
+
+  def fields_for_mc_025_body(count)
+    starting_field_number = 1
+    if starting_field_number < 20
+      {
+        "CODE_#{starting_field_number}" => count.code,
+        "SECTION_#{starting_field_number}" => count.section,
+        "OFFENSE_#{starting_field_number}" => long_severity(count),
+        "MISD_#{starting_field_number}" => reducible_to_misdemeanor(count),
+        "INFR_#{starting_field_number}" => reducible_to_infraction(count)
+      }
+    end
   end
 
   def reducible_to_misdemeanor(count)

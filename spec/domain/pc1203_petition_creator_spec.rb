@@ -231,4 +231,98 @@ RSpec.describe PC1203PetitionCreator do
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
   end
+
+  context 'when the event has more than 5 convictions' do
+    let(:has_attorney) { false }
+
+    it 'appends and properly fills a MC-025 form' do
+      sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
+      conviction_counts = [
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '107' # wobbler, felony
+        ),
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '12355(b)' # wobbler but already misdemeanor
+        ),
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '605' # made up (not a wobbler)
+        ),
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '330' # reducible to infraction
+        ),
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '605' # made up (not a wobbler)
+        ),
+        build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '605'
+        ),build_count(
+          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '608'
+        ),
+      ]
+      conviction_event = build_court_event(
+        case_number: '#ABCDE',
+        date: Date.parse('2010-01-01'),
+        counts: conviction_counts
+      )
+
+      pdf_file = PC1203PetitionCreator.new(
+        rap_sheet: rap_sheet,
+        conviction_event: conviction_event,
+        conviction_counts: conviction_counts,
+        remedy_details: nil
+      ).create_petition
+      expected_values = {
+        'Field38' => 'PC',
+        'Field39' => '605',
+        'Field40' => 'felony',
+        'Field41' => 'no',
+        'Field42' => 'no',
+
+        'ATTACHMENT NUMBER' => '1',
+        'PAGE' => '1',
+        'OF TOTAL PAGES' => '1',
+        'CODE' => 'Code',
+        'SECTION' => 'Section',
+        'OFFENSE_TYPE' => 'Type of Offense',
+        'REDUCTION_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
+        'REDUCTION_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)',
+
+        'CODE_1' => 'PC',
+        'SECTION_1' => '605',
+        'OFFENSE_1' => 'felony',
+        'MISD_1' => 'no',
+        'INFR_1' => 'no',
+
+        'CODE_2' => 'PC',
+        'SECTION_2' => '608',
+        'OFFENSE_2' => 'felony',
+        'MISD_2' => 'no',
+        'INFR_2' => 'no'
+      }
+
+      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+
+    end
+  end
 end
