@@ -23,5 +23,10 @@ class RapSheet < ApplicationRecord
 
   def parsed
     @parsed ||= RapSheetParser::Parser.new.parse(text)
+    if @parsed.personal_info
+      user.update!(name: @parsed.personal_info.names.first.second)
+      user.format_name
+    end
+    @parsed
   end
 end
