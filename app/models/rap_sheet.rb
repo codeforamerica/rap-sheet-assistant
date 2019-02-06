@@ -24,7 +24,7 @@ class RapSheet < ApplicationRecord
   def parsed
     @parsed ||= RapSheetParser::Parser.new.parse(text)
     if @parsed.personal_info
-      user.update!(name: @parsed.personal_info.names.first.second)
+      user.update!(name: @parsed.personal_info.names.first.second, date_of_birth: @parsed.personal_info.date_of_birth)
       user.format_name
     end
     @parsed

@@ -73,9 +73,9 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         click_on 'Next'
 
         expect(page).to have_field('Name', with: 'LUKE JAY SKYWALKER')
-        # select params[:dob_month] 'January'
-        # select params[:dob_day] '1'
-        # select params[:dob_year] '1957'
+        expect(page).to have_select('contact_information_form[date_of_birth(2i)]', selected: 'January')
+        expect(page).to have_select('contact_information_form[date_of_birth(3i)]', selected: '19')
+        expect(page).to have_select('contact_information_form[date_of_birth(1i)]', selected: '1957')
 
         fill_in_contact_form(name: 'Test User')
         click_on 'Next'
