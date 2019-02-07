@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   def format_name
     name_array = name.split(',')
+    return if name_array.length < 2
     formatted_name = name_array[1] + ' ' + name_array[0]
     update!(name: formatted_name)
   end
