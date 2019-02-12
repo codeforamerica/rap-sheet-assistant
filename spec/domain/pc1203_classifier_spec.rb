@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require_relative '../../app/domain/pc1203_classifier'
 
@@ -146,6 +146,7 @@ describe PC1203Classifier do
         end
 
         context 'when it includes a DUI charge' do
+          context 'when the subsection is in parens' do
           let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
           let(:conviction_event) do
             build_court_event(
@@ -163,6 +164,28 @@ describe PC1203Classifier do
 
           it 'is discretionary' do
             expect(subject.discretionary?).to eq true
+          end
+          end
+
+          context 'when the subsection is improperly formatted' do
+            let(:dui_count) { build_count(code: 'VC', section: '23145/23152(b)', disposition: build_disposition(sentence: sentence)) }
+            let(:conviction_event) do
+              build_court_event(
+                counts: [count, dui_count],
+                date: Date.new(1991, 4, 1)
+              )
+            end
+
+            it 'returns discretionary' do
+              expect(subject.remedy_details).to eq ({
+                code: '1203.4',
+                scenario: :discretionary
+              })
+            end
+
+            it 'is discretionary' do
+              expect(subject.discretionary?).to eq true
+            end
           end
         end
       end
