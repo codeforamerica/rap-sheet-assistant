@@ -25,6 +25,10 @@ class PC1203Classifier
     end
   end
 
+  def dui?(count)
+    #if count matches with regex return true
+  end
+
   def discretionary?
     r = remedy_details_hash
     return nil if r.empty?
@@ -49,7 +53,7 @@ class PC1203Classifier
     else
       return nil
     end
-    return :discretionary if event.counts.any?{ |count| count.dui? }
+    return :discretionary if event.counts.any?{ |count| dui?(count) }
     return :unknown if event.date.nil? || success.nil?
     success ? :successful_completion : :discretionary
   end
