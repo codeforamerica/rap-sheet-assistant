@@ -26,7 +26,7 @@ class PC1203Classifier
   end
 
   def dui?(count)
-    #if count matches with regex return true
+    DUI_CODE_SECTIONS.any? { |code_section| count.code_section.start_with?(code_section)}
   end
 
   def discretionary?
@@ -85,3 +85,36 @@ class PC1203Classifier
     }
   end
 end
+
+DUI_CODE_SECTIONS = [
+'VC 23152',
+'VC 20001',
+'VC 20002',
+'VC 23152',
+'VC 23153',
+'PC 191.5',
+'PC 192(c)',
+'VC 2800.2',
+'VC 2800.3',
+'VC 21651(b)',
+'VC 22348(b)',
+'VC 23109(a)',
+'VC 23109(c)',
+'VC 31602',
+'VC 23140(a)',
+'VC 23140(b)',
+'VC 14601',
+'VC 14601.1',
+'VC 14601.2',
+'VC 14601.3',
+'VC 14601.5',
+'VC 42002.1',
+'VC 2800',
+'VC 2801',
+'VC 2803',
+'VC 12810(a)',
+'VC 12810(b)',
+'VC 12810(c)',
+'VC 12810(d)',
+'VC 12810(e)'
+]
