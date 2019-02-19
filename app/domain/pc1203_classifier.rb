@@ -1,6 +1,23 @@
 class PC1203Classifier
   include Classifier
 
+  def initialize(event:, rap_sheet:)
+    super(event: event, rap_sheet: rap_sheet)
+
+    vc_sections = ""
+    VC_DUI_CODE_SECTIONS.each do |cs|
+      vc_sections = "#{vc_sections}|#{Regexp.escape(cs)}"
+    end
+
+    pc_sections = ""
+    PC_DUI_CODE_SECTIONS.each do |cs|
+      pc_sections = "#{pc_sections}|#{Regexp.escape(cs)}"
+    end
+
+    @vc_dui_matcher = /(VC)+.*(\W+(#{vc_sections[1..-1]})(\W|$)+)+.*/
+    @pc_dui_matcher = /(PC)+.*(\W+(#{pc_sections[1..-1]})(\W|$)+)+.*/
+  end
+
   def eligible?
     return false unless event.sentence
     return false unless event.date
@@ -26,7 +43,7 @@ class PC1203Classifier
   end
 
   def dui?(count)
-    DUI_CODE_SECTIONS.any? { |code_section| count.code_section.match(code_section)}
+    count.code_section.match(@vc_dui_matcher) || count.code_section.match(@pc_dui_matcher)
   end
 
   def discretionary?
@@ -86,91 +103,38 @@ class PC1203Classifier
   end
 end
 
-DUI_CODE_SECTIONS = [
-# 'VC 23152',
- /(VC)+\s*(23152)/,
-
-# 'VC 20001',
- /(VC)+\s*(20001)/,
-
-# 'VC 20002',
- /(VC)+\s*(20002)/,
-
-# 'VC 23153',
- /(VC)+\s*(23153)/,
-
-# 'PC 191.5',
- /(PC)+\s*(191.5)/,
-
-# 'PC 192(c)',
- /(PC)+\s*(192)\(*c\)*/,
-
-# 'VC 2800.2',
- /(VC)+\s*(2800.2)/,
-
-# 'VC 2800.3',
- /(VC)+\s*(2800.3)/,
-
-# 'VC 21651(b)',
- /(VC)+\s*(21651)\(*b\)/,
-
-# 'VC 22348(b)',
- /(VC)+\s*(22348)\(*b\)/,
-
-# 'VC 23109(a)',
- /(VC)+\s*(23109)\(*a\)/,
-
-# 'VC 23109(c)',
- /(VC)+\s*(23109)\(*c\)/,
-
-# 'VC 31602',
- /(VC)+\s*(31602)/,
-
-# 'VC 23140(a)',
- /(VC)+\s*(23140)\(*a\)/,
-
-# 'VC 23140(b)',
- /(VC)+\s*(23140)\(*b\)/,
-
-# 'VC 14601',
- /(VC)+\s*(14601)/,
-
-# 'VC 14601.1',
- /(VC)+\s*(14601.1)/,
-
-# 'VC 14601.2',
- /(VC)+\s*(14601.2)/,
-
-# 'VC 14601.3',
- /(VC)+\s*(14601.3)/,
-
-# 'VC 14601.5',
- /(VC)+\s*(14601.5)/,
-
-# 'VC 42002.1',
- /(VC)+\s*(42002.1)/,
-
-# 'VC 2800',
- /(VC)+\s*(2800)/,
-
-# 'VC 2801',
- /(VC)+\s*(2801)/,
-
-# 'VC 2803',
- /(VC)+\s*(2803)/,
-# 'VC 12810(a)',
- #
- /(VC)+\s*(12810)\(*a\)/,
-
-# 'VC 12810(b)',
- /(VC)+\s*(12810)\(*b\)/,
-
-# 'VC 12810(c)',
- /(VC)+\s*(12810)\(*c\)/,
-
-# 'VC 12810(d)',
- /(VC)+\s*(12810)\(*d\)/,
-
-# 'VC 12810(e)'
- /(VC)+\s*(12810)\(*e\)/
+PC_DUI_CODE_SECTIONS = [
+  '191.5',
+  '192(c)'
 ]
+
+VC_DUI_CODE_SECTIONS = [
+  '12810(a)',
+  '12810(b)',
+  '12810(c)',
+  '12810(d)',
+  '12810(e)',
+  '14601',
+  '14601.1',
+  '14601.2',
+  '14601.3',
+  '14601.5',
+  '20001',
+  '20002',
+  '21651(b)',
+  '22348(b)',
+  '23109(a)',
+  '23109(c)',
+  '23140(a)',
+  '23140(b)',
+  '23152',
+  '23153',
+  '2800',
+  '2800.2',
+  '2800.3',
+  '2801',
+  '2803',
+  '31602',
+  '42002.1'
+]
+

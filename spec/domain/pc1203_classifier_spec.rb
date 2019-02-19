@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require_relative '../../app/domain/pc1203_classifier'
 
