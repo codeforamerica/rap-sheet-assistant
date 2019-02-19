@@ -81,6 +81,66 @@ RSpec.describe PC1203PetitionCreator do
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
 
+    context 'name is missing from attorney info' do
+      let(:attorney) do
+        create(:attorney,
+               name: '',
+               state_bar_number: '1234567',
+               firm_name: 'The Firm',
+               street_address: '555 Main Street',
+               city: 'Tulsa',
+               state: 'OK',
+               zip: '55555',
+               phone_number: '5555555555',
+               email: 'email@example.com'
+              )
+      end
+
+      it 'does not fill State Bar Num in the name field' do
+        conviction_counts = [
+          build_count(
+            disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+            code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+            code: 'PC',
+            section: '111'
+          )
+        ]
+        conviction_event = build_court_event(
+          case_number: '#ABCDE',
+          date: Date.new(2010, 1, 1),
+          courthouse: 'CASC SAN FRANCISCO',
+          counts: conviction_counts
+        )
+        remedy_details = { code: '1203.41' }
+
+        pdf_file = PC1203PetitionCreator.new(
+          rap_sheet: rap_sheet,
+          conviction_event: conviction_event,
+          conviction_counts: conviction_counts,
+          remedy_details: remedy_details
+        ).create_petition
+        expected_values = {
+          'Field1' => '',
+          'Field11' => user.name,
+          'Field3' => attorney.street_address,
+          'Field12' => '01/01/1970',
+          'Field4' => attorney.city,
+          'Field5' => attorney.state,
+          'Field6' => attorney.zip,
+          'Field7' => attorney.phone_number,
+          'Field9' => attorney.email,
+          'Field10' => user.name,
+          'Field2' => 'The Firm',
+          'Field13' => '#ABCDE',
+          'Field17' => '01/01/2010',
+          'Field57' => 'Yes',
+          'Field74' => user.street_address,
+          'Field75' => 'San Francisco, CA  12345'
+        }
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+      end
+    end
+
     it 'fills out the offenses table with data from each count' do
       sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
       conviction_counts = [

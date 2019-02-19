@@ -16,15 +16,21 @@ class PC1203PetitionCreator
       client_name = user.name
       state_bar_number = "    State Bar No: #{attorney.state_bar_number}"
       firm = attorney.firm_name
+      if attorney.name.empty? || attorney.state_bar_number.empty?
+        name_and_bar_num = ''
+      else
+        name_and_bar_num = "#{attorney.name}    State Bar No: #{attorney.state_bar_number}"
+      end
     else
       contact_info_person = user
       client_name = 'PRO-SE'
       state_bar_number = ''
       firm = ''
+      name_and_bar_num = "#{contact_info_person.name}"
     end
 
     pdf_fields = {
-      'Field1' => "#{contact_info_person.name}#{state_bar_number}",
+      'Field1' => name_and_bar_num,
       'Field2' => firm,
       'Field3' => contact_info_person.street_address,
       'Field4' => contact_info_person.city,
