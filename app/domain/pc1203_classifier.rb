@@ -14,8 +14,8 @@ class PC1203Classifier
       pc_sections = "#{pc_sections}|#{Regexp.escape(cs)}"
     end
 
-    @vc_dui_matcher = /(VC)+.*(\W+(#{vc_sections[1..-1]})(\W|$)+)+.*/
-    @pc_dui_matcher = /(PC)+.*(\W+(#{pc_sections[1..-1]})(\W|$)+)+.*/
+    @vc_dui_matcher = /(VC)+.*(\W+((#{vc_sections[1..-1]})[\(\)\w]*)([\/\-\s]|$)+)+.*/
+    @pc_dui_matcher = /(PC)+.*(\W+((#{pc_sections[1..-1]})[\(\)\w]*)([\/\-\s]|$)+)+.*/
   end
 
   def eligible?

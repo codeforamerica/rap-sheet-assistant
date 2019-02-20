@@ -167,6 +167,27 @@ describe PC1203Classifier do
           end
           end
 
+          context 'when the subsection includes periods' do
+            let(:dui_count) { build_count(code: 'VC', section: '14601.6', disposition: build_disposition(sentence: sentence)) }
+            let(:conviction_event) do
+              build_court_event(
+                counts: [count, dui_count],
+                date: Date.new(1991, 5, 1)
+              )
+            end
+
+            it 'returns discretionary' do
+              expect(subject.remedy_details).to eq ({
+                code: '1203.4',
+                scenario: :successful_completion
+              })
+            end
+
+            it 'is discretionary' do
+              expect(subject.discretionary?).to eq false
+            end
+          end
+
           context 'when the subsection is improperly formatted' do
             let(:dui_count) { build_count(code: 'VC', section: '23145/23152(b)', disposition: build_disposition(sentence: sentence)) }
             let(:conviction_event) do
