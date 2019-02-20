@@ -43,6 +43,9 @@ class PC1203Classifier
   end
 
   def dui?(count)
+    if !count.code_section
+      return false
+    end
     count.code_section.match(@vc_dui_matcher) || count.code_section.match(@pc_dui_matcher)
   end
 

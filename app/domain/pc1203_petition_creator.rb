@@ -106,6 +106,7 @@ class PC1203PetitionCreator
 
   def mc_025_form(counts)
     form = {
+      'SHORT TITLE' => 'Attachment to CR-180',
       'CASE NUMBER' => conviction_event.case_number,
       'ATTACHMENT NUMBER' => '1',
       'PAGE' => '1',
@@ -113,8 +114,8 @@ class PC1203PetitionCreator
       'CODE' => 'Code',
       'SECTION' => 'Section',
       'OFFENSE_TYPE' => 'Type of Offense',
-      'REDUCE_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
-      'REDUCE_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)'
+      'REDUCE_TO_MISDEMEANOR' => 'Reduction to misd: PC 17(b)',
+      'REDUCE_TO_INFRACTION' => 'Reduction to infr: PC 17(d)(2)'
     }
 
     counts.each_with_index do |count, index|

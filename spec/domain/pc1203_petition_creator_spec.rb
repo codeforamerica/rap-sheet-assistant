@@ -366,8 +366,8 @@ RSpec.describe PC1203PetitionCreator do
         'CODE' => 'Code',
         'SECTION' => 'Section',
         'OFFENSE_TYPE' => 'Type of Offense',
-        'REDUCE_TO_MISDEMEANOR' => 'Reduction to misdemeanor under PC 17(b)',
-        'REDUCE_TO_INFRACTION' => 'Reduction to infraction under PC 17(d)(2)',
+        'REDUCE_TO_MISDEMEANOR' => 'Reduction to misd: PC 17(b)',
+        'REDUCE_TO_INFRACTION' => 'Reduction to infr: PC 17(d)(2)',
 
         'CODE_0' => 'PC',
         'SECTION_0' => '605',
