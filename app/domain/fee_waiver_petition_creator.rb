@@ -10,7 +10,17 @@ class FeeWaiverPetitionCreator
 
     if user.has_attorney
       attorney = user.attorney
-      lawyer_sentence = "#{attorney.name}, #{attorney.firm_name}, #{attorney.street_address}, #{attorney.city}, #{attorney.state} #{attorney.zip}, SB ##{attorney.state_bar_number}"
+      attorney_name = nil_check(attorney.name)
+      attorney_firm_name = nil_check(attorney.firm_name)
+      attorney_street_address = nil_check(attorney.street_address)
+      attorney_city = nil_check(attorney.city)
+      attorney_state = nil_check(attorney.state)
+      attorney_zip = nil_check(attorney.zip)
+      attorney_state_bar = if attorney.state_bar_number && attorney.state_bar_number != ''
+                           "SB ##{attorney.state_bar_number}"
+                           end
+
+      lawyer_sentence = "#{attorney_name} #{attorney_firm_name} #{attorney_street_address} #{attorney_city} #{attorney_state} #{attorney_zip} #{attorney_state_bar}"
     else
       lawyer_sentence = 'PRO-SE'
     end
@@ -37,6 +47,13 @@ class FeeWaiverPetitionCreator
   end
 
   private
+
+  def nil_check(info)
+    if (info.nil?) || (info == '')
+      return ''
+    end
+    return "#{info},"
+  end
 
   attr_reader :user
 end

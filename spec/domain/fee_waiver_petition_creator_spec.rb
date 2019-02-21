@@ -35,12 +35,47 @@ RSpec.describe FeeWaiverPetitionCreator do
     expect(subject).to include(expected_values)
   end
 
+  context 'user and attorney are not filled out' do
+    let(:attorney) do
+      create(:attorney,
+             name: '',
+             state_bar_number: '',
+             firm_name: '',
+             created_at: '',
+             updated_at: '',
+             street_address: '',
+             city: '',
+             state: '',
+             zip: '',
+             phone_number: '',
+             email: ''
+      )
+    end
+    let(:user) do
+      create(:user,
+             name: '',
+             street_address: '',
+             city: '',
+             state: '',
+             zip: '',
+             phone_number: '',
+             financial_information: financial_information,
+             has_attorney: attorney.present?,
+             attorney: attorney
+      )
+    end
+    it 'properly fills out form' do
+      expected_values = { 'lawyer' => '' }
+      expect(subject).to include(expected_values)
+    end
+  end
+
   context 'user has an attorney' do
     let(:attorney) { create :attorney }
 
     it 'creates a filled-out form with the users contact info' do
       expected_values = {
-        'lawyer' => 'Anita Earls, NC Center for Civil Rights, 2 E Morgan St, Raleigh, NC 27601, SB #12345678',
+        'lawyer' => 'Anita Earls, NC Center for Civil Rights, 2 E Morgan St, Raleigh, NC, 27601, SB #12345678',
       }
 
       expect(subject).to include(expected_values)
