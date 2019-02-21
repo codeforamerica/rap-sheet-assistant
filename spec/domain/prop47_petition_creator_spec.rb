@@ -88,6 +88,36 @@ RSpec.describe Prop47PetitionCreator do
         }
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
+
+      context 'attorney info is mission' do
+        let(:attorney) do
+          create(:attorney,
+                 name: 'Ms. Attorney',
+                 state_bar_number: '',
+                 firm_name: 'The Firm',
+                 street_address: '555 Main Street',
+                 city: 'Tulsa',
+                 state: '',
+                 zip: '12345',
+                 phone_number: '5555555555',
+                 email: 'email@example.com'
+                )
+        end
+
+        it 'does not fill blank sb numbers or address info' do
+          expected_values = {
+            'attorney_name' => 'Ms. Attorney',
+            'attorney_state_bar_number' => '',
+            'attorney_street_address' => '555 Main Street',
+            'attorney_city_state_zip' => '',
+            'attorney_phone' => '5555555555',
+            'attorney_fax' => '',
+            'client_name' => 'John Felix Brown',
+            'defendant' => 'John Felix Brown'
+          }
+          expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+        end
+      end
     end
 
     context 'when the client is filing pro se' do
