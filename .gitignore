@@ -23,6 +23,13 @@ public/uploads/
 public/test/
 test_rap_sheet_data/
 
+# Terraform
+.terraform/
+terraform/**/varfile
+terraform/**/backend-config
+*.tfstate
+*.tfstate.backup
+
 tags
 
 .env
