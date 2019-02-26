@@ -4,6 +4,8 @@
     <header class="form-card__header text--centered">
       <h1 class="big-emoji">😀</h1>
       <h3>We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</h3>
+      <%= link_to 'View full transcript', transcript_rap_sheet_path(@rap_sheet)%>
+
     </header>
 
     <div class="summary-table">

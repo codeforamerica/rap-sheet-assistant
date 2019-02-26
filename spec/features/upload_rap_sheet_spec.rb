@@ -64,6 +64,32 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'PC 496(a)'
         expect(page).to have_content 'Receive/Etc Known Stolen Property'
         expect(page).to have_content '#99999988887777'
+        click_on 'View full transcript'
+
+        expect(page).to have_content 'Transcript'
+
+        expect(page).to have_content 'Prop 64 (1)'
+        expect(page).to have_content '05/01/1986'
+        expect(page).to have_content 'M'
+        expect(page).to have_content 'HS 11357'
+        expect(page).to have_content 'Possess Marijuana'
+        expect(page).to have_content '#19514114'
+
+        expect(page).to have_content '1203.4 discretionary (3)'
+        expect(page).to have_content '11/15/2004'
+        expect(page).to have_content 'F'
+        expect(page).to have_content 'PC 451(a)'
+        expect(page).to have_content 'Arson Causing Great Bodily Injury'
+        expect(page).to have_content '#44050'
+
+        expect(page).to have_content 'Prop 47 (1)'
+        expect(page).to have_content '09/06/2011'
+        expect(page).to have_content 'F'
+        expect(page).to have_content 'PC 496(a)'
+        expect(page).to have_content 'Receive/Etc Known Stolen Property'
+        expect(page).to have_content '#99999988887777'
+        click_on 'Back to eligibility summary'
+
         click_on 'Next'
 
         click_on 'Yes, has a lawyer'

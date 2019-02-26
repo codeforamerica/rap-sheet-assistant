@@ -14,6 +14,7 @@ class RapSheetsController < ApplicationController
     end
   end
 
+
   def show
     @rap_sheet = RapSheet.find(params[:id])
     eligibility = EligibilityChecker.new(@rap_sheet.parsed)
@@ -64,6 +65,11 @@ class RapSheetsController < ApplicationController
     @rap_sheet.update(number_of_pages: @rap_sheet.number_of_pages + 1)
 
     redirect_to edit_rap_sheet_path(@rap_sheet)
+  end
+
+  def transcript
+    @rap_sheet = RapSheet.find(params[:id])
+    @convictions = @rap_sheet.parsed.convictions
   end
 
   def remove_page
