@@ -30,6 +30,7 @@
     </div>
 
     <div v-cloak class="form-card form-card--transition" v-if="loading && !error">
+      <% @title="Summary Report" %>
       <div class="form-card__header">
         <div v-if="!finishingUpload" class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
         <div v-cloak v-if="finishingUpload" class="emoji emoji--bigger emoji--clipboard">Almost Done</div>
@@ -44,6 +45,7 @@
     </div>
 
     <div v-cloak class="form-card text--centered form-card--narrow" v-if="error">
+      <% @title="Error" %>
       <div class="form-card--narrow">
         <h2 class="margin-top-med">Upload error</h2>
         <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
