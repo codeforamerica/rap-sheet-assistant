@@ -1,0 +1,37 @@
+<header class="form-card__header text--centered">
+  <%= link_to '< Back to eligibility summary', rap_sheet_path(@rap_sheet)%>
+
+  Transcript
+</header>
+
+<table class="data-table">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>County</th>
+    <th>Case Number</th>
+    <th>Grade</th>
+    <th>Charge</th>
+    <th>Probation</th>
+    <th>Prison</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @convictions.each do |conviction| %>
+    <% conviction.counts.each do |count| %>
+    <% sentence = count.disposition&.sentence %>
+      <tr>
+        <td><%= conviction.date %></td>
+        <td><%= conviction.courthouse %></td>
+        <td><%= "##{conviction.case_number}" %></td>
+        <td><%= conviction.severity %></td>
+        <td><%= count.code_section %></td>
+        <td><%= "#{sentence.probation.parts.values[0]} #{sentence.probation.parts.keys[0]}" if sentence && sentence.probation %></td>
+        <td><%= "#{sentence.prison.parts.values[0]} #{sentence.prison.parts.keys[0]}" if sentence && sentence.prison %></td>
+      </tr>
+    <% end %>
+  <% end %>
+  </tbody>
+</table>
+
+</div>

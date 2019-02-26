@@ -66,6 +66,11 @@ class RapSheetsController < ApplicationController
     redirect_to edit_rap_sheet_path(@rap_sheet)
   end
 
+  def transcript
+    @rap_sheet = RapSheet.find(params[:id])
+    @convictions = @rap_sheet.parsed.convictions
+  end
+
   def remove_page
     @rap_sheet = RapSheet.find(params[:id])
 
