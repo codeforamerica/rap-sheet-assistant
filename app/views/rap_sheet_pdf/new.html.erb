@@ -1,7 +1,7 @@
 <% @title = "Upload File" %>
 <div id="vue-app-div">
   <div class="slab">
-    <div class="form-card" v-if="!loading && !error">
+    <div class="form-card formatted-form-card" v-if="!loading && !error">
       <div class="form-card__header">
         <h1 class="form-card__title">Upload a California RAP sheet</h1>
       </div>
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div v-cloak class="form-card form-card--transition" v-if="loading && !error">
+    <div v-cloak class="form-card formatted-form-card form-card--transition" v-if="loading && !error">
       <div class="form-card__header">
         <div v-if="!finishingUpload" class="emoji emoji--bigger emoji--woman-detective-medium-dark-skin-tone">Searching</div>
         <div v-cloak v-if="finishingUpload" class="emoji emoji--bigger emoji--clipboard">Almost Done</div>
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div v-cloak class="form-card text--centered form-card--narrow" v-if="error">
+    <div v-cloak class="form-card formatted-form-card text--centered form-card--narrow" v-if="error">
       <div class="form-card--narrow">
         <h2 class="margin-top-med">Upload error</h2>
         <p class="text--large">Apologies, we weren't able to read the file you uploaded</p>
