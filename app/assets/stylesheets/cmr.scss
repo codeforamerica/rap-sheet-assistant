@@ -42,11 +42,6 @@ body {
   }
 }
 
-.formatted-form-card{
-  margin-left: 8.3%;
-  width: 83%;
-}
-
 .form-card .progress-indicator{
   z-index: 0;
 }
@@ -176,10 +171,13 @@ a.delete-button {
   font-size: 2.8rem;
 }
 
-
-.form-card--narrow {
+.form-card--wide{
   margin-left: 80px;
   margin-right: 80px;
+}
+.form-card--narrow {
+  margin-left: 160px;
+  margin-right: 160px;
   line-height: 2em;
 }
 
