@@ -19,9 +19,9 @@
     </thead>
     <tbody>
     <% @convictions.each do |conviction| %>
-      <% conviction.counts.each do |count| %>
+      <% conviction.counts.each_with_index do |count, i| %>
         <% sentence = count.disposition&.sentence %>
-        <tr>
+        <tr class=<%= 'divider' if i==0 %>>
           <td><%= conviction.date || '—' %></td>
           <td><%= conviction.courthouse  || '—' %></td>
           <td><%= conviction.case_number ? "##{conviction.case_number}" : '—' %></td>

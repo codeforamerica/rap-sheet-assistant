@@ -124,6 +124,12 @@ body {
   }
 }
 
+.data-table {
+  .divider td {
+    border-top: 2px solid $color-tan;
+  }
+}
+
 .file-picker-box {
   border: 2px solid #EAEAE9;
   padding: 1em;
