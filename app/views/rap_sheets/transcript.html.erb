@@ -18,19 +18,16 @@
     </tr>
     </thead>
     <tbody>
-    <% @convictions.each do |conviction| %>
-      <% conviction.counts.each_with_index do |count, i| %>
-        <% sentence = count.disposition&.sentence %>
-        <tr class=<%= 'divider' if i==0 %>>
-          <td><%= conviction.date || '—' %></td>
-          <td><%= conviction.courthouse  || '—' %></td>
-          <td><%= conviction.case_number ? "##{conviction.case_number}" : '—' %></td>
-          <td><%= count.disposition&.severity %></td>
-          <td><%= count.code_section || '—' %></td>
-          <td><%= sentence&.probation ? "#{sentence.probation.parts.values[0]} #{sentence.probation.parts.keys[0]}" : '—'  %></td>
-          <td><%= sentence&.prison ? "#{sentence.prison.parts.values[0]} #{sentence.prison.parts.keys[0]}" : '—'  %></td>
-        </tr>
-      <% end %>
+    <% @transcript.rows.each do |row| %>
+      <tr class=<%= 'divider' if row[:first_row_in_case?] %>>
+        <td><%= row[:date] %></td>
+        <td><%= row[:courthouse] %></td>
+        <td><%= row[:case_number] %></td>
+        <td><%= row[:severity] %></td>
+        <td><%= row[:code_section] %></td>
+        <td><%= row[:probation] %></td>
+        <td><%= row[:prison] %></td>
+      </tr>
     <% end %>
     </tbody>
   </table>

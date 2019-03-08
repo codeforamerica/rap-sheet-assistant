@@ -68,7 +68,7 @@ class RapSheetsController < ApplicationController
 
   def transcript
     @rap_sheet = RapSheet.find(params[:id])
-    @convictions = @rap_sheet.parsed.convictions
+    @transcript = TranscriptPresenter.new(@rap_sheet)
   end
 
   def remove_page
