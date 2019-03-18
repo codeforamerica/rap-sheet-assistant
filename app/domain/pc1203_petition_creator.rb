@@ -14,7 +14,7 @@ class PC1203PetitionCreator
       attorney = user.attorney
       contact_info_person = attorney
       client_name = user.name
-      state_bar_number = "    State Bar No: #{attorney.state_bar_number}"
+      state_bar_number = attorney.state_bar_number
       firm = attorney.firm_name
       if attorney.name.empty? || attorney.state_bar_number.empty?
         name_and_bar_num = ''
@@ -52,6 +52,19 @@ class PC1203PetitionCreator
       'Field75' => "#{user.city}, #{user.state}  #{user.zip}",
     }
 
+    cr_181_fields = {
+      'NAMEOFDEFENDANT' => client_name,
+      'SBN' => state_bar_number,
+      'FIRMNAME' => firm,
+      'STREETADDRESS' => contact_info_person.street_address,
+      'CITY' => contact_info_person.city,
+      'STATE' => contact_info_person.state,
+      'ZIPCODE' => contact_info_person.zip,
+      'TELNO' => contact_info_person.phone_number,
+      'DOB' => nil_checked_date(user.date_of_birth),
+      'CASENO' => conviction_event.case_number
+    }
+
     conviction_counts[0..4].each_with_index do |count, index|
       pdf_fields.merge!(fields_for_count(count, index))
     end
@@ -62,7 +75,7 @@ class PC1203PetitionCreator
 
     pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy_details).fields)
 
-    result = [fill_petition('pc1203_petition.pdf', pdf_fields)]
+    result = [fill_petition('pc1203_petition.pdf', pdf_fields), fill_petition('cr_181_form.pdf', cr_181_fields)]
 
     if conviction_counts.length > 5
       result << fill_petition('mc_025_for_pc1203_form.pdf', mc_025_fields)
@@ -92,6 +105,7 @@ class PC1203PetitionCreator
     end
     date.strftime('%m/%d/%Y')
   end
+
 
   def fields_for_count(count, index)
     starting_field_number = 18 + (index * 5)

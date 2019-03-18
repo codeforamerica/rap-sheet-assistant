@@ -54,13 +54,14 @@ RSpec.describe PC1203PetitionCreator do
       )
       remedy_details = { code: '1203.41' }
 
-      pdf_file = PC1203PetitionCreator.new(
+      petition_pdf_file = PC1203PetitionCreator.new(
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
         remedy_details: remedy_details
       ).create_petition
-      expected_values = {
+
+      expected_petition_values = {
         'Field1' => 'Ms. Attorney    State Bar No: 1234567',
         'Field11' => user.name,
         'Field3' => attorney.street_address,
@@ -78,7 +79,22 @@ RSpec.describe PC1203PetitionCreator do
         'Field74' => user.street_address,
         'Field75' => 'San Francisco, CA  12345'
       }
-      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+
+      expected_cr_181_values = {
+        'NAMEOFDEFENDANT' => 'Test User',
+        'SBN' => '1234567',
+        'FIRMNAME' => 'The Firm',
+        'STREETADDRESS' => '555 Main Street',
+        'CITY' => 'Tulsa',
+        'STATE' => 'OK',
+        'ZIPCODE' => '55555',
+        'TELNO' => '5555555555',
+        'DOB' => '01/01/1970',
+        'CASENO' => '#ABCDE'
+      }
+
+      expect(get_fields_from_pdf(petition_pdf_file)).to include(expected_petition_values)
+      expect(get_fields_from_pdf(petition_pdf_file)).to include(expected_cr_181_values)
     end
 
     context 'name is missing from attorney info' do
@@ -93,7 +109,7 @@ RSpec.describe PC1203PetitionCreator do
                zip: '55555',
                phone_number: '5555555555',
                email: 'email@example.com'
-              )
+        )
       end
 
       it 'does not fill State Bar Num in the name field' do
@@ -333,7 +349,7 @@ RSpec.describe PC1203PetitionCreator do
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '605'
-        ),build_count(
+        ), build_count(
           disposition: build_disposition(sentence: sentence, severity: 'F'),
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
