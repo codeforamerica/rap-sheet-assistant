@@ -54,6 +54,9 @@ class PC1203PetitionCreator
     }
 
     cr_181_fields = {
+      'NAMEOFPERSONFILING' => contact_info_person.name,
+      'ATTORNEYFOR' => client_name,
+      'EMAIL' => contact_info_person.email,
       'NAMEOFDEFENDANT' => client_name,
       'SBN' => state_bar_number,
       'FIRMNAME' => firm,
