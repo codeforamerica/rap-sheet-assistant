@@ -147,24 +147,24 @@ describe PC1203Classifier do
 
         context 'when it includes a DUI charge' do
           context 'when the subsection is in parens' do
-          let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
-          let(:conviction_event) do
-            build_court_event(
-              counts: [count, dui_count],
-              date: Date.new(1991, 5, 1)
-            )
-          end
+            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
+            let(:conviction_event) do
+              build_court_event(
+                counts: [count, dui_count],
+                date: Date.new(1991, 5, 1)
+              )
+            end
 
-          it 'returns discretionary' do
-            expect(subject.remedy_details).to eq ({
-              code: '1203.4',
-              scenario: :discretionary
-            })
-          end
+            it 'returns discretionary' do
+              expect(subject.remedy_details).to eq ({
+                code: '1203.4',
+                scenario: :discretionary
+              })
+            end
 
-          it 'is discretionary' do
-            expect(subject.discretionary?).to eq true
-          end
+            it 'is discretionary' do
+              expect(subject.discretionary?).to eq true
+            end
           end
 
           context 'when the subsection includes periods' do
@@ -253,9 +253,10 @@ describe PC1203Classifier do
     context 'sentence does not include probation' do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: nil) }
       let(:count) { build_count(disposition: build_disposition(severity: severity, sentence: sentence)) }
+      let(:court_date) { Date.new(1991, 5, 1) }
       let(:conviction_event) do
         build_court_event(
-          date: Date.new(1991, 5, 1),
+          date: court_date,
           counts: [count]
         )
       end
@@ -271,9 +272,9 @@ describe PC1203Classifier do
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy_details).to eq({
-              code: '1203.4a',
-              scenario: :successful_completion
-            })
+                                                   code: '1203.4a',
+                                                   scenario: :successful_completion
+                                                 })
           end
 
           it 'is not discretionary' do
@@ -308,9 +309,9 @@ describe PC1203Classifier do
 
           it 'returns 1203.4a and discretionary scenario' do
             expect(subject.remedy_details).to eq({
-              code: '1203.4a',
-              scenario: :discretionary
-            })
+                                                   code: '1203.4a',
+                                                   scenario: :discretionary
+                                                 })
           end
 
           it 'is discretionary' do
@@ -328,9 +329,9 @@ describe PC1203Classifier do
 
           it 'returns 1203.4a and successful scenario' do
             expect(subject.remedy_details).to eq({
-              code: '1203.4a',
-              scenario: :successful_completion
-            })
+                                                   code: '1203.4a',
+                                                   scenario: :successful_completion
+                                                 })
           end
 
           it 'is not discretionary' do
@@ -344,9 +345,9 @@ describe PC1203Classifier do
 
           it 'returns 1203.4a and discretionary scenario' do
             expect(subject.remedy_details).to eq({
-              code: '1203.4a',
-              scenario: :discretionary
-            })
+                                                   code: '1203.4a',
+                                                   scenario: :discretionary
+                                                 })
           end
 
           it 'is discretionary' do
@@ -356,14 +357,31 @@ describe PC1203Classifier do
       end
 
       context 'when the event severity is felony' do
-        let(:severity) { 'F' }
 
-        it 'returns 1203.41' do
-          expect(subject.remedy_details[:code]).to eq '1203.41'
+        context 'when the conviction is after July 1 2011' do
+          let(:severity) { 'F' }
+          let(:court_date) { Date.new(2001, 7, 2) }
+
+          it 'returns 1203.41' do
+            expect(subject.remedy_details[:code]).to eq '1203.41'
+          end
+
+          it 'is discretionary' do
+            expect(subject.discretionary?).to eq true
+          end
         end
 
-        it 'is discretionary' do
-          expect(subject.discretionary?).to eq true
+        context 'when the conviction is before July 1 2011' do
+          let(:court_date) { Date.new(2001, 6, 25) }
+          let(:severity) { 'F' }
+
+          it 'returns 1203.42' do
+            expect(subject.remedy_details[:code]).to eq '1203.42'
+          end
+
+          it 'is discretionary' do
+            expect(subject.discretionary?).to eq true
+          end
         end
       end
 
