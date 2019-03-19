@@ -5,12 +5,12 @@ class PC1203Classifier
     super(event: event, rap_sheet: rap_sheet)
 
     vc_sections = ""
-    VC_DUI_CODE_SECTIONS.each do |cs|
+    Constants::VC_DUI_CODE_SECTIONS.each do |cs|
       vc_sections = "#{vc_sections}|#{Regexp.escape(cs)}"
     end
 
     pc_sections = ""
-    PC_DUI_CODE_SECTIONS.each do |cs|
+    Constants::PC_DUI_CODE_SECTIONS.each do |cs|
       pc_sections = "#{pc_sections}|#{Regexp.escape(cs)}"
     end
 
@@ -29,8 +29,9 @@ class PC1203Classifier
       return true if event.date < Date.today - 1.year
     elsif code == '1203.41'
       return true if !event.sentence.prison && event.date < Date.today - event.sentence.total_duration - 2.year
+    elsif code == '1203.42'
+      return true if event.counts.any? { |count| ab_109_count?(count) } && event.date < Date.today - event.sentence.total_duration - 2.year
     end
-
     false
   end
 
@@ -49,10 +50,17 @@ class PC1203Classifier
     count.code_section.match(@vc_dui_matcher) || count.code_section.match(@pc_dui_matcher)
   end
 
+  def ab_109_count?(count)
+    if !count.code_section
+      return false
+    end
+    Constants::AB_109_FELONIES.include?(count.code_section)
+  end
+
   def discretionary?
     r = remedy_details_hash
     return nil if r.empty?
-    r[:code] == '1203.41' || r[:scenario] == :discretionary
+    r[:code] == '1203.41' || r[:code] == '1203.42' || r[:scenario] == :discretionary
   end
 
   def eligible_counts
@@ -67,13 +75,13 @@ class PC1203Classifier
 
   def scenario_for_code(code)
     if code == '1203.4'
-      success =  !event.probation_violated?(rap_sheet)
+      success = !event.probation_violated?(rap_sheet)
     elsif code == '1203.4a'
       success = event.successfully_completed_duration?(rap_sheet, 1.year)
     else
       return nil
     end
-    return :discretionary if event.counts.any?{ |count| dui?(count) }
+    return :discretionary if event.counts.any? { |count| dui?(count) }
     return :unknown if event.date.nil? || success.nil?
     success ? :successful_completion : :discretionary
   end
@@ -91,7 +99,11 @@ class PC1203Classifier
         when 'I'
           '1203.4a'
         when 'F'
-          '1203.41'
+          if event.date < Date.new(2011, 10, 1)
+            '1203.42'
+          else
+            '1203.41'
+          end
         else
           nil
         end
@@ -105,39 +117,4 @@ class PC1203Classifier
     }
   end
 end
-
-PC_DUI_CODE_SECTIONS = [
-  '191.5',
-  '192(c)'
-]
-
-VC_DUI_CODE_SECTIONS = [
-  '12810(a)',
-  '12810(b)',
-  '12810(c)',
-  '12810(d)',
-  '12810(e)',
-  '14601',
-  '14601.1',
-  '14601.2',
-  '14601.3',
-  '14601.5',
-  '20001',
-  '20002',
-  '21651(b)',
-  '22348(b)',
-  '23109(a)',
-  '23109(c)',
-  '23140(a)',
-  '23140(b)',
-  '23152',
-  '23153',
-  '2800',
-  '2800.2',
-  '2800.3',
-  '2801',
-  '2803',
-  '31602',
-  '42002.1'
-]
 

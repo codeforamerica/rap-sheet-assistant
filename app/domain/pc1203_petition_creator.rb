@@ -18,6 +18,7 @@ class PC1203PetitionCreator
       firm = attorney.firm_name
       if attorney.name.empty? || attorney.state_bar_number.empty?
         name_and_bar_num = ''
+        state_bar_number = ''
       else
         name_and_bar_num = "#{attorney.name}    State Bar No: #{attorney.state_bar_number}"
       end
@@ -105,7 +106,6 @@ class PC1203PetitionCreator
     end
     date.strftime('%m/%d/%Y')
   end
-
 
   def fields_for_count(count, index)
     starting_field_number = 18 + (index * 5)
