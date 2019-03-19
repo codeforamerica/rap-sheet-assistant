@@ -57,7 +57,7 @@ class PC1203PetitionCreator
       'NAMEOFPERSONFILING' => contact_info_person.name,
       'ATTORNEYFOR' => client_name,
       'EMAIL' => contact_info_person.email,
-      'NAMEOFDEFENDANT' => client_name,
+      'NAMEOFDEFENDANT' => user.name,
       'SBN' => state_bar_number,
       'FIRMNAME' => firm,
       'STREETADDRESS' => contact_info_person.street_address,
@@ -67,6 +67,11 @@ class PC1203PetitionCreator
       'TELNO' => contact_info_person.phone_number,
       'DOB' => nil_checked_date(user.date_of_birth),
       'CASENO' => conviction_event.case_number
+    }
+
+    mc_031_fields ={
+      'DEFENDANT NAME' => user.name,
+      'CASE NUMBER' => conviction_event.case_number
     }
 
     conviction_counts[0..4].each_with_index do |count, index|
@@ -80,6 +85,10 @@ class PC1203PetitionCreator
     pdf_fields.merge!(PC1203RemedyCheckboxes.new(remedy_details).fields)
 
     result = [fill_petition('pc1203_petition.pdf', pdf_fields), fill_petition('cr_181_form.pdf', cr_181_fields)]
+
+    if @remedy_details[:code] == '1203.41' || @remedy_details[:code] == '1203.42' || @remedy_details[:scenario] == :discretionary
+      result << fill_petition('mc_031.pdf', mc_031_fields)
+    end
 
     if conviction_counts.length > 5
       result << fill_petition('mc_025_for_pc1203_form.pdf', mc_025_fields)

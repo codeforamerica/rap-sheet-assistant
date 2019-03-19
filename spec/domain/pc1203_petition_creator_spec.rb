@@ -190,12 +190,13 @@ RSpec.describe PC1203PetitionCreator do
         date: Date.parse('2010-01-01'),
         counts: conviction_counts
       )
+      remedy_details = { code: '1203.4' }
 
       pdf_file = PC1203PetitionCreator.new(
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy_details: nil
+        remedy_details: remedy_details
       ).create_petition
       expected_values = {
         'Field18' => 'PC',
@@ -361,12 +362,12 @@ RSpec.describe PC1203PetitionCreator do
         date: Date.parse('2010-01-01'),
         counts: conviction_counts
       )
-
+      remedy_details = { code: '1203.41' }
       pdf_file = PC1203PetitionCreator.new(
         rap_sheet: rap_sheet,
         conviction_event: conviction_event,
         conviction_counts: conviction_counts,
-        remedy_details: nil
+        remedy_details: remedy_details
       ).create_petition
       expected_values = {
         'Field38' => 'PC',
@@ -400,6 +401,42 @@ RSpec.describe PC1203PetitionCreator do
 
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
 
+    end
+  end
+
+  context 'when the event is discretionary' do
+    let(:has_attorney) { false }
+
+    it 'properly appends and fills out a mc_031' do
+
+      conviction_counts = [
+        build_count(
+          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
+          code: 'PC',
+          section: '111'
+        )
+      ]
+      conviction_event = build_court_event(
+        case_number: '#ABCDE',
+        date: Date.new(2010, 1, 1),
+        courthouse: 'CASC SAN FRANCISCO',
+        counts: conviction_counts
+      )
+      remedy_details = { code: '1203.41' }
+
+      pdf_file = PC1203PetitionCreator.new(
+        rap_sheet: rap_sheet,
+        conviction_event: conviction_event,
+        conviction_counts: conviction_counts,
+        remedy_details: remedy_details
+      ).create_petition
+
+      expected_values = {
+        'DEFENDANT NAME' => 'Test User',
+        'CASE NUMBER' => '#ABCDE'
+      }
+      expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
     end
   end
 end
