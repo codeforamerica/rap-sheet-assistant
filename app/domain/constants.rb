@@ -538,7 +538,7 @@ module Constants
     'HS 1390',
     'HS 1522.01(c)',
     'HS 1621.5(a)',
-    'HS	7051',
+    'HS 7051',
     'HS 7051.5',
     'HS 8113.5(a)',
     'HS 8113.5(a)',
@@ -731,15 +731,15 @@ module Constants
     'PC 218.1',
     'PC 219.1',
     'PC 222',
-    'PC 236-237(a)',
-    'PC 240-241.1',
-    'PC 240-241.4',
-    'PC 240-241.7',
-    'PC 242-243(c)(1)',
-    'PC 242-243(c)(2)',
-    'PC 242-243(d)',
-    'PC 242-243.1',
-    'PC 242-243.6',
+    'PC 236-237(a)', ##Research all exact code sections
+    'PC 240-241.1', ##Research all exact code sections
+    'PC 240-241.4', ##Research all exact code sections
+    'PC 240-241.7', ##Research all exact code sections
+    'PC 242-243(c)(1)', ##Research all exact code sections
+    'PC 242-243(c)(2)', ##Research all exact code sections
+    'PC 242-243(d)', ##Research all exact code sections
+    'PC 242-243.1', ##Research all exact code sections
+    'PC 242-243.6', ##Research all exact code sections
     'PC 244.5(b)',
     'PC 244.5(c)',
     'PC 245.6(d)',
@@ -807,7 +807,7 @@ module Constants
     'PC 417.6',
     'PC 422.7',
     'PC 453(a)',
-    'PC 459-460(b)',
+    'PC 459-460(b)', ##Research all exact code sections
     'PC 463',
     'PC 464',
     'PC 470(a)',
@@ -822,10 +822,14 @@ module Constants
     'PC 475(b)',
     'PC 475(c)',
     'PC 476',
-    'PC 478-477',
-    'PC 478-479',
-    'PC 478-480(a)',
-    'PC 478-481',
+    'PC 478',
+    'PC 477',
+    'PC 478',
+    'PC 479',
+    'PC 478',
+    'PC 480(a)',
+    'PC 478',
+    'PC 481',
     'PC 483.5(a)',
     'PC 484b',
     'PC 484e(a)',

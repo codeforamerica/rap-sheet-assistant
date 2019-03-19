@@ -18,7 +18,8 @@ class PC1203RemedyCheckboxes
     {
       '1203.4' => 'Field43',
       '1203.4a' => 'Field51',
-      '1203.41' => 'Field57'
+      '1203.41' => 'Field57',
+      '1203.42' => 'Field64'
     }[remedy_details[:code]]
   end
 

@@ -368,6 +368,10 @@ describe PC1203Classifier do
             expect(subject.remedy_details[:code]).to eq '1203.41'
           end
 
+          it 'is eligible' do
+            expect(subject.eligible?).to eq true
+          end
+
           it 'is discretionary' do
             expect(subject.discretionary?).to eq true
           end
@@ -375,13 +379,17 @@ describe PC1203Classifier do
 
         context 'when the conviction is before Oct 1 2011' do
           context 'when it has an AB 109 code section' do
-            let(:code) { 'PC'}
-            let(:section) { '119'}
+            let(:code) { 'HS'}
+            let(:section) { '7051'}
             let(:court_date) { Date.new(2011, 9, 25) }
             let(:severity) { 'F' }
 
             it 'returns 1203.42' do
               expect(subject.remedy_details[:code]).to eq '1203.42'
+            end
+
+            it 'is eligible' do
+              expect(subject.eligible?).to eq true
             end
 
             it 'is discretionary' do

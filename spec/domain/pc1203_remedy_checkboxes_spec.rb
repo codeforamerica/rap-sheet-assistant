@@ -12,9 +12,9 @@ describe PC1203RemedyCheckboxes do
     end
     it 'fills out questions 2, 2a' do
       expect(subject).to eq(
-        'Field43' => 'Yes',
-        'Field44' => 'Yes',
-      )
+                           'Field43' => 'Yes',
+                           'Field44' => 'Yes',
+                         )
     end
   end
 
@@ -27,9 +27,9 @@ describe PC1203RemedyCheckboxes do
     end
     it 'fills out questions 2, 2b' do
       expect(subject).to eq(
-        'Field43' => 'Yes',
-        'Field45' => 'Yes',
-      )
+                           'Field43' => 'Yes',
+                           'Field45' => 'Yes',
+                         )
     end
   end
 
@@ -42,9 +42,9 @@ describe PC1203RemedyCheckboxes do
     end
     it 'fills out questions 2, 2c' do
       expect(subject).to eq(
-        'Field43' => 'Yes',
-        'Field46' => 'Yes',
-      )
+                           'Field43' => 'Yes',
+                           'Field46' => 'Yes',
+                         )
     end
   end
 
@@ -56,9 +56,7 @@ describe PC1203RemedyCheckboxes do
       }
     end
     it 'fills out question 2, no subcheckbox' do
-      expect(subject).to eq(
-        'Field43' => 'Yes',
-      )
+      expect(subject).to eq('Field43' => 'Yes',)
     end
   end
 
@@ -72,9 +70,9 @@ describe PC1203RemedyCheckboxes do
 
     it 'fills out questions 3, 3a' do
       expect(subject).to eq(
-        'Field51' => 'Yes',
-        'Field52' => 'Yes',
-      )
+                           'Field51' => 'Yes',
+                           'Field52' => 'Yes',
+                         )
     end
   end
 
@@ -88,9 +86,9 @@ describe PC1203RemedyCheckboxes do
 
     it 'fills out questions 3, 3b' do
       expect(subject).to eq(
-        'Field51' => 'Yes',
-        'Field53' => 'Yes',
-      )
+                           'Field51' => 'Yes',
+                           'Field53' => 'Yes',
+                         )
     end
   end
 
@@ -103,12 +101,10 @@ describe PC1203RemedyCheckboxes do
     end
 
     it 'fills out questions 3, no subcheckbox' do
-      expect(subject).to eq(
-        'Field51' => 'Yes',
-      )
+      expect(subject).to eq('Field51' => 'Yes',)
     end
   end
-  
+
   context '1203.41' do
     let(:remedy) do
       {
@@ -118,9 +114,20 @@ describe PC1203RemedyCheckboxes do
     end
 
     it 'fills out question 5' do
-      expect(subject).to eq(
-        'Field57' => 'Yes',
-      )
+      expect(subject).to eq('Field57' => 'Yes',)
+    end
+  end
+
+  context '1203.42' do
+    let(:remedy) do
+      {
+        code: '1203.42',
+        scenario: nil
+      }
+    end
+
+    it 'fills out question 6' do
+      expect(subject).to eq('Field64' => 'Yes',)
     end
   end
 end
