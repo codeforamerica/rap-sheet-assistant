@@ -14,5 +14,9 @@ provider "aws" {
 
 module "main" {
   source = "../main"
+
+  rds_username = "${var.rds_username}"
+  environment = "staging"
+  rails_secret_key_base = "${var.rails_secret_key_base}"
 }
 
