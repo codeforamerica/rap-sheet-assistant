@@ -7,7 +7,7 @@ variable "aws_az1" {
 
 variable "aws_az2" {
   description = "AWS availability zone 1"
-  default = "us-west-1b"
+  default = "us-west-1c"
 }
 
 variable "environment" {
