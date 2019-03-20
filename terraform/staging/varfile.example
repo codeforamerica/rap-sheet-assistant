@@ -1,2 +1,4 @@
-  aws_access_key = 
-  aws_secret_key = 
+aws_access_key = "AKEY"
+aws_secret_key = "ASECRET"
+rails_secret_key_base = "AKEYBASE"
+rds_username = "a_username"
