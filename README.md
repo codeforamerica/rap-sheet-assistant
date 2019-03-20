@@ -26,6 +26,8 @@
 
  - [Install PDFTK from here](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg)
 
+ - To deploy new environment infrastructure on AWS, see the [terraform README](terraform/README.md)
+ 
 ## Running in CI
 This repo has a CircleCI config and internal tests are run (privately) in CircleCI. CfA members should ask the Clear My Record team for access. 
 There is a `Dockerfile` in this repo that we use due to version issues with the `circleci/ruby:node-browsers`. In particular this Dockerfile installs
