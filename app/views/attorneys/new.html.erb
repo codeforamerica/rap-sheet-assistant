@@ -60,7 +60,7 @@
       </div>
       <div class="form-card__footer">
         <%= f.submit 'Next →', class: 'button button--primary' %>
-        <%= link_to(new_user_legal_representations_path(@user), class: 'button', method: :post) do %>
+        <%= link_to(new_user_legal_representations_path(@user), class: 'button', method: :get) do %>
           Cancel
         <% end %>
       </div>
