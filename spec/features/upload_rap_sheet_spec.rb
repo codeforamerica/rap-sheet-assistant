@@ -88,7 +88,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
 
         click_on 'Yes, has a lawyer'
 
-        click_on 'Cancel'
+        click_on 'Go Back'
 
         click_on 'Yes, has a lawyer'
 
