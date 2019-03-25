@@ -140,6 +140,10 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'CASC LOS ANGELES'
         expect(page).to have_content 'PC 453(a) --- ARSON CAUSING GREAT BODILY INJURY'
         expect(page).to have_content '2y jail, fine, restitution'
+
+        click_on 'Download RAP sheet summary'
+        csv_contents = get_downloaded_csv_contents('LUKE JAY SKYWALKER')
+        expect(csv_contents).to eq (File.read('./spec/fixtures/skywalker_summary.csv'))
       end
     end
 
@@ -273,6 +277,15 @@ describe 'uploading a rap sheet', js: true, type: :feature do
     fill_in 'Zip', with: params[:zip_code] || '94103'
     fill_in 'Phone number', with: params[:phone_number] || '555555555'
     fill_in 'Email address', with: params[:email_address] || 'testuser@example.com'
+  end
+
+  def get_downloaded_csv_contents(name)
+    today = Date.today
+    tempfile = "/tmp/downloads/rap-sheet-assistant/rap_sheet_summary_#{name.tr(" ", "_")}_#{today.strftime("%Y-%m-%d")}.csv".downcase
+    wait_until do
+      File.exist?(tempfile)
+    end
+    File.read(tempfile)
   end
 
   def get_fields_from_downloaded_pdf(name)

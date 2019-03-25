@@ -1,3 +1,5 @@
+require 'csv'
+
 class DocumentsController < ApplicationController
   def index
     @rap_sheet = RapSheet.find(params[:rap_sheet_id])
@@ -15,6 +17,16 @@ class DocumentsController < ApplicationController
     send_file concatenate_pdfs(petitions), filename: download_filename
   end
 
+  def download_summary
+    @rap_sheet = RapSheet.find(params[:rap_sheet_id])
+    @user = @rap_sheet.user
+    eligibility = EligibilityChecker.new(@rap_sheet.parsed)
+
+    send_data create_summary_csv(eligibility), filename: summary_filename
+  end
+
+  private
+
   def create_petitions(eligibility)
     result = []
     eligibility.eligible_events_with_counts.each do |eligible_event|
@@ -26,7 +38,7 @@ class DocumentsController < ApplicationController
             conviction_event: eligible_event[:event],
             conviction_counts: eligible_counts,
             remedy_details: eligible_event[remedy[:key]][:remedy_details],
-            ).create_petition
+          ).create_petition
         end
       end
     end
@@ -46,5 +58,37 @@ class DocumentsController < ApplicationController
   def download_filename
     full_name_for_filename = @user.name.tr(" ", "_").downcase
     ['cmr_petitions', full_name_for_filename, Date.today].join('_') + '.pdf'
+  end
+
+  def create_summary_csv(eligibility)
+    CSV.generate(headers: true) do |csv|
+      csv << ["type", "chron order", "date", "case number", "code section", "description", "severity", "probation", "jail/prision", "remedy", "notes"]
+
+      convictions = @rap_sheet.parsed.convictions
+      out_of_county_convictions = []
+
+      csv << ["-", "-", "-", "SANTA CLARA COUNTY", "-", "-", "-", "-", "-", "-", "-"]
+      convictions.each do |event|
+        if [].include?(event.courthouse)
+          csv << csv_row(event)
+        else
+          out_of_county_convictions << event
+        end
+      end
+
+      csv << ["-", "-", "-", "OTHER COUNTIES", "-", "-", "-", "-", "-", "-", "-"]
+      out_of_county_convictions.each do |event|
+        csv << csv_row(event)
+      end
+    end
+  end
+
+  def summary_filename
+    full_name_for_filename = @user.name.tr(" ", "_").downcase
+    ['rap_sheet_summary', full_name_for_filename, Date.today].join('_') + '.csv'
+  end
+
+  def csv_row(event)
+    ["?", "1",event.date, event.case_number]
   end
 end

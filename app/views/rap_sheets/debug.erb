@@ -18,6 +18,10 @@
         <h1>Here is your rap sheet:</h1>
       <% end %>
 
+      <%= link_to(download_summary_rap_sheet_documents_path(@rap_sheet), data: { turbolinks: false }) do %>
+        Download RAP sheet summary
+      <% end %>
+
       <% if @conviction_events.present? %>
         <p class="rap-sheet-debug-page-marker">Convictions:</p>
         <div class="border">

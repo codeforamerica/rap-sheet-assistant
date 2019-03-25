@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     resources :documents, only: [:index] do
       collection do
         get :download
+        get :download_summary
       end
     end
   end
