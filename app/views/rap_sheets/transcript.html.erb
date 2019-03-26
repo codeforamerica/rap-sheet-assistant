@@ -1,5 +1,5 @@
 <% @title = "Transcript" %>
-<div class="slab">
+<div class="slab extra-wide-layout">
   <header>
     <%= link_to '< Back to eligibility summary', rap_sheet_path(@rap_sheet) %>
     <h2>Transcription</h2>
@@ -15,6 +15,7 @@
       <th>Charge</th>
       <th>Probation</th>
       <th>Prison</th>
+      <th>Remedy</th>
     </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
         <td><%= row[:code_section] %></td>
         <td><%= row[:probation] %></td>
         <td><%= row[:prison] %></td>
+        <td><%= row[:remedy] %></td>
       </tr>
     <% end %>
     </tbody>

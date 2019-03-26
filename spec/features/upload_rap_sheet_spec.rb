@@ -72,16 +72,19 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'M'
         expect(page).to have_content 'HS 11357'
         expect(page).to have_content '#19514114'
+        expect(page).to have_content 'p64, 1203.4 disc'
 
         expect(page).to have_content '2004-11-15'
         expect(page).to have_content 'F'
         expect(page).to have_content 'PC 453(a)'
         expect(page).to have_content '#44050'
+        expect(page).to have_content '1203.42 disc'
 
         expect(page).to have_content '2011-09-06'
         expect(page).to have_content 'F'
         expect(page).to have_content 'PC 496(a)'
         expect(page).to have_content '#99999988887777'
+        expect(page).to have_content '1203.4 mand, p47'
         click_on '< Back to eligibility summary'
 
         click_on 'Next'

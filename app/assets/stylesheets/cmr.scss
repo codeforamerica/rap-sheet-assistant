@@ -102,6 +102,11 @@ body {
   }
 }
 
+.extra-wide-layout {
+  margin-left: -100px;
+  margin-right: -100px;
+}
+
 .grid-container {
   max-width: $site-max-width;
   margin: auto;

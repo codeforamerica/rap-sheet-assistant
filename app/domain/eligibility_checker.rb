@@ -27,7 +27,7 @@ class EligibilityChecker
   ]
 
   def initialize(parsed_rap_sheet)
-     @parsed_rap_sheet = parsed_rap_sheet
+    @parsed_rap_sheet = parsed_rap_sheet
   end
 
   def all_eligible_counts
@@ -36,8 +36,8 @@ class EligibilityChecker
     end
     result = {}
     REMEDIES.each do |remedy|
-     key = remedy[:key]
-     result[key] =  all_counts.flat_map { |c| c[key][:counts] }
+      key = remedy[:key]
+      result[key] = all_counts.flat_map { |c| c[key][:counts] }
     end
     result
   end
@@ -47,14 +47,25 @@ class EligibilityChecker
   end
 
   def eligible_events_with_counts
-   parsed_rap_sheet.convictions.map do |event|
+    parsed_rap_sheet.convictions.map do |event|
       { event: event }.merge(eligible_counts(event))
     end
   end
 
+  def eligiblity_for_count(event, count)
+    result = []
+    eligible_counts = eligible_counts(event)
+    for remedy, info in eligible_counts
+      if info[:counts].include?(count)
+        result << { remedy: remedy, remedy_details: info[:remedy_details] }
+      end
+    end
+    result
+  end
+
   private
 
-  attr_reader  :parsed_rap_sheet
+  attr_reader :parsed_rap_sheet
 
   def eligible_counts(event)
     result = {}

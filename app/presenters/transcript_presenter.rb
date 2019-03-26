@@ -1,11 +1,12 @@
 class TranscriptPresenter
   def initialize(rap_sheet)
-    @rap_sheet = rap_sheet
+    @rap_sheet = rap_sheet.parsed
+    @eligibility = EligibilityChecker.new(@rap_sheet)
   end
 
   def rows
     result = []
-    @rap_sheet.parsed.convictions.each do |conviction|
+    @rap_sheet.convictions.each do |conviction|
       conviction.counts.each_with_index do |count, i|
         row = {}
         row[:first_row_in_case?] = (i == 0)
@@ -19,19 +20,40 @@ class TranscriptPresenter
         row[:probation] = format_duration(sentence&.probation)
         row[:prison] = format_duration(sentence&.prison)
 
-        result.append(row)
-      end
+        count_eligibility = @eligibility.eligiblity_for_count(conviction, count)
+
+        remedy_string = count_eligibility.map do |info|
+          if info[:remedy] == :prop64
+            'p64'
+          elsif info[:remedy] == :prop47
+            'p47'
+          elsif info[:remedy] == :pc1203_mandatory
+            "#{info[:remedy_details][:code]} mand"
+          elsif info[:remedy] == :pc1203_discretionary
+            "#{info[:remedy_details][:code]} disc"
+          end
+        end.join(', ')
+
+        if count_eligibility.empty?
+          remedy_string = 'x'
+        end
+
+      row[:remedy] = remedy_string
+
+      result.append(row)
     end
-    return result
   end
 
-  private
+  return result
+end
 
-  def format_duration(duration)
-    if duration
-      "#{duration.parts.values[0]} #{duration.parts.keys[0]}"
-    else
-      '—'
-    end
+private
+
+def format_duration(duration)
+  if duration
+    "#{duration.parts.values[0]} #{duration.parts.keys[0]}"
+  else
+    '—'
   end
+end
 end

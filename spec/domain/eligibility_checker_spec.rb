@@ -88,7 +88,7 @@ describe EligibilityChecker do
           },
           prop47: {
             counts: [prop47_eligible_count],
-            remedy_details: {scenario: :unknown}
+            remedy_details: { scenario: :unknown }
           }
         }
       ])
@@ -123,6 +123,56 @@ describe EligibilityChecker do
       )
 
       expect(described_class.new(parsed_rap_sheet).eligible?).to eq false
+    end
+  end
+
+  describe '#eligibility_for_count' do
+    let(:event_1) do
+      build_court_event(
+        counts: [prop64_eligible_count_1, pc1203_eligible_count],
+        date: Date.today - 5.years
+      )
+    end
+    let(:event_2) do
+      build_court_event(
+        counts: [pc1203_ineligible_count],
+        date: Date.today - 5.years
+      )
+    end
+    let(:event_3) do
+      build_court_event(
+        counts: [prop47_eligible_count],
+        date: Date.today - 6.years
+      )
+    end
+    let(:event_4) do
+      build_other_event(event_type: 'arrest', date: Date.today)
+    end
+    let(:parsed_rap_sheet) do
+      build_rap_sheet(
+        events: [event_1, event_2, event_3, event_4]
+      )
+    end
+
+    let(:subject) { described_class.new(parsed_rap_sheet) }
+
+    it 'returns the eligiblity information for one count' do
+      expect(subject.eligiblity_for_count(event_1, pc1203_eligible_count)).to eq ([
+        { remedy: :pc1203_mandatory, remedy_details: { code: "1203.4", scenario: :successful_completion } }
+      ])
+
+      expect(subject.eligiblity_for_count(event_1, prop64_eligible_count_1)).to eq ([
+        { remedy: :prop64, remedy_details: { codes: ["HS 11357"], scenario: :redesignation } },
+        { remedy: :pc1203_mandatory, remedy_details: { code: "1203.4", scenario: :successful_completion } }
+      ])
+
+      expect(subject.eligiblity_for_count(event_3, prop47_eligible_count)).to eq ([
+        { remedy: :prop47, remedy_details: { scenario: :unknown } }
+      ])
+    end
+
+    it 'returns an empty array if the count is not eligible' do
+      expect(subject.eligiblity_for_count(event_2, pc1203_ineligible_count)).to eq ([])
     end
   end
 end
