@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe EligibilityChecker do
-  let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'M') }
-  let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), severity: 'F') }
-  let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', disposition: probation_dispo) }
-  let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357', disposition: prison_dispo) }
-  let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', disposition: probation_dispo) }
-  let(:pc1203_ineligible_count) { build_count(code: 'PC', section: '456', disposition: prison_dispo) }
-  let(:prop47_eligible_count) { build_count(code: 'PC', section: '459', disposition: build_disposition(severity: 'F')) }
+  let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), date: Date.today - 5.years, severity: 'M') }
+  let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), date: Date.today - 5.years, severity: 'F') }
+  let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', dispositions: [probation_dispo]) }
+  let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357', dispositions: [prison_dispo]) }
+  let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', dispositions: [probation_dispo]) }
+  let(:pc1203_ineligible_count) { build_count(code: 'PC', section: '456', dispositions: [prison_dispo]) }
+  let(:prop47_eligible_count) { build_count(code: 'PC', section: '459', dispositions: [build_disposition(severity: 'F', date: Date.today - 5.years)]) }
 
   describe '#all_eligible_counts' do
     it 'returns a hash with all counts split by remedy type' do

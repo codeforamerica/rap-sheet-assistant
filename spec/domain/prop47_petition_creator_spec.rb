@@ -19,13 +19,13 @@ RSpec.describe Prop47PetitionCreator do
   let(:conviction_counts) do
     [
       build_count(
-        disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+        dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         code: 'PC',
         section: '484'
       ),
       build_count(
-        disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+        dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
         code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
         code: 'PC',
         section: '487d'

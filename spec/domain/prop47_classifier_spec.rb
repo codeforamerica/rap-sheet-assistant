@@ -6,7 +6,7 @@ describe Prop47Classifier do
   let(:conviction_event) { build_court_event(counts: conviction_counts, date: date) }
   let(:date) { 9.years.ago }
   let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 1.year) }
-  let(:prop47_count) { build_count(code: 'PC', section: '470', disposition: build_disposition(sentence: sentence, severity: severity)) }
+  let(:prop47_count) { build_count(code: 'PC', section: '470', dispositions: [build_disposition(sentence: sentence, severity: severity, date: Date.new(2010,1,1))]) }
   let(:events) { [conviction_event] }
 
 
@@ -47,7 +47,7 @@ describe Prop47Classifier do
           end
 
           context 'and there are also no-prop47 counts in the event' do
-            let(:prop47_count_2) { build_count(code: 'HS', section: '11377', disposition: build_disposition(severity: 'F')) }
+            let(:prop47_count_2) { build_count(code: 'HS', section: '11377', dispositions: [build_disposition(severity: 'F', date: Date.new(2010,1,1))]) }
             let(:conviction_counts) { [prop47_count, build_count, prop47_count_2] }
 
             it 'selects the prop47 counts in eligible_counts' do
@@ -82,7 +82,7 @@ describe Prop47Classifier do
 
     context 'when the event does not contain a Prop47 code' do
       let(:events) { [conviction_event] }
-      let(:conviction_counts) { [build_count, build_count(code: nil, section: nil), build_count(disposition: nil)] }
+      let(:conviction_counts) { [build_count, build_count(code: nil, section: nil), build_count(dispositions: [])] }
 
       it 'is not eligible' do
         expect(subject.eligible?).to be false

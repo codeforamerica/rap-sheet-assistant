@@ -9,7 +9,7 @@ describe PC1203DiscretionaryClassifier do
   let(:conviction_event) do
     build_court_event(
       date: date,
-      counts: [build_count(disposition: build_disposition(severity: severity, sentence: sentence))]
+      counts: [build_count(dispositions: [build_disposition(severity: severity, sentence: sentence, date: Date.today - 3.years)])]
     )
   end
 

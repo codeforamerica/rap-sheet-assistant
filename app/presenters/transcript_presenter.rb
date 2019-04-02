@@ -13,10 +13,10 @@ class TranscriptPresenter
         row[:date] = conviction.date || '—'
         row[:courthouse] = conviction.courthouse || '—'
         row[:case_number] = conviction.case_number ? "##{conviction.case_number}" : '—'
-        row[:severity] = count.disposition&.severity
+        row[:severity] = count.severity
         row[:code_section] = count.code_section || '—'
 
-        sentence = count.disposition&.sentence
+        sentence = count.sentence
         row[:probation] = format_duration(sentence&.probation)
         row[:prison] = format_duration(sentence&.prison)
 

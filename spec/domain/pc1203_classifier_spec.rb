@@ -11,7 +11,7 @@ describe PC1203Classifier do
     let(:conviction_event) do
       build_court_event(
         date: date,
-        counts: [build_count(disposition: build_disposition(severity: severity, sentence: sentence))]
+        counts: [build_count(dispositions: [build_disposition(severity: severity, sentence: sentence)])]
       )
     end
 
@@ -121,8 +121,9 @@ describe PC1203Classifier do
   end
 
   describe '#remedy_details and #discretionary?' do
+    let(:date) { Date.new(1991, 5, 1)}
     context 'sentence includes probation' do
-      let(:count) { build_count(disposition: build_disposition(sentence: sentence)) }
+      let(:count) { build_count(dispositions: [build_disposition(sentence: sentence, date: date)]) }
 
       context 'probation successfully completed' do
         let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 5.months) }
@@ -147,7 +148,7 @@ describe PC1203Classifier do
 
         context 'when it includes a DUI charge' do
           context 'when the subsection is in parens' do
-            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
+            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', dispositions: [build_disposition(sentence: sentence, date: date)]) }
             let(:conviction_event) do
               build_court_event(
                 counts: [count, dui_count],
@@ -168,7 +169,7 @@ describe PC1203Classifier do
           end
 
           context 'when the subsection includes periods' do
-            let(:dui_count) { build_count(code: 'VC', section: '14601.6', disposition: build_disposition(sentence: sentence)) }
+            let(:dui_count) { build_count(code: 'VC', section: '14601.6', dispositions: [build_disposition(sentence: sentence, date: date)]) }
             let(:conviction_event) do
               build_court_event(
                 counts: [count, dui_count],
@@ -189,7 +190,7 @@ describe PC1203Classifier do
           end
 
           context 'when the subsection is improperly formatted' do
-            let(:dui_count) { build_count(code: 'VC', section: '23145/23152(b)', disposition: build_disposition(sentence: sentence)) }
+            let(:dui_count) { build_count(code: 'VC', section: '23145/23152(b)', dispositions: [build_disposition(sentence: sentence, date: date)]) }
             let(:conviction_event) do
               build_court_event(
                 counts: [count, dui_count],
@@ -254,7 +255,7 @@ describe PC1203Classifier do
       let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: nil) }
       let(:code) {'PC'}
       let(:section) {'123'}
-      let(:count) { build_count(code: code, section: section, disposition: build_disposition(severity: severity, sentence: sentence)) }
+      let(:count) { build_count(code: code, section: section, dispositions: [build_disposition(severity: severity, sentence: sentence, date: date)]) }
       let(:court_date) { Date.new(1991, 5, 1) }
       let(:conviction_event) do
         build_court_event(
@@ -284,7 +285,7 @@ describe PC1203Classifier do
           end
 
           context 'when it includes a DUI charge' do
-            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', disposition: build_disposition(sentence: sentence)) }
+            let(:dui_count) { build_count(code: 'VC', section: '23152(c)', dispositions: [build_disposition(sentence: sentence, date: date)]) }
             let(:conviction_event) do
               build_court_event(
                 counts: [count, dui_count],

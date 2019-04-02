@@ -126,7 +126,7 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills resentencing and petition checkboxes if sentence being served' do
-    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year)))]
+    conviction_counts = [build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year), date: Date.new(2104, 8 ,8))])]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts
@@ -154,7 +154,7 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills redesignation and application checkboxes if sentence completed' do
-    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year)))]
+    conviction_counts = [build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(jail: 1.year), date: Date.new(2014, 8, 8))])]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts
@@ -182,7 +182,7 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills remedy checkboxes for all applicable codes' do
-    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
+    conviction_counts = [build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new), date: Date.new(2014, 8, 8)])]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts
@@ -215,7 +215,7 @@ describe Prop64PetitionCreator do
   end
 
   it 'fills remedy checkboxes for only the appropriate codes' do
-    conviction_counts = [build_count(disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new))]
+    conviction_counts = [build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new), date: Date.new(2014, 8, 8)])]
     conviction_event = build_court_event(
       date: Date.new(2014, 8, 8),
       counts: conviction_counts

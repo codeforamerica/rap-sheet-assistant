@@ -8,10 +8,10 @@ describe Prop64Classifier do
     build_court_event(date: date, counts: conviction_counts)
   end
 
-  let(:dispo) { build_disposition(sentence: sentence) }
+  let(:dispo) { build_disposition(sentence: sentence, date: Date.new(2010, 1, 1)) }
 
   let(:conviction_counts) do
-    [build_count(section: section, code: code, disposition: dispo)]
+    [build_count(section: section, code: code, dispositions: [dispo])]
   end
 
   let(:rap_sheet) { nil }
@@ -66,8 +66,8 @@ describe Prop64Classifier do
     context 'when the code section is nil' do
       let(:code) { 'HS' }
       let(:section) { '11359' }
-      let(:conviction_count) { build_count(disposition: dispo, section: section, code: code) }
-      let(:nil_count) { build_count(disposition: dispo, section: section, code: nil) }
+      let(:conviction_count) { build_count(dispositions: [dispo], section: section, code: code) }
+      let(:nil_count) { build_count(dispositions: [dispo], section: section, code: nil) }
       let(:conviction_counts) { [conviction_count, nil_count] }
 
       it 'skips counts with nil code sections' do
@@ -80,9 +80,9 @@ describe Prop64Classifier do
   describe '#remedy_details' do
     describe 'when the person is still serving their sentence' do
       let(:conviction_counts) { [
-        build_count(disposition: dispo, section: '11359(a)(b)', code: 'HS'),
-        build_count(disposition: dispo, section: 'blah', code: 'PC'),
-        build_count(disposition: dispo, section: '11362.1(c)', code: 'HS')
+        build_count(dispositions: [dispo], section: '11359(a)(b)', code: 'HS'),
+        build_count(dispositions: [dispo], section: 'blah', code: 'PC'),
+        build_count(dispositions: [dispo], section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { 9.years.ago }
@@ -98,9 +98,9 @@ describe Prop64Classifier do
 
     describe 'when the person has completed their sentence' do
       let(:conviction_counts) { [
-        build_count(disposition: dispo, section: '11359(a)(b)', code: 'HS'),
-        build_count(disposition: dispo, section: 'blah', code: 'PC'),
-        build_count(disposition: dispo, section: '11362.1(c)', code: 'HS')
+        build_count(dispositions: [dispo], section: '11359(a)(b)', code: 'HS'),
+        build_count(dispositions: [dispo], section: 'blah', code: 'PC'),
+        build_count(dispositions: [dispo], section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { 10.years.ago }
@@ -116,9 +116,9 @@ describe Prop64Classifier do
 
     describe 'when the date is unknown' do
       let(:conviction_counts) { [
-        build_count(disposition: dispo, section: '11359(a)(b)', code: 'HS'),
-        build_count(disposition: dispo, section: 'blah', code: 'PC'),
-        build_count(disposition: dispo, section: '11362.1(c)', code: 'HS')
+        build_count(dispositions: [dispo], section: '11359(a)(b)', code: 'HS'),
+        build_count(dispositions: [dispo], section: 'blah', code: 'PC'),
+        build_count(dispositions: [dispo], section: '11362.1(c)', code: 'HS')
       ] }
 
       let(:date) { nil }

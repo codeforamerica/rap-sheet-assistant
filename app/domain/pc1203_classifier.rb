@@ -77,7 +77,10 @@ class PC1203Classifier
     if code == '1203.4'
       success = !event.probation_violated?(rap_sheet)
     elsif code == '1203.4a'
-      success = event.successfully_completed_duration?(rap_sheet, 1.year)
+      convicted_dispositions = event.convicted_counts.flat_map(&:dispositions).compact
+      dispos_with_sentence = convicted_dispositions.select { |dispo| dispo.sentence }
+      sentence_start_date = dispos_with_sentence[-1].date
+      success = event.successfully_completed_duration?(rap_sheet, sentence_start_date, 1.year)
     else
       return nil
     end

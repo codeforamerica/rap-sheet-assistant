@@ -40,7 +40,7 @@ RSpec.describe PC1203PetitionCreator do
     it 'creates a filled-out form with the attorney info' do
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '111'
@@ -115,7 +115,7 @@ RSpec.describe PC1203PetitionCreator do
       it 'does not fill State Bar Num in the name field' do
         conviction_counts = [
           build_count(
-            disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+            dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
             code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
             code: 'PC',
             section: '111'
@@ -161,25 +161,25 @@ RSpec.describe PC1203PetitionCreator do
       sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '107' # wobbler, felony
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'M', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '12355(b)' # wobbler but already misdemeanor
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '605' # made up (not a wobbler)
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'M', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '330' # reducible to infraction
@@ -234,7 +234,7 @@ RSpec.describe PC1203PetitionCreator do
     it 'creates a filled-out form with client info' do
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '111'
@@ -282,7 +282,7 @@ RSpec.describe PC1203PetitionCreator do
     it 'returns dob as nil' do
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '111'
@@ -316,42 +316,42 @@ RSpec.describe PC1203PetitionCreator do
       sentence = RapSheetParser::ConvictionSentence.new(probation: nil)
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '107' # wobbler, felony
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'M', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '12355(b)' # wobbler but already misdemeanor
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '605' # made up (not a wobbler)
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'M'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'M', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '330' # reducible to infraction
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '605' # made up (not a wobbler)
         ),
         build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '605'
         ), build_count(
-          disposition: build_disposition(sentence: sentence, severity: 'F'),
+          dispositions: [build_disposition(sentence: sentence, severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '608'
@@ -411,7 +411,7 @@ RSpec.describe PC1203PetitionCreator do
 
       conviction_counts = [
         build_count(
-          disposition: build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F'),
+          dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), severity: 'F', date: Date.new(2010,1,1))],
           code_section_description: 'RECEIVE/ETC KNOWN STOLEN PROPERTY',
           code: 'PC',
           section: '111'
