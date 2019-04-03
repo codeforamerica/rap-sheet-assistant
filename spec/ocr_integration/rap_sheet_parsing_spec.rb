@@ -207,8 +207,8 @@ def detected_convictions(rap_sheet)
       counts: event.convicted_counts.map do |count|
         {
           'code_section' => count.code_section&.upcase,
-          'severity' => count.disposition.severity&.first,
-          'sentence' => count.disposition&.sentence&.to_s
+          'severity' => count.severity,
+          'sentence' => count.sentence&.to_s
         }
       end
     }
