@@ -36,9 +36,9 @@ The test suite will compute an accuracy percentage for how well the output match
 
 You can run the integration tests with `rake ocr`. Set the `RSPEC_SHOW_OCR_OUTPUT` environment variable for detailed test output.
  
-The test suite expects a local folder or Amazon S3 bucket containing RAP sheets.
+The test suite expects either a local folder or Amazon S3 bucket containing RAP sheets.
 
-In order to use a local folder, set the environment variable `LOCAL_RAP_SHEETS_DIR`
+In order to use a local folder, set the environment variable `LOCAL_RAP_SHEETS_DIR` to point to the desired folder. If this environment variable is set, it will override the AWS environment variables.
 
 In order to use AWS S3, ensure the following environment variables are set:
 ```
@@ -46,7 +46,6 @@ RAP_SHEETS_BUCKET
 AWS_ACCESS_KEY_ID
 AWS_SECRET_KEY
 ```  
-The access key ID and secret come from your AWS account credentials. Be sure to use the account connected to the [AWS PROJECT NAME GOES HERE] AWS project. The bucket name is [BUCKET NAME GOES HERE].
 
 The RAP sheets folder should contain a subfolder for each RAP sheet to be tested. In each subfolder, it expects to find an image file for each page of the RAP sheet named `page_#.jpg`, where `#` is replaced by the page number.
 Additionally, the subfolder should contain a JSON file named `expected_values.json`.  
