@@ -18,14 +18,12 @@
    Note: We recommend using `chruby` to manage Ruby versions locally.
  - `bundle` to install dependencies
  - `rake db:setup` to install database in development and test
- - `rake` to run unit test suite
- - `rails s` to run the server locally
-
  - Install ElasticBeanstalk CLI
    `sudo pip install awsebcli`
 
  - [Install PDFTK from here](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg)
-
+ - `rake` to run unit test suite
+ - `rails s` to run the server locally
 ## Running in CI
 This repo has a CircleCI config and internal tests are run (privately) in CircleCI. CfA members should ask the Clear My Record team for access. 
 There is a `Dockerfile` in this repo that we use due to version issues with the `circleci/ruby:node-browsers`. In particular this Dockerfile installs
@@ -38,8 +36,19 @@ The test suite will compute an accuracy percentage for how well the output match
 
 You can run the integration tests with `rake ocr`. Set the `RSPEC_SHOW_OCR_OUTPUT` environment variable for detailed test output.
  
-The test suite expects a local folder or Amazon S3 bucket containing subfolders for each RAP sheet to be tested.  
-In each subfolder, it expects to find an image file for each page of the RAP sheet named `page_#.jpg`, where `#` is replaced by the page number.
+The test suite expects a local folder or Amazon S3 bucket containing RAP sheets.
+
+In order to use a local folder, set the environment variable `LOCAL_RAP_SHEETS_DIR`
+
+In order to use AWS S3, ensure the following environment variables are set:
+```
+RAP_SHEETS_BUCKET
+AWS_ACCESS_KEY_ID
+AWS_SECRET_KEY
+```  
+The access key ID and secret come from your AWS account credentials. Be sure to use the account connected to the [AWS PROJECT NAME GOES HERE] AWS project. The bucket name is [BUCKET NAME GOES HERE].
+
+The RAP sheets folder should contain a subfolder for each RAP sheet to be tested. In each subfolder, it expects to find an image file for each page of the RAP sheet named `page_#.jpg`, where `#` is replaced by the page number.
 Additionally, the subfolder should contain a JSON file named `expected_values.json`.  
 
 For example:
@@ -93,16 +102,8 @@ The structure of the `expected_values.json` file is as follows:
 ``` 
 **NOTE:** only court events that result in a conviction are included, and only convicted charges on the event are included.
 
-In order to use a local folder, set the environment variable `LOCAL_RAP_SHEETS_DIR`
-
 When running the tests verbose output is hidden by default. If you are running OCR tests on a system that is CJI/PII safe you can set the `RSPEC_SHOW_OCR_OUTPUT` environment variable to see summary output
 
-In order to use AWS S3, ensure the following environment variables are set:
-```
-RAP_SHEETS_BUCKET
-AWS_ACCESS_KEY_ID
-AWS_SECRET_KEY
-```
 If you would like to only run the tests on one specific RAP sheet, set the environment variable `TEST_DIR` to the subfolder for that RAP sheet.
 
 **Caching:**
