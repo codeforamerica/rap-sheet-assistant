@@ -69,10 +69,25 @@ class PC1203PetitionCreator
       'CASENO' => conviction_event.case_number
     }
 
+    proof_of_service_fields = {
+      'name' =>contact_info_person.name,
+      'state bar number' =>state_bar_number,
+      'firm name' =>firm,
+      'street address' =>contact_info_person.street_address,
+      'city' =>contact_info_person.city,
+      'state' =>contact_info_person.state,
+      'zip' =>contact_info_person.zip,
+      'phone number' =>contact_info_person.phone_number,
+      'email' =>contact_info_person.email,
+      'defendant name' =>client_name,
+      'case number' =>conviction_event.case_number
+    }
+
     mc_031_fields ={
       'DEFENDANT NAME' => user.name,
       'CASE NUMBER' => conviction_event.case_number
     }
+
 
     conviction_counts[0..4].each_with_index do |count, index|
       pdf_fields.merge!(fields_for_count(count, index))
@@ -93,6 +108,8 @@ class PC1203PetitionCreator
     if conviction_counts.length > 5
       result << fill_petition('mc_025_for_pc1203_form.pdf', mc_025_fields)
     end
+
+    result << fill_petition('proof_of_service.pdf', proof_of_service_fields)
 
     concatenate_pdfs(result)
   end

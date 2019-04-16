@@ -93,8 +93,23 @@ RSpec.describe PC1203PetitionCreator do
         'CASENO' => '#ABCDE'
       }
 
+      expected_proof_of_service_values = {
+        'name' =>'Ms. Attorney',
+        'state bar number' =>'1234567',
+        'firm name' =>'The Firm',
+        'street address' =>'555 Main Street',
+        'city' =>'Tulsa',
+        'state' =>'OK',
+        'zip' =>'55555',
+        'phone number' =>'5555555555',
+        'email' =>'email@example.com',
+        'defendant name' =>'Test User',
+        'case number' =>'#ABCDE'
+      }
+
       expect(get_fields_from_pdf(petition_pdf_file)).to include(expected_petition_values)
       expect(get_fields_from_pdf(petition_pdf_file)).to include(expected_cr_181_values)
+      expect(get_fields_from_pdf(petition_pdf_file)).to include(expected_proof_of_service_values)
     end
 
     context 'name is missing from attorney info' do
@@ -272,7 +287,22 @@ RSpec.describe PC1203PetitionCreator do
         'Field74' => user.street_address,
         'Field75' => 'San Francisco, CA  12345'
       }
+      expected_proof_of_service_values = {
+        'name' =>'Test User',
+        'state bar number' =>'',
+        'firm name' =>'',
+        'street address' =>'123 Fake St',
+        'city' =>'San Francisco',
+        'state' =>'CA',
+        'zip' =>'12345',
+        'phone number' =>'000-111-2222',
+        'email' =>'me@me.com',
+        'defendant name' =>'PRO-SE',
+        'case number' =>'#ABCDE'
+      }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
+      expect(get_fields_from_pdf(pdf_file)).to include(expected_proof_of_service_values)
+
     end
   end
   context 'if dob is empty' do
