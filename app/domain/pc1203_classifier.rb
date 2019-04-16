@@ -21,6 +21,8 @@ class PC1203Classifier
   def eligible?
     return false unless event.sentence
     return false unless event.date
+    return false if event.convicted_counts.all? { |c| excluded_code_section?(c) }
+    return false if currently_serving_sentence_for_any_case(rap_sheet)
 
     code = remedy_details_hash[:code]
     if code == '1203.4'
@@ -30,9 +32,24 @@ class PC1203Classifier
     elsif code == '1203.41'
       return true if !event.sentence.prison && event.date < Date.today - event.sentence.total_duration - 2.year
     elsif code == '1203.42'
-      return true if event.counts.any? { |count| ab_109_count?(count) } && event.date < Date.today - event.sentence.total_duration - 2.year
+      return true if event.date < Date.today - event.sentence.total_duration - 2.year
     end
     false
+  end
+
+  #TODO move into rap sheet parser?
+  def currently_serving_sentence_for_any_case(rap_sheet)
+    rap_sheet.convictions.any? do |event|
+      count_with_sentence = event.counts.find { |c| c.sentence.present? }
+      dispos_with_sentence = count_with_sentence&.dispositions&.select { |disposition| disposition.sentence.present? }
+
+      return false unless dispos_with_sentence && dispos_with_sentence.length > 0
+
+      most_recent_sentence_dispo = dispos_with_sentence[-1]
+      return false unless most_recent_sentence_dispo.date.present?
+
+      Date.today < most_recent_sentence_dispo.date + most_recent_sentence_dispo.sentence.total_duration
+    end
   end
 
   def remedy_details
@@ -43,6 +60,10 @@ class PC1203Classifier
     end
   end
 
+  def excluded_code_section?(count)
+    Constants::CODE_SECTIONS_EXCLUDED_FOR_PC1203_DISMISSALS.include?(count.code_section)
+  end
+
   def dui?(count)
     if !count.code_section
       return false
@@ -50,11 +71,15 @@ class PC1203Classifier
     count.code_section.match(@vc_dui_matcher) || count.code_section.match(@pc_dui_matcher)
   end
 
-  def ab_109_count?(count)
+  def pc_1170h_count?(count)
     if !count.code_section
       return false
     end
-    Constants::AB_109_FELONIES.include?(count.code_section)
+    Constants::PC_1170H_FELONIES.include?(count.code_section)
+  end
+
+  def reducible_by_17b?(count)
+    !event.sentence.prison && count.severity == 'F' && Constants::WOBBLERS.include?(count.code_section)
   end
 
   def discretionary?
@@ -65,7 +90,7 @@ class PC1203Classifier
 
   def eligible_counts
     if eligible?
-      event.convicted_counts
+      event.convicted_counts.select { |c| !excluded_code_section?(c) }
     else
       []
     end
@@ -91,7 +116,6 @@ class PC1203Classifier
 
   def remedy_details_hash
     return {} unless event.sentence
-
     if event.sentence.probation
       code = '1203.4'
     else
@@ -102,10 +126,16 @@ class PC1203Classifier
         when 'I'
           '1203.4a'
         when 'F'
-          if event.date < Date.new(2011, 10, 1)
-            '1203.42'
+          if event.counts.any? { |count| pc_1170h_count?(count) }
+            if event.date < Date.new(2011, 10, 1)
+              '1203.42'
+            else
+              '1203.41'
+            end
+          elsif event.convicted_counts.all? { |count| count.severity != 'F' || reducible_by_17b?(count) }
+            '1203.4a'
           else
-            '1203.41'
+            nil
           end
         else
           nil
