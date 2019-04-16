@@ -7,7 +7,7 @@ class TranscriptPresenter
   def rows
     result = []
     @rap_sheet.convictions.each do |conviction|
-      conviction.counts.each_with_index do |count, i|
+      conviction.convicted_counts.each_with_index do |count, i|
         row = {}
         row[:first_row_in_case?] = (i == 0)
         row[:date] = conviction.date || '—'
@@ -17,6 +17,9 @@ class TranscriptPresenter
         row[:code_section] = count.code_section || '—'
 
         sentence = count.sentence
+        if count.sentence.nil?
+          sentence = conviction.sentence
+        end
         row[:probation] = format_duration(sentence&.probation)
         row[:prison] = format_duration(sentence&.prison)
 
@@ -53,7 +56,7 @@ def format_duration(duration)
   if duration
     "#{duration.parts.values[0]} #{duration.parts.keys[0]}"
   else
-    '—'
+    '-'
   end
 end
 end
