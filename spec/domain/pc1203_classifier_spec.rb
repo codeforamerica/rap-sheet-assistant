@@ -91,10 +91,8 @@ describe PC1203Classifier do
         end
 
         it 'returns 1203.4, successful completion' do
-          expect(subject.remedy_details).to eq({
-            code: '1203.4',
-            scenario: :successful_completion
-          })
+          expect(subject.remedy_details[:code]).to eq('1203.4')
+          expect(subject.remedy_details[:scenario]).to eq(:successful_completion)
         end
       end
 
@@ -111,10 +109,8 @@ describe PC1203Classifier do
         end
 
         it 'returns 1203.4, discretionary' do
-          expect(subject.remedy_details).to eq({
-              code: '1203.4',
-              scenario: :discretionary
-          })
+          expect(subject.remedy_details[:code]).to eq('1203.4')
+          expect(subject.remedy_details[:scenario]).to eq(:discretionary)
         end
       end
     end
@@ -131,14 +127,20 @@ describe PC1203Classifier do
       end
 
       it 'returns 1203.4, discretionary' do
-        expect(subject.remedy_details).to eq({
-                                               code: '1203.4',
-                                               scenario: :discretionary
-                                             })
+        expect(subject.remedy_details[:code]).to eq('1203.4')
+        expect(subject.remedy_details[:scenario]).to eq(:discretionary)
       end
     end
 
-    xcontext 'the applicant had a complex probation history including violations' do
+    context 'the applicant had a complex probation history including violations' do
+      let(:dispositions) { [probation_sentence, probation_extended, sentence_modified] }
+
+      let(:probation_sentence) {build_disposition(severity: severity, sentence: sentence, date: conviction_date)}
+      let(:probation_extended) {build_disposition(type: 'other_disposition_type', sentence: RapSheetParser::ConvictionSentence.new(probation: 2.years), date: conviction_date + 2.years)}
+      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days, probation: 3.year), date: conviction_date+3.years)}
+
+      let(:arrest_date) { conviction_date + 42.months }
+
       it 'is eligible' do
         expect(subject.eligible?).to be true
       end
@@ -146,15 +148,31 @@ describe PC1203Classifier do
       it 'is discretionary' do
         expect(subject.discretionary?).to eq true
       end
+
+      it 'returns 1203.4, discretionary' do
+        expect(subject.remedy_details[:code]).to eq('1203.4')
+        expect(subject.remedy_details[:scenario]).to eq(:discretionary)
+      end
     end
 
-    xcontext 'probation was revoked' do
+    context 'probation was revoked' do
+      let(:dispositions) { [probation_sentence, probation_revoked, sentence_modified] }
+
+      let(:probation_sentence) {build_disposition(severity: severity, sentence: sentence, date: conviction_date)}
+      let(:probation_revoked) {build_disposition(type: 'probation_revoked', date: conviction_date + 2.years)}
+      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days), date: conviction_date+3.years)}
+
       it 'is eligible, if eligible when treated as a non-probation case' do
         expect(subject.eligible?).to be true
       end
 
       it 'is discretionary' do
         expect(subject.discretionary?).to eq true
+      end
+
+      it 'returns 1203.4a, discretionary' do
+        expect(subject.remedy_details[:code]).to eq('1203.4a')
+        expect(subject.remedy_details[:scenario]).to eq(:discretionary)
       end
     end
 
@@ -258,10 +276,8 @@ describe PC1203Classifier do
           end
 
           it 'returns 1203.4a, successful completion' do
-            expect(subject.remedy_details).to eq({
-                                                   code: '1203.4a',
-                                                   scenario: :successful_completion
-                                                 })
+            expect(subject.remedy_details[:code]).to eq('1203.4a')
+            expect(subject.remedy_details[:scenario]).to eq(:successful_completion)
           end
         end
 
@@ -278,10 +294,8 @@ describe PC1203Classifier do
           end
 
           it 'returns 1203.4a, discretionary' do
-            expect(subject.remedy_details).to eq({
-                                                   code: '1203.4a',
-                                                   scenario: :discretionary
-                                                 })
+            expect(subject.remedy_details[:code]).to eq('1203.4a')
+            expect(subject.remedy_details[:scenario]).to eq(:discretionary)
           end
         end
 
@@ -298,10 +312,8 @@ describe PC1203Classifier do
           end
 
           it 'returns 1203.4a, discretionary' do
-            expect(subject.remedy_details).to eq({
-                                                   code: '1203.4a',
-                                                   scenario: :discretionary
-                                                 })
+            expect(subject.remedy_details[:code]).to eq('1203.4a')
+            expect(subject.remedy_details[:scenario]).to eq(:discretionary)
           end
         end
       end
@@ -318,10 +330,8 @@ describe PC1203Classifier do
         end
 
         it 'returns 1203.4a, discretionary' do
-          expect(subject.remedy_details).to eq({
-                                                 code: '1203.4a',
-                                                 scenario: :discretionary
-                                               })
+          expect(subject.remedy_details[:code]).to eq('1203.4a')
+          expect(subject.remedy_details[:scenario]).to eq(:discretionary)
         end
       end
     end
@@ -405,10 +415,8 @@ describe PC1203Classifier do
             end
 
             it 'returns 1203.4a, successful completion' do
-              expect(subject.remedy_details).to eq({
-                                                     code: '1203.4a',
-                                                     scenario: :successful_completion,
-                                                   })
+              expect(subject.remedy_details[:code]).to eq('1203.4a')
+              expect(subject.remedy_details[:scenario]).to eq(:successful_completion)
             end
           end
 
@@ -424,13 +432,11 @@ describe PC1203Classifier do
             end
 
             it 'returns 1203.4a, discretionary' do
-              expect(subject.remedy_details).to eq({
-                                                     code: '1203.4a',
-                                                     scenario: :discretionary,
-                                                   })
+              expect(subject.remedy_details[:code]).to eq('1203.4a')
+              expect(subject.remedy_details[:scenario]).to eq(:discretionary)
             end
           end
-      end
+        end
       end
 
       context 'when at least one count is a non-reducible felony' do

@@ -110,8 +110,13 @@ class PC1203Classifier
       return nil
     end
     return :discretionary if event.counts.any? { |count| dui?(count) }
+    return :discretionary if probation_revoked?
     return :unknown if event.date.nil? || success.nil?
     success ? :successful_completion : :discretionary
+  end
+
+  def probation_revoked?
+    event.counts.any? { |c| c.probation_revoked? }
   end
 
   def remedy_details_hash
