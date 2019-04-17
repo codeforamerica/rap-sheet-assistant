@@ -499,6 +499,18 @@ module Constants
     "VC 42005"
   ]
 
+  CODE_SECTIONS_EXCLUDED_FOR_PC1203_DISMISSALS = [
+    'PC 286(c)',
+    'PC 288', #TODO probably should include subsections
+    'PC 288a(c)',
+    'PC 311.1',
+    'PC 311.2',
+    'PC 311.3',
+    'PC 311.11',
+    'VC 2800', #all subsections
+    'VC 2801',
+    'VC 2803' #all subsections
+  ]
   PC_DUI_CODE_SECTIONS = [
     '191.5',
     '192(c)'
@@ -534,7 +546,9 @@ module Constants
     '42002.1'
   ]
 
-  AB_109_FELONIES = [
+  # AB 109 is also known as "realignment", or "1170(h)"
+  # These felonies are now sentenced to county jail instead of state prison
+  PC_1170H_FELONIES = [
     'HS 1390',
     'HS 1522.01(c)',
     'HS 1621.5(a)',
