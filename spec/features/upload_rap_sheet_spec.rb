@@ -118,7 +118,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
           'Field13' => '19514114',
           'Field43' => 'Yes',
           # 1203 dismissal form for arson case
-          '2.Field13' => '44050',
+          '3.Field13' => '44050',
           # Prop47 case
           'case_number' => '99999988887777',
           'code_sections' => 'PC 496(a)',
