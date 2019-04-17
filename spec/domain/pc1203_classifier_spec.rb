@@ -9,7 +9,7 @@ describe PC1203Classifier do
   let(:count) { build_count(code: code, section: section, dispositions: dispositions) }
   let(:code) { 'PC' }
   let(:section) { '12345' }
-  let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 3.years) }
+  let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 3.years, date: conviction_date) }
   let(:dispositions) { [build_disposition(severity: severity, sentence: sentence, date: conviction_date)] }
   let(:conviction_date) { Date.new(1991, 5, 1) }
   let(:severity) { 'M' }
@@ -19,7 +19,7 @@ describe PC1203Classifier do
 
   let(:other_conviction_event) { build_court_event(date: other_conviction_date, counts: [other_count]) }
   let(:other_conviction_date) { Date.new(1999, 12, 23) }
-  let(:other_count) { build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.years), date: other_conviction_date)]) }
+  let(:other_count) { build_count(dispositions: [build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.years, date: other_conviction_date), date: other_conviction_date)]) }
 
   subject { described_class.new(event: conviction_event, rap_sheet: rap_sheet) }
 
@@ -137,7 +137,7 @@ describe PC1203Classifier do
 
       let(:probation_sentence) {build_disposition(severity: severity, sentence: sentence, date: conviction_date)}
       let(:probation_extended) {build_disposition(type: 'other_disposition_type', sentence: RapSheetParser::ConvictionSentence.new(probation: 2.years), date: conviction_date + 2.years)}
-      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days, probation: 3.year), date: conviction_date+3.years)}
+      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days, probation: 3.year, date: conviction_date + 3.years), date: conviction_date + 3.years)}
 
       let(:arrest_date) { conviction_date + 42.months }
 
@@ -160,7 +160,7 @@ describe PC1203Classifier do
 
       let(:probation_sentence) {build_disposition(severity: severity, sentence: sentence, date: conviction_date)}
       let(:probation_revoked) {build_disposition(type: 'probation_revoked', date: conviction_date + 2.years)}
-      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days), date: conviction_date+3.years)}
+      let(:sentence_modified) {build_disposition(type: 'sentence_modified', sentence: RapSheetParser::ConvictionSentence.new(jail: 10.days, date: conviction_date + 3.years), date: conviction_date + 3.years)}
 
       it 'is eligible, if eligible when treated as a non-probation case' do
         expect(subject.eligible?).to be true
@@ -185,7 +185,7 @@ describe PC1203Classifier do
 
   context 'prison sentences (non-probation)' do
     let(:severity) { 'F' }
-    let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 5.years, probation: nil) }
+    let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 5.years, probation: nil, date: conviction_date) }
 
     context 'code section falls under 1170(h) (realignment / felony jail sentences)' do
       let(:code) { 'HS' }
@@ -209,7 +209,7 @@ describe PC1203Classifier do
         end
 
         context '2 years have not yet passed since end of sentence' do
-          let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 7.years, probation: nil) }
+          let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 7.years, probation: nil, date: conviction_date) }
           it 'is not eligible' do
             expect(subject.eligible?).to be false
           end
@@ -244,7 +244,7 @@ describe PC1203Classifier do
   end
 
   context 'non-probation misdemeanors and infractions' do
-    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil) }
+    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil, date: conviction_date) }
     let(:severity) { 'I' }
 
     context 'it is less than a year from the conviction date' do
@@ -338,7 +338,7 @@ describe PC1203Classifier do
   end
 
   context 'non-probation, non-prison felonies' do
-    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: nil) }
+    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, probation: nil, date: conviction_date) }
     let(:severity) { 'F' }
 
     context 'when the code section falls under PC 1170(h) for sentencing (realignment)' do
@@ -453,7 +453,7 @@ describe PC1203Classifier do
 
   context 'non-probation, non-prison sentences with no severity' do
     let(:severity) { nil }
-    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil) }
+    let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 6.months, probation: nil, date: conviction_date) }
 
     it 'is not eligible' do
       expect(subject.eligible?).to be false
