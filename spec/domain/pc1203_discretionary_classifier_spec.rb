@@ -15,9 +15,9 @@ describe PC1203DiscretionaryClassifier do
 
   describe '#eligible?' do
     context 'the underlying conviction is not 1203 eligible' do
-      let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 1.year, probation: nil) }
-      let(:severity) { 'F' }
       let(:date) { Date.today - 3.years }
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(prison: 1.year, probation: nil, date: date) }
+      let(:severity) { 'F' }
 
       it 'returns false' do
         expect(subject.eligible?).to be false
@@ -25,9 +25,9 @@ describe PC1203DiscretionaryClassifier do
     end
 
     context 'the underlying conviction is eligible for mandatory 1203' do
-        let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 1.year) }
+      let(:date) { Date.today - 3.years }
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(probation: 1.year, date: date) }
         let(:severity) { 'M' }
-        let(:date) { Date.today - 3.years }
 
         it 'returns false' do
           expect(subject.eligible?).to be false
@@ -35,9 +35,9 @@ describe PC1203DiscretionaryClassifier do
     end
 
     context 'the underlying conviction is eligible for discretionary 1203' do
-      let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year) }
-      let(:severity) { 'F' }
       let(:date) { Date.today - 4.years }
+      let(:sentence) { RapSheetParser::ConvictionSentence.new(jail: 1.year, date: date) }
+      let(:severity) { 'F' }
 
       it 'returns true' do
         expect(subject.eligible?).to be true
