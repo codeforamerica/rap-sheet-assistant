@@ -103,7 +103,8 @@ RSpec.describe PC1203PetitionCreator do
         'zip' =>'55555',
         'phone number' =>'5555555555',
         'email' =>'email@example.com',
-        'defendant name' =>'Test User',
+        'attorney for' =>'Test User',
+        'defendant' =>'Test User',
         'case number' =>'#ABCDE'
       }
 
@@ -297,7 +298,8 @@ RSpec.describe PC1203PetitionCreator do
         'zip' =>'12345',
         'phone number' =>'000-111-2222',
         'email' =>'me@me.com',
-        'defendant name' =>'PRO-SE',
+        'defendant' =>'Test User',
+        'attorney for' =>'PRO-SE',
         'case number' =>'#ABCDE'
       }
       expect(get_fields_from_pdf(pdf_file)).to include(expected_values)

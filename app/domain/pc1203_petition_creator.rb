@@ -79,7 +79,8 @@ class PC1203PetitionCreator
       'zip' =>contact_info_person.zip,
       'phone number' =>contact_info_person.phone_number,
       'email' =>contact_info_person.email,
-      'defendant name' =>client_name,
+      'attorney for' =>client_name,
+      'defendant' =>user.name,
       'case number' =>conviction_event.case_number
     }
 
