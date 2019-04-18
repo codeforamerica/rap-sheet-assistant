@@ -22,7 +22,7 @@ class PC1203Classifier
     return false unless event.sentence
     return false unless event.date
     return false if event.convicted_counts.all? { |c| excluded_code_section?(c) }
-    return false if currently_serving_sentence_for_any_case(rap_sheet)
+    return false if rap_sheet.currently_serving_sentence?
 
     code = remedy_details_hash[:code]
     if code == '1203.4'
@@ -35,21 +35,6 @@ class PC1203Classifier
       return true if event.date < Date.today - event.sentence.total_duration - 2.year
     end
     false
-  end
-
-  #TODO move into rap sheet parser?
-  def currently_serving_sentence_for_any_case(rap_sheet)
-    rap_sheet.convictions.any? do |event|
-      count_with_sentence = event.counts.find { |c| c.sentence.present? }
-      dispos_with_sentence = count_with_sentence&.dispositions&.select { |disposition| disposition.sentence.present? }
-
-      return false unless dispos_with_sentence && dispos_with_sentence.length > 0
-
-      most_recent_sentence_dispo = dispos_with_sentence[-1]
-      return false unless most_recent_sentence_dispo.date.present?
-
-      Date.today < most_recent_sentence_dispo.date + most_recent_sentence_dispo.sentence.total_duration
-    end
   end
 
   def remedy_details

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe EligibilityChecker do
-  let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year), date: Date.today - 5.years, severity: 'M') }
-  let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year), date: Date.today - 5.years, severity: 'F') }
+  let(:probation_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(probation: 1.year, date: Date.today - 5.years), date: Date.today - 5.years, severity: 'M') }
+  let(:prison_dispo) { build_disposition(sentence: RapSheetParser::ConvictionSentence.new(prison: 1.year,  date: Date.today - 5.years), date: Date.today - 5.years, severity: 'F') }
   let(:prop64_eligible_count_1) { build_count(code: 'HS', section: '11357(b)', dispositions: [probation_dispo]) }
   let(:prop64_eligible_count_2) { build_count(code: 'HS', section: '11357', dispositions: [prison_dispo]) }
   let(:pc1203_eligible_count) { build_count(code: 'PC', section: '456', dispositions: [probation_dispo]) }
