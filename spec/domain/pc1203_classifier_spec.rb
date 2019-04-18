@@ -35,6 +35,16 @@ describe PC1203Classifier do
     end
   end
 
+  context 'when the conviction has already been dismissed under PC 1203' do
+    let(:sentence_disposition) { build_disposition(severity: severity, sentence: sentence, date: conviction_date) }
+    let(:dismissal_disposition) { build_disposition(type: 'pc1203_dismissed', date: conviction_date) }
+    let(:dispositions) { [sentence_disposition, dismissal_disposition] }
+
+    it 'is not eligible' do
+      expect(subject.eligible?).to be false
+    end
+  end
+
   describe 'excluded offenses' do
     let(:conviction_event) { build_court_event(date: conviction_date, counts: [count1, count2]) }
 

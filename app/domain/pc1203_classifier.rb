@@ -21,6 +21,7 @@ class PC1203Classifier
   def eligible?
     return false unless event.sentence
     return false unless event.date
+    return false if event.dismissed_by_pc1203?
     return false if event.convicted_counts.all? { |c| excluded_code_section?(c) }
     return false if rap_sheet.currently_serving_sentence?
 
