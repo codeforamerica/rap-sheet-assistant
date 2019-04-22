@@ -79,6 +79,46 @@ describe Prop64PetitionCreator do
         }
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
+
+      it 'adds a proof a service form' do
+        conviction_counts = [build_count]
+        conviction_event = build_court_event(
+          case_number: '#ABCDE',
+          date: Date.new(2010, 1, 1),
+          counts: conviction_counts
+        )
+
+        pdf_file = nil
+        travel_to Date.new(2015, 3, 3) do
+          pdf_file = described_class.new(
+            rap_sheet: rap_sheet,
+            conviction_event: conviction_event,
+            conviction_counts: conviction_counts,
+            remedy_details: {
+              codes: [],
+              scenario: :resentencing
+            },
+            ).create_petition
+        end
+
+        expected_proof_of_service_values = {
+          'name' =>'Ms. Attorney',
+          'state bar number' =>'1234567',
+          'firm name' =>'The Firm',
+          'proof_of_service_prop64' => 'Yes',
+          'street address' =>'555 Main Street',
+          'city' =>'Tulsa',
+          'state' =>'OK',
+          'zip' =>'55555',
+          'phone number' =>'5555555555',
+          'email' =>'email@example.com',
+          'attorney for' =>'Test User',
+          'defendant' =>'Test User',
+          'case number' =>'#ABCDE'
+        }
+
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_proof_of_service_values)
+      end
     end
     context 'when the client is filing pro-se' do
       it 'fills in the top form with client info' do

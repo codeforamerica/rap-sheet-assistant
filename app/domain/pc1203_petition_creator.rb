@@ -81,7 +81,8 @@ class PC1203PetitionCreator
       'email' =>contact_info_person.email,
       'attorney for' =>client_name,
       'defendant' =>user.name,
-      'case number' =>conviction_event.case_number
+      'case number' =>conviction_event.case_number,
+      'proof_of_service_cr180' => true,
     }
 
     mc_031_fields ={
