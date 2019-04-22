@@ -162,6 +162,44 @@ describe Prop64PetitionCreator do
         }
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
+
+      it 'creates a filled-out form with client info' do
+        conviction_counts = [build_count]
+        conviction_event = build_court_event(
+          case_number: '#ABCDE',
+          date: Date.new(2010, 1, 1),
+          counts: conviction_counts
+        )
+
+        pdf_file = nil
+        travel_to Date.new(2015, 3, 3) do
+          pdf_file = described_class.new(
+            rap_sheet: rap_sheet,
+            conviction_event: conviction_event,
+            conviction_counts: conviction_counts,
+            remedy_details: {
+              codes: [],
+              scenario: :resentencing
+            },
+          ).create_petition
+        end
+
+        expected_proof_of_service_values = {
+          'name' =>'Test User',
+          'state bar number' =>'',
+          'firm name' =>'',
+          'street address' =>'123 Fake St',
+          'city' =>'San Francisco',
+          'state' =>'CA',
+          'zip' =>'12345',
+          'phone number' =>'000-111-2222',
+          'email' =>'me@me.com',
+          'defendant' =>'Test User',
+          'attorney for' =>'PRO-SE',
+          'case number' =>'#ABCDE'
+        }
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_proof_of_service_values)
+      end
     end
   end
 
