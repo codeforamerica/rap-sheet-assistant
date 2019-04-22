@@ -154,6 +154,24 @@ RSpec.describe Prop47PetitionCreator do
         }
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
+
+      it 'creates a filled out proof of service with client info' do
+        expected_proof_of_service_values = {
+          'name' =>'John Felix Brown',
+          'state bar number' =>'',
+          'firm name' =>'',
+          'street address' =>'123 Fake St',
+          'city' =>'San Francisco',
+          'state' =>'CA',
+          'zip' =>'12345',
+          'phone number' =>'000-111-2222',
+          'email' =>'me@me.com',
+          'defendant' =>'John Felix Brown',
+          'attorney for' =>'PRO-SE',
+          'case number' =>'#ABCDE'
+        }
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_proof_of_service_values)
+      end
     end
   end
 
