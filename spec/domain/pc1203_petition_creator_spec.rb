@@ -97,6 +97,7 @@ RSpec.describe PC1203PetitionCreator do
         'name' =>'Ms. Attorney',
         'state bar number' =>'1234567',
         'firm name' =>'The Firm',
+        'proof_of_service_cr180' => 'Yes',
         'street address' =>'555 Main Street',
         'city' =>'Tulsa',
         'state' =>'OK',

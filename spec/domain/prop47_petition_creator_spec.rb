@@ -89,6 +89,26 @@ RSpec.describe Prop47PetitionCreator do
         expect(get_fields_from_pdf(pdf_file)).to include(expected_values)
       end
 
+      it 'adds a proof a service form' do
+        expected_proof_of_service_values = {
+          'name' =>'Ms. Attorney',
+          'state bar number' =>'State Bar No. 1234567',
+          'firm name' =>'The Firm',
+          'proof_of_service_prop47' => 'Yes',
+          'street address' =>'555 Main Street',
+          'city' =>'Tulsa',
+          'state' =>'OK',
+          'zip' =>'55555',
+          'phone number' =>'5555555555',
+          'email' =>'email@example.com',
+          'attorney for' =>'John Felix Brown',
+          'defendant' =>'John Felix Brown',
+          'case number' =>'#ABCDE'
+        }
+
+        expect(get_fields_from_pdf(pdf_file)).to include(expected_proof_of_service_values)
+      end
+
       context 'attorney info is mission' do
         let(:attorney) do
           create(:attorney,

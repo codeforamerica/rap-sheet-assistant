@@ -15,10 +15,12 @@ class Prop47PetitionCreator
       contact_info_person = attorney
       client_name = user.name
       state_bar_number = formatted_sb_num(attorney.state_bar_number)
+      firm = attorney.firm_name
     else
       contact_info_person = user
       client_name = 'PRO-SE'
       state_bar_number = ''
+      firm = ''
     end
     pdf_fields = {
       'attorney_name' => contact_info_person.name,
@@ -36,12 +38,39 @@ class Prop47PetitionCreator
       'sentence' => conviction_event.sentence.to_s
     }
 
+    proof_of_service_fields = {
+      'name' =>contact_info_person.name,
+      'state bar number' =>state_bar_number,
+      'firm name' =>firm,
+      'street address' =>contact_info_person.street_address,
+      'city' =>contact_info_person.city,
+      'state' =>contact_info_person.state,
+      'zip' =>contact_info_person.zip,
+      'phone number' =>contact_info_person.phone_number,
+      'email' =>contact_info_person.email,
+      'attorney for' =>client_name,
+      'defendant' =>user.name,
+      'case number' =>conviction_event.case_number,
+      'proof_of_service_prop47' => true,
+    }
+
     pdf_fields.merge!(checkboxes)
 
-    fill_petition('prop47_petition.pdf', pdf_fields)
+    result = []
+    result << fill_petition('prop47_petition.pdf', pdf_fields)
+    result << fill_petition('proof_of_service.pdf', proof_of_service_fields)
+
+    concatenate_pdfs(result)
   end
 
   private
+
+  def concatenate_pdfs(pdfs)
+    pdftk = PdfForms.new(Cliver.detect('pdftk'))
+    Tempfile.new('concatenated-pdfs').tap do |tempfile|
+      pdftk.cat(*pdfs, tempfile)
+    end
+  end
 
   def formatted_conviction_date
     conviction_event.date.strftime('%m/%d/%Y')

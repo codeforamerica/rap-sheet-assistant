@@ -118,7 +118,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
           'Field13' => '19514114',
           'Field43' => 'Yes',
           # 1203 dismissal form for arson case
-          '3.Field13' => '44050',
+          '4.Field13' => '44050',
           # Prop47 case
           'case_number' => '99999988887777',
           'code_sections' => 'PC 496(a)',
@@ -173,7 +173,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         fields_dict = get_fields_from_downloaded_pdf('Testuser Lastname')
         expected_values = {
           'Field13' => '1234567',
-          '2.Field13' => '3456789'
+          '3.Field13' => '3456789'
         }
         expect(fields_dict).to include(expected_values)
       end
