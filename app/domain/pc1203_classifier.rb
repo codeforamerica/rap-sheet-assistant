@@ -23,7 +23,7 @@ class PC1203Classifier
     return false unless event.date
     return false if event.dismissed_by_pc1203?
     return false if event.convicted_counts.all? { |c| excluded_code_section?(c) }
-    return false if rap_sheet.currently_serving_sentence?
+    # return false if rap_sheet.currently_serving_sentence?
 
     code = remedy_details_hash[:code]
     if code == '1203.4'
