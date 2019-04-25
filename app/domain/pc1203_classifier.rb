@@ -34,25 +34,19 @@ class PC1203Classifier
   end
 
   def excluded_code_section?(count)
-    Constants::CODE_SECTIONS_EXCLUDED_FOR_PC1203_DISMISSALS.include?(count.code_section)
+    count.match_any?(Constants::CODE_SECTIONS_EXCLUDED_FOR_PC1203_DISMISSALS)
   end
 
   def dui?(count)
-    if !count.code_section
-      return false
-    end
-    count.subsection_of_any?(Constants::PC_1203_DISCRETIONARY_CODE_SECTIONS)
+    count.match_any?(Constants::PC_1203_DISCRETIONARY_CODE_SECTIONS)
   end
 
   def pc_1170h_count?(count)
-    if !count.code_section
-      return false
-    end
-    Constants::PC_1170H_FELONIES.include?(count.code_section)
+    count.match_any?(Constants::PC_1170H_FELONIES, subsections: false)
   end
 
   def reducible_by_17b?(count)
-    !event.sentence.prison && count.severity == 'F' && Constants::WOBBLERS.include?(count.code_section)
+    !event.sentence.prison && count.severity == 'F' && count.match_any?(Constants::WOBBLERS, subsections: false)
   end
 
   def discretionary?

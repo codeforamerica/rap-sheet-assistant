@@ -177,12 +177,12 @@ class PC1203PetitionCreator
   end
 
   def reducible_to_misdemeanor(count)
-    is_reducible = count.severity == 'F' && Constants::WOBBLERS.include?(count.code_section)
+    is_reducible = count.severity == 'F' && count.match_any?(Constants::WOBBLERS, subsections: false)
     is_reducible ? 'yes' : 'no'
   end
 
   def reducible_to_infraction(count)
-    is_reducible = count.severity == 'M' && Constants::REDUCIBLE_TO_INFRACTION.include?(count.code_section)
+    is_reducible = count.severity == 'M' && count.match_any?(Constants::REDUCIBLE_TO_INFRACTION, subsections: false)
     is_reducible ? 'yes' : 'no'
   end
 

@@ -1,6 +1,7 @@
 module Constants
 # https://wiperecord.com/california-felony-reductions-and-wobbler-criminal-offenses
 # code mappings are from https://oag.ca.gov/sites/all/files/agweb/pdfs/cjsc/prof10/codes.pdf
+# Exact matches only
   WOBBLERS = [
     "PC 32",
     "PC 69",
@@ -474,6 +475,7 @@ module Constants
     "CC 25404"
   ]
 
+  #exact matches only
   REDUCIBLE_TO_INFRACTION = [
     "PC 193.8",
     "PC 330",
@@ -499,19 +501,21 @@ module Constants
     "VC 42005"
   ]
 
+  # Match including subsections
   CODE_SECTIONS_EXCLUDED_FOR_PC1203_DISMISSALS = [
     'PC 286(c)',
-    'PC 288', #TODO probably should include subsections
+    'PC 288',
     'PC 288a(c)',
     'PC 311.1',
     'PC 311.2',
     'PC 311.3',
     'PC 311.11',
-    'VC 2800', #all subsections
+    'VC 2800',
     'VC 2801',
-    'VC 2803' #all subsections
+    'VC 2803'
   ]
 
+  # Match including subsections
   PC_1203_DISCRETIONARY_CODE_SECTIONS = [
     'PC 191.5',
     'PC 191.5(b)',
@@ -548,6 +552,7 @@ module Constants
 
   # AB 109 is also known as "realignment", or "1170(h)"
   # These felonies are now sentenced to county jail instead of state prison
+  # Exact matches only
   PC_1170H_FELONIES = [
     'HS 1390',
     'HS 1522.01(c)',

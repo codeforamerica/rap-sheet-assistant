@@ -8,7 +8,7 @@ class Prop47Classifier
   def eligible_counts
     return [] if rap_sheet.superstrikes.present? || rap_sheet.sex_offender_registration?
     event.convicted_counts.select do |c|
-      c.severity == 'F' && PROP47_CODE_SECTIONS.include?(c.code_section)
+      c.severity == 'F' && c.match_any?(PROP47_CODE_SECTIONS)
     end
   end
 

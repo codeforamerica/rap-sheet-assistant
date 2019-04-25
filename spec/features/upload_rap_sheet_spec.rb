@@ -58,7 +58,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
         expect(page).to have_content 'Arson Causing Great Bodily Injury'
         expect(page).to have_content '#44050'
 
-        expect(page).to have_content 'Prop 47 (1)'
+        expect(page).to have_content 'Prop 47 (2)'
         expect(page).to have_content '09/06/2011'
         expect(page).to have_content 'F'
         expect(page).to have_content 'PC 496(a)'
