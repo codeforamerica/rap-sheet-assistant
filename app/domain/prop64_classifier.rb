@@ -9,9 +9,7 @@ class Prop64Classifier
     return [] if event.date && event.date > Date.new(2016, 11, 8)
 
     event.convicted_counts.select do |c|
-      c.code_section && dismissible_codes.any? do |d|
-        c.code_section.start_with? d
-      end
+      c.subsection_of_any?(dismissible_codes)
     end
   end
 
@@ -19,7 +17,7 @@ class Prop64Classifier
     {
       codes: eligible_counts.map do |c|
         dismissible_codes.find do |d|
-          c.code_section.start_with? d
+          c.subsection_of?(d)
         end
       end,
       scenario: scenario

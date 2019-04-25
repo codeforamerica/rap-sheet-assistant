@@ -3,19 +3,6 @@ class PC1203Classifier
 
   def initialize(event:, rap_sheet:)
     super(event: event, rap_sheet: rap_sheet)
-
-    vc_sections = ""
-    Constants::VC_DUI_CODE_SECTIONS.each do |cs|
-      vc_sections = "#{vc_sections}|#{Regexp.escape(cs)}"
-    end
-
-    pc_sections = ""
-    Constants::PC_DUI_CODE_SECTIONS.each do |cs|
-      pc_sections = "#{pc_sections}|#{Regexp.escape(cs)}"
-    end
-
-    @vc_dui_matcher = /(VC)+.*(\W+((#{vc_sections[1..-1]})[\(\)\w]*)([\/\-\s]|$)+)+.*/
-    @pc_dui_matcher = /(PC)+.*(\W+((#{pc_sections[1..-1]})[\(\)\w]*)([\/\-\s]|$)+)+.*/
   end
 
   def eligible?
@@ -54,7 +41,7 @@ class PC1203Classifier
     if !count.code_section
       return false
     end
-    count.code_section.match(@vc_dui_matcher) || count.code_section.match(@pc_dui_matcher)
+    count.subsection_of_any?(Constants::PC_1203_DISCRETIONARY_CODE_SECTIONS)
   end
 
   def pc_1170h_count?(count)

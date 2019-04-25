@@ -41,7 +41,9 @@ class Prop47Classifier
     'PC 476',
     'PC 484',
     'PC 484i(b)',
-    'PC 484e(a)(b)(d)',
+    'PC 484e(a)',
+    'PC 484e(b)',
+    'PC 484e(d)',
     'PC 484g',
     'PC 484h',
     'PC 487',
@@ -60,6 +62,7 @@ class Prop47Classifier
     'PC 530.5',
     'HS 11350',
     'HS 11377',
+    'HS 11377(a)',
     'HS 11357(a)',
     'PC 666'
   ].freeze
