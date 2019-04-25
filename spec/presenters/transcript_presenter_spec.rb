@@ -198,5 +198,37 @@ RSpec.describe TranscriptPresenter do
         expect(transcript_rows[1][:probation]).to eq '-'
       end
     end
+
+    context 'an attempted charge' do
+      let(:text) do
+        <<~TEXT
+        info
+        * * * *
+        COURT:  NAM:02
+        19880420 CASC SAN FRANCISCO CO
+        CNT:01 #05378
+          55555-664 HS-TRANSPORT/SELL
+
+        DISPO:CONVICTED
+          SEN: 1 YEAR PROBATION
+
+        CNT:02 #05378
+          11357 HS-POSSES
+
+        DISPO:DISMISSED
+
+        CNT:03 #05378
+          11357 HS-POSSES
+
+        DISPO:CONVICTED
+          SEN: 2 YEARS PRISON
+        * * * END OF MESSAGE * * *
+        TEXT
+      end
+      it 'appends "-ATTEMPTED" to the code section' do
+        expect(transcript_rows.length).to eq 2
+        expect(transcript_rows[0][:code_section]).to eq 'HS 55555-ATTEMPTED'
+      end
+    end
   end
 end

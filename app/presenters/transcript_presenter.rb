@@ -15,6 +15,9 @@ class TranscriptPresenter
         row[:case_number] = conviction.case_number ? "##{conviction.case_number}" : '—'
         row[:severity] = count.severity
         row[:code_section] = count.code_section || '—'
+        if count.flags.include?('-ATTEMPTED')
+          row[:code_section] += '-ATTEMPTED'
+        end
 
         sentence = count.sentence
         if count.sentence.nil?
@@ -41,22 +44,22 @@ class TranscriptPresenter
           remedy_string = 'x'
         end
 
-      row[:remedy] = remedy_string
+        row[:remedy] = remedy_string
 
-      result.append(row)
+        result.append(row)
+      end
+    end
+
+    return result
+  end
+
+  private
+
+  def format_duration(duration)
+    if duration
+      "#{duration.parts.values[0]} #{duration.parts.keys[0]}"
+    else
+      '-'
     end
   end
-
-  return result
-end
-
-private
-
-def format_duration(duration)
-  if duration
-    "#{duration.parts.values[0]} #{duration.parts.keys[0]}"
-  else
-    '-'
-  end
-end
 end
