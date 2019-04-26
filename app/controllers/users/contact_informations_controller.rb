@@ -32,7 +32,9 @@ module Users
         :city,
         :state,
         :zip,
-        :date_of_birth
+        :date_of_birth,
+        :prefer_email,
+        :prefer_text
       )
     end
   end
