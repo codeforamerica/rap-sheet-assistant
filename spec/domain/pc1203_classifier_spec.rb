@@ -309,7 +309,7 @@ describe PC1203Classifier do
           end
         end
 
-        xcontext 'is a weirdly formatted code section that is always discretionary (some vehicle codes)' do
+        context 'is a weirdly formatted code section that is always discretionary (some vehicle codes)' do
           let(:code) { 'VC' }
           let(:section) { '23145/23152(b)' }
 
