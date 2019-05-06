@@ -45,6 +45,8 @@ In order to use AWS S3, ensure the following environment variables are set:
 RAP_SHEETS_BUCKET
 AWS_ACCESS_KEY_ID
 AWS_SECRET_KEY
+# Bucket containing test raps in the following folder format
+RAP_SHEETS_BUCKET
 ```  
 
 The RAP sheets folder should contain a subfolder for each RAP sheet to be tested. In each subfolder, it expects to find an image file for each page of the RAP sheet named `page_#.jpg`, where `#` is replaced by the page number.
