@@ -1,25 +1,39 @@
-<% @title="Summary Report" %>
+<% @title="Transcript" %>
 <div class="slab">
-  <div class="form-card form-card--wide">
+  <div class="form-card extra-wide-layout margin-top-large margin-bottom-large">
     <header class="form-card__header text--centered">
-      <h1 class="big-emoji">😀</h1>
-      <h3>We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</h3>
-      <%= link_to 'View full transcript', transcript_rap_sheet_path(@rap_sheet)%>
-
+      <h1 class="big-emoji small_padding_bottom">😀</h1>
+      <p class="text--large">We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</p>
     </header>
-
-    <div class="summary-table">
-      <table>
-        <% @eligible_events_by_remedy.each do |key, grouped_events| %>
-          <% if grouped_events.present? %>
-            <tr><th class="major-header" colspan="5"> <%= @remedy_names[key] %> (<%= @eligible_counts[key].length %>)</th></tr>
-            <% grouped_events.each do |courthouse, events| %>
-              <%= render 'summary_table_rows', remedy: key, courthouse: courthouse, events: events %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </table>
-    </div>
+    <h2>Transcript - <%= @user_name %></h2>
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Date</th>
+        <th>County</th>
+        <th>Case Number</th>
+        <th>Grade</th>
+        <th>Charge</th>
+        <th>Probation</th>
+        <th>Prison</th>
+        <th>Remedy</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @transcript.rows.each do |row| %>
+        <tr class=<%= 'divider' if row[:first_row_in_case?] %>>
+          <td><%= row[:date] %></td>
+          <td><%= row[:courthouse] %></td>
+          <td><%= row[:case_number] %></td>
+          <td><%= row[:severity] %></td>
+          <td><%= row[:code_section] %></td>
+          <td><%= row[:probation] %></td>
+          <td><%= row[:prison] %></td>
+          <td><%= row[:remedy] %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
 
     <div class="form-card__footer">
       <%= link_to 'Next →', new_user_legal_representations_path(@rap_sheet.user), class: 'button button--primary' %>

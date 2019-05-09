@@ -61,12 +61,11 @@ RSpec.describe RapSheetsController, type: :controller do
         get :show, params: { id: rap_sheet.id }
 
         expect(response.body).to include('We found 1 conviction that may be eligible for record clearance.')
-        expect(response.body).to include('Prop 64 (1)')
-        expect(response.body).to include('09/18/1984')
+        expect(response.body).to include('p64')
+        expect(response.body).to include('1984-09-18')
         expect(response.body).to include('M')
         expect(response.body).to include('CASC Los Angeles')
         expect(response.body).to include('HS 11357')
-        expect(response.body).to include('Possess Marijuana')
         expect(response.body).to include('#1234567')
       end
     end
@@ -78,12 +77,11 @@ RSpec.describe RapSheetsController, type: :controller do
         get :show, params: { id: rap_sheet.id }
 
         expect(response.body).to include('We found 1 conviction that may be eligible for record clearance.')
-        expect(response.body).to include('1203.4 mandatory (1)')
-        expect(response.body).to include('09/18/1984')
+        expect(response.body).to include('1203.4 mand')
+        expect(response.body).to include('1984-09-18')
         expect(response.body).to include('M')
         expect(response.body).to include('CASC Los Angeles')
         expect(response.body).to include('PC 496')
-        expect(response.body).to include('Receive/Etc Known Stolen Property')
         expect(response.body).to include('#1234567')
       end
 

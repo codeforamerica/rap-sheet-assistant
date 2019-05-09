@@ -21,7 +21,6 @@ Rails.application.routes.draw do
   resources :rap_sheets, only: [:index, :edit, :show, :create] do
     member do
       get :ineligible
-      get :transcript
       get :debug
       put :add_page
       put :remove_page

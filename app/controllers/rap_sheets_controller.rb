@@ -16,6 +16,8 @@ class RapSheetsController < ApplicationController
 
   def show
     @rap_sheet = RapSheet.find(params[:id])
+    @transcript = TranscriptPresenter.new(@rap_sheet)
+    @user_name = @rap_sheet.user.name.titlecase
     eligibility = EligibilityChecker.new(@rap_sheet.parsed)
     if eligibility.eligible?
       @remedy_names = EligibilityChecker::REMEDIES.map { |r| [r[:key], r[:name]] }.to_h
@@ -66,10 +68,6 @@ class RapSheetsController < ApplicationController
     redirect_to edit_rap_sheet_path(@rap_sheet)
   end
 
-  def transcript
-    @rap_sheet = RapSheet.find(params[:id])
-    @transcript = TranscriptPresenter.new(@rap_sheet)
-  end
 
   def remove_page
     @rap_sheet = RapSheet.find(params[:id])
