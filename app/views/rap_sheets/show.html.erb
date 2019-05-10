@@ -2,8 +2,10 @@
 <div class="slab">
   <div class="form-card extra-wide-layout margin-top-large margin-bottom-large">
     <header class="form-card__header text--centered">
+      <% unless @no_eligible_convictions %>
       <h1 class="big-emoji small_padding_bottom">😀</h1>
-      <p class="text--large">We found <%= pluralize(@number_of_eligible_counts, 'conviction') %> that may be eligible for record clearance.</p>
+      <% end %>
+      <p class="text--large"><%= @header_copy %></p>
     </header>
     <h2>Transcript - <%= @user_name %></h2>
     <table class="data-table">

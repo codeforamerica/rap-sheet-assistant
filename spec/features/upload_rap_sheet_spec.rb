@@ -197,7 +197,7 @@ describe 'uploading a rap sheet', js: true, type: :feature do
       it 'shows an ineligible page' do
         visit root_path
         upload_pdf
-        expect(page).to have_content 'No eligible convictions found'
+        expect(page).to have_content 'We found no convictions eligible for relief at this time'
       end
     end
 

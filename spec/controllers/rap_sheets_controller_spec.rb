@@ -51,7 +51,7 @@ RSpec.describe RapSheetsController, type: :controller do
     it 'alerts the user if no convictions are found' do
       get :show, params: { id: rap_sheet.id }
 
-      expect(response).to redirect_to(ineligible_rap_sheet_path(rap_sheet.id))
+      expect(response).to redirect_to(no_convictions_rap_sheet_path(rap_sheet.id))
     end
 
     context 'there is a eligible p64 conviction' do
@@ -92,6 +92,25 @@ RSpec.describe RapSheetsController, type: :controller do
       end
     end
 
+    context 'when there are convictions, but none are eligible' do
+      let(:text) do
+        single_ineligible_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY')
+      end
+
+      it 'shows the rap sheet transcript, but changes the header copy' do
+        get :show, params: { id: rap_sheet.id }
+
+        expect(response.body).to include('x')
+        expect(response.body).to include('2017-09-18')
+        expect(response.body).to include('M')
+        expect(response.body).to include('CASC Los Angeles')
+        expect(response.body).to include('PC 496')
+        expect(response.body).to include('#1234567')
+        expect(response.body).to include('We found no convictions eligible for relief at this time.')
+      end
+    end
+
+
     context 'when the rap sheet cannot be parsed' do
       before do
         allow_any_instance_of(RapSheet).to receive(:parsed).and_raise(RapSheetParser::RapSheetParserException.new(nil, nil))
@@ -108,16 +127,6 @@ RSpec.describe RapSheetsController, type: :controller do
       end
     end
 
-    context 'when there are no eligible convictions' do
-      let(:text) do
-        single_conviction_rap_sheet('496 PC-RECEIVE/ETC KNOWN STOLEN PROPERTY', sentence: '002 YEARS PRISON', severity: 'FELONY')
-      end
-
-      it 'redirects to the ineligible page' do
-        get :show, params: { id: rap_sheet.id }
-        expect(response).to redirect_to(ineligible_rap_sheet_path(rap_sheet.id))
-      end
-    end
   end
 
   describe '#debug' do
@@ -193,6 +202,23 @@ RSpec.describe RapSheetsController, type: :controller do
       * * * *
       COURT:                NAM:01
       19840918  CASC LOS ANGELES
+      
+      CNT:01     #1234567
+        #{conviction_description}
+      *DISPO:CONVICTED
+         CONV STATUS:#{severity}
+         SEN: #{sentence}      
+
+      *    *    *    END OF MESSAGE    *    *    *
+    EOT
+  end
+
+  def single_ineligible_conviction_rap_sheet(conviction_description, sentence: '2 YEARS PROBATION, 045 DAYS JAIL', severity: 'MISDEMEANOR')
+    <<~EOT
+      info
+      * * * *
+      COURT:                NAM:01
+      20170918  CASC LOS ANGELES
       
       CNT:01     #1234567
         #{conviction_description}

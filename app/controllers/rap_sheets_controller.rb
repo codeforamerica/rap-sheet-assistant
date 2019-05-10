@@ -1,3 +1,5 @@
+include ActionView::Helpers::TextHelper
+
 class RapSheetsController < ApplicationController
   def index
     @rap_sheet = RapSheet.new
@@ -17,6 +19,9 @@ class RapSheetsController < ApplicationController
   def show
     @rap_sheet = RapSheet.find(params[:id])
     @transcript = TranscriptPresenter.new(@rap_sheet)
+    if @rap_sheet.parsed.convictions.length == 0
+      redirect_to no_convictions_rap_sheet_path(@rap_sheet)
+    end
     @user_name = @rap_sheet.user.name.titlecase
     eligibility = EligibilityChecker.new(@rap_sheet.parsed)
     if eligibility.eligible?
@@ -29,11 +34,13 @@ class RapSheetsController < ApplicationController
         grouped_events = selected_events.group_by { |e| e[:event].courthouse }
         @eligible_events_by_remedy[remedy[:key]] = grouped_events
       end
-
       @eligible_counts = eligibility.all_eligible_counts
-      @number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
+      number_of_eligible_counts = @eligible_counts.values.flatten.uniq.length
+      eligible_counts_string = pluralize(number_of_eligible_counts, 'conviction')
+      @header_copy = "We found #{eligible_counts_string} that may be eligible for record clearance."
     else
-      redirect_to ineligible_rap_sheet_path(@rap_sheet)
+      @no_eligible_convictions = true
+      @header_copy = 'We found no convictions eligible for relief at this time.'
     end
   end
 
