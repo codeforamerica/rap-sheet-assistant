@@ -213,7 +213,7 @@ RSpec.describe RapSheetsController, type: :controller do
     EOT
   end
 
-  def single_ineligible_conviction_rap_sheet(conviction_description, sentence: '2 YEARS PROBATION, 045 DAYS JAIL', severity: 'MISDEMEANOR')
+  def single_ineligible_conviction_rap_sheet(conviction_description, sentence: '20 YEARS PROBATION, 045 DAYS JAIL', severity: 'MISDEMEANOR')
     <<~EOT
       info
       * * * *
