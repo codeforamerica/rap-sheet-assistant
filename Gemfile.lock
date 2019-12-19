@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: https://github.com/codeforamerica/rap_sheet_parser
-  revision: ad122263cf040d6b8bb6ae7b4f8a07918d337583
+  revision: e2bb5a9fb678bb63a299e9389d4acf5a2a67e2e0
   specs:
     rap_sheet_parser (0.1.0)
       activesupport
@@ -107,7 +107,7 @@ GEM
       dotenv (= 2.5.0)
       railties (>= 3.2, < 6.0)
     erubi (1.8.0)
-    excon (0.62.0)
+    excon (0.71.1)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -165,7 +165,7 @@ GEM
     grpc (1.17.0)
       google-protobuf (~> 3.1)
       googleapis-common-protos-types (~> 1.0.0)
-    i18n (1.6.0)
+    i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     ipaddress (0.8.3)
     jbuilder (2.8.0)
@@ -198,7 +198,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
-    minitest (5.11.3)
+    minitest (5.13.0)
     msgpack (1.2.4)
     multi_json (1.13.1)
     multipart-post (2.0.0)
@@ -224,7 +224,7 @@ GEM
       pry (~> 0.10)
     public_suffix (3.0.3)
     puma (3.12.2)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.2.1)
