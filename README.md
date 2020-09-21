@@ -1,4 +1,7 @@
 # README
+**🚫 This repository has been archived**
+
+**Please see below for more background on the project, and please reach out to clearmyrecord@codeforamerica.org for questions.**
 
 ## Prerequisites
  - [chromedriver](http://chromedriver.chromium.org/) installed. `brew install chromedriver` with homebrew.
